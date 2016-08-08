@@ -1,0 +1,19 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+.nav-list {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-bottom: 0;
+}
+
+.content-enter {
+  opacity: 0.01;
+}
+
+.content-enter.content-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}

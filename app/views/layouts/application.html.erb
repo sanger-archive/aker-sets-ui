@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aker</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+
+    <div id="application"><%= yield %></div>
+
+    <%= webpack_include_tag 'common' %>
+    <%= webpack_include_tag 'babel-polyfill' %>
+
+    <%= yield :js if content_for? :js %>
+
+    <%= javascript_include_tag 'application' %>
   </body>
+
 </html>

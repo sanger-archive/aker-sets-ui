@@ -1,24 +1,38 @@
-# README
+# Aker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Getting Started
+---
 
-Things you may want to cover:
+The project relies on Bundler and npm for ruby and javascript dependencies.
 
-* Ruby version
+    bundle install && npm install
 
-* System dependencies
+Running the test suites
+---
 
-* Configuration
+RSpec is used for the server tests. All the tests sit in the `spec` directory.
 
-* Database creation
+    bundle exec rake spec
 
-* Database initialization
+Karma is the test runner for the javascript tests. All the tests sit in the `spec/js` directory.
 
-* How to run the test suite
+    npm test
 
-* Services (job queues, cache servers, search engines, etc.)
+or
 
-* Deployment instructions
+    bundle exec rake test:js
 
-* ...
+To run both the RSpec tests and the Karma tests:
+
+    bundle exec rake test:all
+
+Development
+---
+
+The javascript is written in ES6 and relies on webpack to transform and bundle it into ES5. It is located in the `app/client` directory. You can enable webpack-dev-server to watch and incrementally rebuild your javascript on save by running:
+
+    npm start
+
+There is also a Procfile used by foreman for when you wish to have your Rails server and webpack-dev-server running side by side:
+
+    foreman start

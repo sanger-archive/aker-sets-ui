@@ -10,13 +10,79 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713095939) do
+ActiveRecord::Schema.define(version: 20160825231813) do
 
-  create_table "quotes", force: :cascade do |t|
-    t.text     "text"
-    t.string   "author"
+  create_table "aims", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_aims_on_project_id"
+  end
+
+  create_table "biomaterial_sets", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "biomaterials", force: :cascade do |t|
+    t.string   "supplier"
+    t.string   "supplier_identifier"
+    t.string   "sanger_tube_barcode"
+    t.string   "uuid"
+    t.string   "biomaterial_type"
+    t.string   "metadata"
+    t.integer  "collection_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["collection_id"], name: "index_biomaterials_on_collection_id"
+  end
+
+  create_table "collections", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "program_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["program_id"], name: "index_collections_on_program_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "programs", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "program_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["program_id"], name: "index_projects_on_program_id"
+  end
+
+  create_table "proposals", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "aim_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aim_id"], name: "index_proposals_on_aim_id"
+  end
+
+  create_table "set_elements", force: :cascade do |t|
+    t.integer  "biomaterial_id"
+    t.integer  "biomaterial_set_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["biomaterial_id", "biomaterial_set_id"], name: "index_set_elements_on_biomaterial_id_and_biomaterial_set_id", unique: true
+    t.index ["biomaterial_id"], name: "index_set_elements_on_biomaterial_id"
+    t.index ["biomaterial_set_id"], name: "index_set_elements_on_biomaterial_set_id"
   end
 
 end

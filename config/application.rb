@@ -22,6 +22,9 @@ module Aker
                        request_specs: true
 
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
+
+      g.assets false
     end
+
   end
 end
