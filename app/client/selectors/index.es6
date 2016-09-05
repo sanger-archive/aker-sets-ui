@@ -6,9 +6,11 @@ const nullResource = { id: '', type: '', attributes: {}, links: {}, relationship
 const getApi = (state) => state.api;
 
 const getApiData  = (type) => { return (state) => state.api[type].data };
-const getBiomaterialSets = getApiData('biomaterial_sets');
-const getBiomaterials    = getApiData('biomaterials');
-const getProducts        = getApiData('products');
+const getBiomaterialSets     = getApiData('biomaterial_sets');
+const getBiomaterials        = getApiData('biomaterials');
+const getProducts            = getApiData('products');
+const getProductOptions      = getApiData('product_options');
+const getProductOptionValues = getApiData('product_option_values');
 
 // Selected
 const getSelected = (key)  => { return (state) => state.selected[key] };
@@ -21,24 +23,36 @@ const getSelectedResourceIdentifier = getSelected('entity');
 *******************************************************************************/
 
 // Give it a relationshipType and it'll return a function
-// that will find all the relations for an entity
+// that will find all the relations for a resource (or collection of resources)
 const findResourceRelationshipFactory = (relationshipType) => {
-  return (resource, relatedResources) => {
+  return (resources, relatedResources) => {
 
-    // If we don't have a selected resource, OR that resource doesn't have the specified
-    // relation, OR that relation doesn't have data, just return an empty array
-    if (!resource
-          || !resource.relationships[relationshipType]
-          || !resource.relationships[relationshipType].data) {
+    // If we don't have a resource, just return an array
+    if (!resources) {
       return [];
     }
 
-    // In JSONAPI a resource identifier object is one that identifies an individual object
-    // It must have a type and an id
-    // http://jsonapi.org/format/#document-resource-identifier-objects
-    return resource.relationships[relationshipType].data.map((resourceIdentifier) => {
-      return relatedResources.find((relatedEntity) => relatedEntity.id == resourceIdentifier.id)
-    })
+    // Resource could either be an individual resource, or a collection of them
+    if (!Array.isArray(resources)) {
+      resources = [resources];
+    }
+
+    return resources.reduce((memo, resource) => {
+      // If resource doesn't have the specified relation,
+      // OR that relation doesn't have data, just return the memo
+      if (!resource.relationships[relationshipType] || !resource.relationships[relationshipType].data) {
+        return memo;
+      }
+
+      // In JSONAPI a resource identifier object is one that identifies an individual object
+      // It must have a type and an id
+      // http://jsonapi.org/format/#document-resource-identifier-objects
+      memo.push(...resource.relationships[relationshipType].data.map((resourceIdentifier) => {
+        return relatedResources.find((relatedEntity) => relatedEntity.id == resourceIdentifier.id)
+      }))
+
+      return memo;
+    }, []);
   }
 }
 
@@ -86,3 +100,12 @@ export const getSelectedResourceBiomaterials = createSelector(
   findResourceRelationshipFactory('biomaterials')
 )
 
+export const getSelectedProductOptions = createSelector(
+  getSelectedProduct, getProductOptions,
+  findResourceRelationshipFactory('product_options')
+)
+
+export const getSelectedProductOptionValues = createSelector(
+  getSelectedProductOptions, getProductOptionValues,
+  findResourceRelationshipFactory('product_option_values')
+)

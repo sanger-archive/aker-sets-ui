@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export default ({ product }) => {
+export default ({ product, options, values }) => {
 
   if (!product) {
     return <i>No Product Selected</i>;
@@ -13,47 +13,32 @@ export default ({ product }) => {
   });
 
   return (
-    <table className={tableClass}>
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>{product.attributes.name}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Required input data</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Required input biomaterial</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Expected Data output</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Biomaterial output</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Options</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Reprogramming technology</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Growth Conditions</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Subclone</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <form>
+      <table className={tableClass}>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>{product.attributes.name}</th>
+          </tr>
+        </thead>
+        <tbody>
+          { options.map(option => {
+            return (
+              <tr key={`${option.type}-${option.id}`}>
+                <td>{ option.attributes.name }</td>
+                <td>
+                  <select name={option.attributes.name} className="form-control">
+                  { option.relationships.product_option_values.data.map((pov, key) => {
+                    const option_value = values.find(value => value.id == pov.id)
+                    return <option key={key}>{ option_value.attributes.value }</option>
+                  })}
+                  </select>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </form>
   )
 }

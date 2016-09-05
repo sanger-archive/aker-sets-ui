@@ -10,7 +10,9 @@ let initialState = {
     collections:      { data: [] },
     products:         { data: [] },
     programs:         { data: [] },
-    proposals:        { data: [] }
+    proposals:        { data: [] },
+    product_options:  { data: [] },
+    product_option_values: { data: [] }
   },
   selected: {
     biomaterial_set_id: undefined,

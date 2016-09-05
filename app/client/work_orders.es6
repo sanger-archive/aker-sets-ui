@@ -11,7 +11,7 @@ import $ from 'jquery';
 import store from './store.es6';
 import { getSelectedSet } from './selectors';
 
-store.dispatch(readEndpoint('products'));
+store.dispatch(readEndpoint('products?include=product_options.product_option_values'));
 store.dispatch(readEndpoint('biomaterial_sets'));
 
 const mapStateToProps = (state) => {

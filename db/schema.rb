@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160825231813) do
+ActiveRecord::Schema.define(version: 20160901153629) do
 
   create_table "aims", force: :cascade do |t|
     t.string   "name"
@@ -45,6 +45,23 @@ ActiveRecord::Schema.define(version: 20160825231813) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["program_id"], name: "index_collections_on_program_id"
+  end
+
+  create_table "product_option_values", force: :cascade do |t|
+    t.integer  "product_option_id"
+    t.string   "value"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["product_option_id"], name: "index_product_option_values_on_product_option_id"
+  end
+
+  create_table "product_options", force: :cascade do |t|
+    t.integer  "product_id"
+    t.string   "name"
+    t.string   "select_type"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["product_id"], name: "index_product_options_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|
