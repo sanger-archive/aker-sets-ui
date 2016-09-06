@@ -16,11 +16,13 @@ webpackJsonp([1],[
 
 	var _inbox2 = _interopRequireDefault(_inbox);
 
-	var _store = __webpack_require__(808);
+	var _store = __webpack_require__(810);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _actions = __webpack_require__(812);
+	var _selectors = __webpack_require__(808);
+
+	var _actions = __webpack_require__(814);
 
 	var _reduxJsonApi = __webpack_require__(501);
 
@@ -30,19 +32,11 @@ webpackJsonp([1],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mapStateToProps = function mapStateToProps(_ref) {
-	  var selected = _ref.selected;
-	  var api = _ref.api;
-
-	  var entity = { attributes: { name: '' } };
-
-	  if (selected.entity.id && api[selected.entity.type].data) {
-	    entity = api[selected.entity.type].data.find(function (o) {
-	      return o.id == selected.entity.id;
-	    });
-	  }
-
-	  return { entity: entity, source: 'programs?include=collections,projects.aims.proposals' };
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    entity: (0, _selectors.getSelectedResource)(state),
+	    source: 'programs?include=collections,projects.aims.proposals'
+	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -58165,6 +58159,8 @@ webpackJsonp([1],[
 
 	var _biomaterial_table = __webpack_require__(807);
 
+	var _selectors = __webpack_require__(808);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SelectedEntity = function SelectedEntity(_ref) {
@@ -58178,30 +58174,14 @@ webpackJsonp([1],[
 	  return _react2.default.createElement('div', null);
 	};
 
-	var mapStateToProps = function mapStateToProps(_ref2) {
-	  var selected = _ref2.selected;
-	  var api = _ref2.api;
-	  var _selected$entity = selected.entity;
-	  var type = _selected$entity.type;
-	  var id = _selected$entity.id;
-
+	var mapStateToProps = function mapStateToProps(state) {
 	  var biomaterials = [];
 
-	  if (type == 'collections' && api.collections.data) {
-	    var collection = api.collections.data.find(function (c) {
-	      return c.id == id;
-	    });
-
-	    if (collection.relationships.biomaterials.data) {
-	      biomaterials = collection.relationships.biomaterials.data.map(function (bm) {
-	        return api.biomaterials.data.find(function (biomaterial) {
-	          return bm.id == biomaterial.id;
-	        });
-	      });
-	    }
+	  if (state.selected.entity.type == 'collections') {
+	    biomaterials = (0, _selectors.getSelectedResourceBiomaterials)(state);
 	  }
 
-	  return { entity: selected.entity, biomaterials: biomaterials };
+	  return { entity: state.selected.entity, biomaterials: biomaterials };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(SelectedEntity);
@@ -58394,16 +58374,256 @@ webpackJsonp([1],[
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getSelectedProductOptionValues = exports.getSelectedProductOptions = exports.getSelectedResourceBiomaterials = exports.getSelectedSetBiomaterials = exports.getSelectedResource = exports.getSelectedProduct = exports.getSelectedSet = undefined;
+
+	var _reselect = __webpack_require__(809);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var nullResource = { id: '', type: '', attributes: {}, links: {}, relationships: {} };
+
+	// API
+	var getApi = function getApi(state) {
+	  return state.api;
+	};
+
+	var getApiData = function getApiData(type) {
+	  return function (state) {
+	    return state.api[type].data;
+	  };
+	};
+	var getBiomaterialSets = getApiData('biomaterial_sets');
+	var getBiomaterials = getApiData('biomaterials');
+	var getProducts = getApiData('products');
+	var getProductOptions = getApiData('product_options');
+	var getProductOptionValues = getApiData('product_option_values');
+
+	// Selected
+	var getSelected = function getSelected(key) {
+	  return function (state) {
+	    return state.selected[key];
+	  };
+	};
+	var getSelectedBiomaterialSetId = getSelected('biomaterial_set_id');
+	var getSelectedProductId = getSelected('product_id');
+	var getSelectedResourceIdentifier = getSelected('entity');
+
+	/*******************************************************************************
+	  Factories
+	*******************************************************************************/
+
+	// Give it a relationshipType and it'll return a function
+	// that will find all the relations for a resource (or collection of resources)
+	var findResourceRelationshipFactory = function findResourceRelationshipFactory(relationshipType) {
+	  return function (resources, relatedResources) {
+
+	    // If we don't have a resource, just return an array
+	    if (!resources) {
+	      return [];
+	    }
+
+	    // Resource could either be an individual resource, or a collection of them
+	    if (!Array.isArray(resources)) {
+	      resources = [resources];
+	    }
+
+	    return resources.reduce(function (memo, resource) {
+	      // If resource doesn't have the specified relation,
+	      // OR that relation doesn't have data, just return the memo
+	      if (!resource.relationships[relationshipType] || !resource.relationships[relationshipType].data) {
+	        return memo;
+	      }
+
+	      // In JSONAPI a resource identifier object is one that identifies an individual object
+	      // It must have a type and an id
+	      // http://jsonapi.org/format/#document-resource-identifier-objects
+	      memo.push.apply(memo, _toConsumableArray(resource.relationships[relationshipType].data.map(function (resourceIdentifier) {
+	        return relatedResources.find(function (relatedEntity) {
+	          return relatedEntity.id == resourceIdentifier.id;
+	        });
+	      })));
+
+	      return memo;
+	    }, []);
+	  };
+	};
+
+	var findResourceByIdFactory = function findResourceByIdFactory() {
+	  return function (resource_id, resources) {
+	    return resources.find(function (resource) {
+	      return resource.id == resource_id;
+	    });
+	  };
+	};
+
+	var findResourceFactory = function findResourceFactory() {
+	  return function (resourceIdentifier, resources) {
+	    if (!resources[resourceIdentifier.type]) return nullResource;
+	    return resources[resourceIdentifier.type].data.find(function (resource) {
+	      return resource.id == resourceIdentifier.id;
+	    });
+	  };
+	};
+
+	/*******************************************************************************
+	  Selectors
+	*******************************************************************************/
+
+	// getSelected Selectors
+	var getSelectedSet = exports.getSelectedSet = (0, _reselect.createSelector)(getSelectedBiomaterialSetId, getBiomaterialSets, findResourceByIdFactory());
+
+	var getSelectedProduct = exports.getSelectedProduct = (0, _reselect.createSelector)(getSelectedProductId, getProducts, findResourceByIdFactory());
+
+	var getSelectedResource = exports.getSelectedResource = (0, _reselect.createSelector)(getSelectedResourceIdentifier, getApi, findResourceFactory());
+
+	// selected{Resource}Biomaterials Selectors
+	var getSelectedSetBiomaterials = exports.getSelectedSetBiomaterials = (0, _reselect.createSelector)(getSelectedSet, getBiomaterials, findResourceRelationshipFactory('biomaterials'));
+
+	var getSelectedResourceBiomaterials = exports.getSelectedResourceBiomaterials = (0, _reselect.createSelector)(getSelectedResource, getBiomaterials, findResourceRelationshipFactory('biomaterials'));
+
+	var getSelectedProductOptions = exports.getSelectedProductOptions = (0, _reselect.createSelector)(getSelectedProduct, getProductOptions, findResourceRelationshipFactory('product_options'));
+
+	var getSelectedProductOptionValues = exports.getSelectedProductOptionValues = (0, _reselect.createSelector)(getSelectedProductOptions, getProductOptionValues, findResourceRelationshipFactory('product_option_values'));
+
+/***/ },
+/* 809 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports.defaultMemoize = defaultMemoize;
+	exports.createSelectorCreator = createSelectorCreator;
+	exports.createSelector = createSelector;
+	exports.createStructuredSelector = createStructuredSelector;
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function defaultEqualityCheck(a, b) {
+	  return a === b;
+	}
+
+	function defaultMemoize(func) {
+	  var equalityCheck = arguments.length <= 1 || arguments[1] === undefined ? defaultEqualityCheck : arguments[1];
+
+	  var lastArgs = null;
+	  var lastResult = null;
+	  return function () {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    if (lastArgs !== null && lastArgs.length === args.length && args.every(function (value, index) {
+	      return equalityCheck(value, lastArgs[index]);
+	    })) {
+	      return lastResult;
+	    }
+	    lastResult = func.apply(undefined, args);
+	    lastArgs = args;
+	    return lastResult;
+	  };
+	}
+
+	function getDependencies(funcs) {
+	  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+	  if (!dependencies.every(function (dep) {
+	    return typeof dep === 'function';
+	  })) {
+	    var dependencyTypes = dependencies.map(function (dep) {
+	      return typeof dep;
+	    }).join(', ');
+	    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+	  }
+
+	  return dependencies;
+	}
+
+	function createSelectorCreator(memoize) {
+	  for (var _len2 = arguments.length, memoizeOptions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	    memoizeOptions[_key2 - 1] = arguments[_key2];
+	  }
+
+	  return function () {
+	    for (var _len3 = arguments.length, funcs = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	      funcs[_key3] = arguments[_key3];
+	    }
+
+	    var recomputations = 0;
+	    var resultFunc = funcs.pop();
+	    var dependencies = getDependencies(funcs);
+
+	    var memoizedResultFunc = memoize.apply(undefined, [function () {
+	      recomputations++;
+	      return resultFunc.apply(undefined, arguments);
+	    }].concat(memoizeOptions));
+
+	    var selector = function selector(state, props) {
+	      for (var _len4 = arguments.length, args = Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
+	        args[_key4 - 2] = arguments[_key4];
+	      }
+
+	      var params = dependencies.map(function (dependency) {
+	        return dependency.apply(undefined, [state, props].concat(args));
+	      });
+	      return memoizedResultFunc.apply(undefined, _toConsumableArray(params));
+	    };
+
+	    selector.resultFunc = resultFunc;
+	    selector.recomputations = function () {
+	      return recomputations;
+	    };
+	    selector.resetRecomputations = function () {
+	      return recomputations = 0;
+	    };
+	    return selector;
+	  };
+	}
+
+	function createSelector() {
+	  return createSelectorCreator(defaultMemoize).apply(undefined, arguments);
+	}
+
+	function createStructuredSelector(selectors) {
+	  var selectorCreator = arguments.length <= 1 || arguments[1] === undefined ? createSelector : arguments[1];
+
+	  if (typeof selectors !== 'object') {
+	    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+	  }
+	  var objectKeys = Object.keys(selectors);
+	  return selectorCreator(objectKeys.map(function (key) {
+	    return selectors[key];
+	  }), function () {
+	    for (var _len5 = arguments.length, values = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+	      values[_key5] = arguments[_key5];
+	    }
+
+	    return values.reduce(function (composition, value, index) {
+	      composition[objectKeys[index]] = value;
+	      return composition;
+	    }, {});
+	  });
+	}
+
+/***/ },
+/* 810 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _redux = __webpack_require__(477);
 
-	var _reduxThunk = __webpack_require__(809);
+	var _reduxThunk = __webpack_require__(811);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
 	var _reduxJsonApi = __webpack_require__(501);
 
-	var _reducers = __webpack_require__(810);
+	var _reducers = __webpack_require__(812);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -58416,13 +58636,19 @@ webpackJsonp([1],[
 	    collections: { data: [] },
 	    products: { data: [] },
 	    programs: { data: [] },
-	    proposals: { data: [] }
+	    proposals: { data: [] },
+	    product_options: { data: [] },
+	    product_option_values: { data: [] }
 	  },
 	  selected: {
-	    biomaterial_sets: undefined,
-	    collections: undefined,
+	    biomaterial_set_id: undefined,
+	    biomaterial_set: null,
+	    collection_id: undefined,
+	    collection: null,
 	    entity: { type: null, id: null },
-	    products: undefined
+	    entity_obj: null,
+	    product_id: undefined,
+	    product: null
 	  },
 	  browser: {
 	    items: [],
@@ -58440,7 +58666,7 @@ webpackJsonp([1],[
 	exports.default = store;
 
 /***/ },
-/* 809 */
+/* 811 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58468,7 +58694,7 @@ webpackJsonp([1],[
 	exports['default'] = thunk;
 
 /***/ },
-/* 810 */
+/* 812 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58481,11 +58707,11 @@ webpackJsonp([1],[
 
 	var _reduxJsonApi = __webpack_require__(501);
 
-	var _selected = __webpack_require__(811);
+	var _selected = __webpack_require__(813);
 
 	var _selected2 = _interopRequireDefault(_selected);
 
-	var _browser = __webpack_require__(813);
+	var _browser = __webpack_require__(815);
 
 	var _browser2 = _interopRequireDefault(_browser);
 
@@ -58496,7 +58722,7 @@ webpackJsonp([1],[
 	exports.default = reducers;
 
 /***/ },
-/* 811 */
+/* 813 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58505,7 +58731,7 @@ webpackJsonp([1],[
 	  value: true
 	});
 
-	var _actions = __webpack_require__(812);
+	var _actions = __webpack_require__(814);
 
 	var selected = function selected() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -58513,11 +58739,11 @@ webpackJsonp([1],[
 
 	  switch (action.type) {
 	    case _actions.SELECT_SET:
-	      return Object.assign({}, state, { biomaterial_sets: action.id });
+	      return Object.assign({}, state, { biomaterial_set_id: action.id });
 	    case _actions.SELECT_COLLECTION:
-	      return Object.assign({}, state, { collections: action.id });
+	      return Object.assign({}, state, { collection_id: action.id });
 	    case _actions.SELECT_PRODUCT:
-	      return Object.assign({}, state, { products: action.id });
+	      return Object.assign({}, state, { product_id: action.id });
 	    case _actions.SELECT_ENTITY:
 	      return Object.assign({}, state, { entity: { type: action.entity.type, id: action.entity.id } });
 	    default:
@@ -58528,7 +58754,7 @@ webpackJsonp([1],[
 	exports.default = selected;
 
 /***/ },
-/* 812 */
+/* 814 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58616,7 +58842,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 813 */
+/* 815 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58625,7 +58851,7 @@ webpackJsonp([1],[
 	  value: true
 	});
 
-	var _actions = __webpack_require__(812);
+	var _actions = __webpack_require__(814);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -58641,7 +58867,7 @@ webpackJsonp([1],[
 	      return Object.assign({}, state, { last_shift_selected: [], last_selected: action.key, selected: [state.items[action.key]] });
 
 	    case _actions.TOGGLE_ITEM:
-	      if (state.selected.indexOf(action.key) == -1) {
+	      if (state.selected.indexOf(state.items[action.key]) == -1) {
 	        return Object.assign({}, state, { last_shift_selected: [], last_selected: action.key, selected: [].concat(_toConsumableArray(state.selected), [state.items[action.key]]) });
 	      } else {
 	        return Object.assign({}, state, { last_shift_selected: [], last_selected: action.key, selected: state.selected.filter(function (s, i) {
