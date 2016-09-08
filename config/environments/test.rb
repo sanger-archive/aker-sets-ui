@@ -41,4 +41,6 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.webpack_dev_server_host = 'http://localhost:8080'
+
+  config.webpack[:use_manifest] = true
 end

@@ -26,5 +26,11 @@ module Aker
       g.assets false
     end
 
+    config.webpack = {
+      :use_manifest => false,
+      :asset_manifest => {},
+      :common_manifest => {},
+    }
+
   end
 end
