@@ -53,4 +53,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.webpack_dev_server_host = 'http://localhost:8080'
+
+  config.webpack[:use_manifest] = false
 end

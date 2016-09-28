@@ -42,5 +42,5 @@ Rails.application.configure do
 
   config.webpack_dev_server_host = 'http://localhost:8080'
 
-  config.webpack[:use_manifest] = true
+  config.webpack[:use_manifest] = false
 end
