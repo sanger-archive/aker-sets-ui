@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.hot.config.js --content-base ./app/client --port 8080 --hot",
-    "test": "karma start"
+    "test": "karma start",
+    "dev-compile": "webpack --config webpack.dev.config.js"
   },
   "keywords": [
     "aker",

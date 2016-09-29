@@ -6,7 +6,7 @@ namespace :test do
 
   desc "Run all of the tests!"
   task :all do
-    `webpack --config webpack.dev.config.js`
+    `npm run-script dev-compile`
     Rake::Task["spec"].invoke
     Rake::Task["test:js"].invoke
   end
