@@ -27,6 +27,8 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'pg'
+
 # JSON API
 gem 'jsonapi-resources', '~> 0.7.1.beta2'
 
