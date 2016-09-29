@@ -1,7 +1,7 @@
 namespace :webpack do
   desc 'compile bundles using webpack'
   task :compile do
-    cmd = 'webpack --config webpack.prod.config.js --json'
+    cmd = './node_modules/.bin/webpack --config webpack.prod.config.js --json'
     output = `#{cmd}`
 
     stats = JSON.parse(output)
