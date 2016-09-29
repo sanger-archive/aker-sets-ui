@@ -6,7 +6,8 @@ namespace :test do
 
   desc "Run all of the tests!"
   task :all do
-    `npm run-script dev-compile`
+    puts `npm run-script dev-compile`
+    Rake::Task["assets:precompile"].invoke
     Rake::Task["spec"].invoke
     Rake::Task["test:js"].invoke
   end
