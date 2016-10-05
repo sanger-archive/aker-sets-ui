@@ -37,6 +37,8 @@ gem 'font-awesome-sass'
 # So we can run the webpack-dev-server and rails server at the same time
 gem 'foreman'
 
+gem 'rubocop', '~> 0.41.2', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -51,7 +53,6 @@ group :test do
   gem 'poltergeist'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
-  gem 'rubocop', '~> 0.41.2', require: false
 end
 
 group :development do
