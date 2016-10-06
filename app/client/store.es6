@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk';
-import { setEndpointHost, setEndpointPath } from 'redux-json-api';
+import { setEndpointHost, setEndpointPath, setHeaders } from 'redux-json-api';
 import reducers from './reducers';
 
 let initialState = {
@@ -36,5 +36,9 @@ let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
 store.dispatch(setEndpointHost(''));
 store.dispatch(setEndpointPath('/api/v1'));
+store.dispatch(setHeaders({
+  'Content-Type': 'application/vnd.api+json',
+  Accept: 'application/vnd.api+json'
+}));
 
 export default store;

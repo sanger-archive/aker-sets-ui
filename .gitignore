@@ -27,4 +27,4 @@
 /app/assets/javascripts
 !/app/assets/javascripts/application.js
 
-/public/assets/*
+/public/dev-assets/*
