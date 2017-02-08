@@ -13,7 +13,7 @@ import { getSelectedSet, getSelectedResource } from './selectors';
 import store from './store.es6';
 
 // Load the sets up front
-store.dispatch(readEndpoint('biomaterial_sets'));
+store.dispatch(readEndpoint('sets'));
 
 const mapStateToProps = (state) => {
   return {
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch) => {
 
       dispatch(selectEntity(id, 'collections'));
 
-      dispatch(readEndpoint(`collections/${id}?include=biomaterials`))
+      dispatch(readEndpoint(`sets/${id}?include=materials`))
         .then( json => dispatch(storeItems(json.included)) )
     }
   }

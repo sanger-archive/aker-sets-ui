@@ -7,7 +7,15 @@ export const BiomaterialTableRow = React.createClass({
     return {
       onClick: () => {},
       removeable: false,
-      selected: []
+      selected: [],
+      biomaterial: {
+        id: '',
+        common_name: '',
+        gender: '',
+        phenotype: '',
+        supplier_name: '',
+        donor_id: ''
+      }
     }
   },
 
@@ -26,12 +34,12 @@ export const BiomaterialTableRow = React.createClass({
 
     return (
       <tr className={trClass} onClick={(e) => onClick(biomaterial, index, e) }>
-        <td>{biomaterial.attributes.supplier}</td>
-        <td>{biomaterial.attributes.supplier_identifier}</td>
-        <td>{biomaterial.attributes.sanger_tube_barcode}</td>
-        <td>{biomaterial.attributes.uuid}</td>
-        <td>{biomaterial.attributes.biomaterial_type}</td>
-        <td>{biomaterial.attributes.metadata}</td>
+        <td>{biomaterial.id}</td>
+        <td>{biomaterial.common_name}</td>
+        <td>{biomaterial.gender}</td>
+        <td>{biomaterial.phenotype}</td>
+        <td>{biomaterial.supplier_name}</td>
+        <td>{biomaterial.donor_id}</td>
         {removeableTd}
       </tr>
     )
@@ -49,7 +57,7 @@ export const BiomaterialTable = React.createClass({
   },
 
   render() {
-    const { decorators, biomaterials, ...rest } = this.props;
+    const { decorators, biomaterials, materials, ...rest } = this.props;
 
     const tableClass = classNames({
       table: true,
@@ -60,16 +68,21 @@ export const BiomaterialTable = React.createClass({
       <table className={tableClass}>
         <thead>
           <tr>
-            <th>Supplier</th>
-            <th>Supplier Identifier</th>
-            <th>Sanger tube barcode</th>
-            <th>Sanger assigned UUID</th>
-            <th>Biomaterial type</th>
-            <th>Metadata</th>
+            <th>ID</th>
+            <th>Common Name</th>
+            <th>Gender</th>
+            <th>Phenotype</th>
+            <th>Supplier Name</th>
+            <th>Donor ID</th>
           </tr>
         </thead>
           <tbody>
             { biomaterials.map((biomaterial, index) => {
+
+              if (biomaterial.id in materials) {
+                biomaterial = materials[biomaterial.id]
+              }
+
               return <decorators.row key={index} index={index} biomaterial={biomaterial} {...rest} />;
             })}
           </tbody>

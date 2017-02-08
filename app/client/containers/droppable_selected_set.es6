@@ -20,10 +20,10 @@ const setTarget = {
     let current_biomaterials = [];
     let new_biomaterials     = [];
 
-    const bm_mapper = (bm) => { return { type: bm.type, id: bm.id }};
+    const bm_mapper = (bm) => { return { type: 'materials', id: bm.id }};
 
-    if (set.relationships.biomaterials.data) {
-      current_biomaterials = set.relationships.biomaterials.data.map(bm_mapper)
+    if (set.relationships.materials.data) {
+      current_biomaterials = set.relationships.materials.data.map(bm_mapper)
     }
 
     // If there are selected biomaterials, add them
@@ -39,7 +39,7 @@ const setTarget = {
       type: set.type,
       id: set.id,
       relationships: {
-        biomaterials: {
+        materials: {
           data: [...current_biomaterials, ...new_biomaterials]
         }
       }
@@ -48,7 +48,7 @@ const setTarget = {
     dispatch(updateEntity(entity))
       .then(() => {
         dispatch(clearSelection());
-        return dispatch(readEndpoint(`${set.type}/${set.id}?include=biomaterials`))
+        return dispatch(readEndpoint(`sets/${set.id}?include=materials`))
       });
 
   }
@@ -66,7 +66,11 @@ DroppableBiomaterialTable = DropTarget(ItemTypes.BIOMATERIAL, setTarget, dropCol
 DroppableBiomaterialTable = connect()(DroppableBiomaterialTable)
 
 const mapStateToProps = (state) => {
-  return { biomaterials: getSelectedSetBiomaterials(state), removeable: true };
+  return {
+    biomaterials: getSelectedSetBiomaterials(state),
+    materials: state.materials,
+    removeable: true
+  };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -80,14 +84,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         type: set.type,
         id: set.id,
         relationships: {
-          biomaterials: {
-            data: set.relationships.biomaterials.data.filter(bm_filter)
+          materials: {
+            data: set.relationships.materials.data.filter(bm_filter)
           }
         }
       };
 
       dispatch(updateEntity(entity))
-        .then(() => dispatch(readEndpoint(`${set.type}/${set.id}?include=biomaterials`)))
+        .then(() => dispatch(readEndpoint(`sets/${set.id}?include=materials`)))
         .then((json) => dispatch(storeItems(json.included)) );
     }
   }

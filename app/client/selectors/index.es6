@@ -6,16 +6,12 @@ const nullResource = { id: '', type: '', attributes: {}, links: {}, relationship
 const getApi = (state) => state.api;
 
 const getApiData  = (type) => { return (state) => state.api[type].data };
-const getBiomaterialSets     = getApiData('biomaterial_sets');
-const getBiomaterials        = getApiData('biomaterials');
-const getProducts            = getApiData('products');
-const getProductOptions      = getApiData('product_options');
-const getProductOptionValues = getApiData('product_option_values');
+const getBiomaterialSets     = getApiData('sets');
+const getBiomaterials        = getApiData('materials');
 
 // Selected
 const getSelected = (key)  => { return (state) => state.selected[key] };
 const getSelectedBiomaterialSetId   = getSelected('biomaterial_set_id');
-const getSelectedProductId          = getSelected('product_id');
 const getSelectedResourceIdentifier = getSelected('entity');
 
 /*******************************************************************************
@@ -79,11 +75,6 @@ export const getSelectedSet = createSelector(
   findResourceByIdFactory()
 )
 
-export const getSelectedProduct = createSelector(
-  getSelectedProductId, getProducts,
-  findResourceByIdFactory()
-)
-
 export const getSelectedResource = createSelector(
   getSelectedResourceIdentifier, getApi,
   findResourceFactory()
@@ -92,20 +83,10 @@ export const getSelectedResource = createSelector(
 // selected{Resource}Biomaterials Selectors
 export const getSelectedSetBiomaterials = createSelector(
   getSelectedSet, getBiomaterials,
-  findResourceRelationshipFactory('biomaterials')
+  findResourceRelationshipFactory('materials')
 )
 
 export const getSelectedResourceBiomaterials = createSelector(
   getSelectedResource, getBiomaterials,
-  findResourceRelationshipFactory('biomaterials')
-)
-
-export const getSelectedProductOptions = createSelector(
-  getSelectedProduct, getProductOptions,
-  findResourceRelationshipFactory('product_options')
-)
-
-export const getSelectedProductOptionValues = createSelector(
-  getSelectedProductOptions, getProductOptionValues,
-  findResourceRelationshipFactory('product_option_values')
+  findResourceRelationshipFactory('materials')
 )
