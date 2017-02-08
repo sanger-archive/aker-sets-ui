@@ -12,7 +12,7 @@ let AddSetForm = ({ dispatch }) => {
         if (!input.value) return;
 
         const set = {
-          type: 'biomaterial_sets',
+          type: 'sets',
           attributes: {
             name: input.value.trim()
           }

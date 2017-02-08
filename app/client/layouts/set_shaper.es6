@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import MenuTreePanel from '../containers/menu_tree_panel.es6';
-import SetTable from '../containers/set_table.es6';
 import SelectableSetTable from '../containers/selectable_set_table.es6';
 import DroppableSelectedSet from '../containers/droppable_selected_set.es6';
 import DraggableSelectedCollection from '../containers/draggable_selected_collection.es6';
 import { Panel, Heading, Body, Footer } from '../components/panel.es6';
 import SetForm from '../containers/add_set_form.es6';
 
-const SetShaper = ({ set, entity, source, onToggle }) => {
+const SetShaper = ({ set, collection_ids, entity, source, onToggle }) => {
 
   return (
     <div className="container-fluid">
@@ -25,7 +23,7 @@ const SetShaper = ({ set, entity, source, onToggle }) => {
             <Heading title="Sets" />
 
             <Body style={{height: '280px', overflowY: 'scroll'}}>
-              <SetTable />
+              <SelectableSetTable selectionType="top"/>
             </Body>
 
             <Footer>
@@ -63,14 +61,10 @@ const SetShaper = ({ set, entity, source, onToggle }) => {
 
               <div className="tab-content">
                 <div role="tabpanel" className="tab-pane active" id="collections">
-                  <MenuTreePanel
-                    source={source}
-                    onToggle={onToggle}
-                    entities={['programs', 'collections']}
-                  />
+                  <SelectableSetTable selectionType="bottom" setIdList={collection_ids} />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="sets">
-                  <SelectableSetTable />
+                  <SelectableSetTable selectionType="bottom"/>
                 </div>
               </div>
 

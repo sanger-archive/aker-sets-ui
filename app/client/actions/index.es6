@@ -1,32 +1,9 @@
-export const SELECT_SET = 'SELECT_SET';
-export const selectSet = (id) => {
+export const SELECT = 'SELECT';
+export const select = (id, selectionType) => {
   return {
-    type: SELECT_SET,
-    id
-  }
-}
-
-export const SELECT_COLLECTION = 'SELECT_COLLECTION';
-export const selectCollection = (id) => {
-  return {
-    type: SELECT_COLLECTION,
-    id
-  }
-}
-
-export const SELECT_PRODUCT = 'SELECT_PRODUCT';
-export const selectProduct = (id) => {
-  return {
-    type: SELECT_PRODUCT,
-    id
-  }
-}
-
-export const SELECT_BIOMATERIAL = 'SELECT_BIOMATERIAL';
-export const selectBiomaterial = (id) => {
-  return {
-    type: SELECT_BIOMATERIAL,
-    id
+    type: SELECT,
+    id,
+    selectionType
   }
 }
 
@@ -74,5 +51,31 @@ export const shiftSelectItems = (key) => {
   return {
     type: SHIFT_SELECT_ITEMS,
     key
+  }
+}
+
+export const RECEIVE_MATERIALS = 'RECEIVE_MATERIALS';
+export const receiveMaterials = (materials) => {
+  return {
+    type: RECEIVE_MATERIALS,
+    materials
+  }
+}
+
+export const FETCH_MATERIALS = 'FETCH_MATERIALS';
+export const fetchMaterials = (materials) => {
+  return function(dispatch) {
+    if (!materials) return false;
+
+    const ids = materials.map((material) => material.id);
+
+    $.ajax({
+      url: `http://dev.psd.sanger.ac.uk:9006/materials?where={"_id" : { "$in": ["${ids.join('","')}"] } }`,
+      contentType: "application/json",
+      accept: "application/json",
+      jsonp: false })
+      .then(function(response) {
+        dispatch(receiveMaterials(response._items))
+      });
   }
 }

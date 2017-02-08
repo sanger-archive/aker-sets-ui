@@ -5,24 +5,16 @@ import reducers from './reducers';
 
 let initialState = {
   api: {
-    biomaterial_sets: { data: [] },
-    biomaterials:     { data: [] },
-    collections:      { data: [] },
-    products:         { data: [] },
-    programs:         { data: [] },
-    proposals:        { data: [] },
-    product_options:  { data: [] },
-    product_option_values: { data: [] }
+    sets:        { data: [] },
+    materials:   { data: [] },
+    collections: { data: [] },
+    programs:    { data: [] }
   },
+  materials: {},
+  collection_ids: ["f7b5d220-91d1-48b7-a668-0e737b412d6a"], // TODO real collection ids
   selected: {
-    biomaterial_set_id: undefined,
-    biomaterial_set:    null,
-    collection_id:      undefined,
-    collection:         null,
-    entity:             { type: null, id: null },
-    entity_obj:         null,
-    product_id:         undefined,
-    product:            null,
+    top: null,
+    bottom: null
   },
   browser: {
     items: [],
@@ -34,7 +26,7 @@ let initialState = {
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
-store.dispatch(setEndpointHost(''));
+store.dispatch(setEndpointHost('http://dev.psd.sanger.ac.uk:9007'));
 store.dispatch(setEndpointPath('/api/v1'));
 store.dispatch(setHeaders({
   'Content-Type': 'application/vnd.api+json',

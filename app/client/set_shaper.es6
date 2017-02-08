@@ -9,16 +9,17 @@ import App from './layouts/set_shaper.es6';
 
 import { selectEntity, storeItems } from './actions';
 import { readEndpoint } from 'redux-json-api';
-import { getSelectedSet, getSelectedResource } from './selectors';
+import { getSelectedTop, getSelectedBottom } from './selectors';
 import store from './store.es6';
 
 // Load the sets up front
-store.dispatch(readEndpoint('biomaterial_sets'));
+store.dispatch(readEndpoint('sets'));
 
 const mapStateToProps = (state) => {
   return {
-    set: getSelectedSet(state),
-    entity: getSelectedResource(state),
+    set: getSelectedTop(state),
+    collection_ids: state.collection_ids,
+    entity: getSelectedBottom(state),
     source: 'programs?include=collections'
   };
 };
@@ -30,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 
       dispatch(selectEntity(id, 'collections'));
 
-      dispatch(readEndpoint(`collections/${id}?include=biomaterials`))
+      dispatch(readEndpoint(`sets/${id}?include=materials`))
         .then( json => dispatch(storeItems(json.included)) )
     }
   }
