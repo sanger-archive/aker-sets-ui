@@ -11,13 +11,10 @@ let initialState = {
     programs:    { data: [] }
   },
   materials: {},
+  collection_ids: ["f7b5d220-91d1-48b7-a668-0e737b412d6a"], // TODO real collection ids
   selected: {
-    entity:             { type: null, id: null },
-    entity_obj:         null,
-    biomaterial_set_id: undefined,
-    biomaterial_set:    null,
-    collection_id:      undefined,
-    collection:         null
+    top: null,
+    bottom: null
   },
   browser: {
     items: [],

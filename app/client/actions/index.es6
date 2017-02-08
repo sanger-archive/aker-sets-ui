@@ -1,24 +1,9 @@
-export const SELECT_SET = 'SELECT_SET';
-export const selectSet = (id) => {
+export const SELECT = 'SELECT';
+export const select = (id, selectionType) => {
   return {
-    type: SELECT_SET,
-    id
-  }
-}
-
-export const SELECT_COLLECTION = 'SELECT_COLLECTION';
-export const selectCollection = (id) => {
-  return {
-    type: SELECT_COLLECTION,
-    id
-  }
-}
-
-export const SELECT_BIOMATERIAL = 'SELECT_BIOMATERIAL';
-export const selectBiomaterial = (id) => {
-  return {
-    type: SELECT_BIOMATERIAL,
-    id
+    type: SELECT,
+    id,
+    selectionType
   }
 }
 

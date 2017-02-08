@@ -6,7 +6,7 @@ import droppable from '../hocs/droppable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
 import { updateEntity, readEndpoint } from 'redux-json-api';
 import { clearSelection, storeItems } from '../actions';
-import { getSelectedSetBiomaterials } from '../selectors';
+import { getSelectedTopMaterials } from '../selectors';
 
 let DroppableBiomaterialTable = droppable(BiomaterialTable);
 
@@ -67,7 +67,7 @@ DroppableBiomaterialTable = connect()(DroppableBiomaterialTable)
 
 const mapStateToProps = (state) => {
   return {
-    biomaterials: getSelectedSetBiomaterials(state),
+    biomaterials: getSelectedTopMaterials(state),
     materials: state.materials,
     removeable: true
   };
@@ -91,8 +91,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       };
 
       dispatch(updateEntity(entity))
-        .then(() => dispatch(readEndpoint(`sets/${set.id}?include=materials`)))
-        .then((json) => dispatch(storeItems(json.included)) );
+        .then(() => dispatch(readEndpoint(`sets/${set.id}?include=materials`)));
     }
   }
 }

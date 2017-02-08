@@ -6,13 +6,13 @@ const nullResource = { id: '', type: '', attributes: {}, links: {}, relationship
 const getApi = (state) => state.api;
 
 const getApiData  = (type) => { return (state) => state.api[type].data };
-const getBiomaterialSets     = getApiData('sets');
+const getSets                = getApiData('sets');
 const getBiomaterials        = getApiData('materials');
 
 // Selected
-const getSelected = (key)  => { return (state) => state.selected[key] };
-const getSelectedBiomaterialSetId   = getSelected('biomaterial_set_id');
-const getSelectedResourceIdentifier = getSelected('entity');
+const getSelectedId = (key)  => { return (state) => state.selected[key] };
+const getSelectedTopId    = getSelectedId('top');
+const getSelectedBottomId = getSelectedId('bottom');
 
 /*******************************************************************************
   Factories
@@ -70,23 +70,23 @@ const findResourceFactory = () => {
 *******************************************************************************/
 
 // getSelected Selectors
-export const getSelectedSet = createSelector(
-  getSelectedBiomaterialSetId, getBiomaterialSets,
+export const getSelectedTop = createSelector(
+  getSelectedTopId, getSets,
   findResourceByIdFactory()
 )
 
-export const getSelectedResource = createSelector(
-  getSelectedResourceIdentifier, getApi,
-  findResourceFactory()
+export const getSelectedBottom = createSelector(
+  getSelectedBottomId, getSets,
+  findResourceByIdFactory()
 )
 
 // selected{Resource}Biomaterials Selectors
-export const getSelectedSetBiomaterials = createSelector(
-  getSelectedSet, getBiomaterials,
+export const getSelectedTopMaterials = createSelector(
+  getSelectedTop, getBiomaterials,
   findResourceRelationshipFactory('materials')
 )
 
-export const getSelectedResourceBiomaterials = createSelector(
-  getSelectedResource, getBiomaterials,
+export const getSelectedBottomMaterials = createSelector(
+  getSelectedBottom, getBiomaterials,
   findResourceRelationshipFactory('materials')
 )
