@@ -6,6 +6,7 @@ import SetTable from '../components/set_table.es6';
 
 const mapStateToProps = ({ api, selected }, { setIdList, selectionType }) => {
   let sets = api.sets.data;
+
   if (Array.isArray(setIdList)) {
     sets = sets.filter((s) => setIdList.includes(s.id));
   } else {

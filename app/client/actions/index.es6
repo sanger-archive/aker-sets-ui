@@ -79,3 +79,25 @@ export const fetchMaterials = (materials) => {
       });
   }
 }
+
+export const RECEIVE_COLLECTIONS = 'RECEIVE_COLLECTIONS';
+export const receiveCollections = (collections) => {
+  return {
+    type: RECEIVE_COLLECTIONS,
+    collections
+  }
+}
+
+export const FETCH_COLLECTIONS = 'FETCH_COLLECTIONS';
+export const fetchCollections = () => {
+  return function(dispatch) {
+    $.ajax({
+      url: 'http://dev.psd.sanger.ac.uk:9003/api/v1/collections',
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      jsonp: false })
+      .then(function(response) {
+        dispatch(receiveCollections(response.data))
+      });
+  }
+}

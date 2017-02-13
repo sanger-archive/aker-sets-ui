@@ -7,38 +7,25 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems } from './actions';
+import { selectEntity, storeItems, fetchCollections } from './actions';
 import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom } from './selectors';
 import store from './store.es6';
 
-// Load the sets up front
+// Load the sets and collecions up front
 store.dispatch(readEndpoint('sets'));
+store.dispatch(fetchCollections());
 
 const mapStateToProps = (state) => {
   return {
     set: getSelectedTop(state),
     collection_ids: state.collection_ids,
-    entity: getSelectedBottom(state),
-    source: 'programs?include=collections'
+    entity: getSelectedBottom(state)
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onToggle: (id, type) => {
-      if (type != 'collections') return;
-
-      dispatch(selectEntity(id, 'collections'));
-
-      dispatch(readEndpoint(`sets/${id}?include=materials`))
-        .then( json => dispatch(storeItems(json.included)) )
-    }
-  }
-}
-
 // Make the App "smart"
-let SetShaperApp = connect(mapStateToProps, mapDispatchToProps)(App);
+let SetShaperApp = connect(mapStateToProps)(App);
 
 // Give it the drag and drop context
 // https://gaearon.github.io/react-dnd/docs-drag-drop-context.html
@@ -49,4 +36,4 @@ render(
     <SetShaperApp />
   </Provider>,
   document.getElementById('application')
-)
+);
