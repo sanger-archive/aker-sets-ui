@@ -24,7 +24,7 @@ let initialState = {
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
-store.dispatch(setEndpointHost('http://dev.psd.sanger.ac.uk:9007'));
+store.dispatch(setEndpointHost(Aker.config.sets_root));
 store.dispatch(setEndpointPath('/api/v1'));
 store.dispatch(setHeaders({
   'Content-Type': 'application/vnd.api+json',

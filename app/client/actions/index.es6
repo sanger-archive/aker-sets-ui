@@ -70,7 +70,7 @@ export const fetchMaterials = (materials) => {
     const ids = materials.map((material) => material.id);
 
     $.ajax({
-      url: `http://dev.psd.sanger.ac.uk:9006/materials?where={"_id" : { "$in": ["${ids.join('","')}"] } }`,
+      url: `${Aker.config.materials_root}/materials?where={"_id" : { "$in": ["${ids.join('","')}"] } }`,
       contentType: "application/json",
       accept: "application/json",
       jsonp: false })
@@ -92,7 +92,7 @@ export const FETCH_COLLECTIONS = 'FETCH_COLLECTIONS';
 export const fetchCollections = () => {
   return function(dispatch) {
     $.ajax({
-      url: 'http://dev.psd.sanger.ac.uk:9003/api/v1/collections',
+      url: `${Aker.config.study_root}/collections`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       jsonp: false })

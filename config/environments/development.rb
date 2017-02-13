@@ -59,4 +59,8 @@ Rails.application.configure do
   config.webpack_dev_server_host = 'http://localhost:8080'
 
   config.webpack[:use_manifest] = false
+
+  config.materials_root = 'http://materials.dev'
+  config.study_root = 'http://studies.dev/api/v1'
+  config.sets_root = 'http://sets.dev'
 end
