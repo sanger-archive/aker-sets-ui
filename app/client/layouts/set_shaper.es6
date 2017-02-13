@@ -6,7 +6,7 @@ import DraggableSelectedCollection from '../containers/draggable_selected_collec
 import { Panel, Heading, Body, Footer } from '../components/panel.es6';
 import SetForm from '../containers/add_set_form.es6';
 
-const SetShaper = ({ set, collection_ids, entity, source, onToggle }) => {
+const SetShaper = ({ set, collection_ids, entity }) => {
 
   return (
     <div className="container-fluid">

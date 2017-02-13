@@ -11,4 +11,4 @@
 // about supported directives.
 //
 //= require bootstrap-sprockets
-//= require turbolinks
+//= require config

@@ -70,12 +70,34 @@ export const fetchMaterials = (materials) => {
     const ids = materials.map((material) => material.id);
 
     $.ajax({
-      url: `http://dev.psd.sanger.ac.uk:9006/materials?where={"_id" : { "$in": ["${ids.join('","')}"] } }`,
+      url: `${Aker.config.materials_root}/materials?where={"_id" : { "$in": ["${ids.join('","')}"] } }`,
       contentType: "application/json",
       accept: "application/json",
       jsonp: false })
       .then(function(response) {
         dispatch(receiveMaterials(response._items))
+      });
+  }
+}
+
+export const RECEIVE_COLLECTIONS = 'RECEIVE_COLLECTIONS';
+export const receiveCollections = (collections) => {
+  return {
+    type: RECEIVE_COLLECTIONS,
+    collections
+  }
+}
+
+export const FETCH_COLLECTIONS = 'FETCH_COLLECTIONS';
+export const fetchCollections = () => {
+  return function(dispatch) {
+    $.ajax({
+      url: `${Aker.config.study_root}/collections`,
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      jsonp: false })
+      .then(function(response) {
+        dispatch(receiveCollections(response.data))
       });
   }
 }
