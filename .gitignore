@@ -23,8 +23,4 @@
 # Ignore javascript modules installed through npm
 /node_modules
 
-# Ignore everything in app/assets/javascripts except application.js
-/app/assets/javascripts
-!/app/assets/javascripts/application.js
-
 /public/dev-assets/*

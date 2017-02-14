@@ -11,5 +11,3 @@ namespace :webpack do
     end
   end
 end
-
-Rake::Task['assets:precompile'].enhance(['webpack:compile'])
