@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
-import { selectItem, toggleItem, shiftSelectItems, clearSelection } from '../actions';
+import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions';
 import onClickOutside from 'react-onclickoutside';
 
 import draggable from '../hocs/draggable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
-import { getSelectedResourceBiomaterials } from '../selectors';
+import { getSelectedBottomMaterials } from '../selectors';
 
 import { BiomaterialTable, BiomaterialTableRow } from '../components/biomaterial_table.es6';
 import FontAwesome from '../components/font_awesome.es6';
@@ -41,7 +41,8 @@ draggableBiomaterialTableRow = DragSource(ItemTypes.BIOMATERIAL, biomaterialSour
 
 const mapStateToProps = (state) => {
   return {
-    biomaterials: getSelectedResourceBiomaterials(state),
+    biomaterials: getSelectedBottomMaterials(state),
+    materials: state.materials,
     decorators: { row: draggableBiomaterialTableRow },
     selected: state.browser.selected
   };
@@ -50,7 +51,9 @@ const mapStateToProps = (state) => {
 let Wrapper = onClickOutside(React.createClass({
 
   onClick(biomaterial, index, evt) {
-    const {dispatch} = this.props;
+    const {dispatch, biomaterials} = this.props;
+
+    dispatch(storeItems(biomaterials));
 
     if (evt.metaKey) {
       dispatch(toggleItem(index));

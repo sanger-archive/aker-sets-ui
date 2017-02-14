@@ -5,24 +5,14 @@ import reducers from './reducers';
 
 let initialState = {
   api: {
-    biomaterial_sets: { data: [] },
-    biomaterials:     { data: [] },
-    collections:      { data: [] },
-    products:         { data: [] },
-    programs:         { data: [] },
-    proposals:        { data: [] },
-    product_options:  { data: [] },
-    product_option_values: { data: [] }
+    sets:        { data: [] },
+    materials:   { data: [] }
   },
+  materials: {},
+  collection_ids: [],
   selected: {
-    biomaterial_set_id: undefined,
-    biomaterial_set:    null,
-    collection_id:      undefined,
-    collection:         null,
-    entity:             { type: null, id: null },
-    entity_obj:         null,
-    product_id:         undefined,
-    product:            null,
+    top: null,
+    bottom: null
   },
   browser: {
     items: [],
@@ -34,7 +24,7 @@ let initialState = {
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
-store.dispatch(setEndpointHost(''));
+store.dispatch(setEndpointHost(Aker.config.sets_root));
 store.dispatch(setEndpointPath('/api/v1'));
 store.dispatch(setHeaders({
   'Content-Type': 'application/vnd.api+json',
