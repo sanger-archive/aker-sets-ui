@@ -35,10 +35,10 @@ const SetShaper = ({ set, collection_ids, entity }) => {
         <div className="col-md-9">
           <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
 
-            <Panel key={`set-${set.id}`} style={{height: '424px', overflowY: 'scroll'}}>
+            <Panel key={`set-${set.id}`}>
               <Heading title={set.attributes.name} />
 
-              <Body>
+              <Body style={{height: '424px', overflowY: 'scroll'}}>
                 <DroppableSelectedSet set={set} />
               </Body>
 
@@ -76,10 +76,10 @@ const SetShaper = ({ set, collection_ids, entity }) => {
 
         <div className="col-md-9">
           <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
-            <Panel key={`collection-${entity.id}`} style={{height: '424px', overflowY: 'scroll'}}>
+            <Panel key={`collection-${entity.id}`}>
               <Heading title={entity.attributes.name} />
 
-              <Body>
+              <Body style={{height: '424px', overflowY: 'scroll'}}>
                 <DraggableSelectedCollection />
               </Body>
 
