@@ -35,7 +35,7 @@ const SetShaper = ({ set, collection_ids, entity }) => {
         <div className="col-md-9">
           <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
 
-            <Panel key={`set-${set.id}`}>
+            <Panel key={`set-${set.id}`} style={{height: '424px', overflowY: 'scroll'}}>
               <Heading title={set.attributes.name} />
 
               <Body>
@@ -76,7 +76,7 @@ const SetShaper = ({ set, collection_ids, entity }) => {
 
         <div className="col-md-9">
           <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
-            <Panel key={`collection-${entity.id}`}>
+            <Panel key={`collection-${entity.id}`} style={{height: '424px', overflowY: 'scroll'}}>
               <Heading title={entity.attributes.name} />
 
               <Body>
