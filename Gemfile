@@ -72,3 +72,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'simplecov', :require => false, :group => :test
 gem 'simplecov-rcov', :group => :test
 gem 'rubycritic', :group => :test
+
+gem 'rails-controller-testing', :group => :test
