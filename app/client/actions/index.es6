@@ -62,10 +62,15 @@ export const receiveMaterials = (materials) => {
   }
 }
 
+const BATCH_SIZE = 25;
 export const FETCH_MATERIALS = 'FETCH_MATERIALS';
 export const fetchMaterials = (materials) => {
   return function(dispatch) {
     if (!materials) return false;
+
+    if (materials.length > BATCH_SIZE) {
+      dispatch(fetchMaterials(materials.splice(BATCH_SIZE)))
+    }
 
     const ids = materials.map((material) => material.id);
 
