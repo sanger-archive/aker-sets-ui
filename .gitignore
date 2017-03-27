@@ -24,3 +24,5 @@
 /node_modules
 
 /public/dev-assets/*
+
+coverage
