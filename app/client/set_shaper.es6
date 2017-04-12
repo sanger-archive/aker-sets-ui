@@ -7,7 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems, fetchCollections } from './actions';
+import { selectEntity, storeItems, fetchCollections, fetchTokenIfNeeded } from './actions';
 import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom } from './selectors';
 import store from './store.es6';

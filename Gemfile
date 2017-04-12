@@ -40,6 +40,14 @@ gem 'foreman'
 gem 'rubocop', '~> 0.41.2', require: false
 
 gem 'pg'
+gem 'rack-reverse-proxy', require: 'rack/reverse_proxy'
+
+gem 'aker_authentication_gem', github: 'sanger/aker-authentication'
+gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
+gem 'faraday'
+
+gem 'bootstrap_form'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
