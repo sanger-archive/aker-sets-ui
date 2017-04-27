@@ -10,18 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170411134714) do
-
-  create_table "permissions", force: :cascade do |t|
-    t.string  "permitted"
-    t.boolean "r"
-    t.boolean "w"
-    t.boolean "x"
-    t.string  "accessible_type"
-    t.integer "accessible_id"
-    t.index ["accessible_type", "accessible_id"], name: "index_permissions_on_accessible_type_and_accessible_id"
-    t.index ["permitted"], name: "index_permissions_on_permitted"
-  end
+ActiveRecord::Schema.define(version: 20170411134713) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",               default: "", null: false
