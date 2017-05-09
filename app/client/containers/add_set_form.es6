@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createEntity } from 'redux-json-api';
+import { fetchTokenIfNeeded } from '../actions';
 
 let AddSetForm = ({ dispatch }) => {
   let input;
@@ -18,7 +19,7 @@ let AddSetForm = ({ dispatch }) => {
           }
         };
 
-        dispatch(createEntity(set));
+        dispatch(fetchTokenIfNeeded()).then(() => dispatch(createEntity(set)) );
         input.value = '';
 
       }}>
