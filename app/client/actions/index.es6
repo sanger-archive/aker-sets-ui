@@ -110,7 +110,7 @@ export const fetchCollections = function() {
           contentType: "application/vnd.api+json",
           accept: "application/vnd.api+json",
           headers: {
-            "X-Authentication": getState().token
+            "X-Authorisation": getState().token
           },
           jsonp: false
         })
@@ -155,7 +155,7 @@ export const fetchToken = () => {
 
     // Set it as a default header for redux-json-api
     .then(function() {
-      return dispatch(setHeader({"X-Authentication": getState().token}));
+      return dispatch(setHeader({"X-Authorisation": getState().token}));
     });
   }
 }
