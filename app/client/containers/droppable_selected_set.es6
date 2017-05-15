@@ -45,15 +45,10 @@ const setTarget = {
       }
     };
 
-    dispatch(fetchTokenIfNeeded())
-      .then(() => {
-        return dispatch(updateEntity(entity))
-      })
-      .then(() => {
-        dispatch(clearSelection());
-        return dispatch(readEndpoint(`sets/${set.id}?include=materials`))
-      });
-
+    return dispatch(fetchTokenIfNeeded())
+      .then(() => { return dispatch(updateEntity(entity)) })
+      .then(() => { return dispatch(clearSelection()) })
+      .then(() => { return dispatch(readEndpoint(`sets/${set.id}?include=materials`)) });
   }
 }
 
