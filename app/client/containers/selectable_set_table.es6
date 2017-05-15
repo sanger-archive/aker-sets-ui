@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchMaterials, storeItems } from '../actions';
+import { select, fetchMaterials, storeItems, fetchTokenIfNeeded } from '../actions';
 import { readEndpoint } from 'redux-json-api';
 import SetTable from '../components/set_table.es6';
 
