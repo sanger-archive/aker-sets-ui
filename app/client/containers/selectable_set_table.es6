@@ -25,10 +25,9 @@ const mapDispatchToProps = (dispatch, { selectionType }) => {
     onSetClick: (id) => {
       dispatch(select(id, selectionType));
 
-      dispatch(readEndpoint(`sets/${id}?include=materials`))
-        .then((json) => {
-          dispatch(fetchMaterials(json.included));
-        })
+      dispatch(fetchTokenIfNeeded())
+        .then(() => { return dispatch(readEndpoint(`sets/${id}?include=materials`)) })
+        .then((json) => { return dispatch(fetchMaterials(json.included)) });
     }
   }
 }
