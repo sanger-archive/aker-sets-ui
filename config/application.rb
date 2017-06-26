@@ -31,6 +31,8 @@ module Aker
       :asset_manifest => {},
       :common_manifest => {},
     }
+    
+    config.ldap = config_for(:ldap)
 
     unless Rails.env.production? || Rails.env.staging?
       config.middleware.insert(0, Rack::ReverseProxy) do
