@@ -31,10 +31,13 @@ module Aker
       :asset_manifest => {},
       :common_manifest => {},
     }
-    
-    config.ldap = config_for(:ldap)
+
+    if Rails.env.production? || Rails.env.staging?
+      config.ldap = config_for(:ldap)
+    end
 
     unless Rails.env.production? || Rails.env.staging?
+
       config.middleware.insert(0, Rack::ReverseProxy) do
         reverse_proxy_options preserve_host: true
         reverse_proxy /^\/studies_service(\/.*)$/, "#{Rails.configuration.studies_root}$1"
