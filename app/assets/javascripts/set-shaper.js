@@ -24,11 +24,11 @@ webpackJsonp([1],[
 
 	var _actions = __webpack_require__(648);
 
-	var _reduxJsonApi = __webpack_require__(652);
+	var _reduxJsonApi = __webpack_require__(655);
 
-	var _selectors = __webpack_require__(772);
+	var _selectors = __webpack_require__(791);
 
-	var _store = __webpack_require__(779);
+	var _store = __webpack_require__(798);
 
 	var _store2 = _interopRequireDefault(_store);
 
@@ -30580,17 +30580,17 @@ webpackJsonp([1],[
 
 	var _selectable_set_table2 = _interopRequireDefault(_selectable_set_table);
 
-	var _droppable_selected_set = __webpack_require__(767);
+	var _droppable_selected_set = __webpack_require__(786);
 
 	var _droppable_selected_set2 = _interopRequireDefault(_droppable_selected_set);
 
-	var _draggable_selected_collection = __webpack_require__(774);
+	var _draggable_selected_collection = __webpack_require__(793);
 
 	var _draggable_selected_collection2 = _interopRequireDefault(_draggable_selected_collection);
 
-	var _panel = __webpack_require__(777);
+	var _panel = __webpack_require__(796);
 
-	var _add_set_form = __webpack_require__(778);
+	var _add_set_form = __webpack_require__(797);
 
 	var _add_set_form2 = _interopRequireDefault(_add_set_form);
 
@@ -30611,6 +30611,11 @@ webpackJsonp([1],[
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-md-12' },
+	        _react2.default.createElement(
+	          'a',
+	          { href: '/users/sign_out', className: 'btn btn-default vcenter', style: { float: 'right', marginTop: '40px' }, 'data-method': 'delete' },
+	          'Log Out'
+	        ),
 	        _react2.default.createElement(
 	          'h1',
 	          { className: 'page-header' },
@@ -30652,7 +30657,7 @@ webpackJsonp([1],[
 	            _react2.default.createElement(_panel.Heading, { title: set.attributes.name }),
 	            _react2.default.createElement(
 	              _panel.Body,
-	              null,
+	              { style: { height: '424px', overflowY: 'scroll' } },
 	              _react2.default.createElement(_droppable_selected_set2.default, { set: set })
 	            )
 	          )
@@ -30722,7 +30727,7 @@ webpackJsonp([1],[
 	            _react2.default.createElement(_panel.Heading, { title: entity.attributes.name }),
 	            _react2.default.createElement(
 	              _panel.Body,
-	              null,
+	              { style: { height: '424px', overflowY: 'scroll' } },
 	              _react2.default.createElement(_draggable_selected_collection2.default, null)
 	            )
 	          )
@@ -31587,9 +31592,9 @@ webpackJsonp([1],[
 
 	var _actions = __webpack_require__(648);
 
-	var _reduxJsonApi = __webpack_require__(652);
+	var _reduxJsonApi = __webpack_require__(655);
 
-	var _set_table = __webpack_require__(765);
+	var _set_table = __webpack_require__(784);
 
 	var _set_table2 = _interopRequireDefault(_set_table);
 
@@ -31627,8 +31632,10 @@ webpackJsonp([1],[
 	    onSetClick: function onSetClick(id) {
 	      dispatch((0, _actions.select)(id, selectionType));
 
-	      dispatch((0, _reduxJsonApi.readEndpoint)('sets/' + id + '?include=materials')).then(function (json) {
-	        dispatch((0, _actions.fetchMaterials)(json.included));
+	      dispatch((0, _actions.fetchTokenIfNeeded)()).then(function () {
+	        return dispatch((0, _reduxJsonApi.readEndpoint)('sets/' + id + '?include=materials'));
+	      }).then(function (json) {
+	        return dispatch((0, _actions.fetchMaterials)(json.included));
 	      });
 	    }
 	  };
@@ -31640,12 +31647,22 @@ webpackJsonp([1],[
 /* 648 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+	/* WEBPACK VAR INJECTION */(function($) {"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var SELECT = exports.SELECT = 'SELECT';
+	exports.receiveToken = exports.RECEIVE_TOKEN = exports.fetchToken = exports.FETCH_TOKEN = exports.fetchTokenIfNeeded = exports.FETCH_TOKEN_IF_NEEDED = exports.fetchCollections = exports.FETCH_COLLECTIONS = exports.receiveCollections = exports.RECEIVE_COLLECTIONS = exports.fetchMaterials = exports.FETCH_MATERIALS = exports.receiveMaterials = exports.RECEIVE_MATERIALS = exports.shiftSelectItems = exports.SHIFT_SELECT_ITEMS = exports.toggleItem = exports.TOGGLE_ITEM = exports.clearSelection = exports.CLEAR_SELECTION = exports.selectItem = exports.SELECT_ITEM = exports.storeItems = exports.STORE_ITEMS = exports.selectEntity = exports.SELECT_ENTITY = exports.select = exports.SELECT = undefined;
+
+	var _jwtDecode = __webpack_require__(652);
+
+	var _jwtDecode2 = _interopRequireDefault(_jwtDecode);
+
+	var _reduxJsonApi = __webpack_require__(655);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SELECT = exports.SELECT = "SELECT";
 	var select = exports.select = function select(id, selectionType) {
 	  return {
 	    type: SELECT,
@@ -31654,7 +31671,7 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var SELECT_ENTITY = exports.SELECT_ENTITY = 'SELECT_ENTITY';
+	var SELECT_ENTITY = exports.SELECT_ENTITY = "SELECT_ENTITY";
 	var selectEntity = exports.selectEntity = function selectEntity(id, entityType) {
 	  return {
 	    type: SELECT_ENTITY,
@@ -31662,7 +31679,7 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var STORE_ITEMS = exports.STORE_ITEMS = 'STORE_ITEMS';
+	var STORE_ITEMS = exports.STORE_ITEMS = "STORE_ITEMS";
 	var storeItems = exports.storeItems = function storeItems(items) {
 	  return {
 	    type: STORE_ITEMS,
@@ -31670,7 +31687,7 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var SELECT_ITEM = exports.SELECT_ITEM = 'SELECT_ITEM';
+	var SELECT_ITEM = exports.SELECT_ITEM = "SELECT_ITEM";
 	var selectItem = exports.selectItem = function selectItem(key) {
 	  return {
 	    type: SELECT_ITEM,
@@ -31678,14 +31695,14 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var CLEAR_SELECTION = exports.CLEAR_SELECTION = 'CLEAR_SELECTION';
+	var CLEAR_SELECTION = exports.CLEAR_SELECTION = "CLEAR_SELECTION";
 	var clearSelection = exports.clearSelection = function clearSelection() {
 	  return {
 	    type: CLEAR_SELECTION
 	  };
 	};
 
-	var TOGGLE_ITEM = exports.TOGGLE_ITEM = 'TOGGLE_ITEM';
+	var TOGGLE_ITEM = exports.TOGGLE_ITEM = "TOGGLE_ITEM";
 	var toggleItem = exports.toggleItem = function toggleItem(key) {
 	  return {
 	    type: TOGGLE_ITEM,
@@ -31693,7 +31710,7 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var SHIFT_SELECT_ITEMS = exports.SHIFT_SELECT_ITEMS = 'SHIFT_SELECT_ITEMS';
+	var SHIFT_SELECT_ITEMS = exports.SHIFT_SELECT_ITEMS = "SHIFT_SELECT_ITEMS";
 	var shiftSelectItems = exports.shiftSelectItems = function shiftSelectItems(key) {
 	  return {
 	    type: SHIFT_SELECT_ITEMS,
@@ -31701,7 +31718,7 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var RECEIVE_MATERIALS = exports.RECEIVE_MATERIALS = 'RECEIVE_MATERIALS';
+	var RECEIVE_MATERIALS = exports.RECEIVE_MATERIALS = "RECEIVE_MATERIALS";
 	var receiveMaterials = exports.receiveMaterials = function receiveMaterials(materials) {
 	  return {
 	    type: RECEIVE_MATERIALS,
@@ -31709,17 +31726,26 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var FETCH_MATERIALS = exports.FETCH_MATERIALS = 'FETCH_MATERIALS';
+	var BATCH_SIZE = 25;
+	var FETCH_MATERIALS = exports.FETCH_MATERIALS = "FETCH_MATERIALS";
 	var fetchMaterials = exports.fetchMaterials = function fetchMaterials(materials) {
 	  return function (dispatch) {
 	    if (!materials) return false;
+
+	    // We need to fetch materials in batches, otherwise the url params get too long
+	    if (materials.length > BATCH_SIZE) {
+	      dispatch(fetchMaterials(materials.splice(BATCH_SIZE)));
+	    }
 
 	    var ids = materials.map(function (material) {
 	      return material.id;
 	    });
 
+	    var params = encodeURIComponent("{\"_id\" : { \"$in\": [\"" + ids.join('","') + "\"] } }");
+	    var url = "/materials_service/materials?where=" + params;
+
 	    $.ajax({
-	      url: Aker.config.materials_root + '/materials?where={"_id" : { "$in": ["' + ids.join('","') + '"] } }',
+	      url: url,
 	      contentType: "application/json",
 	      accept: "application/json",
 	      jsonp: false }).then(function (response) {
@@ -31728,7 +31754,7 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var RECEIVE_COLLECTIONS = exports.RECEIVE_COLLECTIONS = 'RECEIVE_COLLECTIONS';
+	var RECEIVE_COLLECTIONS = exports.RECEIVE_COLLECTIONS = "RECEIVE_COLLECTIONS";
 	var receiveCollections = exports.receiveCollections = function receiveCollections(collections) {
 	  return {
 	    type: RECEIVE_COLLECTIONS,
@@ -31736,16 +31762,69 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var FETCH_COLLECTIONS = exports.FETCH_COLLECTIONS = 'FETCH_COLLECTIONS';
+	var FETCH_COLLECTIONS = exports.FETCH_COLLECTIONS = "FETCH_COLLECTIONS";
 	var fetchCollections = exports.fetchCollections = function fetchCollections() {
-	  return function (dispatch) {
-	    $.ajax({
-	      url: Aker.config.study_root + '/collections',
-	      contentType: "application/vnd.api+json",
-	      accept: "application/vnd.api+json",
-	      jsonp: false }).then(function (response) {
+	  return function (dispatch, getState) {
+	    dispatch(fetchTokenIfNeeded()).then(function () {
+	      return $.ajax({
+	        url: "/studies_service/collections",
+	        contentType: "application/vnd.api+json",
+	        accept: "application/vnd.api+json",
+	        headers: {
+	          "X-Authorisation": getState().token
+	        },
+	        jsonp: false
+	      });
+	    }).then(function (response) {
 	      dispatch(receiveCollections(response.data));
 	    });
+	  };
+	};
+
+	var FETCH_TOKEN_IF_NEEDED = exports.FETCH_TOKEN_IF_NEEDED = "FETCH_TOKEN_IF_NEEDED";
+	var fetchTokenIfNeeded = exports.fetchTokenIfNeeded = function fetchTokenIfNeeded() {
+	  return function (dispatch, getState) {
+	    var token = getState().token;
+
+	    if (!token || isExpired(token)) {
+	      return dispatch(fetchToken());
+	    }
+
+	    return $.Deferred().resolve();
+	  };
+	};
+
+	var isExpired = function isExpired(token) {
+	  var payload = (0, _jwtDecode2.default)(token);
+	  return payload.exp < Date.now() / 1000;
+	};
+
+	var FETCH_TOKEN = exports.FETCH_TOKEN = "FETCH_TOKEN";
+	var fetchToken = exports.fetchToken = function fetchToken() {
+	  return function (dispatch, getState) {
+	    return $.ajax({
+	      method: 'POST',
+	      url: "/token",
+	      accept: "application/json"
+	    })
+
+	    // Put the token in the Store
+	    .then(function (response) {
+	      return dispatch(receiveToken(response.token));
+	    })
+
+	    // Set it as a default header for redux-json-api
+	    .then(function () {
+	      return dispatch((0, _reduxJsonApi.setHeader)({ "X-Authorisation": getState().token }));
+	    });
+	  };
+	};
+
+	var RECEIVE_TOKEN = exports.RECEIVE_TOKEN = "RECEIVE_TOKEN";
+	var receiveToken = exports.receiveToken = function receiveToken(token) {
+	  return {
+	    type: RECEIVE_TOKEN,
+	    token: token
 	  };
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(649)))
@@ -41996,46 +42075,165 @@ webpackJsonp([1],[
 
 	'use strict';
 
-	var _defineProperty2 = __webpack_require__(653);
+	var base64_url_decode = __webpack_require__(653);
+
+	function InvalidTokenError(message) {
+	  this.message = message;
+	}
+
+	InvalidTokenError.prototype = new Error();
+	InvalidTokenError.prototype.name = 'InvalidTokenError';
+
+	module.exports = function (token,options) {
+	  if (typeof token !== 'string') {
+	    throw new InvalidTokenError('Invalid token specified');
+	  }
+
+	  options = options || {};
+	  var pos = options.header === true ? 0 : 1;
+	  try {
+	    return JSON.parse(base64_url_decode(token.split('.')[pos]));
+	  } catch (e) {
+	    throw new InvalidTokenError('Invalid token specified: ' + e.message);
+	  }
+	};
+
+	module.exports.InvalidTokenError = InvalidTokenError;
+
+
+/***/ },
+/* 653 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var atob = __webpack_require__(654);
+
+	function b64DecodeUnicode(str) {
+	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+	    var code = p.charCodeAt(0).toString(16).toUpperCase();
+	    if (code.length < 2) {
+	      code = '0' + code;
+	    }
+	    return '%' + code;
+	  }));
+	}
+
+	module.exports = function(str) {
+	  var output = str.replace(/-/g, "+").replace(/_/g, "/");
+	  switch (output.length % 4) {
+	    case 0:
+	      break;
+	    case 2:
+	      output += "==";
+	      break;
+	    case 3:
+	      output += "=";
+	      break;
+	    default:
+	      throw "Illegal base64url string!";
+	  }
+
+	  try{
+	    return b64DecodeUnicode(output);
+	  } catch (err) {
+	    return atob(output);
+	  }
+	};
+
+
+/***/ },
+/* 654 */
+/***/ function(module, exports) {
+
+	/**
+	 * The code was extracted from:
+	 * https://github.com/davidchambers/Base64.js
+	 */
+
+	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+	function InvalidCharacterError(message) {
+	  this.message = message;
+	}
+
+	InvalidCharacterError.prototype = new Error();
+	InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+	function polyfill (input) {
+	  var str = String(input).replace(/=+$/, '');
+	  if (str.length % 4 == 1) {
+	    throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+	  }
+	  for (
+	    // initialize result and counters
+	    var bc = 0, bs, buffer, idx = 0, output = '';
+	    // get next character
+	    buffer = str.charAt(idx++);
+	    // character found in table? initialize bit storage and add its ascii value;
+	    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+	      // and if not first of each 4 characters,
+	      // convert the first 8 bits to one ascii character
+	      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+	  ) {
+	    // try to find character in table (0-63, not found => -1)
+	    buffer = chars.indexOf(buffer);
+	  }
+	  return output;
+	}
+
+
+	module.exports = typeof window !== 'undefined' && window.atob && window.atob.bind(window) || polyfill;
+
+
+/***/ },
+/* 655 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.reducer = exports.requireEntity = exports.deleteEntity = exports.updateEntity = exports.createEntity = exports.requireResource = exports.deleteResource = exports.updateResource = exports.readEndpoint = exports.createResource = exports.uploadFile = exports.setAccessToken = exports.setHeader = exports.setHeaders = exports.setEndpointPath = exports.setEndpointHost = exports.IS_UPDATING = exports.IS_DELETING = undefined;
+
+	var _defineProperty2 = __webpack_require__(656);
 
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-	var _extends2 = __webpack_require__(672);
+	var _keys = __webpack_require__(675);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
+	var _extends2 = __webpack_require__(695);
 
 	var _extends3 = _interopRequireDefault(_extends2);
 
-	var _stringify = __webpack_require__(695);
+	var _stringify = __webpack_require__(702);
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
-	var _promise = __webpack_require__(697);
+	var _promise = __webpack_require__(704);
 
 	var _promise2 = _interopRequireDefault(_promise);
 
 	var _handleActions;
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.reducer = exports.requireEntity = exports.deleteEntity = exports.updateEntity = exports.readEndpoint = exports.createEntity = exports.uploadFile = exports.setAccessToken = exports.setHeader = exports.setHeaders = exports.setEndpointPath = exports.setEndpointHost = exports.IS_UPDATING = exports.IS_DELETING = undefined;
+	var _reduxActions = __webpack_require__(738);
 
-	var _reduxActions = __webpack_require__(731);
+	__webpack_require__(750);
 
-	__webpack_require__(743);
+	var _objectPathImmutable = __webpack_require__(752);
 
-	var _immutable = __webpack_require__(745);
+	var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
 
-	var _immutable2 = _interopRequireDefault(_immutable);
+	var _stateMutation = __webpack_require__(753);
 
-	var _stateMutation = __webpack_require__(746);
+	var _utils = __webpack_require__(779);
 
-	var _utils = __webpack_require__(755);
-
-	var _constants = __webpack_require__(756);
+	var _constants = __webpack_require__(783);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// Entity isInvalidating values
+	// Resource isInvalidating values
 	var IS_DELETING = exports.IS_DELETING = 'IS_DELETING';
 	var IS_UPDATING = exports.IS_UPDATING = 'IS_UPDATING';
 
@@ -42069,18 +42267,17 @@ webpackJsonp([1],[
 	};
 
 	var uploadFile = exports.uploadFile = function uploadFile(file, _ref) {
-	  var companyId = _ref.companyId;
-	  var _ref$fileableType = _ref.fileableType;
-	  var fileableType = _ref$fileableType === undefined ? null : _ref$fileableType;
-	  var _ref$fileableId = _ref.fileableId;
-	  var fileableId = _ref$fileableId === undefined ? null : _ref$fileableId;
+	  var companyId = _ref.companyId,
+	      _ref$fileableType = _ref.fileableType,
+	      fileableType = _ref$fileableType === undefined ? null : _ref$fileableType,
+	      _ref$fileableId = _ref.fileableId,
+	      fileableId = _ref$fileableId === undefined ? null : _ref$fileableId;
 
-	  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-	  var _ref2$onSuccess = _ref2.onSuccess;
-	  var onSuccess = _ref2$onSuccess === undefined ? _utils.noop : _ref2$onSuccess;
-	  var _ref2$onError = _ref2.onError;
-	  var onError = _ref2$onError === undefined ? _utils.noop : _ref2$onError;
+	  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+	      _ref2$onSuccess = _ref2.onSuccess,
+	      onSuccess = _ref2$onSuccess === undefined ? _utils.noop : _ref2$onSuccess,
+	      _ref2$onError = _ref2.onError,
+	      onError = _ref2$onError === undefined ? _utils.noop : _ref2$onError;
 
 	  console.warn('uploadFile has been deprecated and will no longer be supported by redux-json-api https://github.com/dixieio/redux-json-api/issues/2');
 
@@ -42121,42 +42318,42 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var createEntity = exports.createEntity = function createEntity(entity) {
-	  var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  var _ref3$onSuccess = _ref3.onSuccess;
-	  var onSuccess = _ref3$onSuccess === undefined ? _utils.noop : _ref3$onSuccess;
-	  var _ref3$onError = _ref3.onError;
-	  var onError = _ref3$onError === undefined ? _utils.noop : _ref3$onError;
+	var createResource = exports.createResource = function createResource(resource) {
+	  var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	      _ref3$onSuccess = _ref3.onSuccess,
+	      onSuccess = _ref3$onSuccess === undefined ? _utils.noop : _ref3$onSuccess,
+	      _ref3$onError = _ref3.onError,
+	      onError = _ref3$onError === undefined ? _utils.noop : _ref3$onError;
 
 	  if (onSuccess !== _utils.noop || onError !== _utils.noop) {
 	    console.warn('onSuccess/onError callbacks are deprecated. Please use returned promise: https://github.com/dixieio/redux-json-api/issues/17');
 	  }
 
 	  return function (dispatch, getState) {
-	    dispatch(apiWillCreate(entity));
+	    dispatch(apiWillCreate(resource));
 
-	    var _getState$api$endpoin = getState().api.endpoint;
-	    var apiHost = _getState$api$endpoin.host;
-	    var apiPath = _getState$api$endpoin.path;
-	    var headers = _getState$api$endpoin.headers;
+	    var _getState$api$endpoin = getState().api.endpoint,
+	        apiHost = _getState$api$endpoin.host,
+	        apiPath = _getState$api$endpoin.path,
+	        headers = _getState$api$endpoin.headers;
 
-	    var endpoint = '' + apiHost + apiPath + '/' + entity.type;
+	    var endpoint = '' + apiHost + apiPath + '/' + resource.type;
 
 	    return new _promise2.default(function (resolve, reject) {
 	      (0, _utils.apiRequest)(endpoint, {
 	        headers: headers,
 	        method: 'POST',
+	        credentials: 'include',
 	        body: (0, _stringify2.default)({
-	          data: entity
+	          data: resource
 	        })
 	      }).then(function (json) {
-	        dispatch(apiCreated(json.data));
+	        dispatch(apiCreated(json));
 	        onSuccess(json);
 	        resolve(json);
 	      }).catch(function (error) {
 	        var err = error;
-	        err.entity = entity;
+	        err.resource = resource;
 
 	        dispatch(apiCreateFailed(err));
 	        onError(err);
@@ -42167,12 +42364,15 @@ webpackJsonp([1],[
 	};
 
 	var readEndpoint = exports.readEndpoint = function readEndpoint(endpoint) {
-	  var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  var _ref4$onSuccess = _ref4.onSuccess;
-	  var onSuccess = _ref4$onSuccess === undefined ? _utils.noop : _ref4$onSuccess;
-	  var _ref4$onError = _ref4.onError;
-	  var onError = _ref4$onError === undefined ? _utils.noop : _ref4$onError;
+	  var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	      _ref4$onSuccess = _ref4.onSuccess,
+	      onSuccess = _ref4$onSuccess === undefined ? _utils.noop : _ref4$onSuccess,
+	      _ref4$onError = _ref4.onError,
+	      onError = _ref4$onError === undefined ? _utils.noop : _ref4$onError,
+	      _ref4$options = _ref4.options,
+	      options = _ref4$options === undefined ? {
+	    indexLinks: undefined
+	  } : _ref4$options;
 
 	  if (onSuccess !== _utils.noop || onError !== _utils.noop) {
 	    console.warn('onSuccess/onError callbacks are deprecated. Please use returned promise: https://github.com/dixieio/redux-json-api/issues/17');
@@ -42181,16 +42381,19 @@ webpackJsonp([1],[
 	  return function (dispatch, getState) {
 	    dispatch(apiWillRead(endpoint));
 
-	    var _getState$api$endpoin2 = getState().api.endpoint;
-	    var apiHost = _getState$api$endpoin2.host;
-	    var apiPath = _getState$api$endpoin2.path;
-	    var headers = _getState$api$endpoin2.headers;
+	    var _getState$api$endpoin2 = getState().api.endpoint,
+	        apiHost = _getState$api$endpoin2.host,
+	        apiPath = _getState$api$endpoin2.path,
+	        headers = _getState$api$endpoin2.headers;
 
 	    var apiEndpoint = '' + apiHost + apiPath + '/' + endpoint;
 
 	    return new _promise2.default(function (resolve, reject) {
-	      (0, _utils.apiRequest)('' + apiEndpoint, { headers: headers }).then(function (json) {
-	        dispatch(apiRead((0, _extends3.default)({ endpoint: endpoint }, json)));
+	      (0, _utils.apiRequest)('' + apiEndpoint, {
+	        headers: headers,
+	        credentials: 'include'
+	      }).then(function (json) {
+	        dispatch(apiRead((0, _extends3.default)({ endpoint: endpoint, options: options }, json)));
 	        onSuccess(json);
 	        resolve(json);
 	      }).catch(function (error) {
@@ -42205,42 +42408,41 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var updateEntity = exports.updateEntity = function updateEntity(entity) {
-	  var _ref5 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  var _ref5$onSuccess = _ref5.onSuccess;
-	  var onSuccess = _ref5$onSuccess === undefined ? _utils.noop : _ref5$onSuccess;
-	  var _ref5$onError = _ref5.onError;
-	  var onError = _ref5$onError === undefined ? _utils.noop : _ref5$onError;
+	var updateResource = exports.updateResource = function updateResource(resource) {
+	  var _ref5 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	      _ref5$onSuccess = _ref5.onSuccess,
+	      onSuccess = _ref5$onSuccess === undefined ? _utils.noop : _ref5$onSuccess,
+	      _ref5$onError = _ref5.onError,
+	      onError = _ref5$onError === undefined ? _utils.noop : _ref5$onError;
 
 	  if (onSuccess !== _utils.noop || onError !== _utils.noop) {
 	    console.warn('onSuccess/onError callbacks are deprecated. Please use returned promise: https://github.com/dixieio/redux-json-api/issues/17');
 	  }
-
 	  return function (dispatch, getState) {
-	    dispatch(apiWillUpdate(entity));
+	    dispatch(apiWillUpdate(resource));
 
-	    var _getState$api$endpoin3 = getState().api.endpoint;
-	    var apiHost = _getState$api$endpoin3.host;
-	    var apiPath = _getState$api$endpoin3.path;
-	    var headers = _getState$api$endpoin3.headers;
+	    var _getState$api$endpoin3 = getState().api.endpoint,
+	        apiHost = _getState$api$endpoin3.host,
+	        apiPath = _getState$api$endpoin3.path,
+	        headers = _getState$api$endpoin3.headers;
 
-	    var endpoint = '' + apiHost + apiPath + '/' + entity.type + '/' + entity.id;
+	    var endpoint = '' + apiHost + apiPath + '/' + resource.type + '/' + resource.id;
 
 	    return new _promise2.default(function (resolve, reject) {
 	      (0, _utils.apiRequest)(endpoint, {
 	        headers: headers,
 	        method: 'PATCH',
+	        credentials: 'include',
 	        body: (0, _stringify2.default)({
-	          data: entity
+	          data: resource
 	        })
 	      }).then(function (json) {
-	        dispatch(apiUpdated(json.data));
+	        dispatch(apiUpdated(json));
 	        onSuccess(json);
 	        resolve(json);
 	      }).catch(function (error) {
 	        var err = error;
-	        err.entity = entity;
+	        err.resource = resource;
 
 	        dispatch(apiUpdateFailed(err));
 	        onError(err);
@@ -42250,39 +42452,39 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var deleteEntity = exports.deleteEntity = function deleteEntity(entity) {
-	  var _ref6 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	  var _ref6$onSuccess = _ref6.onSuccess;
-	  var onSuccess = _ref6$onSuccess === undefined ? _utils.noop : _ref6$onSuccess;
-	  var _ref6$onError = _ref6.onError;
-	  var onError = _ref6$onError === undefined ? _utils.noop : _ref6$onError;
+	var deleteResource = exports.deleteResource = function deleteResource(resource) {
+	  var _ref6 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	      _ref6$onSuccess = _ref6.onSuccess,
+	      onSuccess = _ref6$onSuccess === undefined ? _utils.noop : _ref6$onSuccess,
+	      _ref6$onError = _ref6.onError,
+	      onError = _ref6$onError === undefined ? _utils.noop : _ref6$onError;
 
 	  if (onSuccess !== _utils.noop || onError !== _utils.noop) {
 	    console.warn('onSuccess/onError callbacks are deprecated. Please use returned promise: https://github.com/dixieio/redux-json-api/issues/17');
 	  }
 
 	  return function (dispatch, getState) {
-	    dispatch(apiWillDelete(entity));
+	    dispatch(apiWillDelete(resource));
 
-	    var _getState$api$endpoin4 = getState().api.endpoint;
-	    var apiHost = _getState$api$endpoin4.host;
-	    var apiPath = _getState$api$endpoin4.path;
-	    var headers = _getState$api$endpoin4.headers;
+	    var _getState$api$endpoin4 = getState().api.endpoint,
+	        apiHost = _getState$api$endpoin4.host,
+	        apiPath = _getState$api$endpoin4.path,
+	        headers = _getState$api$endpoin4.headers;
 
-	    var endpoint = '' + apiHost + apiPath + '/' + entity.type + '/' + entity.id;
+	    var endpoint = '' + apiHost + apiPath + '/' + resource.type + '/' + resource.id;
 
 	    return new _promise2.default(function (resolve, reject) {
 	      (0, _utils.apiRequest)(endpoint, {
 	        headers: headers,
-	        method: 'DELETE'
+	        method: 'DELETE',
+	        credentials: 'include'
 	      }).then(function () {
-	        dispatch(apiDeleted(entity));
+	        dispatch(apiDeleted(resource));
 	        onSuccess();
 	        resolve();
 	      }).catch(function (error) {
 	        var err = error;
-	        err.entity = entity;
+	        err.resource = resource;
 
 	        dispatch(apiDeleteFailed(err));
 	        onError(err);
@@ -42292,15 +42494,14 @@ webpackJsonp([1],[
 	  };
 	};
 
-	var requireEntity = exports.requireEntity = function requireEntity(entityType) {
-	  var endpoint = arguments.length <= 1 || arguments[1] === undefined ? entityType : arguments[1];
+	var requireResource = exports.requireResource = function requireResource(resourceType) {
+	  var endpoint = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : resourceType;
 
-	  var _ref7 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-	  var _ref7$onSuccess = _ref7.onSuccess;
-	  var onSuccess = _ref7$onSuccess === undefined ? _utils.noop : _ref7$onSuccess;
-	  var _ref7$onError = _ref7.onError;
-	  var onError = _ref7$onError === undefined ? _utils.noop : _ref7$onError;
+	  var _ref7 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+	      _ref7$onSuccess = _ref7.onSuccess,
+	      onSuccess = _ref7$onSuccess === undefined ? _utils.noop : _ref7$onSuccess,
+	      _ref7$onError = _ref7.onError,
+	      onError = _ref7$onError === undefined ? _utils.noop : _ref7$onError;
 
 	  if (onSuccess !== _utils.noop || onError !== _utils.noop) {
 	    console.warn('onSuccess/onError callbacks are deprecated. Please use returned promise: https://github.com/dixieio/redux-json-api/issues/17');
@@ -42308,11 +42509,10 @@ webpackJsonp([1],[
 
 	  return function (dispatch, getState) {
 	    return new _promise2.default(function (resolve, reject) {
-	      var _getState = getState();
+	      var _getState = getState(),
+	          api = _getState.api;
 
-	      var api = _getState.api;
-
-	      if (api.hasOwnProperty(entityType)) {
+	      if (api.hasOwnProperty(resourceType)) {
 	        resolve();
 	        return onSuccess();
 	      }
@@ -42322,115 +42522,115 @@ webpackJsonp([1],[
 	  };
 	};
 
+	var createEntity = exports.createEntity = function createEntity() {
+	  console.warn('createEntity is deprecated and will be removed in v2.0 in favor of new method createResource');
+	  return createResource.apply(undefined, arguments);
+	};
+
+	var updateEntity = exports.updateEntity = function updateEntity() {
+	  console.warn('updateEntity is deprecated and will be removed in v2.0 in favor of new method updateResource');
+	  return updateResource.apply(undefined, arguments);
+	};
+
+	var deleteEntity = exports.deleteEntity = function deleteEntity() {
+	  console.warn('deleteEntity is deprecated and will be removed in v2.0 in favor of new method deleteResource');
+	  return deleteResource.apply(undefined, arguments);
+	};
+
+	var requireEntity = exports.requireEntity = function requireEntity() {
+	  console.warn('requireEntity is deprecated and will be removed in v2.0 in favor of new method requireResource');
+	  return requireResource.apply(undefined, arguments);
+	};
+
 	// Reducers
 	var reducer = exports.reducer = (0, _reduxActions.handleActions)((_handleActions = {}, (0, _defineProperty3.default)(_handleActions, _constants.API_SET_HEADERS, function (state, _ref8) {
 	  var headers = _ref8.payload;
 
-	  return _immutable2.default.fromJS(state).setIn(['endpoint', 'headers'], headers).toJS();
+	  return (0, _objectPathImmutable2.default)(state).set(['endpoint', 'headers'], headers).value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_SET_HEADER, function (state, _ref9) {
 	  var header = _ref9.payload;
 
-	  return _immutable2.default.fromJS(state).mergeIn(['endpoint', 'headers'], header).toJS();
+	  var newState = (0, _objectPathImmutable2.default)(state);
+	  (0, _keys2.default)(header).forEach(function (key) {
+	    newState.set(['endpoint', 'headers', key], header[key]);
+	  });
+
+	  return newState.value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_SET_ENDPOINT_HOST, function (state, _ref10) {
 	  var host = _ref10.payload;
 
-	  return _immutable2.default.fromJS(state).setIn(['endpoint', 'host'], host).toJS();
+	  return (0, _objectPathImmutable2.default)(state).set(['endpoint', 'host'], host).value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_SET_ENDPOINT_PATH, function (state, _ref11) {
 	  var path = _ref11.payload;
 
-	  return _immutable2.default.fromJS(state).setIn(['endpoint', 'path'], path).toJS();
+	  return (0, _objectPathImmutable2.default)(state).set(['endpoint', 'path'], path).value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_WILL_CREATE, function (state) {
-	  return _immutable2.default.fromJS(state).update('isCreating', function (v) {
-	    return v + 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_CREATED, function (rawState, _ref12) {
-	  var rawEntities = _ref12.payload;
+	  return (0, _objectPathImmutable2.default)(state).set(['isCreating'], state.isCreating + 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_CREATED, function (state, _ref12) {
+	  var resources = _ref12.payload;
 
-	  var state = _immutable2.default.fromJS(rawState);
-	  var entities = _immutable2.default.fromJS(Array.isArray(rawEntities) ? rawEntities : [rawEntities]);
+	  var entities = Array.isArray(resources.data) ? resources.data : [resources.data];
 
-	  return (0, _stateMutation.updateOrInsertEntitiesIntoState)(state, entities).update('isCreating', function (v) {
-	    return v - 1;
-	  }).toJS();
+	  var newState = (0, _stateMutation.updateOrInsertResourcesIntoState)(state, entities.concat(resources.included || []));
+
+	  return (0, _objectPathImmutable2.default)(newState).set('isCreating', state.isCreating - 1).value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_CREATE_FAILED, function (state) {
-	  return _immutable2.default.fromJS(state).update('isCreating', function (v) {
-	    return v - 1;
-	  }).toJS();
+	  return (0, _objectPathImmutable2.default)(state).set(['isCreating'], state.isCreating - 1).value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_WILL_READ, function (state) {
-	  return _immutable2.default.fromJS(state).update('isReading', function (v) {
-	    return v + 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_READ, function (rawState, _ref13) {
+	  return (0, _objectPathImmutable2.default)(state).set(['isReading'], state.isReading + 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_READ, function (state, _ref13) {
 	  var payload = _ref13.payload;
 
-	  var state = _immutable2.default.fromJS(rawState);
-	  var entities = _immutable2.default.fromJS(Array.isArray(payload.data) ? payload.data : [payload.data]).concat(_immutable2.default.fromJS(payload.included || []));
+	  var resources = (Array.isArray(payload.data) ? payload.data : [payload.data]).concat(payload.included || []);
 
-	  return (0, _stateMutation.updateOrInsertEntitiesIntoState)(state, entities).update('isReading', function (v) {
-	    return v - 1;
-	  }).toJS();
+	  var newState = (0, _stateMutation.updateOrInsertResourcesIntoState)(state, resources);
+	  var finalState = (0, _stateMutation.addLinksToState)(newState, payload.links, payload.options);
+
+	  return (0, _objectPathImmutable2.default)(finalState).set('isReading', state.isReading - 1).value();
 	}), (0, _defineProperty3.default)(_handleActions, _constants.API_READ_FAILED, function (state) {
-	  return _immutable2.default.fromJS(state).update('isReading', function (v) {
-	    return v - 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_WILL_UPDATE, function (rawState, _ref14) {
-	  var entity = _ref14.payload;
-	  var type = entity.type;
-	  var id = entity.id;
+	  return (0, _objectPathImmutable2.default)(state).set(['isReading'], state.isReading - 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_WILL_UPDATE, function (state, _ref14) {
+	  var resource = _ref14.payload;
+	  var type = resource.type,
+	      id = resource.id;
 
-	  var state = _immutable2.default.fromJS(rawState);
 
-	  return (0, _stateMutation.setIsInvalidatingForExistingEntity)(state, { type: type, id: id }, IS_UPDATING).update('isUpdating', function (v) {
-	    return v + 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_UPDATED, function (rawState, _ref15) {
-	  var rawEntities = _ref15.payload;
+	  var newState = (0, _stateMutation.ensureResourceTypeInState)(state, type);
 
-	  var state = _immutable2.default.fromJS(rawState);
-	  var entities = _immutable2.default.fromJS(Array.isArray(rawEntities) ? rawEntities : [rawEntities]);
+	  return (0, _stateMutation.setIsInvalidatingForExistingResource)(newState, { type: type, id: id }, IS_UPDATING).set('isUpdating', state.isUpdating + 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_UPDATED, function (state, _ref15) {
+	  var resources = _ref15.payload;
 
-	  return (0, _stateMutation.updateOrInsertEntitiesIntoState)(state, entities).update('isUpdating', function (v) {
-	    return v - 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_UPDATE_FAILED, function (rawState, _ref16) {
-	  var entity = _ref16.payload.entity;
-	  var type = entity.type;
-	  var id = entity.id;
+	  var entities = Array.isArray(resources.data) ? resources.data : [resources.data];
 
-	  var state = _immutable2.default.fromJS(rawState);
+	  var newState = (0, _stateMutation.updateOrInsertResourcesIntoState)(state, entities.concat(resources.included || []));
 
-	  return (0, _stateMutation.setIsInvalidatingForExistingEntity)(state, { type: type, id: id }, IS_UPDATING).update('isUpdating', function (v) {
-	    return v - 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_WILL_DELETE, function (rawState, _ref17) {
-	  var entity = _ref17.payload;
-	  var type = entity.type;
-	  var id = entity.id;
+	  return (0, _objectPathImmutable2.default)(newState).set('isUpdating', state.isUpdating - 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_UPDATE_FAILED, function (state, _ref16) {
+	  var resource = _ref16.payload.resource;
+	  var type = resource.type,
+	      id = resource.id;
 
-	  var state = _immutable2.default.fromJS(rawState);
 
-	  return (0, _stateMutation.setIsInvalidatingForExistingEntity)(state, { type: type, id: id }, IS_DELETING).update('isDeleting', function (v) {
-	    return v + 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_DELETED, function (rawState, _ref18) {
-	  var rawEntity = _ref18.payload;
+	  return (0, _stateMutation.setIsInvalidatingForExistingResource)(state, { type: type, id: id }, IS_UPDATING).set('isUpdating', state.isUpdating + 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_WILL_DELETE, function (state, _ref17) {
+	  var resource = _ref17.payload;
+	  var type = resource.type,
+	      id = resource.id;
 
-	  var state = _immutable2.default.fromJS(rawState);
-	  var entity = _immutable2.default.fromJS(rawEntity);
 
-	  return (0, _stateMutation.removeEntityFromState)(state, entity).update('isDeleting', function (v) {
-	    return v - 1;
-	  }).toJS();
-	}), (0, _defineProperty3.default)(_handleActions, _constants.API_DELETE_FAILED, function (rawState, _ref19) {
-	  var entity = _ref19.payload.entity;
-	  var type = entity.type;
-	  var id = entity.id;
+	  return (0, _stateMutation.setIsInvalidatingForExistingResource)(state, { type: type, id: id }, IS_DELETING).set('isDeleting', state.isDeleting + 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_DELETED, function (state, _ref18) {
+	  var resource = _ref18.payload;
 
-	  var state = _immutable2.default.fromJS(rawState);
+	  return (0, _stateMutation.removeResourceFromState)(state, resource).set('isDeleting', state.isDeleting - 1).value();
+	}), (0, _defineProperty3.default)(_handleActions, _constants.API_DELETE_FAILED, function (state, _ref19) {
+	  var resource = _ref19.payload.resource;
+	  var type = resource.type,
+	      id = resource.id;
 
-	  return (0, _stateMutation.setIsInvalidatingForExistingEntity)(state, { type: type, id: id }, IS_DELETING).update('isDeleting', function (v) {
-	    return v - 1;
-	  }).toJS();
+
+	  return (0, _stateMutation.setIsInvalidatingForExistingResource)(state, { type: type, id: id }, IS_DELETING).set('isDeleting', state.isDeleting + 1).value();
 	}), _handleActions), {
 	  isCreating: 0,
 	  isReading: 0,
@@ -42447,14 +42647,14 @@ webpackJsonp([1],[
 	});
 
 /***/ },
-/* 653 */
+/* 656 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _defineProperty = __webpack_require__(654);
+	var _defineProperty = __webpack_require__(657);
 
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -42476,37 +42676,37 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 654 */
+/* 657 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(655), __esModule: true };
+	module.exports = { "default": __webpack_require__(658), __esModule: true };
 
 /***/ },
-/* 655 */
+/* 658 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(656);
-	var $Object = __webpack_require__(659).Object;
+	__webpack_require__(659);
+	var $Object = __webpack_require__(662).Object;
 	module.exports = function defineProperty(it, key, desc){
 	  return $Object.defineProperty(it, key, desc);
 	};
 
 /***/ },
-/* 656 */
+/* 659 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $export = __webpack_require__(657);
+	var $export = __webpack_require__(660);
 	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-	$export($export.S + $export.F * !__webpack_require__(667), 'Object', {defineProperty: __webpack_require__(663).f});
+	$export($export.S + $export.F * !__webpack_require__(670), 'Object', {defineProperty: __webpack_require__(666).f});
 
 /***/ },
-/* 657 */
+/* 660 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(658)
-	  , core      = __webpack_require__(659)
-	  , ctx       = __webpack_require__(660)
-	  , hide      = __webpack_require__(662)
+	var global    = __webpack_require__(661)
+	  , core      = __webpack_require__(662)
+	  , ctx       = __webpack_require__(663)
+	  , hide      = __webpack_require__(665)
 	  , PROTOTYPE = 'prototype';
 
 	var $export = function(type, name, source){
@@ -42566,7 +42766,7 @@ webpackJsonp([1],[
 	module.exports = $export;
 
 /***/ },
-/* 658 */
+/* 661 */
 /***/ function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -42575,18 +42775,18 @@ webpackJsonp([1],[
 	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 659 */
+/* 662 */
 /***/ function(module, exports) {
 
 	var core = module.exports = {version: '2.4.0'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 660 */
+/* 663 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(661);
+	var aFunction = __webpack_require__(664);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -42607,7 +42807,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 661 */
+/* 664 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -42616,12 +42816,12 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 662 */
+/* 665 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP         = __webpack_require__(663)
-	  , createDesc = __webpack_require__(671);
-	module.exports = __webpack_require__(667) ? function(object, key, value){
+	var dP         = __webpack_require__(666)
+	  , createDesc = __webpack_require__(674);
+	module.exports = __webpack_require__(670) ? function(object, key, value){
 	  return dP.f(object, key, createDesc(1, value));
 	} : function(object, key, value){
 	  object[key] = value;
@@ -42629,15 +42829,15 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 663 */
+/* 666 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(664)
-	  , IE8_DOM_DEFINE = __webpack_require__(666)
-	  , toPrimitive    = __webpack_require__(670)
+	var anObject       = __webpack_require__(667)
+	  , IE8_DOM_DEFINE = __webpack_require__(669)
+	  , toPrimitive    = __webpack_require__(673)
 	  , dP             = Object.defineProperty;
 
-	exports.f = __webpack_require__(667) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	exports.f = __webpack_require__(670) ? Object.defineProperty : function defineProperty(O, P, Attributes){
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -42650,17 +42850,17 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 664 */
+/* 667 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(665);
+	var isObject = __webpack_require__(668);
 	module.exports = function(it){
 	  if(!isObject(it))throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
 /***/ },
-/* 665 */
+/* 668 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -42668,24 +42868,24 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 666 */
+/* 669 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(667) && !__webpack_require__(668)(function(){
-	  return Object.defineProperty(__webpack_require__(669)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(670) && !__webpack_require__(671)(function(){
+	  return Object.defineProperty(__webpack_require__(672)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 667 */
+/* 670 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(668)(function(){
+	module.exports = !__webpack_require__(671)(function(){
 	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 668 */
+/* 671 */
 /***/ function(module, exports) {
 
 	module.exports = function(exec){
@@ -42697,11 +42897,11 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 669 */
+/* 672 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(665)
-	  , document = __webpack_require__(658).document
+	var isObject = __webpack_require__(668)
+	  , document = __webpack_require__(661).document
 	  // in old IE typeof document.createElement is 'object'
 	  , is = isObject(document) && isObject(document.createElement);
 	module.exports = function(it){
@@ -42709,11 +42909,11 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 670 */
+/* 673 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(665);
+	var isObject = __webpack_require__(668);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function(it, S){
@@ -42726,7 +42926,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 671 */
+/* 674 */
 /***/ function(module, exports) {
 
 	module.exports = function(bitmap, value){
@@ -42739,14 +42939,250 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 672 */
+/* 675 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(676), __esModule: true };
+
+/***/ },
+/* 676 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(677);
+	module.exports = __webpack_require__(662).Object.keys;
+
+/***/ },
+/* 677 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(678)
+	  , $keys    = __webpack_require__(680);
+
+	__webpack_require__(694)('keys', function(){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
+	});
+
+/***/ },
+/* 678 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.13 ToObject(argument)
+	var defined = __webpack_require__(679);
+	module.exports = function(it){
+	  return Object(defined(it));
+	};
+
+/***/ },
+/* 679 */
+/***/ function(module, exports) {
+
+	// 7.2.1 RequireObjectCoercible(argument)
+	module.exports = function(it){
+	  if(it == undefined)throw TypeError("Can't call method on  " + it);
+	  return it;
+	};
+
+/***/ },
+/* 680 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+	var $keys       = __webpack_require__(681)
+	  , enumBugKeys = __webpack_require__(693);
+
+	module.exports = Object.keys || function keys(O){
+	  return $keys(O, enumBugKeys);
+	};
+
+/***/ },
+/* 681 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var has          = __webpack_require__(682)
+	  , toIObject    = __webpack_require__(683)
+	  , arrayIndexOf = __webpack_require__(686)(false)
+	  , IE_PROTO     = __webpack_require__(690)('IE_PROTO');
+
+	module.exports = function(object, names){
+	  var O      = toIObject(object)
+	    , i      = 0
+	    , result = []
+	    , key;
+	  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+	  // Don't enum bug & hidden keys
+	  while(names.length > i)if(has(O, key = names[i++])){
+	    ~arrayIndexOf(result, key) || result.push(key);
+	  }
+	  return result;
+	};
+
+/***/ },
+/* 682 */
+/***/ function(module, exports) {
+
+	var hasOwnProperty = {}.hasOwnProperty;
+	module.exports = function(it, key){
+	  return hasOwnProperty.call(it, key);
+	};
+
+/***/ },
+/* 683 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+	var IObject = __webpack_require__(684)
+	  , defined = __webpack_require__(679);
+	module.exports = function(it){
+	  return IObject(defined(it));
+	};
+
+/***/ },
+/* 684 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for non-array-like ES3 and non-enumerable old V8 strings
+	var cof = __webpack_require__(685);
+	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+	  return cof(it) == 'String' ? it.split('') : Object(it);
+	};
+
+/***/ },
+/* 685 */
+/***/ function(module, exports) {
+
+	var toString = {}.toString;
+
+	module.exports = function(it){
+	  return toString.call(it).slice(8, -1);
+	};
+
+/***/ },
+/* 686 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// false -> Array#indexOf
+	// true  -> Array#includes
+	var toIObject = __webpack_require__(683)
+	  , toLength  = __webpack_require__(687)
+	  , toIndex   = __webpack_require__(689);
+	module.exports = function(IS_INCLUDES){
+	  return function($this, el, fromIndex){
+	    var O      = toIObject($this)
+	      , length = toLength(O.length)
+	      , index  = toIndex(fromIndex, length)
+	      , value;
+	    // Array#includes uses SameValueZero equality algorithm
+	    if(IS_INCLUDES && el != el)while(length > index){
+	      value = O[index++];
+	      if(value != value)return true;
+	    // Array#toIndex ignores holes, Array#includes - not
+	    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+	      if(O[index] === el)return IS_INCLUDES || index || 0;
+	    } return !IS_INCLUDES && -1;
+	  };
+	};
+
+/***/ },
+/* 687 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.15 ToLength
+	var toInteger = __webpack_require__(688)
+	  , min       = Math.min;
+	module.exports = function(it){
+	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+	};
+
+/***/ },
+/* 688 */
+/***/ function(module, exports) {
+
+	// 7.1.4 ToInteger
+	var ceil  = Math.ceil
+	  , floor = Math.floor;
+	module.exports = function(it){
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	};
+
+/***/ },
+/* 689 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var toInteger = __webpack_require__(688)
+	  , max       = Math.max
+	  , min       = Math.min;
+	module.exports = function(index, length){
+	  index = toInteger(index);
+	  return index < 0 ? max(index + length, 0) : min(index, length);
+	};
+
+/***/ },
+/* 690 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var shared = __webpack_require__(691)('keys')
+	  , uid    = __webpack_require__(692);
+	module.exports = function(key){
+	  return shared[key] || (shared[key] = uid(key));
+	};
+
+/***/ },
+/* 691 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var global = __webpack_require__(661)
+	  , SHARED = '__core-js_shared__'
+	  , store  = global[SHARED] || (global[SHARED] = {});
+	module.exports = function(key){
+	  return store[key] || (store[key] = {});
+	};
+
+/***/ },
+/* 692 */
+/***/ function(module, exports) {
+
+	var id = 0
+	  , px = Math.random();
+	module.exports = function(key){
+	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+	};
+
+/***/ },
+/* 693 */
+/***/ function(module, exports) {
+
+	// IE 8- don't enum bug keys
+	module.exports = (
+	  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+	).split(',');
+
+/***/ },
+/* 694 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// most Object methods by ES6 should accept primitives
+	var $export = __webpack_require__(660)
+	  , core    = __webpack_require__(662)
+	  , fails   = __webpack_require__(671);
+	module.exports = function(KEY, exec){
+	  var fn  = (core.Object || {})[KEY] || Object[KEY]
+	    , exp = {};
+	  exp[KEY] = exec(fn);
+	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+	};
+
+/***/ },
+/* 695 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _assign = __webpack_require__(673);
+	var _assign = __webpack_require__(696);
 
 	var _assign2 = _interopRequireDefault(_assign);
 
@@ -42767,42 +43203,42 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 673 */
+/* 696 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(674), __esModule: true };
+	module.exports = { "default": __webpack_require__(697), __esModule: true };
 
 /***/ },
-/* 674 */
+/* 697 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(675);
-	module.exports = __webpack_require__(659).Object.assign;
+	__webpack_require__(698);
+	module.exports = __webpack_require__(662).Object.assign;
 
 /***/ },
-/* 675 */
+/* 698 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.3.1 Object.assign(target, source)
-	var $export = __webpack_require__(657);
+	var $export = __webpack_require__(660);
 
-	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(676)});
+	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(699)});
 
 /***/ },
-/* 676 */
+/* 699 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	// 19.1.2.1 Object.assign(target, source, ...)
-	var getKeys  = __webpack_require__(677)
-	  , gOPS     = __webpack_require__(692)
-	  , pIE      = __webpack_require__(693)
-	  , toObject = __webpack_require__(694)
-	  , IObject  = __webpack_require__(681)
+	var getKeys  = __webpack_require__(680)
+	  , gOPS     = __webpack_require__(700)
+	  , pIE      = __webpack_require__(701)
+	  , toObject = __webpack_require__(678)
+	  , IObject  = __webpack_require__(684)
 	  , $assign  = Object.assign;
 
 	// should work with symbols and should have deterministic property order (V8 bug)
-	module.exports = !$assign || __webpack_require__(668)(function(){
+	module.exports = !$assign || __webpack_require__(671)(function(){
 	  var A = {}
 	    , B = {}
 	    , S = Symbol()
@@ -42827,258 +43263,64 @@ webpackJsonp([1],[
 	} : $assign;
 
 /***/ },
-/* 677 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys       = __webpack_require__(678)
-	  , enumBugKeys = __webpack_require__(691);
-
-	module.exports = Object.keys || function keys(O){
-	  return $keys(O, enumBugKeys);
-	};
-
-/***/ },
-/* 678 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var has          = __webpack_require__(679)
-	  , toIObject    = __webpack_require__(680)
-	  , arrayIndexOf = __webpack_require__(684)(false)
-	  , IE_PROTO     = __webpack_require__(688)('IE_PROTO');
-
-	module.exports = function(object, names){
-	  var O      = toIObject(object)
-	    , i      = 0
-	    , result = []
-	    , key;
-	  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
-	  // Don't enum bug & hidden keys
-	  while(names.length > i)if(has(O, key = names[i++])){
-	    ~arrayIndexOf(result, key) || result.push(key);
-	  }
-	  return result;
-	};
-
-/***/ },
-/* 679 */
-/***/ function(module, exports) {
-
-	var hasOwnProperty = {}.hasOwnProperty;
-	module.exports = function(it, key){
-	  return hasOwnProperty.call(it, key);
-	};
-
-/***/ },
-/* 680 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(681)
-	  , defined = __webpack_require__(683);
-	module.exports = function(it){
-	  return IObject(defined(it));
-	};
-
-/***/ },
-/* 681 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(682);
-	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
-	  return cof(it) == 'String' ? it.split('') : Object(it);
-	};
-
-/***/ },
-/* 682 */
-/***/ function(module, exports) {
-
-	var toString = {}.toString;
-
-	module.exports = function(it){
-	  return toString.call(it).slice(8, -1);
-	};
-
-/***/ },
-/* 683 */
-/***/ function(module, exports) {
-
-	// 7.2.1 RequireObjectCoercible(argument)
-	module.exports = function(it){
-	  if(it == undefined)throw TypeError("Can't call method on  " + it);
-	  return it;
-	};
-
-/***/ },
-/* 684 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// false -> Array#indexOf
-	// true  -> Array#includes
-	var toIObject = __webpack_require__(680)
-	  , toLength  = __webpack_require__(685)
-	  , toIndex   = __webpack_require__(687);
-	module.exports = function(IS_INCLUDES){
-	  return function($this, el, fromIndex){
-	    var O      = toIObject($this)
-	      , length = toLength(O.length)
-	      , index  = toIndex(fromIndex, length)
-	      , value;
-	    // Array#includes uses SameValueZero equality algorithm
-	    if(IS_INCLUDES && el != el)while(length > index){
-	      value = O[index++];
-	      if(value != value)return true;
-	    // Array#toIndex ignores holes, Array#includes - not
-	    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-	      if(O[index] === el)return IS_INCLUDES || index || 0;
-	    } return !IS_INCLUDES && -1;
-	  };
-	};
-
-/***/ },
-/* 685 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(686)
-	  , min       = Math.min;
-	module.exports = function(it){
-	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-	};
-
-/***/ },
-/* 686 */
-/***/ function(module, exports) {
-
-	// 7.1.4 ToInteger
-	var ceil  = Math.ceil
-	  , floor = Math.floor;
-	module.exports = function(it){
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	};
-
-/***/ },
-/* 687 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var toInteger = __webpack_require__(686)
-	  , max       = Math.max
-	  , min       = Math.min;
-	module.exports = function(index, length){
-	  index = toInteger(index);
-	  return index < 0 ? max(index + length, 0) : min(index, length);
-	};
-
-/***/ },
-/* 688 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var shared = __webpack_require__(689)('keys')
-	  , uid    = __webpack_require__(690);
-	module.exports = function(key){
-	  return shared[key] || (shared[key] = uid(key));
-	};
-
-/***/ },
-/* 689 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var global = __webpack_require__(658)
-	  , SHARED = '__core-js_shared__'
-	  , store  = global[SHARED] || (global[SHARED] = {});
-	module.exports = function(key){
-	  return store[key] || (store[key] = {});
-	};
-
-/***/ },
-/* 690 */
-/***/ function(module, exports) {
-
-	var id = 0
-	  , px = Math.random();
-	module.exports = function(key){
-	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-	};
-
-/***/ },
-/* 691 */
-/***/ function(module, exports) {
-
-	// IE 8- don't enum bug keys
-	module.exports = (
-	  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-	).split(',');
-
-/***/ },
-/* 692 */
+/* 700 */
 /***/ function(module, exports) {
 
 	exports.f = Object.getOwnPropertySymbols;
 
 /***/ },
-/* 693 */
+/* 701 */
 /***/ function(module, exports) {
 
 	exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 694 */
+/* 702 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(683);
-	module.exports = function(it){
-	  return Object(defined(it));
-	};
+	module.exports = { "default": __webpack_require__(703), __esModule: true };
 
 /***/ },
-/* 695 */
+/* 703 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(696), __esModule: true };
-
-/***/ },
-/* 696 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var core  = __webpack_require__(659)
+	var core  = __webpack_require__(662)
 	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
 	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
 	  return $JSON.stringify.apply($JSON, arguments);
 	};
 
 /***/ },
-/* 697 */
+/* 704 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(698), __esModule: true };
+	module.exports = { "default": __webpack_require__(705), __esModule: true };
 
 /***/ },
-/* 698 */
+/* 705 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(699);
-	__webpack_require__(700);
-	__webpack_require__(713);
-	__webpack_require__(717);
-	module.exports = __webpack_require__(659).Promise;
+	__webpack_require__(706);
+	__webpack_require__(707);
+	__webpack_require__(720);
+	__webpack_require__(724);
+	module.exports = __webpack_require__(662).Promise;
 
 /***/ },
-/* 699 */
+/* 706 */
 /***/ function(module, exports) {
 
 	
 
 /***/ },
-/* 700 */
+/* 707 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at  = __webpack_require__(701)(true);
+	var $at  = __webpack_require__(708)(true);
 
 	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(702)(String, 'String', function(iterated){
+	__webpack_require__(709)(String, 'String', function(iterated){
 	  this._t = String(iterated); // target
 	  this._i = 0;                // next index
 	// 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -43093,11 +43335,11 @@ webpackJsonp([1],[
 	});
 
 /***/ },
-/* 701 */
+/* 708 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(686)
-	  , defined   = __webpack_require__(683);
+	var toInteger = __webpack_require__(688)
+	  , defined   = __webpack_require__(679);
 	// true  -> String#at
 	// false -> String#codePointAt
 	module.exports = function(TO_STRING){
@@ -43115,20 +43357,20 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 702 */
+/* 709 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY        = __webpack_require__(703)
-	  , $export        = __webpack_require__(657)
-	  , redefine       = __webpack_require__(704)
-	  , hide           = __webpack_require__(662)
-	  , has            = __webpack_require__(679)
-	  , Iterators      = __webpack_require__(705)
-	  , $iterCreate    = __webpack_require__(706)
-	  , setToStringTag = __webpack_require__(710)
-	  , getPrototypeOf = __webpack_require__(712)
-	  , ITERATOR       = __webpack_require__(711)('iterator')
+	var LIBRARY        = __webpack_require__(710)
+	  , $export        = __webpack_require__(660)
+	  , redefine       = __webpack_require__(711)
+	  , hide           = __webpack_require__(665)
+	  , has            = __webpack_require__(682)
+	  , Iterators      = __webpack_require__(712)
+	  , $iterCreate    = __webpack_require__(713)
+	  , setToStringTag = __webpack_require__(717)
+	  , getPrototypeOf = __webpack_require__(719)
+	  , ITERATOR       = __webpack_require__(718)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
 	  , KEYS           = 'keys'
@@ -43190,35 +43432,35 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 703 */
+/* 710 */
 /***/ function(module, exports) {
 
 	module.exports = true;
 
 /***/ },
-/* 704 */
+/* 711 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(662);
+	module.exports = __webpack_require__(665);
 
 /***/ },
-/* 705 */
+/* 712 */
 /***/ function(module, exports) {
 
 	module.exports = {};
 
 /***/ },
-/* 706 */
+/* 713 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var create         = __webpack_require__(707)
-	  , descriptor     = __webpack_require__(671)
-	  , setToStringTag = __webpack_require__(710)
+	var create         = __webpack_require__(714)
+	  , descriptor     = __webpack_require__(674)
+	  , setToStringTag = __webpack_require__(717)
 	  , IteratorPrototype = {};
 
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(662)(IteratorPrototype, __webpack_require__(711)('iterator'), function(){ return this; });
+	__webpack_require__(665)(IteratorPrototype, __webpack_require__(718)('iterator'), function(){ return this; });
 
 	module.exports = function(Constructor, NAME, next){
 	  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -43226,27 +43468,27 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 707 */
+/* 714 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject    = __webpack_require__(664)
-	  , dPs         = __webpack_require__(708)
-	  , enumBugKeys = __webpack_require__(691)
-	  , IE_PROTO    = __webpack_require__(688)('IE_PROTO')
+	var anObject    = __webpack_require__(667)
+	  , dPs         = __webpack_require__(715)
+	  , enumBugKeys = __webpack_require__(693)
+	  , IE_PROTO    = __webpack_require__(690)('IE_PROTO')
 	  , Empty       = function(){ /* empty */ }
 	  , PROTOTYPE   = 'prototype';
 
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var createDict = function(){
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(669)('iframe')
+	  var iframe = __webpack_require__(672)('iframe')
 	    , i      = enumBugKeys.length
 	    , lt     = '<'
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(709).appendChild(iframe);
+	  __webpack_require__(716).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -43273,14 +43515,14 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 708 */
+/* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP       = __webpack_require__(663)
-	  , anObject = __webpack_require__(664)
-	  , getKeys  = __webpack_require__(677);
+	var dP       = __webpack_require__(666)
+	  , anObject = __webpack_require__(667)
+	  , getKeys  = __webpack_require__(680);
 
-	module.exports = __webpack_require__(667) ? Object.defineProperties : function defineProperties(O, Properties){
+	module.exports = __webpack_require__(670) ? Object.defineProperties : function defineProperties(O, Properties){
 	  anObject(O);
 	  var keys   = getKeys(Properties)
 	    , length = keys.length
@@ -43291,30 +43533,30 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 709 */
+/* 716 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(658).document && document.documentElement;
+	module.exports = __webpack_require__(661).document && document.documentElement;
 
 /***/ },
-/* 710 */
+/* 717 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(663).f
-	  , has = __webpack_require__(679)
-	  , TAG = __webpack_require__(711)('toStringTag');
+	var def = __webpack_require__(666).f
+	  , has = __webpack_require__(682)
+	  , TAG = __webpack_require__(718)('toStringTag');
 
 	module.exports = function(it, tag, stat){
 	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 	};
 
 /***/ },
-/* 711 */
+/* 718 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var store      = __webpack_require__(689)('wks')
-	  , uid        = __webpack_require__(690)
-	  , Symbol     = __webpack_require__(658).Symbol
+	var store      = __webpack_require__(691)('wks')
+	  , uid        = __webpack_require__(692)
+	  , Symbol     = __webpack_require__(661).Symbol
 	  , USE_SYMBOL = typeof Symbol == 'function';
 
 	var $exports = module.exports = function(name){
@@ -43325,13 +43567,13 @@ webpackJsonp([1],[
 	$exports.store = store;
 
 /***/ },
-/* 712 */
+/* 719 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has         = __webpack_require__(679)
-	  , toObject    = __webpack_require__(694)
-	  , IE_PROTO    = __webpack_require__(688)('IE_PROTO')
+	var has         = __webpack_require__(682)
+	  , toObject    = __webpack_require__(678)
+	  , IE_PROTO    = __webpack_require__(690)('IE_PROTO')
 	  , ObjectProto = Object.prototype;
 
 	module.exports = Object.getPrototypeOf || function(O){
@@ -43343,14 +43585,14 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 713 */
+/* 720 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(714);
-	var global        = __webpack_require__(658)
-	  , hide          = __webpack_require__(662)
-	  , Iterators     = __webpack_require__(705)
-	  , TO_STRING_TAG = __webpack_require__(711)('toStringTag');
+	__webpack_require__(721);
+	var global        = __webpack_require__(661)
+	  , hide          = __webpack_require__(665)
+	  , Iterators     = __webpack_require__(712)
+	  , TO_STRING_TAG = __webpack_require__(718)('toStringTag');
 
 	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
 	  var NAME       = collections[i]
@@ -43361,20 +43603,20 @@ webpackJsonp([1],[
 	}
 
 /***/ },
-/* 714 */
+/* 721 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(715)
-	  , step             = __webpack_require__(716)
-	  , Iterators        = __webpack_require__(705)
-	  , toIObject        = __webpack_require__(680);
+	var addToUnscopables = __webpack_require__(722)
+	  , step             = __webpack_require__(723)
+	  , Iterators        = __webpack_require__(712)
+	  , toIObject        = __webpack_require__(683);
 
 	// 22.1.3.4 Array.prototype.entries()
 	// 22.1.3.13 Array.prototype.keys()
 	// 22.1.3.29 Array.prototype.values()
 	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __webpack_require__(702)(Array, 'Array', function(iterated, kind){
+	module.exports = __webpack_require__(709)(Array, 'Array', function(iterated, kind){
 	  this._t = toIObject(iterated); // target
 	  this._i = 0;                   // next index
 	  this._k = kind;                // kind
@@ -43400,13 +43642,13 @@ webpackJsonp([1],[
 	addToUnscopables('entries');
 
 /***/ },
-/* 715 */
+/* 722 */
 /***/ function(module, exports) {
 
 	module.exports = function(){ /* empty */ };
 
 /***/ },
-/* 716 */
+/* 723 */
 /***/ function(module, exports) {
 
 	module.exports = function(done, value){
@@ -43414,22 +43656,22 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 717 */
+/* 724 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY            = __webpack_require__(703)
-	  , global             = __webpack_require__(658)
-	  , ctx                = __webpack_require__(660)
-	  , classof            = __webpack_require__(718)
-	  , $export            = __webpack_require__(657)
-	  , isObject           = __webpack_require__(665)
-	  , aFunction          = __webpack_require__(661)
-	  , anInstance         = __webpack_require__(719)
-	  , forOf              = __webpack_require__(720)
-	  , speciesConstructor = __webpack_require__(724)
-	  , task               = __webpack_require__(725).set
-	  , microtask          = __webpack_require__(727)()
+	var LIBRARY            = __webpack_require__(710)
+	  , global             = __webpack_require__(661)
+	  , ctx                = __webpack_require__(663)
+	  , classof            = __webpack_require__(725)
+	  , $export            = __webpack_require__(660)
+	  , isObject           = __webpack_require__(668)
+	  , aFunction          = __webpack_require__(664)
+	  , anInstance         = __webpack_require__(726)
+	  , forOf              = __webpack_require__(727)
+	  , speciesConstructor = __webpack_require__(731)
+	  , task               = __webpack_require__(732).set
+	  , microtask          = __webpack_require__(734)()
 	  , PROMISE            = 'Promise'
 	  , TypeError          = global.TypeError
 	  , process            = global.process
@@ -43443,7 +43685,7 @@ webpackJsonp([1],[
 	  try {
 	    // correct subclassing with @@species support
 	    var promise     = $Promise.resolve(1)
-	      , FakePromise = (promise.constructor = {})[__webpack_require__(711)('species')] = function(exec){ exec(empty, empty); };
+	      , FakePromise = (promise.constructor = {})[__webpack_require__(718)('species')] = function(exec){ exec(empty, empty); };
 	    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
 	    return (isNode || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
 	  } catch(e){ /* empty */ }
@@ -43621,7 +43863,7 @@ webpackJsonp([1],[
 	    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
 	    this._n = false;          // <- notify
 	  };
-	  Internal.prototype = __webpack_require__(728)($Promise.prototype, {
+	  Internal.prototype = __webpack_require__(735)($Promise.prototype, {
 	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
 	    then: function then(onFulfilled, onRejected){
 	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
@@ -43647,9 +43889,9 @@ webpackJsonp([1],[
 	}
 
 	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
-	__webpack_require__(710)($Promise, PROMISE);
-	__webpack_require__(729)(PROMISE);
-	Wrapper = __webpack_require__(659)[PROMISE];
+	__webpack_require__(717)($Promise, PROMISE);
+	__webpack_require__(736)(PROMISE);
+	Wrapper = __webpack_require__(662)[PROMISE];
 
 	// statics
 	$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
@@ -43672,7 +43914,7 @@ webpackJsonp([1],[
 	    return capability.promise;
 	  }
 	});
-	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(730)(function(iter){
+	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(737)(function(iter){
 	  $Promise.all(iter)['catch'](empty);
 	})), PROMISE, {
 	  // 25.4.4.1 Promise.all(iterable)
@@ -43718,12 +43960,12 @@ webpackJsonp([1],[
 	});
 
 /***/ },
-/* 718 */
+/* 725 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(682)
-	  , TAG = __webpack_require__(711)('toStringTag')
+	var cof = __webpack_require__(685)
+	  , TAG = __webpack_require__(718)('toStringTag')
 	  // ES3 wrong here
 	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 
@@ -43746,7 +43988,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 719 */
+/* 726 */
 /***/ function(module, exports) {
 
 	module.exports = function(it, Constructor, name, forbiddenField){
@@ -43756,15 +43998,15 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 720 */
+/* 727 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ctx         = __webpack_require__(660)
-	  , call        = __webpack_require__(721)
-	  , isArrayIter = __webpack_require__(722)
-	  , anObject    = __webpack_require__(664)
-	  , toLength    = __webpack_require__(685)
-	  , getIterFn   = __webpack_require__(723)
+	var ctx         = __webpack_require__(663)
+	  , call        = __webpack_require__(728)
+	  , isArrayIter = __webpack_require__(729)
+	  , anObject    = __webpack_require__(667)
+	  , toLength    = __webpack_require__(687)
+	  , getIterFn   = __webpack_require__(730)
 	  , BREAK       = {}
 	  , RETURN      = {};
 	var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
@@ -43786,11 +44028,11 @@ webpackJsonp([1],[
 	exports.RETURN = RETURN;
 
 /***/ },
-/* 721 */
+/* 728 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(664);
+	var anObject = __webpack_require__(667);
 	module.exports = function(iterator, fn, value, entries){
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -43803,12 +44045,12 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 722 */
+/* 729 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(705)
-	  , ITERATOR   = __webpack_require__(711)('iterator')
+	var Iterators  = __webpack_require__(712)
+	  , ITERATOR   = __webpack_require__(718)('iterator')
 	  , ArrayProto = Array.prototype;
 
 	module.exports = function(it){
@@ -43816,40 +44058,40 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 723 */
+/* 730 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(718)
-	  , ITERATOR  = __webpack_require__(711)('iterator')
-	  , Iterators = __webpack_require__(705);
-	module.exports = __webpack_require__(659).getIteratorMethod = function(it){
+	var classof   = __webpack_require__(725)
+	  , ITERATOR  = __webpack_require__(718)('iterator')
+	  , Iterators = __webpack_require__(712);
+	module.exports = __webpack_require__(662).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
 	    || Iterators[classof(it)];
 	};
 
 /***/ },
-/* 724 */
+/* 731 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-	var anObject  = __webpack_require__(664)
-	  , aFunction = __webpack_require__(661)
-	  , SPECIES   = __webpack_require__(711)('species');
+	var anObject  = __webpack_require__(667)
+	  , aFunction = __webpack_require__(664)
+	  , SPECIES   = __webpack_require__(718)('species');
 	module.exports = function(O, D){
 	  var C = anObject(O).constructor, S;
 	  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
 	};
 
 /***/ },
-/* 725 */
+/* 732 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ctx                = __webpack_require__(660)
-	  , invoke             = __webpack_require__(726)
-	  , html               = __webpack_require__(709)
-	  , cel                = __webpack_require__(669)
-	  , global             = __webpack_require__(658)
+	var ctx                = __webpack_require__(663)
+	  , invoke             = __webpack_require__(733)
+	  , html               = __webpack_require__(716)
+	  , cel                = __webpack_require__(672)
+	  , global             = __webpack_require__(661)
 	  , process            = global.process
 	  , setTask            = global.setImmediate
 	  , clearTask          = global.clearImmediate
@@ -43884,7 +44126,7 @@ webpackJsonp([1],[
 	    delete queue[id];
 	  };
 	  // Node.js 0.8-
-	  if(__webpack_require__(682)(process) == 'process'){
+	  if(__webpack_require__(685)(process) == 'process'){
 	    defer = function(id){
 	      process.nextTick(ctx(run, id, 1));
 	    };
@@ -43922,7 +44164,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 726 */
+/* 733 */
 /***/ function(module, exports) {
 
 	// fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -43943,15 +44185,15 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 727 */
+/* 734 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(658)
-	  , macrotask = __webpack_require__(725).set
+	var global    = __webpack_require__(661)
+	  , macrotask = __webpack_require__(732).set
 	  , Observer  = global.MutationObserver || global.WebKitMutationObserver
 	  , process   = global.process
 	  , Promise   = global.Promise
-	  , isNode    = __webpack_require__(682)(process) == 'process';
+	  , isNode    = __webpack_require__(685)(process) == 'process';
 
 	module.exports = function(){
 	  var head, last, notify;
@@ -44016,10 +44258,10 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 728 */
+/* 735 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var hide = __webpack_require__(662);
+	var hide = __webpack_require__(665);
 	module.exports = function(target, src, safe){
 	  for(var key in src){
 	    if(safe && target[key])target[key] = src[key];
@@ -44028,15 +44270,15 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 729 */
+/* 736 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var global      = __webpack_require__(658)
-	  , core        = __webpack_require__(659)
-	  , dP          = __webpack_require__(663)
-	  , DESCRIPTORS = __webpack_require__(667)
-	  , SPECIES     = __webpack_require__(711)('species');
+	var global      = __webpack_require__(661)
+	  , core        = __webpack_require__(662)
+	  , dP          = __webpack_require__(666)
+	  , DESCRIPTORS = __webpack_require__(670)
+	  , SPECIES     = __webpack_require__(718)('species');
 
 	module.exports = function(KEY){
 	  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
@@ -44047,10 +44289,10 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 730 */
+/* 737 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ITERATOR     = __webpack_require__(711)('iterator')
+	var ITERATOR     = __webpack_require__(718)('iterator')
 	  , SAFE_CLOSING = false;
 
 	try {
@@ -44073,7 +44315,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 731 */
+/* 738 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44082,15 +44324,15 @@ webpackJsonp([1],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createAction = __webpack_require__(732);
+	var _createAction = __webpack_require__(739);
 
 	var _createAction2 = _interopRequireDefault(_createAction);
 
-	var _handleAction = __webpack_require__(733);
+	var _handleAction = __webpack_require__(740);
 
 	var _handleAction2 = _interopRequireDefault(_handleAction);
 
-	var _handleActions = __webpack_require__(740);
+	var _handleActions = __webpack_require__(747);
 
 	var _handleActions2 = _interopRequireDefault(_handleActions);
 
@@ -44099,7 +44341,7 @@ webpackJsonp([1],[
 	exports.handleActions = _handleActions2['default'];
 
 /***/ },
-/* 732 */
+/* 739 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44139,7 +44381,7 @@ webpackJsonp([1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 733 */
+/* 740 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44147,7 +44389,7 @@ webpackJsonp([1],[
 	exports.__esModule = true;
 	exports['default'] = handleAction;
 
-	var _fluxStandardAction = __webpack_require__(734);
+	var _fluxStandardAction = __webpack_require__(741);
 
 	function isFunction(val) {
 	  return typeof val === 'function';
@@ -44175,7 +44417,7 @@ webpackJsonp([1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 734 */
+/* 741 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44186,7 +44428,7 @@ webpackJsonp([1],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(735);
+	var _lodashIsplainobject = __webpack_require__(742);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -44205,7 +44447,7 @@ webpackJsonp([1],[
 	}
 
 /***/ },
-/* 735 */
+/* 742 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -44216,9 +44458,9 @@ webpackJsonp([1],[
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(736),
-	    isArguments = __webpack_require__(737),
-	    keysIn = __webpack_require__(738);
+	var baseFor = __webpack_require__(743),
+	    isArguments = __webpack_require__(744),
+	    keysIn = __webpack_require__(745);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -44314,7 +44556,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 736 */
+/* 743 */
 /***/ function(module, exports) {
 
 	/**
@@ -44368,7 +44610,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 737 */
+/* 744 */
 /***/ function(module, exports) {
 
 	/**
@@ -44603,7 +44845,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 738 */
+/* 745 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -44614,8 +44856,8 @@ webpackJsonp([1],[
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(737),
-	    isArray = __webpack_require__(739);
+	var isArguments = __webpack_require__(744),
+	    isArray = __webpack_require__(746);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -44741,7 +44983,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 739 */
+/* 746 */
 /***/ function(module, exports) {
 
 	/**
@@ -44927,7 +45169,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 740 */
+/* 747 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44937,15 +45179,15 @@ webpackJsonp([1],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _handleAction = __webpack_require__(733);
+	var _handleAction = __webpack_require__(740);
 
 	var _handleAction2 = _interopRequireDefault(_handleAction);
 
-	var _ownKeys = __webpack_require__(741);
+	var _ownKeys = __webpack_require__(748);
 
 	var _ownKeys2 = _interopRequireDefault(_ownKeys);
 
-	var _reduceReducers = __webpack_require__(742);
+	var _reduceReducers = __webpack_require__(749);
 
 	var _reduceReducers2 = _interopRequireDefault(_reduceReducers);
 
@@ -44963,7 +45205,7 @@ webpackJsonp([1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 741 */
+/* 748 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44988,7 +45230,7 @@ webpackJsonp([1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 742 */
+/* 749 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45011,19 +45253,20 @@ webpackJsonp([1],[
 	module.exports = exports["default"];
 
 /***/ },
-/* 743 */
+/* 750 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(744);
-	module.exports = self.fetch.bind(self);
+	__webpack_require__(751);
+	var globalObj = typeof self !== 'undefined' && self || this;
+	module.exports = globalObj.fetch.bind(globalObj);
 
 
 /***/ },
-/* 744 */
+/* 751 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -45462,5149 +45705,949 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 745 */
+/* 752 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 *  Copyright (c) 2014-2015, Facebook, Inc.
-	 *  All rights reserved.
-	 *
-	 *  This source code is licensed under the BSD-style license found in the
-	 *  LICENSE file in the root directory of this source tree. An additional grant
-	 *  of patent rights can be found in the PATENTS file in the same directory.
-	 */
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* globals define */
 
-	(function (global, factory) {
-	   true ? module.exports = factory() :
-	  typeof define === 'function' && define.amd ? define(factory) :
-	  (global.Immutable = factory());
-	}(this, function () { 'use strict';var SLICE$0 = Array.prototype.slice;
+	(function (root, factory) {
+	  'use strict'
 
-	  function createClass(ctor, superClass) {
-	    if (superClass) {
-	      ctor.prototype = Object.create(superClass.prototype);
+	  /* istanbul ignore next:cant test */
+	  if (typeof module === 'object' && typeof module.exports === 'object') {
+	    module.exports = factory()
+	  } else if (true) {
+	    // AMD. Register as an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+	  } else {
+	    // Browser globals
+	    root.objectPath = factory()
+	  }
+	})(this, function () {
+	  'use strict'
+	  var _hasOwnProperty = Object.prototype.hasOwnProperty
+
+	  function isEmpty (value) {
+	    if (!value) {
+	      return true
 	    }
-	    ctor.prototype.constructor = ctor;
-	  }
-
-	  function Iterable(value) {
-	      return isIterable(value) ? value : Seq(value);
-	    }
-
-
-	  createClass(KeyedIterable, Iterable);
-	    function KeyedIterable(value) {
-	      return isKeyed(value) ? value : KeyedSeq(value);
-	    }
-
-
-	  createClass(IndexedIterable, Iterable);
-	    function IndexedIterable(value) {
-	      return isIndexed(value) ? value : IndexedSeq(value);
-	    }
-
-
-	  createClass(SetIterable, Iterable);
-	    function SetIterable(value) {
-	      return isIterable(value) && !isAssociative(value) ? value : SetSeq(value);
-	    }
-
-
-
-	  function isIterable(maybeIterable) {
-	    return !!(maybeIterable && maybeIterable[IS_ITERABLE_SENTINEL]);
-	  }
-
-	  function isKeyed(maybeKeyed) {
-	    return !!(maybeKeyed && maybeKeyed[IS_KEYED_SENTINEL]);
-	  }
-
-	  function isIndexed(maybeIndexed) {
-	    return !!(maybeIndexed && maybeIndexed[IS_INDEXED_SENTINEL]);
-	  }
-
-	  function isAssociative(maybeAssociative) {
-	    return isKeyed(maybeAssociative) || isIndexed(maybeAssociative);
-	  }
-
-	  function isOrdered(maybeOrdered) {
-	    return !!(maybeOrdered && maybeOrdered[IS_ORDERED_SENTINEL]);
-	  }
-
-	  Iterable.isIterable = isIterable;
-	  Iterable.isKeyed = isKeyed;
-	  Iterable.isIndexed = isIndexed;
-	  Iterable.isAssociative = isAssociative;
-	  Iterable.isOrdered = isOrdered;
-
-	  Iterable.Keyed = KeyedIterable;
-	  Iterable.Indexed = IndexedIterable;
-	  Iterable.Set = SetIterable;
-
-
-	  var IS_ITERABLE_SENTINEL = '@@__IMMUTABLE_ITERABLE__@@';
-	  var IS_KEYED_SENTINEL = '@@__IMMUTABLE_KEYED__@@';
-	  var IS_INDEXED_SENTINEL = '@@__IMMUTABLE_INDEXED__@@';
-	  var IS_ORDERED_SENTINEL = '@@__IMMUTABLE_ORDERED__@@';
-
-	  // Used for setting prototype methods that IE8 chokes on.
-	  var DELETE = 'delete';
-
-	  // Constants describing the size of trie nodes.
-	  var SHIFT = 5; // Resulted in best performance after ______?
-	  var SIZE = 1 << SHIFT;
-	  var MASK = SIZE - 1;
-
-	  // A consistent shared value representing "not set" which equals nothing other
-	  // than itself, and nothing that could be provided externally.
-	  var NOT_SET = {};
-
-	  // Boolean references, Rough equivalent of `bool &`.
-	  var CHANGE_LENGTH = { value: false };
-	  var DID_ALTER = { value: false };
-
-	  function MakeRef(ref) {
-	    ref.value = false;
-	    return ref;
-	  }
-
-	  function SetRef(ref) {
-	    ref && (ref.value = true);
-	  }
-
-	  // A function which returns a value representing an "owner" for transient writes
-	  // to tries. The return value will only ever equal itself, and will not equal
-	  // the return of any subsequent call of this function.
-	  function OwnerID() {}
-
-	  // http://jsperf.com/copy-array-inline
-	  function arrCopy(arr, offset) {
-	    offset = offset || 0;
-	    var len = Math.max(0, arr.length - offset);
-	    var newArr = new Array(len);
-	    for (var ii = 0; ii < len; ii++) {
-	      newArr[ii] = arr[ii + offset];
-	    }
-	    return newArr;
-	  }
-
-	  function ensureSize(iter) {
-	    if (iter.size === undefined) {
-	      iter.size = iter.__iterate(returnTrue);
-	    }
-	    return iter.size;
-	  }
-
-	  function wrapIndex(iter, index) {
-	    // This implements "is array index" which the ECMAString spec defines as:
-	    //
-	    //     A String property name P is an array index if and only if
-	    //     ToString(ToUint32(P)) is equal to P and ToUint32(P) is not equal
-	    //     to 2^32−1.
-	    //
-	    // http://www.ecma-international.org/ecma-262/6.0/#sec-array-exotic-objects
-	    if (typeof index !== 'number') {
-	      var uint32Index = index >>> 0; // N >>> 0 is shorthand for ToUint32
-	      if ('' + uint32Index !== index || uint32Index === 4294967295) {
-	        return NaN;
-	      }
-	      index = uint32Index;
-	    }
-	    return index < 0 ? ensureSize(iter) + index : index;
-	  }
-
-	  function returnTrue() {
-	    return true;
-	  }
-
-	  function wholeSlice(begin, end, size) {
-	    return (begin === 0 || (size !== undefined && begin <= -size)) &&
-	      (end === undefined || (size !== undefined && end >= size));
-	  }
-
-	  function resolveBegin(begin, size) {
-	    return resolveIndex(begin, size, 0);
-	  }
-
-	  function resolveEnd(end, size) {
-	    return resolveIndex(end, size, size);
-	  }
-
-	  function resolveIndex(index, size, defaultIndex) {
-	    return index === undefined ?
-	      defaultIndex :
-	      index < 0 ?
-	        Math.max(0, size + index) :
-	        size === undefined ?
-	          index :
-	          Math.min(size, index);
-	  }
-
-	  /* global Symbol */
-
-	  var ITERATE_KEYS = 0;
-	  var ITERATE_VALUES = 1;
-	  var ITERATE_ENTRIES = 2;
-
-	  var REAL_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-	  var FAUX_ITERATOR_SYMBOL = '@@iterator';
-
-	  var ITERATOR_SYMBOL = REAL_ITERATOR_SYMBOL || FAUX_ITERATOR_SYMBOL;
-
-
-	  function Iterator(next) {
-	      this.next = next;
-	    }
-
-	    Iterator.prototype.toString = function() {
-	      return '[Iterator]';
-	    };
-
-
-	  Iterator.KEYS = ITERATE_KEYS;
-	  Iterator.VALUES = ITERATE_VALUES;
-	  Iterator.ENTRIES = ITERATE_ENTRIES;
-
-	  Iterator.prototype.inspect =
-	  Iterator.prototype.toSource = function () { return this.toString(); }
-	  Iterator.prototype[ITERATOR_SYMBOL] = function () {
-	    return this;
-	  };
-
-
-	  function iteratorValue(type, k, v, iteratorResult) {
-	    var value = type === 0 ? k : type === 1 ? v : [k, v];
-	    iteratorResult ? (iteratorResult.value = value) : (iteratorResult = {
-	      value: value, done: false
-	    });
-	    return iteratorResult;
-	  }
-
-	  function iteratorDone() {
-	    return { value: undefined, done: true };
-	  }
-
-	  function hasIterator(maybeIterable) {
-	    return !!getIteratorFn(maybeIterable);
-	  }
-
-	  function isIterator(maybeIterator) {
-	    return maybeIterator && typeof maybeIterator.next === 'function';
-	  }
-
-	  function getIterator(iterable) {
-	    var iteratorFn = getIteratorFn(iterable);
-	    return iteratorFn && iteratorFn.call(iterable);
-	  }
-
-	  function getIteratorFn(iterable) {
-	    var iteratorFn = iterable && (
-	      (REAL_ITERATOR_SYMBOL && iterable[REAL_ITERATOR_SYMBOL]) ||
-	      iterable[FAUX_ITERATOR_SYMBOL]
-	    );
-	    if (typeof iteratorFn === 'function') {
-	      return iteratorFn;
-	    }
-	  }
-
-	  function isArrayLike(value) {
-	    return value && typeof value.length === 'number';
-	  }
-
-	  createClass(Seq, Iterable);
-	    function Seq(value) {
-	      return value === null || value === undefined ? emptySequence() :
-	        isIterable(value) ? value.toSeq() : seqFromValue(value);
-	    }
-
-	    Seq.of = function(/*...values*/) {
-	      return Seq(arguments);
-	    };
-
-	    Seq.prototype.toSeq = function() {
-	      return this;
-	    };
-
-	    Seq.prototype.toString = function() {
-	      return this.__toString('Seq {', '}');
-	    };
-
-	    Seq.prototype.cacheResult = function() {
-	      if (!this._cache && this.__iterateUncached) {
-	        this._cache = this.entrySeq().toArray();
-	        this.size = this._cache.length;
-	      }
-	      return this;
-	    };
-
-	    // abstract __iterateUncached(fn, reverse)
-
-	    Seq.prototype.__iterate = function(fn, reverse) {
-	      return seqIterate(this, fn, reverse, true);
-	    };
-
-	    // abstract __iteratorUncached(type, reverse)
-
-	    Seq.prototype.__iterator = function(type, reverse) {
-	      return seqIterator(this, type, reverse, true);
-	    };
-
-
-
-	  createClass(KeyedSeq, Seq);
-	    function KeyedSeq(value) {
-	      return value === null || value === undefined ?
-	        emptySequence().toKeyedSeq() :
-	        isIterable(value) ?
-	          (isKeyed(value) ? value.toSeq() : value.fromEntrySeq()) :
-	          keyedSeqFromValue(value);
-	    }
-
-	    KeyedSeq.prototype.toKeyedSeq = function() {
-	      return this;
-	    };
-
-
-
-	  createClass(IndexedSeq, Seq);
-	    function IndexedSeq(value) {
-	      return value === null || value === undefined ? emptySequence() :
-	        !isIterable(value) ? indexedSeqFromValue(value) :
-	        isKeyed(value) ? value.entrySeq() : value.toIndexedSeq();
-	    }
-
-	    IndexedSeq.of = function(/*...values*/) {
-	      return IndexedSeq(arguments);
-	    };
-
-	    IndexedSeq.prototype.toIndexedSeq = function() {
-	      return this;
-	    };
-
-	    IndexedSeq.prototype.toString = function() {
-	      return this.__toString('Seq [', ']');
-	    };
-
-	    IndexedSeq.prototype.__iterate = function(fn, reverse) {
-	      return seqIterate(this, fn, reverse, false);
-	    };
-
-	    IndexedSeq.prototype.__iterator = function(type, reverse) {
-	      return seqIterator(this, type, reverse, false);
-	    };
-
-
-
-	  createClass(SetSeq, Seq);
-	    function SetSeq(value) {
-	      return (
-	        value === null || value === undefined ? emptySequence() :
-	        !isIterable(value) ? indexedSeqFromValue(value) :
-	        isKeyed(value) ? value.entrySeq() : value
-	      ).toSetSeq();
-	    }
-
-	    SetSeq.of = function(/*...values*/) {
-	      return SetSeq(arguments);
-	    };
-
-	    SetSeq.prototype.toSetSeq = function() {
-	      return this;
-	    };
-
-
-
-	  Seq.isSeq = isSeq;
-	  Seq.Keyed = KeyedSeq;
-	  Seq.Set = SetSeq;
-	  Seq.Indexed = IndexedSeq;
-
-	  var IS_SEQ_SENTINEL = '@@__IMMUTABLE_SEQ__@@';
-
-	  Seq.prototype[IS_SEQ_SENTINEL] = true;
-
-
-
-	  createClass(ArraySeq, IndexedSeq);
-	    function ArraySeq(array) {
-	      this._array = array;
-	      this.size = array.length;
-	    }
-
-	    ArraySeq.prototype.get = function(index, notSetValue) {
-	      return this.has(index) ? this._array[wrapIndex(this, index)] : notSetValue;
-	    };
-
-	    ArraySeq.prototype.__iterate = function(fn, reverse) {
-	      var array = this._array;
-	      var maxIndex = array.length - 1;
-	      for (var ii = 0; ii <= maxIndex; ii++) {
-	        if (fn(array[reverse ? maxIndex - ii : ii], ii, this) === false) {
-	          return ii + 1;
+	    if (isArray(value) && value.length === 0) {
+	      return true
+	    } else if (!isString(value)) {
+	      for (var i in value) {
+	        if (_hasOwnProperty.call(value, i)) {
+	          return false
 	        }
 	      }
-	      return ii;
-	    };
-
-	    ArraySeq.prototype.__iterator = function(type, reverse) {
-	      var array = this._array;
-	      var maxIndex = array.length - 1;
-	      var ii = 0;
-	      return new Iterator(function() 
-	        {return ii > maxIndex ?
-	          iteratorDone() :
-	          iteratorValue(type, ii, array[reverse ? maxIndex - ii++ : ii++])}
-	      );
-	    };
-
-
-
-	  createClass(ObjectSeq, KeyedSeq);
-	    function ObjectSeq(object) {
-	      var keys = Object.keys(object);
-	      this._object = object;
-	      this._keys = keys;
-	      this.size = keys.length;
+	      return true
 	    }
+	    return false
+	  }
 
-	    ObjectSeq.prototype.get = function(key, notSetValue) {
-	      if (notSetValue !== undefined && !this.has(key)) {
-	        return notSetValue;
-	      }
-	      return this._object[key];
-	    };
+	  function isNumber (value) {
+	    return typeof value === 'number'
+	  }
 
-	    ObjectSeq.prototype.has = function(key) {
-	      return this._object.hasOwnProperty(key);
-	    };
+	  function isString (obj) {
+	    return typeof obj === 'string'
+	  }
 
-	    ObjectSeq.prototype.__iterate = function(fn, reverse) {
-	      var object = this._object;
-	      var keys = this._keys;
-	      var maxIndex = keys.length - 1;
-	      for (var ii = 0; ii <= maxIndex; ii++) {
-	        var key = keys[reverse ? maxIndex - ii : ii];
-	        if (fn(object[key], key, this) === false) {
-	          return ii + 1;
-	        }
-	      }
-	      return ii;
-	    };
+	  function isArray (obj) {
+	    return Array.isArray(obj)
+	  }
 
-	    ObjectSeq.prototype.__iterator = function(type, reverse) {
-	      var object = this._object;
-	      var keys = this._keys;
-	      var maxIndex = keys.length - 1;
-	      var ii = 0;
-	      return new Iterator(function()  {
-	        var key = keys[reverse ? maxIndex - ii : ii];
-	        return ii++ > maxIndex ?
-	          iteratorDone() :
-	          iteratorValue(type, key, object[key]);
-	      });
-	    };
-
-	  ObjectSeq.prototype[IS_ORDERED_SENTINEL] = true;
-
-
-	  createClass(IterableSeq, IndexedSeq);
-	    function IterableSeq(iterable) {
-	      this._iterable = iterable;
-	      this.size = iterable.length || iterable.size;
+	  function getKey (key) {
+	    var intKey = parseInt(key)
+	    if (intKey.toString() === key) {
+	      return intKey
 	    }
+	    return key
+	  }
 
-	    IterableSeq.prototype.__iterateUncached = function(fn, reverse) {
-	      if (reverse) {
-	        return this.cacheResult().__iterate(fn, reverse);
-	      }
-	      var iterable = this._iterable;
-	      var iterator = getIterator(iterable);
-	      var iterations = 0;
-	      if (isIterator(iterator)) {
-	        var step;
-	        while (!(step = iterator.next()).done) {
-	          if (fn(step.value, iterations++, this) === false) {
-	            break;
+	  var objectPathImmutable = function (src) {
+	    var dest = src
+	    var committed = false
+
+	    var transaction = Object.keys(api).reduce(function (proxy, prop) {
+	      /* istanbul ignore else */
+	      if (typeof api[prop] === 'function') {
+	        proxy[prop] = function () {
+	          var args = [dest, src].concat(Array.prototype.slice.call(arguments))
+
+	          if (committed) {
+	            throw new Error('Cannot call ' + prop + ' after `value`')
 	          }
+
+	          dest = api[prop].apply(null, args)
+
+	          return transaction
 	        }
 	      }
-	      return iterations;
-	    };
 
-	    IterableSeq.prototype.__iteratorUncached = function(type, reverse) {
-	      if (reverse) {
-	        return this.cacheResult().__iterator(type, reverse);
-	      }
-	      var iterable = this._iterable;
-	      var iterator = getIterator(iterable);
-	      if (!isIterator(iterator)) {
-	        return new Iterator(iteratorDone);
-	      }
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        var step = iterator.next();
-	        return step.done ? step : iteratorValue(type, iterations++, step.value);
-	      });
-	    };
+	      return proxy
+	    }, {})
 
-
-
-	  createClass(IteratorSeq, IndexedSeq);
-	    function IteratorSeq(iterator) {
-	      this._iterator = iterator;
-	      this._iteratorCache = [];
+	    transaction.value = function () {
+	      committed = true
+	      return dest
 	    }
 
-	    IteratorSeq.prototype.__iterateUncached = function(fn, reverse) {
-	      if (reverse) {
-	        return this.cacheResult().__iterate(fn, reverse);
-	      }
-	      var iterator = this._iterator;
-	      var cache = this._iteratorCache;
-	      var iterations = 0;
-	      while (iterations < cache.length) {
-	        if (fn(cache[iterations], iterations++, this) === false) {
-	          return iterations;
+	    return transaction
+	  }
+
+	  function clone (obj, createIfEmpty, assumeArray) {
+	    if (obj == null) {
+	      if (createIfEmpty) {
+	        if (assumeArray) {
+	          return []
 	        }
+
+	        return {}
 	      }
-	      var step;
-	      while (!(step = iterator.next()).done) {
-	        var val = step.value;
-	        cache[iterations] = val;
-	        if (fn(val, iterations++, this) === false) {
-	          break;
+
+	      return obj
+	    } else if (isArray(obj)) {
+	      return obj.slice()
+	    }
+
+	    var res = {}
+	    for (var key in obj) {
+	      if (obj.hasOwnProperty(key)) {
+	        res[key] = obj[key]
+	      }
+	    }
+
+	    return res
+	  }
+
+	  function changeImmutable (dest, src, path, changeCallback) {
+	    if (isNumber(path)) {
+	      path = [path]
+	    }
+	    if (isEmpty(path)) {
+	      return src
+	    }
+	    if (isString(path)) {
+	      return changeImmutable(dest, src, path.split('.').map(getKey), changeCallback)
+	    }
+	    var currentPath = path[0]
+
+	    if (!dest || dest === src) {
+	      dest = clone(src, true, isNumber(currentPath))
+	    }
+
+	    if (path.length === 1) {
+	      return changeCallback(dest, currentPath)
+	    }
+
+	    if (src != null) {
+	      src = src[currentPath]
+	    }
+
+	    dest[currentPath] = changeImmutable(dest[currentPath], src, path.slice(1), changeCallback)
+
+	    return dest
+	  }
+
+	  var api = {}
+	  api.set = function set (dest, src, path, value) {
+	    return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
+	      clonedObj[finalPath] = value
+	      return clonedObj
+	    })
+	  }
+
+	  api.push = function push (dest, src, path /*, values */) {
+	    var values = Array.prototype.slice.call(arguments, 3)
+	    return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
+	      if (!isArray(clonedObj[finalPath])) {
+	        clonedObj[finalPath] = values
+	      } else {
+	        clonedObj[finalPath] = clonedObj[finalPath].concat(values)
+	      }
+	      return clonedObj
+	    })
+	  }
+
+	  api.insert = function insert (dest, src, path, value, at) {
+	    at = ~~at
+	    return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
+	      var arr = clonedObj[finalPath]
+	      if (!isArray(arr)) {
+	        if (arr != null && typeof arr !== 'undefined') {
+	          throw new Error('Expected ' + path + 'to be an array. Instead got ' + typeof path)
 	        }
+	        arr = []
 	      }
-	      return iterations;
-	    };
 
-	    IteratorSeq.prototype.__iteratorUncached = function(type, reverse) {
-	      if (reverse) {
-	        return this.cacheResult().__iterator(type, reverse);
-	      }
-	      var iterator = this._iterator;
-	      var cache = this._iteratorCache;
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        if (iterations >= cache.length) {
-	          var step = iterator.next();
-	          if (step.done) {
-	            return step;
-	          }
-	          cache[iterations] = step.value;
-	        }
-	        return iteratorValue(type, iterations, cache[iterations++]);
-	      });
-	    };
-
-
-
-
-	  // # pragma Helper functions
-
-	  function isSeq(maybeSeq) {
-	    return !!(maybeSeq && maybeSeq[IS_SEQ_SENTINEL]);
+	      var first = arr.slice(0, at)
+	      first.push(value)
+	      clonedObj[finalPath] = first.concat(arr.slice(at))
+	      return clonedObj
+	    })
 	  }
 
-	  var EMPTY_SEQ;
-
-	  function emptySequence() {
-	    return EMPTY_SEQ || (EMPTY_SEQ = new ArraySeq([]));
-	  }
-
-	  function keyedSeqFromValue(value) {
-	    var seq =
-	      Array.isArray(value) ? new ArraySeq(value).fromEntrySeq() :
-	      isIterator(value) ? new IteratorSeq(value).fromEntrySeq() :
-	      hasIterator(value) ? new IterableSeq(value).fromEntrySeq() :
-	      typeof value === 'object' ? new ObjectSeq(value) :
-	      undefined;
-	    if (!seq) {
-	      throw new TypeError(
-	        'Expected Array or iterable object of [k, v] entries, '+
-	        'or keyed object: ' + value
-	      );
-	    }
-	    return seq;
-	  }
-
-	  function indexedSeqFromValue(value) {
-	    var seq = maybeIndexedSeqFromValue(value);
-	    if (!seq) {
-	      throw new TypeError(
-	        'Expected Array or iterable object of values: ' + value
-	      );
-	    }
-	    return seq;
-	  }
-
-	  function seqFromValue(value) {
-	    var seq = maybeIndexedSeqFromValue(value) ||
-	      (typeof value === 'object' && new ObjectSeq(value));
-	    if (!seq) {
-	      throw new TypeError(
-	        'Expected Array or iterable object of values, or keyed object: ' + value
-	      );
-	    }
-	    return seq;
-	  }
-
-	  function maybeIndexedSeqFromValue(value) {
-	    return (
-	      isArrayLike(value) ? new ArraySeq(value) :
-	      isIterator(value) ? new IteratorSeq(value) :
-	      hasIterator(value) ? new IterableSeq(value) :
-	      undefined
-	    );
-	  }
-
-	  function seqIterate(seq, fn, reverse, useKeys) {
-	    var cache = seq._cache;
-	    if (cache) {
-	      var maxIndex = cache.length - 1;
-	      for (var ii = 0; ii <= maxIndex; ii++) {
-	        var entry = cache[reverse ? maxIndex - ii : ii];
-	        if (fn(entry[1], useKeys ? entry[0] : ii, seq) === false) {
-	          return ii + 1;
-	        }
-	      }
-	      return ii;
-	    }
-	    return seq.__iterateUncached(fn, reverse);
-	  }
-
-	  function seqIterator(seq, type, reverse, useKeys) {
-	    var cache = seq._cache;
-	    if (cache) {
-	      var maxIndex = cache.length - 1;
-	      var ii = 0;
-	      return new Iterator(function()  {
-	        var entry = cache[reverse ? maxIndex - ii : ii];
-	        return ii++ > maxIndex ?
-	          iteratorDone() :
-	          iteratorValue(type, useKeys ? entry[0] : ii - 1, entry[1]);
-	      });
-	    }
-	    return seq.__iteratorUncached(type, reverse);
-	  }
-
-	  function fromJS(json, converter) {
-	    return converter ?
-	      fromJSWith(converter, json, '', {'': json}) :
-	      fromJSDefault(json);
-	  }
-
-	  function fromJSWith(converter, json, key, parentJSON) {
-	    if (Array.isArray(json)) {
-	      return converter.call(parentJSON, key, IndexedSeq(json).map(function(v, k)  {return fromJSWith(converter, v, k, json)}));
-	    }
-	    if (isPlainObj(json)) {
-	      return converter.call(parentJSON, key, KeyedSeq(json).map(function(v, k)  {return fromJSWith(converter, v, k, json)}));
-	    }
-	    return json;
-	  }
-
-	  function fromJSDefault(json) {
-	    if (Array.isArray(json)) {
-	      return IndexedSeq(json).map(fromJSDefault).toList();
-	    }
-	    if (isPlainObj(json)) {
-	      return KeyedSeq(json).map(fromJSDefault).toMap();
-	    }
-	    return json;
-	  }
-
-	  function isPlainObj(value) {
-	    return value && (value.constructor === Object || value.constructor === undefined);
-	  }
-
-	  /**
-	   * An extension of the "same-value" algorithm as [described for use by ES6 Map
-	   * and Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#Key_equality)
-	   *
-	   * NaN is considered the same as NaN, however -0 and 0 are considered the same
-	   * value, which is different from the algorithm described by
-	   * [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
-	   *
-	   * This is extended further to allow Objects to describe the values they
-	   * represent, by way of `valueOf` or `equals` (and `hashCode`).
-	   *
-	   * Note: because of this extension, the key equality of Immutable.Map and the
-	   * value equality of Immutable.Set will differ from ES6 Map and Set.
-	   *
-	   * ### Defining custom values
-	   *
-	   * The easiest way to describe the value an object represents is by implementing
-	   * `valueOf`. For example, `Date` represents a value by returning a unix
-	   * timestamp for `valueOf`:
-	   *
-	   *     var date1 = new Date(1234567890000); // Fri Feb 13 2009 ...
-	   *     var date2 = new Date(1234567890000);
-	   *     date1.valueOf(); // 1234567890000
-	   *     assert( date1 !== date2 );
-	   *     assert( Immutable.is( date1, date2 ) );
-	   *
-	   * Note: overriding `valueOf` may have other implications if you use this object
-	   * where JavaScript expects a primitive, such as implicit string coercion.
-	   *
-	   * For more complex types, especially collections, implementing `valueOf` may
-	   * not be performant. An alternative is to implement `equals` and `hashCode`.
-	   *
-	   * `equals` takes another object, presumably of similar type, and returns true
-	   * if the it is equal. Equality is symmetrical, so the same result should be
-	   * returned if this and the argument are flipped.
-	   *
-	   *     assert( a.equals(b) === b.equals(a) );
-	   *
-	   * `hashCode` returns a 32bit integer number representing the object which will
-	   * be used to determine how to store the value object in a Map or Set. You must
-	   * provide both or neither methods, one must not exist without the other.
-	   *
-	   * Also, an important relationship between these methods must be upheld: if two
-	   * values are equal, they *must* return the same hashCode. If the values are not
-	   * equal, they might have the same hashCode; this is called a hash collision,
-	   * and while undesirable for performance reasons, it is acceptable.
-	   *
-	   *     if (a.equals(b)) {
-	   *       assert( a.hashCode() === b.hashCode() );
-	   *     }
-	   *
-	   * All Immutable collections implement `equals` and `hashCode`.
-	   *
-	   */
-	  function is(valueA, valueB) {
-	    if (valueA === valueB || (valueA !== valueA && valueB !== valueB)) {
-	      return true;
-	    }
-	    if (!valueA || !valueB) {
-	      return false;
-	    }
-	    if (typeof valueA.valueOf === 'function' &&
-	        typeof valueB.valueOf === 'function') {
-	      valueA = valueA.valueOf();
-	      valueB = valueB.valueOf();
-	      if (valueA === valueB || (valueA !== valueA && valueB !== valueB)) {
-	        return true;
-	      }
-	      if (!valueA || !valueB) {
-	        return false;
-	      }
-	    }
-	    if (typeof valueA.equals === 'function' &&
-	        typeof valueB.equals === 'function' &&
-	        valueA.equals(valueB)) {
-	      return true;
-	    }
-	    return false;
-	  }
-
-	  function deepEqual(a, b) {
-	    if (a === b) {
-	      return true;
-	    }
-
-	    if (
-	      !isIterable(b) ||
-	      a.size !== undefined && b.size !== undefined && a.size !== b.size ||
-	      a.__hash !== undefined && b.__hash !== undefined && a.__hash !== b.__hash ||
-	      isKeyed(a) !== isKeyed(b) ||
-	      isIndexed(a) !== isIndexed(b) ||
-	      isOrdered(a) !== isOrdered(b)
-	    ) {
-	      return false;
-	    }
-
-	    if (a.size === 0 && b.size === 0) {
-	      return true;
-	    }
-
-	    var notAssociative = !isAssociative(a);
-
-	    if (isOrdered(a)) {
-	      var entries = a.entries();
-	      return b.every(function(v, k)  {
-	        var entry = entries.next().value;
-	        return entry && is(entry[1], v) && (notAssociative || is(entry[0], k));
-	      }) && entries.next().done;
-	    }
-
-	    var flipped = false;
-
-	    if (a.size === undefined) {
-	      if (b.size === undefined) {
-	        if (typeof a.cacheResult === 'function') {
-	          a.cacheResult();
+	  api.del = function del (dest, src, path, value, at) {
+	    return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
+	      if (Array.isArray(clonedObj)) {
+	        if (clonedObj[finalPath] !== undefined) {
+	          clonedObj.splice(finalPath, 1)
 	        }
 	      } else {
-	        flipped = true;
-	        var _ = a;
-	        a = b;
-	        b = _;
-	      }
-	    }
-
-	    var allEqual = true;
-	    var bSize = b.__iterate(function(v, k)  {
-	      if (notAssociative ? !a.has(v) :
-	          flipped ? !is(v, a.get(k, NOT_SET)) : !is(a.get(k, NOT_SET), v)) {
-	        allEqual = false;
-	        return false;
-	      }
-	    });
-
-	    return allEqual && a.size === bSize;
-	  }
-
-	  createClass(Repeat, IndexedSeq);
-
-	    function Repeat(value, times) {
-	      if (!(this instanceof Repeat)) {
-	        return new Repeat(value, times);
-	      }
-	      this._value = value;
-	      this.size = times === undefined ? Infinity : Math.max(0, times);
-	      if (this.size === 0) {
-	        if (EMPTY_REPEAT) {
-	          return EMPTY_REPEAT;
-	        }
-	        EMPTY_REPEAT = this;
-	      }
-	    }
-
-	    Repeat.prototype.toString = function() {
-	      if (this.size === 0) {
-	        return 'Repeat []';
-	      }
-	      return 'Repeat [ ' + this._value + ' ' + this.size + ' times ]';
-	    };
-
-	    Repeat.prototype.get = function(index, notSetValue) {
-	      return this.has(index) ? this._value : notSetValue;
-	    };
-
-	    Repeat.prototype.includes = function(searchValue) {
-	      return is(this._value, searchValue);
-	    };
-
-	    Repeat.prototype.slice = function(begin, end) {
-	      var size = this.size;
-	      return wholeSlice(begin, end, size) ? this :
-	        new Repeat(this._value, resolveEnd(end, size) - resolveBegin(begin, size));
-	    };
-
-	    Repeat.prototype.reverse = function() {
-	      return this;
-	    };
-
-	    Repeat.prototype.indexOf = function(searchValue) {
-	      if (is(this._value, searchValue)) {
-	        return 0;
-	      }
-	      return -1;
-	    };
-
-	    Repeat.prototype.lastIndexOf = function(searchValue) {
-	      if (is(this._value, searchValue)) {
-	        return this.size;
-	      }
-	      return -1;
-	    };
-
-	    Repeat.prototype.__iterate = function(fn, reverse) {
-	      for (var ii = 0; ii < this.size; ii++) {
-	        if (fn(this._value, ii, this) === false) {
-	          return ii + 1;
+	        if (clonedObj.hasOwnProperty(finalPath)) {
+	          delete clonedObj[finalPath]
 	        }
 	      }
-	      return ii;
-	    };
-
-	    Repeat.prototype.__iterator = function(type, reverse) {var this$0 = this;
-	      var ii = 0;
-	      return new Iterator(function() 
-	        {return ii < this$0.size ? iteratorValue(type, ii++, this$0._value) : iteratorDone()}
-	      );
-	    };
-
-	    Repeat.prototype.equals = function(other) {
-	      return other instanceof Repeat ?
-	        is(this._value, other._value) :
-	        deepEqual(other);
-	    };
-
-
-	  var EMPTY_REPEAT;
-
-	  function invariant(condition, error) {
-	    if (!condition) throw new Error(error);
+	      return clonedObj
+	    })
 	  }
 
-	  createClass(Range, IndexedSeq);
-
-	    function Range(start, end, step) {
-	      if (!(this instanceof Range)) {
-	        return new Range(start, end, step);
-	      }
-	      invariant(step !== 0, 'Cannot step a Range by 0');
-	      start = start || 0;
-	      if (end === undefined) {
-	        end = Infinity;
-	      }
-	      step = step === undefined ? 1 : Math.abs(step);
-	      if (end < start) {
-	        step = -step;
-	      }
-	      this._start = start;
-	      this._end = end;
-	      this._step = step;
-	      this.size = Math.max(0, Math.ceil((end - start) / step - 1) + 1);
-	      if (this.size === 0) {
-	        if (EMPTY_RANGE) {
-	          return EMPTY_RANGE;
-	        }
-	        EMPTY_RANGE = this;
-	      }
-	    }
-
-	    Range.prototype.toString = function() {
-	      if (this.size === 0) {
-	        return 'Range []';
-	      }
-	      return 'Range [ ' +
-	        this._start + '...' + this._end +
-	        (this._step !== 1 ? ' by ' + this._step : '') +
-	      ' ]';
-	    };
-
-	    Range.prototype.get = function(index, notSetValue) {
-	      return this.has(index) ?
-	        this._start + wrapIndex(this, index) * this._step :
-	        notSetValue;
-	    };
-
-	    Range.prototype.includes = function(searchValue) {
-	      var possibleIndex = (searchValue - this._start) / this._step;
-	      return possibleIndex >= 0 &&
-	        possibleIndex < this.size &&
-	        possibleIndex === Math.floor(possibleIndex);
-	    };
-
-	    Range.prototype.slice = function(begin, end) {
-	      if (wholeSlice(begin, end, this.size)) {
-	        return this;
-	      }
-	      begin = resolveBegin(begin, this.size);
-	      end = resolveEnd(end, this.size);
-	      if (end <= begin) {
-	        return new Range(0, 0);
-	      }
-	      return new Range(this.get(begin, this._end), this.get(end, this._end), this._step);
-	    };
-
-	    Range.prototype.indexOf = function(searchValue) {
-	      var offsetValue = searchValue - this._start;
-	      if (offsetValue % this._step === 0) {
-	        var index = offsetValue / this._step;
-	        if (index >= 0 && index < this.size) {
-	          return index
-	        }
-	      }
-	      return -1;
-	    };
-
-	    Range.prototype.lastIndexOf = function(searchValue) {
-	      return this.indexOf(searchValue);
-	    };
-
-	    Range.prototype.__iterate = function(fn, reverse) {
-	      var maxIndex = this.size - 1;
-	      var step = this._step;
-	      var value = reverse ? this._start + maxIndex * step : this._start;
-	      for (var ii = 0; ii <= maxIndex; ii++) {
-	        if (fn(value, ii, this) === false) {
-	          return ii + 1;
-	        }
-	        value += reverse ? -step : step;
-	      }
-	      return ii;
-	    };
-
-	    Range.prototype.__iterator = function(type, reverse) {
-	      var maxIndex = this.size - 1;
-	      var step = this._step;
-	      var value = reverse ? this._start + maxIndex * step : this._start;
-	      var ii = 0;
-	      return new Iterator(function()  {
-	        var v = value;
-	        value += reverse ? -step : step;
-	        return ii > maxIndex ? iteratorDone() : iteratorValue(type, ii++, v);
-	      });
-	    };
-
-	    Range.prototype.equals = function(other) {
-	      return other instanceof Range ?
-	        this._start === other._start &&
-	        this._end === other._end &&
-	        this._step === other._step :
-	        deepEqual(this, other);
-	    };
-
-
-	  var EMPTY_RANGE;
-
-	  createClass(Collection, Iterable);
-	    function Collection() {
-	      throw TypeError('Abstract');
-	    }
-
-
-	  createClass(KeyedCollection, Collection);function KeyedCollection() {}
-
-	  createClass(IndexedCollection, Collection);function IndexedCollection() {}
-
-	  createClass(SetCollection, Collection);function SetCollection() {}
-
-
-	  Collection.Keyed = KeyedCollection;
-	  Collection.Indexed = IndexedCollection;
-	  Collection.Set = SetCollection;
-
-	  var imul =
-	    typeof Math.imul === 'function' && Math.imul(0xffffffff, 2) === -2 ?
-	    Math.imul :
-	    function imul(a, b) {
-	      a = a | 0; // int
-	      b = b | 0; // int
-	      var c = a & 0xffff;
-	      var d = b & 0xffff;
-	      // Shift by 0 fixes the sign on the high part.
-	      return (c * d) + ((((a >>> 16) * d + c * (b >>> 16)) << 16) >>> 0) | 0; // int
-	    };
-
-	  // v8 has an optimization for storing 31-bit signed numbers.
-	  // Values which have either 00 or 11 as the high order bits qualify.
-	  // This function drops the highest order bit in a signed number, maintaining
-	  // the sign bit.
-	  function smi(i32) {
-	    return ((i32 >>> 1) & 0x40000000) | (i32 & 0xBFFFFFFF);
-	  }
-
-	  function hash(o) {
-	    if (o === false || o === null || o === undefined) {
-	      return 0;
-	    }
-	    if (typeof o.valueOf === 'function') {
-	      o = o.valueOf();
-	      if (o === false || o === null || o === undefined) {
-	        return 0;
-	      }
-	    }
-	    if (o === true) {
-	      return 1;
-	    }
-	    var type = typeof o;
-	    if (type === 'number') {
-	      if (o !== o || o === Infinity) {
-	        return 0;
-	      }
-	      var h = o | 0;
-	      if (h !== o) {
-	        h ^= o * 0xFFFFFFFF;
-	      }
-	      while (o > 0xFFFFFFFF) {
-	        o /= 0xFFFFFFFF;
-	        h ^= o;
-	      }
-	      return smi(h);
-	    }
-	    if (type === 'string') {
-	      return o.length > STRING_HASH_CACHE_MIN_STRLEN ? cachedHashString(o) : hashString(o);
-	    }
-	    if (typeof o.hashCode === 'function') {
-	      return o.hashCode();
-	    }
-	    if (type === 'object') {
-	      return hashJSObj(o);
-	    }
-	    if (typeof o.toString === 'function') {
-	      return hashString(o.toString());
-	    }
-	    throw new Error('Value type ' + type + ' cannot be hashed.');
-	  }
-
-	  function cachedHashString(string) {
-	    var hash = stringHashCache[string];
-	    if (hash === undefined) {
-	      hash = hashString(string);
-	      if (STRING_HASH_CACHE_SIZE === STRING_HASH_CACHE_MAX_SIZE) {
-	        STRING_HASH_CACHE_SIZE = 0;
-	        stringHashCache = {};
-	      }
-	      STRING_HASH_CACHE_SIZE++;
-	      stringHashCache[string] = hash;
-	    }
-	    return hash;
-	  }
-
-	  // http://jsperf.com/hashing-strings
-	  function hashString(string) {
-	    // This is the hash from JVM
-	    // The hash code for a string is computed as
-	    // s[0] * 31 ^ (n - 1) + s[1] * 31 ^ (n - 2) + ... + s[n - 1],
-	    // where s[i] is the ith character of the string and n is the length of
-	    // the string. We "mod" the result to make it between 0 (inclusive) and 2^31
-	    // (exclusive) by dropping high bits.
-	    var hash = 0;
-	    for (var ii = 0; ii < string.length; ii++) {
-	      hash = 31 * hash + string.charCodeAt(ii) | 0;
-	    }
-	    return smi(hash);
-	  }
-
-	  function hashJSObj(obj) {
-	    var hash;
-	    if (usingWeakMap) {
-	      hash = weakMap.get(obj);
-	      if (hash !== undefined) {
-	        return hash;
-	      }
-	    }
-
-	    hash = obj[UID_HASH_KEY];
-	    if (hash !== undefined) {
-	      return hash;
-	    }
-
-	    if (!canDefineProperty) {
-	      hash = obj.propertyIsEnumerable && obj.propertyIsEnumerable[UID_HASH_KEY];
-	      if (hash !== undefined) {
-	        return hash;
-	      }
-
-	      hash = getIENodeHash(obj);
-	      if (hash !== undefined) {
-	        return hash;
-	      }
-	    }
-
-	    hash = ++objHashUID;
-	    if (objHashUID & 0x40000000) {
-	      objHashUID = 0;
-	    }
-
-	    if (usingWeakMap) {
-	      weakMap.set(obj, hash);
-	    } else if (isExtensible !== undefined && isExtensible(obj) === false) {
-	      throw new Error('Non-extensible objects are not allowed as keys.');
-	    } else if (canDefineProperty) {
-	      Object.defineProperty(obj, UID_HASH_KEY, {
-	        'enumerable': false,
-	        'configurable': false,
-	        'writable': false,
-	        'value': hash
-	      });
-	    } else if (obj.propertyIsEnumerable !== undefined &&
-	               obj.propertyIsEnumerable === obj.constructor.prototype.propertyIsEnumerable) {
-	      // Since we can't define a non-enumerable property on the object
-	      // we'll hijack one of the less-used non-enumerable properties to
-	      // save our hash on it. Since this is a function it will not show up in
-	      // `JSON.stringify` which is what we want.
-	      obj.propertyIsEnumerable = function() {
-	        return this.constructor.prototype.propertyIsEnumerable.apply(this, arguments);
-	      };
-	      obj.propertyIsEnumerable[UID_HASH_KEY] = hash;
-	    } else if (obj.nodeType !== undefined) {
-	      // At this point we couldn't get the IE `uniqueID` to use as a hash
-	      // and we couldn't use a non-enumerable property to exploit the
-	      // dontEnum bug so we simply add the `UID_HASH_KEY` on the node
-	      // itself.
-	      obj[UID_HASH_KEY] = hash;
-	    } else {
-	      throw new Error('Unable to set a non-enumerable property on object.');
-	    }
-
-	    return hash;
-	  }
-
-	  // Get references to ES5 object methods.
-	  var isExtensible = Object.isExtensible;
-
-	  // True if Object.defineProperty works as expected. IE8 fails this test.
-	  var canDefineProperty = (function() {
-	    try {
-	      Object.defineProperty({}, '@', {});
-	      return true;
-	    } catch (e) {
-	      return false;
-	    }
-	  }());
-
-	  // IE has a `uniqueID` property on DOM nodes. We can construct the hash from it
-	  // and avoid memory leaks from the IE cloneNode bug.
-	  function getIENodeHash(node) {
-	    if (node && node.nodeType > 0) {
-	      switch (node.nodeType) {
-	        case 1: // Element
-	          return node.uniqueID;
-	        case 9: // Document
-	          return node.documentElement && node.documentElement.uniqueID;
-	      }
-	    }
-	  }
-
-	  // If possible, use a WeakMap.
-	  var usingWeakMap = typeof WeakMap === 'function';
-	  var weakMap;
-	  if (usingWeakMap) {
-	    weakMap = new WeakMap();
-	  }
-
-	  var objHashUID = 0;
-
-	  var UID_HASH_KEY = '__immutablehash__';
-	  if (typeof Symbol === 'function') {
-	    UID_HASH_KEY = Symbol(UID_HASH_KEY);
-	  }
-
-	  var STRING_HASH_CACHE_MIN_STRLEN = 16;
-	  var STRING_HASH_CACHE_MAX_SIZE = 255;
-	  var STRING_HASH_CACHE_SIZE = 0;
-	  var stringHashCache = {};
-
-	  function assertNotInfinite(size) {
-	    invariant(
-	      size !== Infinity,
-	      'Cannot perform this action with an infinite size.'
-	    );
-	  }
-
-	  createClass(Map, KeyedCollection);
-
-	    // @pragma Construction
-
-	    function Map(value) {
-	      return value === null || value === undefined ? emptyMap() :
-	        isMap(value) && !isOrdered(value) ? value :
-	        emptyMap().withMutations(function(map ) {
-	          var iter = KeyedIterable(value);
-	          assertNotInfinite(iter.size);
-	          iter.forEach(function(v, k)  {return map.set(k, v)});
-	        });
-	    }
-
-	    Map.of = function() {var keyValues = SLICE$0.call(arguments, 0);
-	      return emptyMap().withMutations(function(map ) {
-	        for (var i = 0; i < keyValues.length; i += 2) {
-	          if (i + 1 >= keyValues.length) {
-	            throw new Error('Missing value for key: ' + keyValues[i]);
-	          }
-	          map.set(keyValues[i], keyValues[i + 1]);
-	        }
-	      });
-	    };
-
-	    Map.prototype.toString = function() {
-	      return this.__toString('Map {', '}');
-	    };
-
-	    // @pragma Access
-
-	    Map.prototype.get = function(k, notSetValue) {
-	      return this._root ?
-	        this._root.get(0, undefined, k, notSetValue) :
-	        notSetValue;
-	    };
-
-	    // @pragma Modification
-
-	    Map.prototype.set = function(k, v) {
-	      return updateMap(this, k, v);
-	    };
-
-	    Map.prototype.setIn = function(keyPath, v) {
-	      return this.updateIn(keyPath, NOT_SET, function()  {return v});
-	    };
-
-	    Map.prototype.remove = function(k) {
-	      return updateMap(this, k, NOT_SET);
-	    };
-
-	    Map.prototype.deleteIn = function(keyPath) {
-	      return this.updateIn(keyPath, function()  {return NOT_SET});
-	    };
-
-	    Map.prototype.update = function(k, notSetValue, updater) {
-	      return arguments.length === 1 ?
-	        k(this) :
-	        this.updateIn([k], notSetValue, updater);
-	    };
-
-	    Map.prototype.updateIn = function(keyPath, notSetValue, updater) {
-	      if (!updater) {
-	        updater = notSetValue;
-	        notSetValue = undefined;
-	      }
-	      var updatedValue = updateInDeepMap(
-	        this,
-	        forceIterator(keyPath),
-	        notSetValue,
-	        updater
-	      );
-	      return updatedValue === NOT_SET ? undefined : updatedValue;
-	    };
-
-	    Map.prototype.clear = function() {
-	      if (this.size === 0) {
-	        return this;
-	      }
-	      if (this.__ownerID) {
-	        this.size = 0;
-	        this._root = null;
-	        this.__hash = undefined;
-	        this.__altered = true;
-	        return this;
-	      }
-	      return emptyMap();
-	    };
-
-	    // @pragma Composition
-
-	    Map.prototype.merge = function(/*...iters*/) {
-	      return mergeIntoMapWith(this, undefined, arguments);
-	    };
-
-	    Map.prototype.mergeWith = function(merger) {var iters = SLICE$0.call(arguments, 1);
-	      return mergeIntoMapWith(this, merger, iters);
-	    };
-
-	    Map.prototype.mergeIn = function(keyPath) {var iters = SLICE$0.call(arguments, 1);
-	      return this.updateIn(
-	        keyPath,
-	        emptyMap(),
-	        function(m ) {return typeof m.merge === 'function' ?
-	          m.merge.apply(m, iters) :
-	          iters[iters.length - 1]}
-	      );
-	    };
-
-	    Map.prototype.mergeDeep = function(/*...iters*/) {
-	      return mergeIntoMapWith(this, deepMerger, arguments);
-	    };
-
-	    Map.prototype.mergeDeepWith = function(merger) {var iters = SLICE$0.call(arguments, 1);
-	      return mergeIntoMapWith(this, deepMergerWith(merger), iters);
-	    };
-
-	    Map.prototype.mergeDeepIn = function(keyPath) {var iters = SLICE$0.call(arguments, 1);
-	      return this.updateIn(
-	        keyPath,
-	        emptyMap(),
-	        function(m ) {return typeof m.mergeDeep === 'function' ?
-	          m.mergeDeep.apply(m, iters) :
-	          iters[iters.length - 1]}
-	      );
-	    };
-
-	    Map.prototype.sort = function(comparator) {
-	      // Late binding
-	      return OrderedMap(sortFactory(this, comparator));
-	    };
-
-	    Map.prototype.sortBy = function(mapper, comparator) {
-	      // Late binding
-	      return OrderedMap(sortFactory(this, comparator, mapper));
-	    };
-
-	    // @pragma Mutability
-
-	    Map.prototype.withMutations = function(fn) {
-	      var mutable = this.asMutable();
-	      fn(mutable);
-	      return mutable.wasAltered() ? mutable.__ensureOwner(this.__ownerID) : this;
-	    };
-
-	    Map.prototype.asMutable = function() {
-	      return this.__ownerID ? this : this.__ensureOwner(new OwnerID());
-	    };
-
-	    Map.prototype.asImmutable = function() {
-	      return this.__ensureOwner();
-	    };
-
-	    Map.prototype.wasAltered = function() {
-	      return this.__altered;
-	    };
-
-	    Map.prototype.__iterator = function(type, reverse) {
-	      return new MapIterator(this, type, reverse);
-	    };
-
-	    Map.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      var iterations = 0;
-	      this._root && this._root.iterate(function(entry ) {
-	        iterations++;
-	        return fn(entry[1], entry[0], this$0);
-	      }, reverse);
-	      return iterations;
-	    };
-
-	    Map.prototype.__ensureOwner = function(ownerID) {
-	      if (ownerID === this.__ownerID) {
-	        return this;
-	      }
-	      if (!ownerID) {
-	        this.__ownerID = ownerID;
-	        this.__altered = false;
-	        return this;
-	      }
-	      return makeMap(this.size, this._root, ownerID, this.__hash);
-	    };
-
-
-	  function isMap(maybeMap) {
-	    return !!(maybeMap && maybeMap[IS_MAP_SENTINEL]);
-	  }
-
-	  Map.isMap = isMap;
-
-	  var IS_MAP_SENTINEL = '@@__IMMUTABLE_MAP__@@';
-
-	  var MapPrototype = Map.prototype;
-	  MapPrototype[IS_MAP_SENTINEL] = true;
-	  MapPrototype[DELETE] = MapPrototype.remove;
-	  MapPrototype.removeIn = MapPrototype.deleteIn;
-
-
-	  // #pragma Trie Nodes
-
-
-
-	    function ArrayMapNode(ownerID, entries) {
-	      this.ownerID = ownerID;
-	      this.entries = entries;
-	    }
-
-	    ArrayMapNode.prototype.get = function(shift, keyHash, key, notSetValue) {
-	      var entries = this.entries;
-	      for (var ii = 0, len = entries.length; ii < len; ii++) {
-	        if (is(key, entries[ii][0])) {
-	          return entries[ii][1];
-	        }
-	      }
-	      return notSetValue;
-	    };
-
-	    ArrayMapNode.prototype.update = function(ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
-	      var removed = value === NOT_SET;
-
-	      var entries = this.entries;
-	      var idx = 0;
-	      for (var len = entries.length; idx < len; idx++) {
-	        if (is(key, entries[idx][0])) {
-	          break;
-	        }
-	      }
-	      var exists = idx < len;
-
-	      if (exists ? entries[idx][1] === value : removed) {
-	        return this;
-	      }
-
-	      SetRef(didAlter);
-	      (removed || !exists) && SetRef(didChangeSize);
-
-	      if (removed && entries.length === 1) {
-	        return; // undefined
-	      }
-
-	      if (!exists && !removed && entries.length >= MAX_ARRAY_MAP_SIZE) {
-	        return createNodes(ownerID, entries, key, value);
-	      }
-
-	      var isEditable = ownerID && ownerID === this.ownerID;
-	      var newEntries = isEditable ? entries : arrCopy(entries);
-
-	      if (exists) {
-	        if (removed) {
-	          idx === len - 1 ? newEntries.pop() : (newEntries[idx] = newEntries.pop());
-	        } else {
-	          newEntries[idx] = [key, value];
-	        }
-	      } else {
-	        newEntries.push([key, value]);
-	      }
-
-	      if (isEditable) {
-	        this.entries = newEntries;
-	        return this;
-	      }
-
-	      return new ArrayMapNode(ownerID, newEntries);
-	    };
-
-
-
-
-	    function BitmapIndexedNode(ownerID, bitmap, nodes) {
-	      this.ownerID = ownerID;
-	      this.bitmap = bitmap;
-	      this.nodes = nodes;
-	    }
-
-	    BitmapIndexedNode.prototype.get = function(shift, keyHash, key, notSetValue) {
-	      if (keyHash === undefined) {
-	        keyHash = hash(key);
-	      }
-	      var bit = (1 << ((shift === 0 ? keyHash : keyHash >>> shift) & MASK));
-	      var bitmap = this.bitmap;
-	      return (bitmap & bit) === 0 ? notSetValue :
-	        this.nodes[popCount(bitmap & (bit - 1))].get(shift + SHIFT, keyHash, key, notSetValue);
-	    };
-
-	    BitmapIndexedNode.prototype.update = function(ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
-	      if (keyHash === undefined) {
-	        keyHash = hash(key);
-	      }
-	      var keyHashFrag = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
-	      var bit = 1 << keyHashFrag;
-	      var bitmap = this.bitmap;
-	      var exists = (bitmap & bit) !== 0;
-
-	      if (!exists && value === NOT_SET) {
-	        return this;
-	      }
-
-	      var idx = popCount(bitmap & (bit - 1));
-	      var nodes = this.nodes;
-	      var node = exists ? nodes[idx] : undefined;
-	      var newNode = updateNode(node, ownerID, shift + SHIFT, keyHash, key, value, didChangeSize, didAlter);
-
-	      if (newNode === node) {
-	        return this;
-	      }
-
-	      if (!exists && newNode && nodes.length >= MAX_BITMAP_INDEXED_SIZE) {
-	        return expandNodes(ownerID, nodes, bitmap, keyHashFrag, newNode);
-	      }
-
-	      if (exists && !newNode && nodes.length === 2 && isLeafNode(nodes[idx ^ 1])) {
-	        return nodes[idx ^ 1];
-	      }
-
-	      if (exists && newNode && nodes.length === 1 && isLeafNode(newNode)) {
-	        return newNode;
-	      }
-
-	      var isEditable = ownerID && ownerID === this.ownerID;
-	      var newBitmap = exists ? newNode ? bitmap : bitmap ^ bit : bitmap | bit;
-	      var newNodes = exists ? newNode ?
-	        setIn(nodes, idx, newNode, isEditable) :
-	        spliceOut(nodes, idx, isEditable) :
-	        spliceIn(nodes, idx, newNode, isEditable);
-
-	      if (isEditable) {
-	        this.bitmap = newBitmap;
-	        this.nodes = newNodes;
-	        return this;
-	      }
-
-	      return new BitmapIndexedNode(ownerID, newBitmap, newNodes);
-	    };
-
-
-
-
-	    function HashArrayMapNode(ownerID, count, nodes) {
-	      this.ownerID = ownerID;
-	      this.count = count;
-	      this.nodes = nodes;
-	    }
-
-	    HashArrayMapNode.prototype.get = function(shift, keyHash, key, notSetValue) {
-	      if (keyHash === undefined) {
-	        keyHash = hash(key);
-	      }
-	      var idx = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
-	      var node = this.nodes[idx];
-	      return node ? node.get(shift + SHIFT, keyHash, key, notSetValue) : notSetValue;
-	    };
-
-	    HashArrayMapNode.prototype.update = function(ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
-	      if (keyHash === undefined) {
-	        keyHash = hash(key);
-	      }
-	      var idx = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
-	      var removed = value === NOT_SET;
-	      var nodes = this.nodes;
-	      var node = nodes[idx];
-
-	      if (removed && !node) {
-	        return this;
-	      }
-
-	      var newNode = updateNode(node, ownerID, shift + SHIFT, keyHash, key, value, didChangeSize, didAlter);
-	      if (newNode === node) {
-	        return this;
-	      }
-
-	      var newCount = this.count;
-	      if (!node) {
-	        newCount++;
-	      } else if (!newNode) {
-	        newCount--;
-	        if (newCount < MIN_HASH_ARRAY_MAP_SIZE) {
-	          return packNodes(ownerID, nodes, newCount, idx);
+	  api.assign = function assign (dest, src, path, source) {
+	    return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
+	      source = Object(source)
+	      var target = clone(clonedObj[finalPath], true)
+
+	      for (var key in source) {
+	        if (_hasOwnProperty.call(source, key)) {
+	          target[key] = source[key]
 	        }
 	      }
 
-	      var isEditable = ownerID && ownerID === this.ownerID;
-	      var newNodes = setIn(nodes, idx, newNode, isEditable);
-
-	      if (isEditable) {
-	        this.count = newCount;
-	        this.nodes = newNodes;
-	        return this;
-	      }
-
-	      return new HashArrayMapNode(ownerID, newCount, newNodes);
-	    };
-
-
-
-
-	    function HashCollisionNode(ownerID, keyHash, entries) {
-	      this.ownerID = ownerID;
-	      this.keyHash = keyHash;
-	      this.entries = entries;
-	    }
-
-	    HashCollisionNode.prototype.get = function(shift, keyHash, key, notSetValue) {
-	      var entries = this.entries;
-	      for (var ii = 0, len = entries.length; ii < len; ii++) {
-	        if (is(key, entries[ii][0])) {
-	          return entries[ii][1];
-	        }
-	      }
-	      return notSetValue;
-	    };
-
-	    HashCollisionNode.prototype.update = function(ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
-	      if (keyHash === undefined) {
-	        keyHash = hash(key);
-	      }
-
-	      var removed = value === NOT_SET;
-
-	      if (keyHash !== this.keyHash) {
-	        if (removed) {
-	          return this;
-	        }
-	        SetRef(didAlter);
-	        SetRef(didChangeSize);
-	        return mergeIntoNode(this, ownerID, shift, keyHash, [key, value]);
-	      }
-
-	      var entries = this.entries;
-	      var idx = 0;
-	      for (var len = entries.length; idx < len; idx++) {
-	        if (is(key, entries[idx][0])) {
-	          break;
-	        }
-	      }
-	      var exists = idx < len;
-
-	      if (exists ? entries[idx][1] === value : removed) {
-	        return this;
-	      }
-
-	      SetRef(didAlter);
-	      (removed || !exists) && SetRef(didChangeSize);
-
-	      if (removed && len === 2) {
-	        return new ValueNode(ownerID, this.keyHash, entries[idx ^ 1]);
-	      }
-
-	      var isEditable = ownerID && ownerID === this.ownerID;
-	      var newEntries = isEditable ? entries : arrCopy(entries);
-
-	      if (exists) {
-	        if (removed) {
-	          idx === len - 1 ? newEntries.pop() : (newEntries[idx] = newEntries.pop());
-	        } else {
-	          newEntries[idx] = [key, value];
-	        }
-	      } else {
-	        newEntries.push([key, value]);
-	      }
-
-	      if (isEditable) {
-	        this.entries = newEntries;
-	        return this;
-	      }
-
-	      return new HashCollisionNode(ownerID, this.keyHash, newEntries);
-	    };
-
-
-
-
-	    function ValueNode(ownerID, keyHash, entry) {
-	      this.ownerID = ownerID;
-	      this.keyHash = keyHash;
-	      this.entry = entry;
-	    }
-
-	    ValueNode.prototype.get = function(shift, keyHash, key, notSetValue) {
-	      return is(key, this.entry[0]) ? this.entry[1] : notSetValue;
-	    };
-
-	    ValueNode.prototype.update = function(ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
-	      var removed = value === NOT_SET;
-	      var keyMatch = is(key, this.entry[0]);
-	      if (keyMatch ? value === this.entry[1] : removed) {
-	        return this;
-	      }
-
-	      SetRef(didAlter);
-
-	      if (removed) {
-	        SetRef(didChangeSize);
-	        return; // undefined
-	      }
-
-	      if (keyMatch) {
-	        if (ownerID && ownerID === this.ownerID) {
-	          this.entry[1] = value;
-	          return this;
-	        }
-	        return new ValueNode(ownerID, this.keyHash, [key, value]);
-	      }
-
-	      SetRef(didChangeSize);
-	      return mergeIntoNode(this, ownerID, shift, hash(key), [key, value]);
-	    };
-
-
-
-	  // #pragma Iterators
-
-	  ArrayMapNode.prototype.iterate =
-	  HashCollisionNode.prototype.iterate = function (fn, reverse) {
-	    var entries = this.entries;
-	    for (var ii = 0, maxIndex = entries.length - 1; ii <= maxIndex; ii++) {
-	      if (fn(entries[reverse ? maxIndex - ii : ii]) === false) {
-	        return false;
-	      }
-	    }
-	  }
-
-	  BitmapIndexedNode.prototype.iterate =
-	  HashArrayMapNode.prototype.iterate = function (fn, reverse) {
-	    var nodes = this.nodes;
-	    for (var ii = 0, maxIndex = nodes.length - 1; ii <= maxIndex; ii++) {
-	      var node = nodes[reverse ? maxIndex - ii : ii];
-	      if (node && node.iterate(fn, reverse) === false) {
-	        return false;
-	      }
-	    }
-	  }
-
-	  ValueNode.prototype.iterate = function (fn, reverse) {
-	    return fn(this.entry);
-	  }
-
-	  createClass(MapIterator, Iterator);
-
-	    function MapIterator(map, type, reverse) {
-	      this._type = type;
-	      this._reverse = reverse;
-	      this._stack = map._root && mapIteratorFrame(map._root);
-	    }
-
-	    MapIterator.prototype.next = function() {
-	      var type = this._type;
-	      var stack = this._stack;
-	      while (stack) {
-	        var node = stack.node;
-	        var index = stack.index++;
-	        var maxIndex;
-	        if (node.entry) {
-	          if (index === 0) {
-	            return mapIteratorValue(type, node.entry);
-	          }
-	        } else if (node.entries) {
-	          maxIndex = node.entries.length - 1;
-	          if (index <= maxIndex) {
-	            return mapIteratorValue(type, node.entries[this._reverse ? maxIndex - index : index]);
-	          }
-	        } else {
-	          maxIndex = node.nodes.length - 1;
-	          if (index <= maxIndex) {
-	            var subNode = node.nodes[this._reverse ? maxIndex - index : index];
-	            if (subNode) {
-	              if (subNode.entry) {
-	                return mapIteratorValue(type, subNode.entry);
-	              }
-	              stack = this._stack = mapIteratorFrame(subNode, stack);
-	            }
-	            continue;
-	          }
-	        }
-	        stack = this._stack = this._stack.__prev;
-	      }
-	      return iteratorDone();
-	    };
-
-
-	  function mapIteratorValue(type, entry) {
-	    return iteratorValue(type, entry[0], entry[1]);
-	  }
-
-	  function mapIteratorFrame(node, prev) {
-	    return {
-	      node: node,
-	      index: 0,
-	      __prev: prev
-	    };
-	  }
-
-	  function makeMap(size, root, ownerID, hash) {
-	    var map = Object.create(MapPrototype);
-	    map.size = size;
-	    map._root = root;
-	    map.__ownerID = ownerID;
-	    map.__hash = hash;
-	    map.__altered = false;
-	    return map;
-	  }
-
-	  var EMPTY_MAP;
-	  function emptyMap() {
-	    return EMPTY_MAP || (EMPTY_MAP = makeMap(0));
-	  }
-
-	  function updateMap(map, k, v) {
-	    var newRoot;
-	    var newSize;
-	    if (!map._root) {
-	      if (v === NOT_SET) {
-	        return map;
-	      }
-	      newSize = 1;
-	      newRoot = new ArrayMapNode(map.__ownerID, [[k, v]]);
-	    } else {
-	      var didChangeSize = MakeRef(CHANGE_LENGTH);
-	      var didAlter = MakeRef(DID_ALTER);
-	      newRoot = updateNode(map._root, map.__ownerID, 0, undefined, k, v, didChangeSize, didAlter);
-	      if (!didAlter.value) {
-	        return map;
-	      }
-	      newSize = map.size + (didChangeSize.value ? v === NOT_SET ? -1 : 1 : 0);
-	    }
-	    if (map.__ownerID) {
-	      map.size = newSize;
-	      map._root = newRoot;
-	      map.__hash = undefined;
-	      map.__altered = true;
-	      return map;
-	    }
-	    return newRoot ? makeMap(newSize, newRoot) : emptyMap();
-	  }
-
-	  function updateNode(node, ownerID, shift, keyHash, key, value, didChangeSize, didAlter) {
-	    if (!node) {
-	      if (value === NOT_SET) {
-	        return node;
-	      }
-	      SetRef(didAlter);
-	      SetRef(didChangeSize);
-	      return new ValueNode(ownerID, keyHash, [key, value]);
-	    }
-	    return node.update(ownerID, shift, keyHash, key, value, didChangeSize, didAlter);
-	  }
-
-	  function isLeafNode(node) {
-	    return node.constructor === ValueNode || node.constructor === HashCollisionNode;
-	  }
-
-	  function mergeIntoNode(node, ownerID, shift, keyHash, entry) {
-	    if (node.keyHash === keyHash) {
-	      return new HashCollisionNode(ownerID, keyHash, [node.entry, entry]);
-	    }
-
-	    var idx1 = (shift === 0 ? node.keyHash : node.keyHash >>> shift) & MASK;
-	    var idx2 = (shift === 0 ? keyHash : keyHash >>> shift) & MASK;
-
-	    var newNode;
-	    var nodes = idx1 === idx2 ?
-	      [mergeIntoNode(node, ownerID, shift + SHIFT, keyHash, entry)] :
-	      ((newNode = new ValueNode(ownerID, keyHash, entry)), idx1 < idx2 ? [node, newNode] : [newNode, node]);
-
-	    return new BitmapIndexedNode(ownerID, (1 << idx1) | (1 << idx2), nodes);
-	  }
-
-	  function createNodes(ownerID, entries, key, value) {
-	    if (!ownerID) {
-	      ownerID = new OwnerID();
-	    }
-	    var node = new ValueNode(ownerID, hash(key), [key, value]);
-	    for (var ii = 0; ii < entries.length; ii++) {
-	      var entry = entries[ii];
-	      node = node.update(ownerID, 0, undefined, entry[0], entry[1]);
-	    }
-	    return node;
-	  }
-
-	  function packNodes(ownerID, nodes, count, excluding) {
-	    var bitmap = 0;
-	    var packedII = 0;
-	    var packedNodes = new Array(count);
-	    for (var ii = 0, bit = 1, len = nodes.length; ii < len; ii++, bit <<= 1) {
-	      var node = nodes[ii];
-	      if (node !== undefined && ii !== excluding) {
-	        bitmap |= bit;
-	        packedNodes[packedII++] = node;
-	      }
-	    }
-	    return new BitmapIndexedNode(ownerID, bitmap, packedNodes);
-	  }
-
-	  function expandNodes(ownerID, nodes, bitmap, including, node) {
-	    var count = 0;
-	    var expandedNodes = new Array(SIZE);
-	    for (var ii = 0; bitmap !== 0; ii++, bitmap >>>= 1) {
-	      expandedNodes[ii] = bitmap & 1 ? nodes[count++] : undefined;
-	    }
-	    expandedNodes[including] = node;
-	    return new HashArrayMapNode(ownerID, count + 1, expandedNodes);
-	  }
-
-	  function mergeIntoMapWith(map, merger, iterables) {
-	    var iters = [];
-	    for (var ii = 0; ii < iterables.length; ii++) {
-	      var value = iterables[ii];
-	      var iter = KeyedIterable(value);
-	      if (!isIterable(value)) {
-	        iter = iter.map(function(v ) {return fromJS(v)});
-	      }
-	      iters.push(iter);
-	    }
-	    return mergeIntoCollectionWith(map, merger, iters);
-	  }
-
-	  function deepMerger(existing, value, key) {
-	    return existing && existing.mergeDeep && isIterable(value) ?
-	      existing.mergeDeep(value) :
-	      is(existing, value) ? existing : value;
-	  }
-
-	  function deepMergerWith(merger) {
-	    return function(existing, value, key)  {
-	      if (existing && existing.mergeDeepWith && isIterable(value)) {
-	        return existing.mergeDeepWith(merger, value);
-	      }
-	      var nextValue = merger(existing, value, key);
-	      return is(existing, nextValue) ? existing : nextValue;
-	    };
-	  }
-
-	  function mergeIntoCollectionWith(collection, merger, iters) {
-	    iters = iters.filter(function(x ) {return x.size !== 0});
-	    if (iters.length === 0) {
-	      return collection;
-	    }
-	    if (collection.size === 0 && !collection.__ownerID && iters.length === 1) {
-	      return collection.constructor(iters[0]);
-	    }
-	    return collection.withMutations(function(collection ) {
-	      var mergeIntoMap = merger ?
-	        function(value, key)  {
-	          collection.update(key, NOT_SET, function(existing )
-	            {return existing === NOT_SET ? value : merger(existing, value, key)}
-	          );
-	        } :
-	        function(value, key)  {
-	          collection.set(key, value);
-	        }
-	      for (var ii = 0; ii < iters.length; ii++) {
-	        iters[ii].forEach(mergeIntoMap);
-	      }
-	    });
-	  }
-
-	  function updateInDeepMap(existing, keyPathIter, notSetValue, updater) {
-	    var isNotSet = existing === NOT_SET;
-	    var step = keyPathIter.next();
-	    if (step.done) {
-	      var existingValue = isNotSet ? notSetValue : existing;
-	      var newValue = updater(existingValue);
-	      return newValue === existingValue ? existing : newValue;
-	    }
-	    invariant(
-	      isNotSet || (existing && existing.set),
-	      'invalid keyPath'
-	    );
-	    var key = step.value;
-	    var nextExisting = isNotSet ? NOT_SET : existing.get(key, NOT_SET);
-	    var nextUpdated = updateInDeepMap(
-	      nextExisting,
-	      keyPathIter,
-	      notSetValue,
-	      updater
-	    );
-	    return nextUpdated === nextExisting ? existing :
-	      nextUpdated === NOT_SET ? existing.remove(key) :
-	      (isNotSet ? emptyMap() : existing).set(key, nextUpdated);
-	  }
-
-	  function popCount(x) {
-	    x = x - ((x >> 1) & 0x55555555);
-	    x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
-	    x = (x + (x >> 4)) & 0x0f0f0f0f;
-	    x = x + (x >> 8);
-	    x = x + (x >> 16);
-	    return x & 0x7f;
-	  }
-
-	  function setIn(array, idx, val, canEdit) {
-	    var newArray = canEdit ? array : arrCopy(array);
-	    newArray[idx] = val;
-	    return newArray;
-	  }
-
-	  function spliceIn(array, idx, val, canEdit) {
-	    var newLen = array.length + 1;
-	    if (canEdit && idx + 1 === newLen) {
-	      array[idx] = val;
-	      return array;
-	    }
-	    var newArray = new Array(newLen);
-	    var after = 0;
-	    for (var ii = 0; ii < newLen; ii++) {
-	      if (ii === idx) {
-	        newArray[ii] = val;
-	        after = -1;
-	      } else {
-	        newArray[ii] = array[ii + after];
-	      }
-	    }
-	    return newArray;
-	  }
-
-	  function spliceOut(array, idx, canEdit) {
-	    var newLen = array.length - 1;
-	    if (canEdit && idx === newLen) {
-	      array.pop();
-	      return array;
-	    }
-	    var newArray = new Array(newLen);
-	    var after = 0;
-	    for (var ii = 0; ii < newLen; ii++) {
-	      if (ii === idx) {
-	        after = 1;
-	      }
-	      newArray[ii] = array[ii + after];
-	    }
-	    return newArray;
-	  }
-
-	  var MAX_ARRAY_MAP_SIZE = SIZE / 4;
-	  var MAX_BITMAP_INDEXED_SIZE = SIZE / 2;
-	  var MIN_HASH_ARRAY_MAP_SIZE = SIZE / 4;
-
-	  createClass(List, IndexedCollection);
-
-	    // @pragma Construction
-
-	    function List(value) {
-	      var empty = emptyList();
-	      if (value === null || value === undefined) {
-	        return empty;
-	      }
-	      if (isList(value)) {
-	        return value;
-	      }
-	      var iter = IndexedIterable(value);
-	      var size = iter.size;
-	      if (size === 0) {
-	        return empty;
-	      }
-	      assertNotInfinite(size);
-	      if (size > 0 && size < SIZE) {
-	        return makeList(0, size, SHIFT, null, new VNode(iter.toArray()));
-	      }
-	      return empty.withMutations(function(list ) {
-	        list.setSize(size);
-	        iter.forEach(function(v, i)  {return list.set(i, v)});
-	      });
-	    }
-
-	    List.of = function(/*...values*/) {
-	      return this(arguments);
-	    };
-
-	    List.prototype.toString = function() {
-	      return this.__toString('List [', ']');
-	    };
-
-	    // @pragma Access
-
-	    List.prototype.get = function(index, notSetValue) {
-	      index = wrapIndex(this, index);
-	      if (index >= 0 && index < this.size) {
-	        index += this._origin;
-	        var node = listNodeFor(this, index);
-	        return node && node.array[index & MASK];
-	      }
-	      return notSetValue;
-	    };
-
-	    // @pragma Modification
-
-	    List.prototype.set = function(index, value) {
-	      return updateList(this, index, value);
-	    };
-
-	    List.prototype.remove = function(index) {
-	      return !this.has(index) ? this :
-	        index === 0 ? this.shift() :
-	        index === this.size - 1 ? this.pop() :
-	        this.splice(index, 1);
-	    };
-
-	    List.prototype.insert = function(index, value) {
-	      return this.splice(index, 0, value);
-	    };
-
-	    List.prototype.clear = function() {
-	      if (this.size === 0) {
-	        return this;
-	      }
-	      if (this.__ownerID) {
-	        this.size = this._origin = this._capacity = 0;
-	        this._level = SHIFT;
-	        this._root = this._tail = null;
-	        this.__hash = undefined;
-	        this.__altered = true;
-	        return this;
-	      }
-	      return emptyList();
-	    };
-
-	    List.prototype.push = function(/*...values*/) {
-	      var values = arguments;
-	      var oldSize = this.size;
-	      return this.withMutations(function(list ) {
-	        setListBounds(list, 0, oldSize + values.length);
-	        for (var ii = 0; ii < values.length; ii++) {
-	          list.set(oldSize + ii, values[ii]);
-	        }
-	      });
-	    };
-
-	    List.prototype.pop = function() {
-	      return setListBounds(this, 0, -1);
-	    };
-
-	    List.prototype.unshift = function(/*...values*/) {
-	      var values = arguments;
-	      return this.withMutations(function(list ) {
-	        setListBounds(list, -values.length);
-	        for (var ii = 0; ii < values.length; ii++) {
-	          list.set(ii, values[ii]);
-	        }
-	      });
-	    };
-
-	    List.prototype.shift = function() {
-	      return setListBounds(this, 1);
-	    };
-
-	    // @pragma Composition
-
-	    List.prototype.merge = function(/*...iters*/) {
-	      return mergeIntoListWith(this, undefined, arguments);
-	    };
-
-	    List.prototype.mergeWith = function(merger) {var iters = SLICE$0.call(arguments, 1);
-	      return mergeIntoListWith(this, merger, iters);
-	    };
-
-	    List.prototype.mergeDeep = function(/*...iters*/) {
-	      return mergeIntoListWith(this, deepMerger, arguments);
-	    };
-
-	    List.prototype.mergeDeepWith = function(merger) {var iters = SLICE$0.call(arguments, 1);
-	      return mergeIntoListWith(this, deepMergerWith(merger), iters);
-	    };
-
-	    List.prototype.setSize = function(size) {
-	      return setListBounds(this, 0, size);
-	    };
-
-	    // @pragma Iteration
-
-	    List.prototype.slice = function(begin, end) {
-	      var size = this.size;
-	      if (wholeSlice(begin, end, size)) {
-	        return this;
-	      }
-	      return setListBounds(
-	        this,
-	        resolveBegin(begin, size),
-	        resolveEnd(end, size)
-	      );
-	    };
-
-	    List.prototype.__iterator = function(type, reverse) {
-	      var index = 0;
-	      var values = iterateList(this, reverse);
-	      return new Iterator(function()  {
-	        var value = values();
-	        return value === DONE ?
-	          iteratorDone() :
-	          iteratorValue(type, index++, value);
-	      });
-	    };
-
-	    List.prototype.__iterate = function(fn, reverse) {
-	      var index = 0;
-	      var values = iterateList(this, reverse);
-	      var value;
-	      while ((value = values()) !== DONE) {
-	        if (fn(value, index++, this) === false) {
-	          break;
-	        }
-	      }
-	      return index;
-	    };
-
-	    List.prototype.__ensureOwner = function(ownerID) {
-	      if (ownerID === this.__ownerID) {
-	        return this;
-	      }
-	      if (!ownerID) {
-	        this.__ownerID = ownerID;
-	        return this;
-	      }
-	      return makeList(this._origin, this._capacity, this._level, this._root, this._tail, ownerID, this.__hash);
-	    };
-
-
-	  function isList(maybeList) {
-	    return !!(maybeList && maybeList[IS_LIST_SENTINEL]);
-	  }
-
-	  List.isList = isList;
-
-	  var IS_LIST_SENTINEL = '@@__IMMUTABLE_LIST__@@';
-
-	  var ListPrototype = List.prototype;
-	  ListPrototype[IS_LIST_SENTINEL] = true;
-	  ListPrototype[DELETE] = ListPrototype.remove;
-	  ListPrototype.setIn = MapPrototype.setIn;
-	  ListPrototype.deleteIn =
-	  ListPrototype.removeIn = MapPrototype.removeIn;
-	  ListPrototype.update = MapPrototype.update;
-	  ListPrototype.updateIn = MapPrototype.updateIn;
-	  ListPrototype.mergeIn = MapPrototype.mergeIn;
-	  ListPrototype.mergeDeepIn = MapPrototype.mergeDeepIn;
-	  ListPrototype.withMutations = MapPrototype.withMutations;
-	  ListPrototype.asMutable = MapPrototype.asMutable;
-	  ListPrototype.asImmutable = MapPrototype.asImmutable;
-	  ListPrototype.wasAltered = MapPrototype.wasAltered;
-
-
-
-	    function VNode(array, ownerID) {
-	      this.array = array;
-	      this.ownerID = ownerID;
-	    }
-
-	    // TODO: seems like these methods are very similar
-
-	    VNode.prototype.removeBefore = function(ownerID, level, index) {
-	      if (index === level ? 1 << level : 0 || this.array.length === 0) {
-	        return this;
-	      }
-	      var originIndex = (index >>> level) & MASK;
-	      if (originIndex >= this.array.length) {
-	        return new VNode([], ownerID);
-	      }
-	      var removingFirst = originIndex === 0;
-	      var newChild;
-	      if (level > 0) {
-	        var oldChild = this.array[originIndex];
-	        newChild = oldChild && oldChild.removeBefore(ownerID, level - SHIFT, index);
-	        if (newChild === oldChild && removingFirst) {
-	          return this;
-	        }
-	      }
-	      if (removingFirst && !newChild) {
-	        return this;
-	      }
-	      var editable = editableVNode(this, ownerID);
-	      if (!removingFirst) {
-	        for (var ii = 0; ii < originIndex; ii++) {
-	          editable.array[ii] = undefined;
-	        }
-	      }
-	      if (newChild) {
-	        editable.array[originIndex] = newChild;
-	      }
-	      return editable;
-	    };
-
-	    VNode.prototype.removeAfter = function(ownerID, level, index) {
-	      if (index === (level ? 1 << level : 0) || this.array.length === 0) {
-	        return this;
-	      }
-	      var sizeIndex = ((index - 1) >>> level) & MASK;
-	      if (sizeIndex >= this.array.length) {
-	        return this;
-	      }
-
-	      var newChild;
-	      if (level > 0) {
-	        var oldChild = this.array[sizeIndex];
-	        newChild = oldChild && oldChild.removeAfter(ownerID, level - SHIFT, index);
-	        if (newChild === oldChild && sizeIndex === this.array.length - 1) {
-	          return this;
-	        }
-	      }
-
-	      var editable = editableVNode(this, ownerID);
-	      editable.array.splice(sizeIndex + 1);
-	      if (newChild) {
-	        editable.array[sizeIndex] = newChild;
-	      }
-	      return editable;
-	    };
-
-
-
-	  var DONE = {};
-
-	  function iterateList(list, reverse) {
-	    var left = list._origin;
-	    var right = list._capacity;
-	    var tailPos = getTailOffset(right);
-	    var tail = list._tail;
-
-	    return iterateNodeOrLeaf(list._root, list._level, 0);
-
-	    function iterateNodeOrLeaf(node, level, offset) {
-	      return level === 0 ?
-	        iterateLeaf(node, offset) :
-	        iterateNode(node, level, offset);
-	    }
-
-	    function iterateLeaf(node, offset) {
-	      var array = offset === tailPos ? tail && tail.array : node && node.array;
-	      var from = offset > left ? 0 : left - offset;
-	      var to = right - offset;
-	      if (to > SIZE) {
-	        to = SIZE;
-	      }
-	      return function()  {
-	        if (from === to) {
-	          return DONE;
-	        }
-	        var idx = reverse ? --to : from++;
-	        return array && array[idx];
-	      };
-	    }
-
-	    function iterateNode(node, level, offset) {
-	      var values;
-	      var array = node && node.array;
-	      var from = offset > left ? 0 : (left - offset) >> level;
-	      var to = ((right - offset) >> level) + 1;
-	      if (to > SIZE) {
-	        to = SIZE;
-	      }
-	      return function()  {
-	        do {
-	          if (values) {
-	            var value = values();
-	            if (value !== DONE) {
-	              return value;
-	            }
-	            values = null;
-	          }
-	          if (from === to) {
-	            return DONE;
-	          }
-	          var idx = reverse ? --to : from++;
-	          values = iterateNodeOrLeaf(
-	            array && array[idx], level - SHIFT, offset + (idx << level)
-	          );
-	        } while (true);
-	      };
-	    }
-	  }
-
-	  function makeList(origin, capacity, level, root, tail, ownerID, hash) {
-	    var list = Object.create(ListPrototype);
-	    list.size = capacity - origin;
-	    list._origin = origin;
-	    list._capacity = capacity;
-	    list._level = level;
-	    list._root = root;
-	    list._tail = tail;
-	    list.__ownerID = ownerID;
-	    list.__hash = hash;
-	    list.__altered = false;
-	    return list;
-	  }
-
-	  var EMPTY_LIST;
-	  function emptyList() {
-	    return EMPTY_LIST || (EMPTY_LIST = makeList(0, 0, SHIFT));
-	  }
-
-	  function updateList(list, index, value) {
-	    index = wrapIndex(list, index);
-
-	    if (index !== index) {
-	      return list;
-	    }
-
-	    if (index >= list.size || index < 0) {
-	      return list.withMutations(function(list ) {
-	        index < 0 ?
-	          setListBounds(list, index).set(0, value) :
-	          setListBounds(list, 0, index + 1).set(index, value)
-	      });
-	    }
-
-	    index += list._origin;
-
-	    var newTail = list._tail;
-	    var newRoot = list._root;
-	    var didAlter = MakeRef(DID_ALTER);
-	    if (index >= getTailOffset(list._capacity)) {
-	      newTail = updateVNode(newTail, list.__ownerID, 0, index, value, didAlter);
-	    } else {
-	      newRoot = updateVNode(newRoot, list.__ownerID, list._level, index, value, didAlter);
-	    }
-
-	    if (!didAlter.value) {
-	      return list;
-	    }
-
-	    if (list.__ownerID) {
-	      list._root = newRoot;
-	      list._tail = newTail;
-	      list.__hash = undefined;
-	      list.__altered = true;
-	      return list;
-	    }
-	    return makeList(list._origin, list._capacity, list._level, newRoot, newTail);
-	  }
-
-	  function updateVNode(node, ownerID, level, index, value, didAlter) {
-	    var idx = (index >>> level) & MASK;
-	    var nodeHas = node && idx < node.array.length;
-	    if (!nodeHas && value === undefined) {
-	      return node;
-	    }
-
-	    var newNode;
-
-	    if (level > 0) {
-	      var lowerNode = node && node.array[idx];
-	      var newLowerNode = updateVNode(lowerNode, ownerID, level - SHIFT, index, value, didAlter);
-	      if (newLowerNode === lowerNode) {
-	        return node;
-	      }
-	      newNode = editableVNode(node, ownerID);
-	      newNode.array[idx] = newLowerNode;
-	      return newNode;
-	    }
-
-	    if (nodeHas && node.array[idx] === value) {
-	      return node;
-	    }
-
-	    SetRef(didAlter);
-
-	    newNode = editableVNode(node, ownerID);
-	    if (value === undefined && idx === newNode.array.length - 1) {
-	      newNode.array.pop();
-	    } else {
-	      newNode.array[idx] = value;
-	    }
-	    return newNode;
-	  }
-
-	  function editableVNode(node, ownerID) {
-	    if (ownerID && node && ownerID === node.ownerID) {
-	      return node;
-	    }
-	    return new VNode(node ? node.array.slice() : [], ownerID);
-	  }
-
-	  function listNodeFor(list, rawIndex) {
-	    if (rawIndex >= getTailOffset(list._capacity)) {
-	      return list._tail;
-	    }
-	    if (rawIndex < 1 << (list._level + SHIFT)) {
-	      var node = list._root;
-	      var level = list._level;
-	      while (node && level > 0) {
-	        node = node.array[(rawIndex >>> level) & MASK];
-	        level -= SHIFT;
-	      }
-	      return node;
-	    }
-	  }
-
-	  function setListBounds(list, begin, end) {
-	    // Sanitize begin & end using this shorthand for ToInt32(argument)
-	    // http://www.ecma-international.org/ecma-262/6.0/#sec-toint32
-	    if (begin !== undefined) {
-	      begin = begin | 0;
-	    }
-	    if (end !== undefined) {
-	      end = end | 0;
-	    }
-	    var owner = list.__ownerID || new OwnerID();
-	    var oldOrigin = list._origin;
-	    var oldCapacity = list._capacity;
-	    var newOrigin = oldOrigin + begin;
-	    var newCapacity = end === undefined ? oldCapacity : end < 0 ? oldCapacity + end : oldOrigin + end;
-	    if (newOrigin === oldOrigin && newCapacity === oldCapacity) {
-	      return list;
-	    }
-
-	    // If it's going to end after it starts, it's empty.
-	    if (newOrigin >= newCapacity) {
-	      return list.clear();
-	    }
-
-	    var newLevel = list._level;
-	    var newRoot = list._root;
-
-	    // New origin might need creating a higher root.
-	    var offsetShift = 0;
-	    while (newOrigin + offsetShift < 0) {
-	      newRoot = new VNode(newRoot && newRoot.array.length ? [undefined, newRoot] : [], owner);
-	      newLevel += SHIFT;
-	      offsetShift += 1 << newLevel;
-	    }
-	    if (offsetShift) {
-	      newOrigin += offsetShift;
-	      oldOrigin += offsetShift;
-	      newCapacity += offsetShift;
-	      oldCapacity += offsetShift;
-	    }
-
-	    var oldTailOffset = getTailOffset(oldCapacity);
-	    var newTailOffset = getTailOffset(newCapacity);
-
-	    // New size might need creating a higher root.
-	    while (newTailOffset >= 1 << (newLevel + SHIFT)) {
-	      newRoot = new VNode(newRoot && newRoot.array.length ? [newRoot] : [], owner);
-	      newLevel += SHIFT;
-	    }
-
-	    // Locate or create the new tail.
-	    var oldTail = list._tail;
-	    var newTail = newTailOffset < oldTailOffset ?
-	      listNodeFor(list, newCapacity - 1) :
-	      newTailOffset > oldTailOffset ? new VNode([], owner) : oldTail;
-
-	    // Merge Tail into tree.
-	    if (oldTail && newTailOffset > oldTailOffset && newOrigin < oldCapacity && oldTail.array.length) {
-	      newRoot = editableVNode(newRoot, owner);
-	      var node = newRoot;
-	      for (var level = newLevel; level > SHIFT; level -= SHIFT) {
-	        var idx = (oldTailOffset >>> level) & MASK;
-	        node = node.array[idx] = editableVNode(node.array[idx], owner);
-	      }
-	      node.array[(oldTailOffset >>> SHIFT) & MASK] = oldTail;
-	    }
-
-	    // If the size has been reduced, there's a chance the tail needs to be trimmed.
-	    if (newCapacity < oldCapacity) {
-	      newTail = newTail && newTail.removeAfter(owner, 0, newCapacity);
-	    }
-
-	    // If the new origin is within the tail, then we do not need a root.
-	    if (newOrigin >= newTailOffset) {
-	      newOrigin -= newTailOffset;
-	      newCapacity -= newTailOffset;
-	      newLevel = SHIFT;
-	      newRoot = null;
-	      newTail = newTail && newTail.removeBefore(owner, 0, newOrigin);
-
-	    // Otherwise, if the root has been trimmed, garbage collect.
-	    } else if (newOrigin > oldOrigin || newTailOffset < oldTailOffset) {
-	      offsetShift = 0;
-
-	      // Identify the new top root node of the subtree of the old root.
-	      while (newRoot) {
-	        var beginIndex = (newOrigin >>> newLevel) & MASK;
-	        if (beginIndex !== (newTailOffset >>> newLevel) & MASK) {
-	          break;
-	        }
-	        if (beginIndex) {
-	          offsetShift += (1 << newLevel) * beginIndex;
-	        }
-	        newLevel -= SHIFT;
-	        newRoot = newRoot.array[beginIndex];
-	      }
-
-	      // Trim the new sides of the new root.
-	      if (newRoot && newOrigin > oldOrigin) {
-	        newRoot = newRoot.removeBefore(owner, newLevel, newOrigin - offsetShift);
-	      }
-	      if (newRoot && newTailOffset < oldTailOffset) {
-	        newRoot = newRoot.removeAfter(owner, newLevel, newTailOffset - offsetShift);
-	      }
-	      if (offsetShift) {
-	        newOrigin -= offsetShift;
-	        newCapacity -= offsetShift;
-	      }
-	    }
-
-	    if (list.__ownerID) {
-	      list.size = newCapacity - newOrigin;
-	      list._origin = newOrigin;
-	      list._capacity = newCapacity;
-	      list._level = newLevel;
-	      list._root = newRoot;
-	      list._tail = newTail;
-	      list.__hash = undefined;
-	      list.__altered = true;
-	      return list;
-	    }
-	    return makeList(newOrigin, newCapacity, newLevel, newRoot, newTail);
-	  }
-
-	  function mergeIntoListWith(list, merger, iterables) {
-	    var iters = [];
-	    var maxSize = 0;
-	    for (var ii = 0; ii < iterables.length; ii++) {
-	      var value = iterables[ii];
-	      var iter = IndexedIterable(value);
-	      if (iter.size > maxSize) {
-	        maxSize = iter.size;
-	      }
-	      if (!isIterable(value)) {
-	        iter = iter.map(function(v ) {return fromJS(v)});
-	      }
-	      iters.push(iter);
-	    }
-	    if (maxSize > list.size) {
-	      list = list.setSize(maxSize);
-	    }
-	    return mergeIntoCollectionWith(list, merger, iters);
-	  }
-
-	  function getTailOffset(size) {
-	    return size < SIZE ? 0 : (((size - 1) >>> SHIFT) << SHIFT);
-	  }
-
-	  createClass(OrderedMap, Map);
-
-	    // @pragma Construction
-
-	    function OrderedMap(value) {
-	      return value === null || value === undefined ? emptyOrderedMap() :
-	        isOrderedMap(value) ? value :
-	        emptyOrderedMap().withMutations(function(map ) {
-	          var iter = KeyedIterable(value);
-	          assertNotInfinite(iter.size);
-	          iter.forEach(function(v, k)  {return map.set(k, v)});
-	        });
-	    }
-
-	    OrderedMap.of = function(/*...values*/) {
-	      return this(arguments);
-	    };
-
-	    OrderedMap.prototype.toString = function() {
-	      return this.__toString('OrderedMap {', '}');
-	    };
-
-	    // @pragma Access
-
-	    OrderedMap.prototype.get = function(k, notSetValue) {
-	      var index = this._map.get(k);
-	      return index !== undefined ? this._list.get(index)[1] : notSetValue;
-	    };
-
-	    // @pragma Modification
-
-	    OrderedMap.prototype.clear = function() {
-	      if (this.size === 0) {
-	        return this;
-	      }
-	      if (this.__ownerID) {
-	        this.size = 0;
-	        this._map.clear();
-	        this._list.clear();
-	        return this;
-	      }
-	      return emptyOrderedMap();
-	    };
-
-	    OrderedMap.prototype.set = function(k, v) {
-	      return updateOrderedMap(this, k, v);
-	    };
-
-	    OrderedMap.prototype.remove = function(k) {
-	      return updateOrderedMap(this, k, NOT_SET);
-	    };
-
-	    OrderedMap.prototype.wasAltered = function() {
-	      return this._map.wasAltered() || this._list.wasAltered();
-	    };
-
-	    OrderedMap.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      return this._list.__iterate(
-	        function(entry ) {return entry && fn(entry[1], entry[0], this$0)},
-	        reverse
-	      );
-	    };
-
-	    OrderedMap.prototype.__iterator = function(type, reverse) {
-	      return this._list.fromEntrySeq().__iterator(type, reverse);
-	    };
-
-	    OrderedMap.prototype.__ensureOwner = function(ownerID) {
-	      if (ownerID === this.__ownerID) {
-	        return this;
-	      }
-	      var newMap = this._map.__ensureOwner(ownerID);
-	      var newList = this._list.__ensureOwner(ownerID);
-	      if (!ownerID) {
-	        this.__ownerID = ownerID;
-	        this._map = newMap;
-	        this._list = newList;
-	        return this;
-	      }
-	      return makeOrderedMap(newMap, newList, ownerID, this.__hash);
-	    };
-
-
-	  function isOrderedMap(maybeOrderedMap) {
-	    return isMap(maybeOrderedMap) && isOrdered(maybeOrderedMap);
-	  }
-
-	  OrderedMap.isOrderedMap = isOrderedMap;
-
-	  OrderedMap.prototype[IS_ORDERED_SENTINEL] = true;
-	  OrderedMap.prototype[DELETE] = OrderedMap.prototype.remove;
-
-
-
-	  function makeOrderedMap(map, list, ownerID, hash) {
-	    var omap = Object.create(OrderedMap.prototype);
-	    omap.size = map ? map.size : 0;
-	    omap._map = map;
-	    omap._list = list;
-	    omap.__ownerID = ownerID;
-	    omap.__hash = hash;
-	    return omap;
-	  }
-
-	  var EMPTY_ORDERED_MAP;
-	  function emptyOrderedMap() {
-	    return EMPTY_ORDERED_MAP || (EMPTY_ORDERED_MAP = makeOrderedMap(emptyMap(), emptyList()));
-	  }
-
-	  function updateOrderedMap(omap, k, v) {
-	    var map = omap._map;
-	    var list = omap._list;
-	    var i = map.get(k);
-	    var has = i !== undefined;
-	    var newMap;
-	    var newList;
-	    if (v === NOT_SET) { // removed
-	      if (!has) {
-	        return omap;
-	      }
-	      if (list.size >= SIZE && list.size >= map.size * 2) {
-	        newList = list.filter(function(entry, idx)  {return entry !== undefined && i !== idx});
-	        newMap = newList.toKeyedSeq().map(function(entry ) {return entry[0]}).flip().toMap();
-	        if (omap.__ownerID) {
-	          newMap.__ownerID = newList.__ownerID = omap.__ownerID;
-	        }
-	      } else {
-	        newMap = map.remove(k);
-	        newList = i === list.size - 1 ? list.pop() : list.set(i, undefined);
-	      }
-	    } else {
-	      if (has) {
-	        if (v === list.get(i)[1]) {
-	          return omap;
-	        }
-	        newMap = map;
-	        newList = list.set(i, [k, v]);
-	      } else {
-	        newMap = map.set(k, list.size);
-	        newList = list.set(list.size, [k, v]);
-	      }
-	    }
-	    if (omap.__ownerID) {
-	      omap.size = newMap.size;
-	      omap._map = newMap;
-	      omap._list = newList;
-	      omap.__hash = undefined;
-	      return omap;
-	    }
-	    return makeOrderedMap(newMap, newList);
-	  }
-
-	  createClass(ToKeyedSequence, KeyedSeq);
-	    function ToKeyedSequence(indexed, useKeys) {
-	      this._iter = indexed;
-	      this._useKeys = useKeys;
-	      this.size = indexed.size;
-	    }
-
-	    ToKeyedSequence.prototype.get = function(key, notSetValue) {
-	      return this._iter.get(key, notSetValue);
-	    };
-
-	    ToKeyedSequence.prototype.has = function(key) {
-	      return this._iter.has(key);
-	    };
-
-	    ToKeyedSequence.prototype.valueSeq = function() {
-	      return this._iter.valueSeq();
-	    };
-
-	    ToKeyedSequence.prototype.reverse = function() {var this$0 = this;
-	      var reversedSequence = reverseFactory(this, true);
-	      if (!this._useKeys) {
-	        reversedSequence.valueSeq = function()  {return this$0._iter.toSeq().reverse()};
-	      }
-	      return reversedSequence;
-	    };
-
-	    ToKeyedSequence.prototype.map = function(mapper, context) {var this$0 = this;
-	      var mappedSequence = mapFactory(this, mapper, context);
-	      if (!this._useKeys) {
-	        mappedSequence.valueSeq = function()  {return this$0._iter.toSeq().map(mapper, context)};
-	      }
-	      return mappedSequence;
-	    };
-
-	    ToKeyedSequence.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      var ii;
-	      return this._iter.__iterate(
-	        this._useKeys ?
-	          function(v, k)  {return fn(v, k, this$0)} :
-	          ((ii = reverse ? resolveSize(this) : 0),
-	            function(v ) {return fn(v, reverse ? --ii : ii++, this$0)}),
-	        reverse
-	      );
-	    };
-
-	    ToKeyedSequence.prototype.__iterator = function(type, reverse) {
-	      if (this._useKeys) {
-	        return this._iter.__iterator(type, reverse);
-	      }
-	      var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
-	      var ii = reverse ? resolveSize(this) : 0;
-	      return new Iterator(function()  {
-	        var step = iterator.next();
-	        return step.done ? step :
-	          iteratorValue(type, reverse ? --ii : ii++, step.value, step);
-	      });
-	    };
-
-	  ToKeyedSequence.prototype[IS_ORDERED_SENTINEL] = true;
-
-
-	  createClass(ToIndexedSequence, IndexedSeq);
-	    function ToIndexedSequence(iter) {
-	      this._iter = iter;
-	      this.size = iter.size;
-	    }
-
-	    ToIndexedSequence.prototype.includes = function(value) {
-	      return this._iter.includes(value);
-	    };
-
-	    ToIndexedSequence.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      var iterations = 0;
-	      return this._iter.__iterate(function(v ) {return fn(v, iterations++, this$0)}, reverse);
-	    };
-
-	    ToIndexedSequence.prototype.__iterator = function(type, reverse) {
-	      var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        var step = iterator.next();
-	        return step.done ? step :
-	          iteratorValue(type, iterations++, step.value, step)
-	      });
-	    };
-
-
-
-	  createClass(ToSetSequence, SetSeq);
-	    function ToSetSequence(iter) {
-	      this._iter = iter;
-	      this.size = iter.size;
-	    }
-
-	    ToSetSequence.prototype.has = function(key) {
-	      return this._iter.includes(key);
-	    };
-
-	    ToSetSequence.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      return this._iter.__iterate(function(v ) {return fn(v, v, this$0)}, reverse);
-	    };
-
-	    ToSetSequence.prototype.__iterator = function(type, reverse) {
-	      var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
-	      return new Iterator(function()  {
-	        var step = iterator.next();
-	        return step.done ? step :
-	          iteratorValue(type, step.value, step.value, step);
-	      });
-	    };
-
-
-
-	  createClass(FromEntriesSequence, KeyedSeq);
-	    function FromEntriesSequence(entries) {
-	      this._iter = entries;
-	      this.size = entries.size;
-	    }
-
-	    FromEntriesSequence.prototype.entrySeq = function() {
-	      return this._iter.toSeq();
-	    };
-
-	    FromEntriesSequence.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      return this._iter.__iterate(function(entry ) {
-	        // Check if entry exists first so array access doesn't throw for holes
-	        // in the parent iteration.
-	        if (entry) {
-	          validateEntry(entry);
-	          var indexedIterable = isIterable(entry);
-	          return fn(
-	            indexedIterable ? entry.get(1) : entry[1],
-	            indexedIterable ? entry.get(0) : entry[0],
-	            this$0
-	          );
-	        }
-	      }, reverse);
-	    };
-
-	    FromEntriesSequence.prototype.__iterator = function(type, reverse) {
-	      var iterator = this._iter.__iterator(ITERATE_VALUES, reverse);
-	      return new Iterator(function()  {
-	        while (true) {
-	          var step = iterator.next();
-	          if (step.done) {
-	            return step;
-	          }
-	          var entry = step.value;
-	          // Check if entry exists first so array access doesn't throw for holes
-	          // in the parent iteration.
-	          if (entry) {
-	            validateEntry(entry);
-	            var indexedIterable = isIterable(entry);
-	            return iteratorValue(
-	              type,
-	              indexedIterable ? entry.get(0) : entry[0],
-	              indexedIterable ? entry.get(1) : entry[1],
-	              step
-	            );
-	          }
-	        }
-	      });
-	    };
-
-
-	  ToIndexedSequence.prototype.cacheResult =
-	  ToKeyedSequence.prototype.cacheResult =
-	  ToSetSequence.prototype.cacheResult =
-	  FromEntriesSequence.prototype.cacheResult =
-	    cacheResultThrough;
-
-
-	  function flipFactory(iterable) {
-	    var flipSequence = makeSequence(iterable);
-	    flipSequence._iter = iterable;
-	    flipSequence.size = iterable.size;
-	    flipSequence.flip = function()  {return iterable};
-	    flipSequence.reverse = function () {
-	      var reversedSequence = iterable.reverse.apply(this); // super.reverse()
-	      reversedSequence.flip = function()  {return iterable.reverse()};
-	      return reversedSequence;
-	    };
-	    flipSequence.has = function(key ) {return iterable.includes(key)};
-	    flipSequence.includes = function(key ) {return iterable.has(key)};
-	    flipSequence.cacheResult = cacheResultThrough;
-	    flipSequence.__iterateUncached = function (fn, reverse) {var this$0 = this;
-	      return iterable.__iterate(function(v, k)  {return fn(k, v, this$0) !== false}, reverse);
-	    }
-	    flipSequence.__iteratorUncached = function(type, reverse) {
-	      if (type === ITERATE_ENTRIES) {
-	        var iterator = iterable.__iterator(type, reverse);
-	        return new Iterator(function()  {
-	          var step = iterator.next();
-	          if (!step.done) {
-	            var k = step.value[0];
-	            step.value[0] = step.value[1];
-	            step.value[1] = k;
-	          }
-	          return step;
-	        });
-	      }
-	      return iterable.__iterator(
-	        type === ITERATE_VALUES ? ITERATE_KEYS : ITERATE_VALUES,
-	        reverse
-	      );
-	    }
-	    return flipSequence;
-	  }
-
-
-	  function mapFactory(iterable, mapper, context) {
-	    var mappedSequence = makeSequence(iterable);
-	    mappedSequence.size = iterable.size;
-	    mappedSequence.has = function(key ) {return iterable.has(key)};
-	    mappedSequence.get = function(key, notSetValue)  {
-	      var v = iterable.get(key, NOT_SET);
-	      return v === NOT_SET ?
-	        notSetValue :
-	        mapper.call(context, v, key, iterable);
-	    };
-	    mappedSequence.__iterateUncached = function (fn, reverse) {var this$0 = this;
-	      return iterable.__iterate(
-	        function(v, k, c)  {return fn(mapper.call(context, v, k, c), k, this$0) !== false},
-	        reverse
-	      );
-	    }
-	    mappedSequence.__iteratorUncached = function (type, reverse) {
-	      var iterator = iterable.__iterator(ITERATE_ENTRIES, reverse);
-	      return new Iterator(function()  {
-	        var step = iterator.next();
-	        if (step.done) {
-	          return step;
-	        }
-	        var entry = step.value;
-	        var key = entry[0];
-	        return iteratorValue(
-	          type,
-	          key,
-	          mapper.call(context, entry[1], key, iterable),
-	          step
-	        );
-	      });
-	    }
-	    return mappedSequence;
-	  }
-
-
-	  function reverseFactory(iterable, useKeys) {
-	    var reversedSequence = makeSequence(iterable);
-	    reversedSequence._iter = iterable;
-	    reversedSequence.size = iterable.size;
-	    reversedSequence.reverse = function()  {return iterable};
-	    if (iterable.flip) {
-	      reversedSequence.flip = function () {
-	        var flipSequence = flipFactory(iterable);
-	        flipSequence.reverse = function()  {return iterable.flip()};
-	        return flipSequence;
-	      };
-	    }
-	    reversedSequence.get = function(key, notSetValue) 
-	      {return iterable.get(useKeys ? key : -1 - key, notSetValue)};
-	    reversedSequence.has = function(key )
-	      {return iterable.has(useKeys ? key : -1 - key)};
-	    reversedSequence.includes = function(value ) {return iterable.includes(value)};
-	    reversedSequence.cacheResult = cacheResultThrough;
-	    reversedSequence.__iterate = function (fn, reverse) {var this$0 = this;
-	      return iterable.__iterate(function(v, k)  {return fn(v, k, this$0)}, !reverse);
-	    };
-	    reversedSequence.__iterator =
-	      function(type, reverse)  {return iterable.__iterator(type, !reverse)};
-	    return reversedSequence;
-	  }
-
-
-	  function filterFactory(iterable, predicate, context, useKeys) {
-	    var filterSequence = makeSequence(iterable);
-	    if (useKeys) {
-	      filterSequence.has = function(key ) {
-	        var v = iterable.get(key, NOT_SET);
-	        return v !== NOT_SET && !!predicate.call(context, v, key, iterable);
-	      };
-	      filterSequence.get = function(key, notSetValue)  {
-	        var v = iterable.get(key, NOT_SET);
-	        return v !== NOT_SET && predicate.call(context, v, key, iterable) ?
-	          v : notSetValue;
-	      };
-	    }
-	    filterSequence.__iterateUncached = function (fn, reverse) {var this$0 = this;
-	      var iterations = 0;
-	      iterable.__iterate(function(v, k, c)  {
-	        if (predicate.call(context, v, k, c)) {
-	          iterations++;
-	          return fn(v, useKeys ? k : iterations - 1, this$0);
-	        }
-	      }, reverse);
-	      return iterations;
-	    };
-	    filterSequence.__iteratorUncached = function (type, reverse) {
-	      var iterator = iterable.__iterator(ITERATE_ENTRIES, reverse);
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        while (true) {
-	          var step = iterator.next();
-	          if (step.done) {
-	            return step;
-	          }
-	          var entry = step.value;
-	          var key = entry[0];
-	          var value = entry[1];
-	          if (predicate.call(context, value, key, iterable)) {
-	            return iteratorValue(type, useKeys ? key : iterations++, value, step);
-	          }
-	        }
-	      });
-	    }
-	    return filterSequence;
-	  }
-
-
-	  function countByFactory(iterable, grouper, context) {
-	    var groups = Map().asMutable();
-	    iterable.__iterate(function(v, k)  {
-	      groups.update(
-	        grouper.call(context, v, k, iterable),
-	        0,
-	        function(a ) {return a + 1}
-	      );
-	    });
-	    return groups.asImmutable();
-	  }
-
-
-	  function groupByFactory(iterable, grouper, context) {
-	    var isKeyedIter = isKeyed(iterable);
-	    var groups = (isOrdered(iterable) ? OrderedMap() : Map()).asMutable();
-	    iterable.__iterate(function(v, k)  {
-	      groups.update(
-	        grouper.call(context, v, k, iterable),
-	        function(a ) {return (a = a || [], a.push(isKeyedIter ? [k, v] : v), a)}
-	      );
-	    });
-	    var coerce = iterableClass(iterable);
-	    return groups.map(function(arr ) {return reify(iterable, coerce(arr))});
-	  }
-
-
-	  function sliceFactory(iterable, begin, end, useKeys) {
-	    var originalSize = iterable.size;
-
-	    // Sanitize begin & end using this shorthand for ToInt32(argument)
-	    // http://www.ecma-international.org/ecma-262/6.0/#sec-toint32
-	    if (begin !== undefined) {
-	      begin = begin | 0;
-	    }
-	    if (end !== undefined) {
-	      if (end === Infinity) {
-	        end = originalSize;
-	      } else {
-	        end = end | 0;
-	      }
-	    }
-
-	    if (wholeSlice(begin, end, originalSize)) {
-	      return iterable;
-	    }
-
-	    var resolvedBegin = resolveBegin(begin, originalSize);
-	    var resolvedEnd = resolveEnd(end, originalSize);
-
-	    // begin or end will be NaN if they were provided as negative numbers and
-	    // this iterable's size is unknown. In that case, cache first so there is
-	    // a known size and these do not resolve to NaN.
-	    if (resolvedBegin !== resolvedBegin || resolvedEnd !== resolvedEnd) {
-	      return sliceFactory(iterable.toSeq().cacheResult(), begin, end, useKeys);
-	    }
-
-	    // Note: resolvedEnd is undefined when the original sequence's length is
-	    // unknown and this slice did not supply an end and should contain all
-	    // elements after resolvedBegin.
-	    // In that case, resolvedSize will be NaN and sliceSize will remain undefined.
-	    var resolvedSize = resolvedEnd - resolvedBegin;
-	    var sliceSize;
-	    if (resolvedSize === resolvedSize) {
-	      sliceSize = resolvedSize < 0 ? 0 : resolvedSize;
-	    }
-
-	    var sliceSeq = makeSequence(iterable);
-
-	    // If iterable.size is undefined, the size of the realized sliceSeq is
-	    // unknown at this point unless the number of items to slice is 0
-	    sliceSeq.size = sliceSize === 0 ? sliceSize : iterable.size && sliceSize || undefined;
-
-	    if (!useKeys && isSeq(iterable) && sliceSize >= 0) {
-	      sliceSeq.get = function (index, notSetValue) {
-	        index = wrapIndex(this, index);
-	        return index >= 0 && index < sliceSize ?
-	          iterable.get(index + resolvedBegin, notSetValue) :
-	          notSetValue;
-	      }
-	    }
-
-	    sliceSeq.__iterateUncached = function(fn, reverse) {var this$0 = this;
-	      if (sliceSize === 0) {
-	        return 0;
-	      }
-	      if (reverse) {
-	        return this.cacheResult().__iterate(fn, reverse);
-	      }
-	      var skipped = 0;
-	      var isSkipping = true;
-	      var iterations = 0;
-	      iterable.__iterate(function(v, k)  {
-	        if (!(isSkipping && (isSkipping = skipped++ < resolvedBegin))) {
-	          iterations++;
-	          return fn(v, useKeys ? k : iterations - 1, this$0) !== false &&
-	                 iterations !== sliceSize;
-	        }
-	      });
-	      return iterations;
-	    };
-
-	    sliceSeq.__iteratorUncached = function(type, reverse) {
-	      if (sliceSize !== 0 && reverse) {
-	        return this.cacheResult().__iterator(type, reverse);
-	      }
-	      // Don't bother instantiating parent iterator if taking 0.
-	      var iterator = sliceSize !== 0 && iterable.__iterator(type, reverse);
-	      var skipped = 0;
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        while (skipped++ < resolvedBegin) {
-	          iterator.next();
-	        }
-	        if (++iterations > sliceSize) {
-	          return iteratorDone();
-	        }
-	        var step = iterator.next();
-	        if (useKeys || type === ITERATE_VALUES) {
-	          return step;
-	        } else if (type === ITERATE_KEYS) {
-	          return iteratorValue(type, iterations - 1, undefined, step);
-	        } else {
-	          return iteratorValue(type, iterations - 1, step.value[1], step);
-	        }
-	      });
-	    }
-
-	    return sliceSeq;
-	  }
-
-
-	  function takeWhileFactory(iterable, predicate, context) {
-	    var takeSequence = makeSequence(iterable);
-	    takeSequence.__iterateUncached = function(fn, reverse) {var this$0 = this;
-	      if (reverse) {
-	        return this.cacheResult().__iterate(fn, reverse);
-	      }
-	      var iterations = 0;
-	      iterable.__iterate(function(v, k, c) 
-	        {return predicate.call(context, v, k, c) && ++iterations && fn(v, k, this$0)}
-	      );
-	      return iterations;
-	    };
-	    takeSequence.__iteratorUncached = function(type, reverse) {var this$0 = this;
-	      if (reverse) {
-	        return this.cacheResult().__iterator(type, reverse);
-	      }
-	      var iterator = iterable.__iterator(ITERATE_ENTRIES, reverse);
-	      var iterating = true;
-	      return new Iterator(function()  {
-	        if (!iterating) {
-	          return iteratorDone();
-	        }
-	        var step = iterator.next();
-	        if (step.done) {
-	          return step;
-	        }
-	        var entry = step.value;
-	        var k = entry[0];
-	        var v = entry[1];
-	        if (!predicate.call(context, v, k, this$0)) {
-	          iterating = false;
-	          return iteratorDone();
-	        }
-	        return type === ITERATE_ENTRIES ? step :
-	          iteratorValue(type, k, v, step);
-	      });
-	    };
-	    return takeSequence;
-	  }
-
-
-	  function skipWhileFactory(iterable, predicate, context, useKeys) {
-	    var skipSequence = makeSequence(iterable);
-	    skipSequence.__iterateUncached = function (fn, reverse) {var this$0 = this;
-	      if (reverse) {
-	        return this.cacheResult().__iterate(fn, reverse);
-	      }
-	      var isSkipping = true;
-	      var iterations = 0;
-	      iterable.__iterate(function(v, k, c)  {
-	        if (!(isSkipping && (isSkipping = predicate.call(context, v, k, c)))) {
-	          iterations++;
-	          return fn(v, useKeys ? k : iterations - 1, this$0);
-	        }
-	      });
-	      return iterations;
-	    };
-	    skipSequence.__iteratorUncached = function(type, reverse) {var this$0 = this;
-	      if (reverse) {
-	        return this.cacheResult().__iterator(type, reverse);
-	      }
-	      var iterator = iterable.__iterator(ITERATE_ENTRIES, reverse);
-	      var skipping = true;
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        var step, k, v;
-	        do {
-	          step = iterator.next();
-	          if (step.done) {
-	            if (useKeys || type === ITERATE_VALUES) {
-	              return step;
-	            } else if (type === ITERATE_KEYS) {
-	              return iteratorValue(type, iterations++, undefined, step);
-	            } else {
-	              return iteratorValue(type, iterations++, step.value[1], step);
-	            }
-	          }
-	          var entry = step.value;
-	          k = entry[0];
-	          v = entry[1];
-	          skipping && (skipping = predicate.call(context, v, k, this$0));
-	        } while (skipping);
-	        return type === ITERATE_ENTRIES ? step :
-	          iteratorValue(type, k, v, step);
-	      });
-	    };
-	    return skipSequence;
-	  }
-
-
-	  function concatFactory(iterable, values) {
-	    var isKeyedIterable = isKeyed(iterable);
-	    var iters = [iterable].concat(values).map(function(v ) {
-	      if (!isIterable(v)) {
-	        v = isKeyedIterable ?
-	          keyedSeqFromValue(v) :
-	          indexedSeqFromValue(Array.isArray(v) ? v : [v]);
-	      } else if (isKeyedIterable) {
-	        v = KeyedIterable(v);
-	      }
-	      return v;
-	    }).filter(function(v ) {return v.size !== 0});
-
-	    if (iters.length === 0) {
-	      return iterable;
-	    }
-
-	    if (iters.length === 1) {
-	      var singleton = iters[0];
-	      if (singleton === iterable ||
-	          isKeyedIterable && isKeyed(singleton) ||
-	          isIndexed(iterable) && isIndexed(singleton)) {
-	        return singleton;
-	      }
-	    }
-
-	    var concatSeq = new ArraySeq(iters);
-	    if (isKeyedIterable) {
-	      concatSeq = concatSeq.toKeyedSeq();
-	    } else if (!isIndexed(iterable)) {
-	      concatSeq = concatSeq.toSetSeq();
-	    }
-	    concatSeq = concatSeq.flatten(true);
-	    concatSeq.size = iters.reduce(
-	      function(sum, seq)  {
-	        if (sum !== undefined) {
-	          var size = seq.size;
-	          if (size !== undefined) {
-	            return sum + size;
-	          }
-	        }
-	      },
-	      0
-	    );
-	    return concatSeq;
-	  }
-
-
-	  function flattenFactory(iterable, depth, useKeys) {
-	    var flatSequence = makeSequence(iterable);
-	    flatSequence.__iterateUncached = function(fn, reverse) {
-	      var iterations = 0;
-	      var stopped = false;
-	      function flatDeep(iter, currentDepth) {var this$0 = this;
-	        iter.__iterate(function(v, k)  {
-	          if ((!depth || currentDepth < depth) && isIterable(v)) {
-	            flatDeep(v, currentDepth + 1);
-	          } else if (fn(v, useKeys ? k : iterations++, this$0) === false) {
-	            stopped = true;
-	          }
-	          return !stopped;
-	        }, reverse);
-	      }
-	      flatDeep(iterable, 0);
-	      return iterations;
-	    }
-	    flatSequence.__iteratorUncached = function(type, reverse) {
-	      var iterator = iterable.__iterator(type, reverse);
-	      var stack = [];
-	      var iterations = 0;
-	      return new Iterator(function()  {
-	        while (iterator) {
-	          var step = iterator.next();
-	          if (step.done !== false) {
-	            iterator = stack.pop();
-	            continue;
-	          }
-	          var v = step.value;
-	          if (type === ITERATE_ENTRIES) {
-	            v = v[1];
-	          }
-	          if ((!depth || stack.length < depth) && isIterable(v)) {
-	            stack.push(iterator);
-	            iterator = v.__iterator(type, reverse);
-	          } else {
-	            return useKeys ? step : iteratorValue(type, iterations++, v, step);
-	          }
-	        }
-	        return iteratorDone();
-	      });
-	    }
-	    return flatSequence;
-	  }
-
-
-	  function flatMapFactory(iterable, mapper, context) {
-	    var coerce = iterableClass(iterable);
-	    return iterable.toSeq().map(
-	      function(v, k)  {return coerce(mapper.call(context, v, k, iterable))}
-	    ).flatten(true);
-	  }
-
-
-	  function interposeFactory(iterable, separator) {
-	    var interposedSequence = makeSequence(iterable);
-	    interposedSequence.size = iterable.size && iterable.size * 2 -1;
-	    interposedSequence.__iterateUncached = function(fn, reverse) {var this$0 = this;
-	      var iterations = 0;
-	      iterable.__iterate(function(v, k) 
-	        {return (!iterations || fn(separator, iterations++, this$0) !== false) &&
-	        fn(v, iterations++, this$0) !== false},
-	        reverse
-	      );
-	      return iterations;
-	    };
-	    interposedSequence.__iteratorUncached = function(type, reverse) {
-	      var iterator = iterable.__iterator(ITERATE_VALUES, reverse);
-	      var iterations = 0;
-	      var step;
-	      return new Iterator(function()  {
-	        if (!step || iterations % 2) {
-	          step = iterator.next();
-	          if (step.done) {
-	            return step;
-	          }
-	        }
-	        return iterations % 2 ?
-	          iteratorValue(type, iterations++, separator) :
-	          iteratorValue(type, iterations++, step.value, step);
-	      });
-	    };
-	    return interposedSequence;
-	  }
-
-
-	  function sortFactory(iterable, comparator, mapper) {
-	    if (!comparator) {
-	      comparator = defaultComparator;
-	    }
-	    var isKeyedIterable = isKeyed(iterable);
-	    var index = 0;
-	    var entries = iterable.toSeq().map(
-	      function(v, k)  {return [k, v, index++, mapper ? mapper(v, k, iterable) : v]}
-	    ).toArray();
-	    entries.sort(function(a, b)  {return comparator(a[3], b[3]) || a[2] - b[2]}).forEach(
-	      isKeyedIterable ?
-	      function(v, i)  { entries[i].length = 2; } :
-	      function(v, i)  { entries[i] = v[1]; }
-	    );
-	    return isKeyedIterable ? KeyedSeq(entries) :
-	      isIndexed(iterable) ? IndexedSeq(entries) :
-	      SetSeq(entries);
-	  }
-
-
-	  function maxFactory(iterable, comparator, mapper) {
-	    if (!comparator) {
-	      comparator = defaultComparator;
-	    }
-	    if (mapper) {
-	      var entry = iterable.toSeq()
-	        .map(function(v, k)  {return [v, mapper(v, k, iterable)]})
-	        .reduce(function(a, b)  {return maxCompare(comparator, a[1], b[1]) ? b : a});
-	      return entry && entry[0];
-	    } else {
-	      return iterable.reduce(function(a, b)  {return maxCompare(comparator, a, b) ? b : a});
-	    }
-	  }
-
-	  function maxCompare(comparator, a, b) {
-	    var comp = comparator(b, a);
-	    // b is considered the new max if the comparator declares them equal, but
-	    // they are not equal and b is in fact a nullish value.
-	    return (comp === 0 && b !== a && (b === undefined || b === null || b !== b)) || comp > 0;
-	  }
-
-
-	  function zipWithFactory(keyIter, zipper, iters) {
-	    var zipSequence = makeSequence(keyIter);
-	    zipSequence.size = new ArraySeq(iters).map(function(i ) {return i.size}).min();
-	    // Note: this a generic base implementation of __iterate in terms of
-	    // __iterator which may be more generically useful in the future.
-	    zipSequence.__iterate = function(fn, reverse) {
-	      /* generic:
-	      var iterator = this.__iterator(ITERATE_ENTRIES, reverse);
-	      var step;
-	      var iterations = 0;
-	      while (!(step = iterator.next()).done) {
-	        iterations++;
-	        if (fn(step.value[1], step.value[0], this) === false) {
-	          break;
-	        }
-	      }
-	      return iterations;
-	      */
-	      // indexed:
-	      var iterator = this.__iterator(ITERATE_VALUES, reverse);
-	      var step;
-	      var iterations = 0;
-	      while (!(step = iterator.next()).done) {
-	        if (fn(step.value, iterations++, this) === false) {
-	          break;
-	        }
-	      }
-	      return iterations;
-	    };
-	    zipSequence.__iteratorUncached = function(type, reverse) {
-	      var iterators = iters.map(function(i )
-	        {return (i = Iterable(i), getIterator(reverse ? i.reverse() : i))}
-	      );
-	      var iterations = 0;
-	      var isDone = false;
-	      return new Iterator(function()  {
-	        var steps;
-	        if (!isDone) {
-	          steps = iterators.map(function(i ) {return i.next()});
-	          isDone = steps.some(function(s ) {return s.done});
-	        }
-	        if (isDone) {
-	          return iteratorDone();
-	        }
-	        return iteratorValue(
-	          type,
-	          iterations++,
-	          zipper.apply(null, steps.map(function(s ) {return s.value}))
-	        );
-	      });
-	    };
-	    return zipSequence
-	  }
-
-
-	  // #pragma Helper Functions
-
-	  function reify(iter, seq) {
-	    return isSeq(iter) ? seq : iter.constructor(seq);
-	  }
-
-	  function validateEntry(entry) {
-	    if (entry !== Object(entry)) {
-	      throw new TypeError('Expected [K, V] tuple: ' + entry);
-	    }
-	  }
-
-	  function resolveSize(iter) {
-	    assertNotInfinite(iter.size);
-	    return ensureSize(iter);
-	  }
-
-	  function iterableClass(iterable) {
-	    return isKeyed(iterable) ? KeyedIterable :
-	      isIndexed(iterable) ? IndexedIterable :
-	      SetIterable;
-	  }
-
-	  function makeSequence(iterable) {
-	    return Object.create(
-	      (
-	        isKeyed(iterable) ? KeyedSeq :
-	        isIndexed(iterable) ? IndexedSeq :
-	        SetSeq
-	      ).prototype
-	    );
-	  }
-
-	  function cacheResultThrough() {
-	    if (this._iter.cacheResult) {
-	      this._iter.cacheResult();
-	      this.size = this._iter.size;
-	      return this;
-	    } else {
-	      return Seq.prototype.cacheResult.call(this);
-	    }
-	  }
-
-	  function defaultComparator(a, b) {
-	    return a > b ? 1 : a < b ? -1 : 0;
-	  }
-
-	  function forceIterator(keyPath) {
-	    var iter = getIterator(keyPath);
-	    if (!iter) {
-	      // Array might not be iterable in this environment, so we need a fallback
-	      // to our wrapped type.
-	      if (!isArrayLike(keyPath)) {
-	        throw new TypeError('Expected iterable or array-like: ' + keyPath);
-	      }
-	      iter = getIterator(Iterable(keyPath));
-	    }
-	    return iter;
-	  }
-
-	  createClass(Record, KeyedCollection);
-
-	    function Record(defaultValues, name) {
-	      var hasInitialized;
-
-	      var RecordType = function Record(values) {
-	        if (values instanceof RecordType) {
-	          return values;
-	        }
-	        if (!(this instanceof RecordType)) {
-	          return new RecordType(values);
-	        }
-	        if (!hasInitialized) {
-	          hasInitialized = true;
-	          var keys = Object.keys(defaultValues);
-	          setProps(RecordTypePrototype, keys);
-	          RecordTypePrototype.size = keys.length;
-	          RecordTypePrototype._name = name;
-	          RecordTypePrototype._keys = keys;
-	          RecordTypePrototype._defaultValues = defaultValues;
-	        }
-	        this._map = Map(values);
-	      };
-
-	      var RecordTypePrototype = RecordType.prototype = Object.create(RecordPrototype);
-	      RecordTypePrototype.constructor = RecordType;
-
-	      return RecordType;
-	    }
-
-	    Record.prototype.toString = function() {
-	      return this.__toString(recordName(this) + ' {', '}');
-	    };
-
-	    // @pragma Access
-
-	    Record.prototype.has = function(k) {
-	      return this._defaultValues.hasOwnProperty(k);
-	    };
-
-	    Record.prototype.get = function(k, notSetValue) {
-	      if (!this.has(k)) {
-	        return notSetValue;
-	      }
-	      var defaultVal = this._defaultValues[k];
-	      return this._map ? this._map.get(k, defaultVal) : defaultVal;
-	    };
-
-	    // @pragma Modification
-
-	    Record.prototype.clear = function() {
-	      if (this.__ownerID) {
-	        this._map && this._map.clear();
-	        return this;
-	      }
-	      var RecordType = this.constructor;
-	      return RecordType._empty || (RecordType._empty = makeRecord(this, emptyMap()));
-	    };
-
-	    Record.prototype.set = function(k, v) {
-	      if (!this.has(k)) {
-	        throw new Error('Cannot set unknown key "' + k + '" on ' + recordName(this));
-	      }
-	      if (this._map && !this._map.has(k)) {
-	        var defaultVal = this._defaultValues[k];
-	        if (v === defaultVal) {
-	          return this;
-	        }
-	      }
-	      var newMap = this._map && this._map.set(k, v);
-	      if (this.__ownerID || newMap === this._map) {
-	        return this;
-	      }
-	      return makeRecord(this, newMap);
-	    };
-
-	    Record.prototype.remove = function(k) {
-	      if (!this.has(k)) {
-	        return this;
-	      }
-	      var newMap = this._map && this._map.remove(k);
-	      if (this.__ownerID || newMap === this._map) {
-	        return this;
-	      }
-	      return makeRecord(this, newMap);
-	    };
-
-	    Record.prototype.wasAltered = function() {
-	      return this._map.wasAltered();
-	    };
-
-	    Record.prototype.__iterator = function(type, reverse) {var this$0 = this;
-	      return KeyedIterable(this._defaultValues).map(function(_, k)  {return this$0.get(k)}).__iterator(type, reverse);
-	    };
-
-	    Record.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      return KeyedIterable(this._defaultValues).map(function(_, k)  {return this$0.get(k)}).__iterate(fn, reverse);
-	    };
-
-	    Record.prototype.__ensureOwner = function(ownerID) {
-	      if (ownerID === this.__ownerID) {
-	        return this;
-	      }
-	      var newMap = this._map && this._map.__ensureOwner(ownerID);
-	      if (!ownerID) {
-	        this.__ownerID = ownerID;
-	        this._map = newMap;
-	        return this;
-	      }
-	      return makeRecord(this, newMap, ownerID);
-	    };
-
-
-	  var RecordPrototype = Record.prototype;
-	  RecordPrototype[DELETE] = RecordPrototype.remove;
-	  RecordPrototype.deleteIn =
-	  RecordPrototype.removeIn = MapPrototype.removeIn;
-	  RecordPrototype.merge = MapPrototype.merge;
-	  RecordPrototype.mergeWith = MapPrototype.mergeWith;
-	  RecordPrototype.mergeIn = MapPrototype.mergeIn;
-	  RecordPrototype.mergeDeep = MapPrototype.mergeDeep;
-	  RecordPrototype.mergeDeepWith = MapPrototype.mergeDeepWith;
-	  RecordPrototype.mergeDeepIn = MapPrototype.mergeDeepIn;
-	  RecordPrototype.setIn = MapPrototype.setIn;
-	  RecordPrototype.update = MapPrototype.update;
-	  RecordPrototype.updateIn = MapPrototype.updateIn;
-	  RecordPrototype.withMutations = MapPrototype.withMutations;
-	  RecordPrototype.asMutable = MapPrototype.asMutable;
-	  RecordPrototype.asImmutable = MapPrototype.asImmutable;
-
-
-	  function makeRecord(likeRecord, map, ownerID) {
-	    var record = Object.create(Object.getPrototypeOf(likeRecord));
-	    record._map = map;
-	    record.__ownerID = ownerID;
-	    return record;
-	  }
-
-	  function recordName(record) {
-	    return record._name || record.constructor.name || 'Record';
-	  }
-
-	  function setProps(prototype, names) {
-	    try {
-	      names.forEach(setProp.bind(undefined, prototype));
-	    } catch (error) {
-	      // Object.defineProperty failed. Probably IE8.
-	    }
-	  }
-
-	  function setProp(prototype, name) {
-	    Object.defineProperty(prototype, name, {
-	      get: function() {
-	        return this.get(name);
-	      },
-	      set: function(value) {
-	        invariant(this.__ownerID, 'Cannot set on an immutable record.');
-	        this.set(name, value);
-	      }
-	    });
-	  }
-
-	  createClass(Set, SetCollection);
-
-	    // @pragma Construction
-
-	    function Set(value) {
-	      return value === null || value === undefined ? emptySet() :
-	        isSet(value) && !isOrdered(value) ? value :
-	        emptySet().withMutations(function(set ) {
-	          var iter = SetIterable(value);
-	          assertNotInfinite(iter.size);
-	          iter.forEach(function(v ) {return set.add(v)});
-	        });
-	    }
-
-	    Set.of = function(/*...values*/) {
-	      return this(arguments);
-	    };
-
-	    Set.fromKeys = function(value) {
-	      return this(KeyedIterable(value).keySeq());
-	    };
-
-	    Set.prototype.toString = function() {
-	      return this.__toString('Set {', '}');
-	    };
-
-	    // @pragma Access
-
-	    Set.prototype.has = function(value) {
-	      return this._map.has(value);
-	    };
-
-	    // @pragma Modification
-
-	    Set.prototype.add = function(value) {
-	      return updateSet(this, this._map.set(value, true));
-	    };
-
-	    Set.prototype.remove = function(value) {
-	      return updateSet(this, this._map.remove(value));
-	    };
-
-	    Set.prototype.clear = function() {
-	      return updateSet(this, this._map.clear());
-	    };
-
-	    // @pragma Composition
-
-	    Set.prototype.union = function() {var iters = SLICE$0.call(arguments, 0);
-	      iters = iters.filter(function(x ) {return x.size !== 0});
-	      if (iters.length === 0) {
-	        return this;
-	      }
-	      if (this.size === 0 && !this.__ownerID && iters.length === 1) {
-	        return this.constructor(iters[0]);
-	      }
-	      return this.withMutations(function(set ) {
-	        for (var ii = 0; ii < iters.length; ii++) {
-	          SetIterable(iters[ii]).forEach(function(value ) {return set.add(value)});
-	        }
-	      });
-	    };
-
-	    Set.prototype.intersect = function() {var iters = SLICE$0.call(arguments, 0);
-	      if (iters.length === 0) {
-	        return this;
-	      }
-	      iters = iters.map(function(iter ) {return SetIterable(iter)});
-	      var originalSet = this;
-	      return this.withMutations(function(set ) {
-	        originalSet.forEach(function(value ) {
-	          if (!iters.every(function(iter ) {return iter.includes(value)})) {
-	            set.remove(value);
-	          }
-	        });
-	      });
-	    };
-
-	    Set.prototype.subtract = function() {var iters = SLICE$0.call(arguments, 0);
-	      if (iters.length === 0) {
-	        return this;
-	      }
-	      iters = iters.map(function(iter ) {return SetIterable(iter)});
-	      var originalSet = this;
-	      return this.withMutations(function(set ) {
-	        originalSet.forEach(function(value ) {
-	          if (iters.some(function(iter ) {return iter.includes(value)})) {
-	            set.remove(value);
-	          }
-	        });
-	      });
-	    };
-
-	    Set.prototype.merge = function() {
-	      return this.union.apply(this, arguments);
-	    };
-
-	    Set.prototype.mergeWith = function(merger) {var iters = SLICE$0.call(arguments, 1);
-	      return this.union.apply(this, iters);
-	    };
-
-	    Set.prototype.sort = function(comparator) {
-	      // Late binding
-	      return OrderedSet(sortFactory(this, comparator));
-	    };
-
-	    Set.prototype.sortBy = function(mapper, comparator) {
-	      // Late binding
-	      return OrderedSet(sortFactory(this, comparator, mapper));
-	    };
-
-	    Set.prototype.wasAltered = function() {
-	      return this._map.wasAltered();
-	    };
-
-	    Set.prototype.__iterate = function(fn, reverse) {var this$0 = this;
-	      return this._map.__iterate(function(_, k)  {return fn(k, k, this$0)}, reverse);
-	    };
-
-	    Set.prototype.__iterator = function(type, reverse) {
-	      return this._map.map(function(_, k)  {return k}).__iterator(type, reverse);
-	    };
-
-	    Set.prototype.__ensureOwner = function(ownerID) {
-	      if (ownerID === this.__ownerID) {
-	        return this;
-	      }
-	      var newMap = this._map.__ensureOwner(ownerID);
-	      if (!ownerID) {
-	        this.__ownerID = ownerID;
-	        this._map = newMap;
-	        return this;
-	      }
-	      return this.__make(newMap, ownerID);
-	    };
-
-
-	  function isSet(maybeSet) {
-	    return !!(maybeSet && maybeSet[IS_SET_SENTINEL]);
-	  }
-
-	  Set.isSet = isSet;
-
-	  var IS_SET_SENTINEL = '@@__IMMUTABLE_SET__@@';
-
-	  var SetPrototype = Set.prototype;
-	  SetPrototype[IS_SET_SENTINEL] = true;
-	  SetPrototype[DELETE] = SetPrototype.remove;
-	  SetPrototype.mergeDeep = SetPrototype.merge;
-	  SetPrototype.mergeDeepWith = SetPrototype.mergeWith;
-	  SetPrototype.withMutations = MapPrototype.withMutations;
-	  SetPrototype.asMutable = MapPrototype.asMutable;
-	  SetPrototype.asImmutable = MapPrototype.asImmutable;
-
-	  SetPrototype.__empty = emptySet;
-	  SetPrototype.__make = makeSet;
-
-	  function updateSet(set, newMap) {
-	    if (set.__ownerID) {
-	      set.size = newMap.size;
-	      set._map = newMap;
-	      return set;
-	    }
-	    return newMap === set._map ? set :
-	      newMap.size === 0 ? set.__empty() :
-	      set.__make(newMap);
-	  }
-
-	  function makeSet(map, ownerID) {
-	    var set = Object.create(SetPrototype);
-	    set.size = map ? map.size : 0;
-	    set._map = map;
-	    set.__ownerID = ownerID;
-	    return set;
-	  }
-
-	  var EMPTY_SET;
-	  function emptySet() {
-	    return EMPTY_SET || (EMPTY_SET = makeSet(emptyMap()));
-	  }
-
-	  createClass(OrderedSet, Set);
-
-	    // @pragma Construction
-
-	    function OrderedSet(value) {
-	      return value === null || value === undefined ? emptyOrderedSet() :
-	        isOrderedSet(value) ? value :
-	        emptyOrderedSet().withMutations(function(set ) {
-	          var iter = SetIterable(value);
-	          assertNotInfinite(iter.size);
-	          iter.forEach(function(v ) {return set.add(v)});
-	        });
-	    }
-
-	    OrderedSet.of = function(/*...values*/) {
-	      return this(arguments);
-	    };
-
-	    OrderedSet.fromKeys = function(value) {
-	      return this(KeyedIterable(value).keySeq());
-	    };
-
-	    OrderedSet.prototype.toString = function() {
-	      return this.__toString('OrderedSet {', '}');
-	    };
-
-
-	  function isOrderedSet(maybeOrderedSet) {
-	    return isSet(maybeOrderedSet) && isOrdered(maybeOrderedSet);
-	  }
-
-	  OrderedSet.isOrderedSet = isOrderedSet;
-
-	  var OrderedSetPrototype = OrderedSet.prototype;
-	  OrderedSetPrototype[IS_ORDERED_SENTINEL] = true;
-
-	  OrderedSetPrototype.__empty = emptyOrderedSet;
-	  OrderedSetPrototype.__make = makeOrderedSet;
-
-	  function makeOrderedSet(map, ownerID) {
-	    var set = Object.create(OrderedSetPrototype);
-	    set.size = map ? map.size : 0;
-	    set._map = map;
-	    set.__ownerID = ownerID;
-	    return set;
-	  }
-
-	  var EMPTY_ORDERED_SET;
-	  function emptyOrderedSet() {
-	    return EMPTY_ORDERED_SET || (EMPTY_ORDERED_SET = makeOrderedSet(emptyOrderedMap()));
-	  }
-
-	  createClass(Stack, IndexedCollection);
-
-	    // @pragma Construction
-
-	    function Stack(value) {
-	      return value === null || value === undefined ? emptyStack() :
-	        isStack(value) ? value :
-	        emptyStack().unshiftAll(value);
-	    }
-
-	    Stack.of = function(/*...values*/) {
-	      return this(arguments);
-	    };
-
-	    Stack.prototype.toString = function() {
-	      return this.__toString('Stack [', ']');
-	    };
-
-	    // @pragma Access
-
-	    Stack.prototype.get = function(index, notSetValue) {
-	      var head = this._head;
-	      index = wrapIndex(this, index);
-	      while (head && index--) {
-	        head = head.next;
-	      }
-	      return head ? head.value : notSetValue;
-	    };
-
-	    Stack.prototype.peek = function() {
-	      return this._head && this._head.value;
-	    };
-
-	    // @pragma Modification
-
-	    Stack.prototype.push = function(/*...values*/) {
-	      if (arguments.length === 0) {
-	        return this;
-	      }
-	      var newSize = this.size + arguments.length;
-	      var head = this._head;
-	      for (var ii = arguments.length - 1; ii >= 0; ii--) {
-	        head = {
-	          value: arguments[ii],
-	          next: head
-	        };
-	      }
-	      if (this.__ownerID) {
-	        this.size = newSize;
-	        this._head = head;
-	        this.__hash = undefined;
-	        this.__altered = true;
-	        return this;
-	      }
-	      return makeStack(newSize, head);
-	    };
-
-	    Stack.prototype.pushAll = function(iter) {
-	      iter = IndexedIterable(iter);
-	      if (iter.size === 0) {
-	        return this;
-	      }
-	      assertNotInfinite(iter.size);
-	      var newSize = this.size;
-	      var head = this._head;
-	      iter.reverse().forEach(function(value ) {
-	        newSize++;
-	        head = {
-	          value: value,
-	          next: head
-	        };
-	      });
-	      if (this.__ownerID) {
-	        this.size = newSize;
-	        this._head = head;
-	        this.__hash = undefined;
-	        this.__altered = true;
-	        return this;
-	      }
-	      return makeStack(newSize, head);
-	    };
-
-	    Stack.prototype.pop = function() {
-	      return this.slice(1);
-	    };
-
-	    Stack.prototype.unshift = function(/*...values*/) {
-	      return this.push.apply(this, arguments);
-	    };
-
-	    Stack.prototype.unshiftAll = function(iter) {
-	      return this.pushAll(iter);
-	    };
-
-	    Stack.prototype.shift = function() {
-	      return this.pop.apply(this, arguments);
-	    };
-
-	    Stack.prototype.clear = function() {
-	      if (this.size === 0) {
-	        return this;
-	      }
-	      if (this.__ownerID) {
-	        this.size = 0;
-	        this._head = undefined;
-	        this.__hash = undefined;
-	        this.__altered = true;
-	        return this;
-	      }
-	      return emptyStack();
-	    };
-
-	    Stack.prototype.slice = function(begin, end) {
-	      if (wholeSlice(begin, end, this.size)) {
-	        return this;
-	      }
-	      var resolvedBegin = resolveBegin(begin, this.size);
-	      var resolvedEnd = resolveEnd(end, this.size);
-	      if (resolvedEnd !== this.size) {
-	        // super.slice(begin, end);
-	        return IndexedCollection.prototype.slice.call(this, begin, end);
-	      }
-	      var newSize = this.size - resolvedBegin;
-	      var head = this._head;
-	      while (resolvedBegin--) {
-	        head = head.next;
-	      }
-	      if (this.__ownerID) {
-	        this.size = newSize;
-	        this._head = head;
-	        this.__hash = undefined;
-	        this.__altered = true;
-	        return this;
-	      }
-	      return makeStack(newSize, head);
-	    };
-
-	    // @pragma Mutability
-
-	    Stack.prototype.__ensureOwner = function(ownerID) {
-	      if (ownerID === this.__ownerID) {
-	        return this;
-	      }
-	      if (!ownerID) {
-	        this.__ownerID = ownerID;
-	        this.__altered = false;
-	        return this;
-	      }
-	      return makeStack(this.size, this._head, ownerID, this.__hash);
-	    };
-
-	    // @pragma Iteration
-
-	    Stack.prototype.__iterate = function(fn, reverse) {
-	      if (reverse) {
-	        return this.reverse().__iterate(fn);
-	      }
-	      var iterations = 0;
-	      var node = this._head;
-	      while (node) {
-	        if (fn(node.value, iterations++, this) === false) {
-	          break;
-	        }
-	        node = node.next;
-	      }
-	      return iterations;
-	    };
-
-	    Stack.prototype.__iterator = function(type, reverse) {
-	      if (reverse) {
-	        return this.reverse().__iterator(type);
-	      }
-	      var iterations = 0;
-	      var node = this._head;
-	      return new Iterator(function()  {
-	        if (node) {
-	          var value = node.value;
-	          node = node.next;
-	          return iteratorValue(type, iterations++, value);
-	        }
-	        return iteratorDone();
-	      });
-	    };
-
-
-	  function isStack(maybeStack) {
-	    return !!(maybeStack && maybeStack[IS_STACK_SENTINEL]);
-	  }
-
-	  Stack.isStack = isStack;
-
-	  var IS_STACK_SENTINEL = '@@__IMMUTABLE_STACK__@@';
-
-	  var StackPrototype = Stack.prototype;
-	  StackPrototype[IS_STACK_SENTINEL] = true;
-	  StackPrototype.withMutations = MapPrototype.withMutations;
-	  StackPrototype.asMutable = MapPrototype.asMutable;
-	  StackPrototype.asImmutable = MapPrototype.asImmutable;
-	  StackPrototype.wasAltered = MapPrototype.wasAltered;
-
-
-	  function makeStack(size, head, ownerID, hash) {
-	    var map = Object.create(StackPrototype);
-	    map.size = size;
-	    map._head = head;
-	    map.__ownerID = ownerID;
-	    map.__hash = hash;
-	    map.__altered = false;
-	    return map;
-	  }
-
-	  var EMPTY_STACK;
-	  function emptyStack() {
-	    return EMPTY_STACK || (EMPTY_STACK = makeStack(0));
-	  }
-
-	  /**
-	   * Contributes additional methods to a constructor
-	   */
-	  function mixin(ctor, methods) {
-	    var keyCopier = function(key ) { ctor.prototype[key] = methods[key]; };
-	    Object.keys(methods).forEach(keyCopier);
-	    Object.getOwnPropertySymbols &&
-	      Object.getOwnPropertySymbols(methods).forEach(keyCopier);
-	    return ctor;
-	  }
-
-	  Iterable.Iterator = Iterator;
-
-	  mixin(Iterable, {
-
-	    // ### Conversion to other types
-
-	    toArray: function() {
-	      assertNotInfinite(this.size);
-	      var array = new Array(this.size || 0);
-	      this.valueSeq().__iterate(function(v, i)  { array[i] = v; });
-	      return array;
-	    },
-
-	    toIndexedSeq: function() {
-	      return new ToIndexedSequence(this);
-	    },
-
-	    toJS: function() {
-	      return this.toSeq().map(
-	        function(value ) {return value && typeof value.toJS === 'function' ? value.toJS() : value}
-	      ).__toJS();
-	    },
-
-	    toJSON: function() {
-	      return this.toSeq().map(
-	        function(value ) {return value && typeof value.toJSON === 'function' ? value.toJSON() : value}
-	      ).__toJS();
-	    },
-
-	    toKeyedSeq: function() {
-	      return new ToKeyedSequence(this, true);
-	    },
-
-	    toMap: function() {
-	      // Use Late Binding here to solve the circular dependency.
-	      return Map(this.toKeyedSeq());
-	    },
-
-	    toObject: function() {
-	      assertNotInfinite(this.size);
-	      var object = {};
-	      this.__iterate(function(v, k)  { object[k] = v; });
-	      return object;
-	    },
-
-	    toOrderedMap: function() {
-	      // Use Late Binding here to solve the circular dependency.
-	      return OrderedMap(this.toKeyedSeq());
-	    },
-
-	    toOrderedSet: function() {
-	      // Use Late Binding here to solve the circular dependency.
-	      return OrderedSet(isKeyed(this) ? this.valueSeq() : this);
-	    },
-
-	    toSet: function() {
-	      // Use Late Binding here to solve the circular dependency.
-	      return Set(isKeyed(this) ? this.valueSeq() : this);
-	    },
-
-	    toSetSeq: function() {
-	      return new ToSetSequence(this);
-	    },
-
-	    toSeq: function() {
-	      return isIndexed(this) ? this.toIndexedSeq() :
-	        isKeyed(this) ? this.toKeyedSeq() :
-	        this.toSetSeq();
-	    },
-
-	    toStack: function() {
-	      // Use Late Binding here to solve the circular dependency.
-	      return Stack(isKeyed(this) ? this.valueSeq() : this);
-	    },
-
-	    toList: function() {
-	      // Use Late Binding here to solve the circular dependency.
-	      return List(isKeyed(this) ? this.valueSeq() : this);
-	    },
-
-
-	    // ### Common JavaScript methods and properties
-
-	    toString: function() {
-	      return '[Iterable]';
-	    },
-
-	    __toString: function(head, tail) {
-	      if (this.size === 0) {
-	        return head + tail;
-	      }
-	      return head + ' ' + this.toSeq().map(this.__toStringMapper).join(', ') + ' ' + tail;
-	    },
-
-
-	    // ### ES6 Collection methods (ES6 Array and Map)
-
-	    concat: function() {var values = SLICE$0.call(arguments, 0);
-	      return reify(this, concatFactory(this, values));
-	    },
-
-	    includes: function(searchValue) {
-	      return this.some(function(value ) {return is(value, searchValue)});
-	    },
-
-	    entries: function() {
-	      return this.__iterator(ITERATE_ENTRIES);
-	    },
-
-	    every: function(predicate, context) {
-	      assertNotInfinite(this.size);
-	      var returnValue = true;
-	      this.__iterate(function(v, k, c)  {
-	        if (!predicate.call(context, v, k, c)) {
-	          returnValue = false;
-	          return false;
-	        }
-	      });
-	      return returnValue;
-	    },
-
-	    filter: function(predicate, context) {
-	      return reify(this, filterFactory(this, predicate, context, true));
-	    },
-
-	    find: function(predicate, context, notSetValue) {
-	      var entry = this.findEntry(predicate, context);
-	      return entry ? entry[1] : notSetValue;
-	    },
-
-	    forEach: function(sideEffect, context) {
-	      assertNotInfinite(this.size);
-	      return this.__iterate(context ? sideEffect.bind(context) : sideEffect);
-	    },
-
-	    join: function(separator) {
-	      assertNotInfinite(this.size);
-	      separator = separator !== undefined ? '' + separator : ',';
-	      var joined = '';
-	      var isFirst = true;
-	      this.__iterate(function(v ) {
-	        isFirst ? (isFirst = false) : (joined += separator);
-	        joined += v !== null && v !== undefined ? v.toString() : '';
-	      });
-	      return joined;
-	    },
-
-	    keys: function() {
-	      return this.__iterator(ITERATE_KEYS);
-	    },
-
-	    map: function(mapper, context) {
-	      return reify(this, mapFactory(this, mapper, context));
-	    },
-
-	    reduce: function(reducer, initialReduction, context) {
-	      assertNotInfinite(this.size);
-	      var reduction;
-	      var useFirst;
-	      if (arguments.length < 2) {
-	        useFirst = true;
-	      } else {
-	        reduction = initialReduction;
-	      }
-	      this.__iterate(function(v, k, c)  {
-	        if (useFirst) {
-	          useFirst = false;
-	          reduction = v;
-	        } else {
-	          reduction = reducer.call(context, reduction, v, k, c);
-	        }
-	      });
-	      return reduction;
-	    },
-
-	    reduceRight: function(reducer, initialReduction, context) {
-	      var reversed = this.toKeyedSeq().reverse();
-	      return reversed.reduce.apply(reversed, arguments);
-	    },
-
-	    reverse: function() {
-	      return reify(this, reverseFactory(this, true));
-	    },
-
-	    slice: function(begin, end) {
-	      return reify(this, sliceFactory(this, begin, end, true));
-	    },
-
-	    some: function(predicate, context) {
-	      return !this.every(not(predicate), context);
-	    },
-
-	    sort: function(comparator) {
-	      return reify(this, sortFactory(this, comparator));
-	    },
-
-	    values: function() {
-	      return this.__iterator(ITERATE_VALUES);
-	    },
-
-
-	    // ### More sequential methods
-
-	    butLast: function() {
-	      return this.slice(0, -1);
-	    },
-
-	    isEmpty: function() {
-	      return this.size !== undefined ? this.size === 0 : !this.some(function()  {return true});
-	    },
-
-	    count: function(predicate, context) {
-	      return ensureSize(
-	        predicate ? this.toSeq().filter(predicate, context) : this
-	      );
-	    },
-
-	    countBy: function(grouper, context) {
-	      return countByFactory(this, grouper, context);
-	    },
-
-	    equals: function(other) {
-	      return deepEqual(this, other);
-	    },
-
-	    entrySeq: function() {
-	      var iterable = this;
-	      if (iterable._cache) {
-	        // We cache as an entries array, so we can just return the cache!
-	        return new ArraySeq(iterable._cache);
-	      }
-	      var entriesSequence = iterable.toSeq().map(entryMapper).toIndexedSeq();
-	      entriesSequence.fromEntrySeq = function()  {return iterable.toSeq()};
-	      return entriesSequence;
-	    },
-
-	    filterNot: function(predicate, context) {
-	      return this.filter(not(predicate), context);
-	    },
-
-	    findEntry: function(predicate, context, notSetValue) {
-	      var found = notSetValue;
-	      this.__iterate(function(v, k, c)  {
-	        if (predicate.call(context, v, k, c)) {
-	          found = [k, v];
-	          return false;
-	        }
-	      });
-	      return found;
-	    },
-
-	    findKey: function(predicate, context) {
-	      var entry = this.findEntry(predicate, context);
-	      return entry && entry[0];
-	    },
-
-	    findLast: function(predicate, context, notSetValue) {
-	      return this.toKeyedSeq().reverse().find(predicate, context, notSetValue);
-	    },
-
-	    findLastEntry: function(predicate, context, notSetValue) {
-	      return this.toKeyedSeq().reverse().findEntry(predicate, context, notSetValue);
-	    },
-
-	    findLastKey: function(predicate, context) {
-	      return this.toKeyedSeq().reverse().findKey(predicate, context);
-	    },
-
-	    first: function() {
-	      return this.find(returnTrue);
-	    },
-
-	    flatMap: function(mapper, context) {
-	      return reify(this, flatMapFactory(this, mapper, context));
-	    },
-
-	    flatten: function(depth) {
-	      return reify(this, flattenFactory(this, depth, true));
-	    },
-
-	    fromEntrySeq: function() {
-	      return new FromEntriesSequence(this);
-	    },
-
-	    get: function(searchKey, notSetValue) {
-	      return this.find(function(_, key)  {return is(key, searchKey)}, undefined, notSetValue);
-	    },
-
-	    getIn: function(searchKeyPath, notSetValue) {
-	      var nested = this;
-	      // Note: in an ES6 environment, we would prefer:
-	      // for (var key of searchKeyPath) {
-	      var iter = forceIterator(searchKeyPath);
-	      var step;
-	      while (!(step = iter.next()).done) {
-	        var key = step.value;
-	        nested = nested && nested.get ? nested.get(key, NOT_SET) : NOT_SET;
-	        if (nested === NOT_SET) {
-	          return notSetValue;
-	        }
-	      }
-	      return nested;
-	    },
-
-	    groupBy: function(grouper, context) {
-	      return groupByFactory(this, grouper, context);
-	    },
-
-	    has: function(searchKey) {
-	      return this.get(searchKey, NOT_SET) !== NOT_SET;
-	    },
-
-	    hasIn: function(searchKeyPath) {
-	      return this.getIn(searchKeyPath, NOT_SET) !== NOT_SET;
-	    },
-
-	    isSubset: function(iter) {
-	      iter = typeof iter.includes === 'function' ? iter : Iterable(iter);
-	      return this.every(function(value ) {return iter.includes(value)});
-	    },
-
-	    isSuperset: function(iter) {
-	      iter = typeof iter.isSubset === 'function' ? iter : Iterable(iter);
-	      return iter.isSubset(this);
-	    },
-
-	    keyOf: function(searchValue) {
-	      return this.findKey(function(value ) {return is(value, searchValue)});
-	    },
-
-	    keySeq: function() {
-	      return this.toSeq().map(keyMapper).toIndexedSeq();
-	    },
-
-	    last: function() {
-	      return this.toSeq().reverse().first();
-	    },
-
-	    lastKeyOf: function(searchValue) {
-	      return this.toKeyedSeq().reverse().keyOf(searchValue);
-	    },
-
-	    max: function(comparator) {
-	      return maxFactory(this, comparator);
-	    },
-
-	    maxBy: function(mapper, comparator) {
-	      return maxFactory(this, comparator, mapper);
-	    },
-
-	    min: function(comparator) {
-	      return maxFactory(this, comparator ? neg(comparator) : defaultNegComparator);
-	    },
-
-	    minBy: function(mapper, comparator) {
-	      return maxFactory(this, comparator ? neg(comparator) : defaultNegComparator, mapper);
-	    },
-
-	    rest: function() {
-	      return this.slice(1);
-	    },
-
-	    skip: function(amount) {
-	      return this.slice(Math.max(0, amount));
-	    },
-
-	    skipLast: function(amount) {
-	      return reify(this, this.toSeq().reverse().skip(amount).reverse());
-	    },
-
-	    skipWhile: function(predicate, context) {
-	      return reify(this, skipWhileFactory(this, predicate, context, true));
-	    },
-
-	    skipUntil: function(predicate, context) {
-	      return this.skipWhile(not(predicate), context);
-	    },
-
-	    sortBy: function(mapper, comparator) {
-	      return reify(this, sortFactory(this, comparator, mapper));
-	    },
-
-	    take: function(amount) {
-	      return this.slice(0, Math.max(0, amount));
-	    },
-
-	    takeLast: function(amount) {
-	      return reify(this, this.toSeq().reverse().take(amount).reverse());
-	    },
-
-	    takeWhile: function(predicate, context) {
-	      return reify(this, takeWhileFactory(this, predicate, context));
-	    },
-
-	    takeUntil: function(predicate, context) {
-	      return this.takeWhile(not(predicate), context);
-	    },
-
-	    valueSeq: function() {
-	      return this.toIndexedSeq();
-	    },
-
-
-	    // ### Hashable Object
-
-	    hashCode: function() {
-	      return this.__hash || (this.__hash = hashIterable(this));
-	    }
-
-
-	    // ### Internal
-
-	    // abstract __iterate(fn, reverse)
-
-	    // abstract __iterator(type, reverse)
-	  });
-
-	  // var IS_ITERABLE_SENTINEL = '@@__IMMUTABLE_ITERABLE__@@';
-	  // var IS_KEYED_SENTINEL = '@@__IMMUTABLE_KEYED__@@';
-	  // var IS_INDEXED_SENTINEL = '@@__IMMUTABLE_INDEXED__@@';
-	  // var IS_ORDERED_SENTINEL = '@@__IMMUTABLE_ORDERED__@@';
-
-	  var IterablePrototype = Iterable.prototype;
-	  IterablePrototype[IS_ITERABLE_SENTINEL] = true;
-	  IterablePrototype[ITERATOR_SYMBOL] = IterablePrototype.values;
-	  IterablePrototype.__toJS = IterablePrototype.toArray;
-	  IterablePrototype.__toStringMapper = quoteString;
-	  IterablePrototype.inspect =
-	  IterablePrototype.toSource = function() { return this.toString(); };
-	  IterablePrototype.chain = IterablePrototype.flatMap;
-	  IterablePrototype.contains = IterablePrototype.includes;
-
-	  mixin(KeyedIterable, {
-
-	    // ### More sequential methods
-
-	    flip: function() {
-	      return reify(this, flipFactory(this));
-	    },
-
-	    mapEntries: function(mapper, context) {var this$0 = this;
-	      var iterations = 0;
-	      return reify(this,
-	        this.toSeq().map(
-	          function(v, k)  {return mapper.call(context, [k, v], iterations++, this$0)}
-	        ).fromEntrySeq()
-	      );
-	    },
-
-	    mapKeys: function(mapper, context) {var this$0 = this;
-	      return reify(this,
-	        this.toSeq().flip().map(
-	          function(k, v)  {return mapper.call(context, k, v, this$0)}
-	        ).flip()
-	      );
-	    }
-
-	  });
-
-	  var KeyedIterablePrototype = KeyedIterable.prototype;
-	  KeyedIterablePrototype[IS_KEYED_SENTINEL] = true;
-	  KeyedIterablePrototype[ITERATOR_SYMBOL] = IterablePrototype.entries;
-	  KeyedIterablePrototype.__toJS = IterablePrototype.toObject;
-	  KeyedIterablePrototype.__toStringMapper = function(v, k)  {return JSON.stringify(k) + ': ' + quoteString(v)};
-
-
-
-	  mixin(IndexedIterable, {
-
-	    // ### Conversion to other types
-
-	    toKeyedSeq: function() {
-	      return new ToKeyedSequence(this, false);
-	    },
-
-
-	    // ### ES6 Collection methods (ES6 Array and Map)
-
-	    filter: function(predicate, context) {
-	      return reify(this, filterFactory(this, predicate, context, false));
-	    },
-
-	    findIndex: function(predicate, context) {
-	      var entry = this.findEntry(predicate, context);
-	      return entry ? entry[0] : -1;
-	    },
-
-	    indexOf: function(searchValue) {
-	      var key = this.keyOf(searchValue);
-	      return key === undefined ? -1 : key;
-	    },
-
-	    lastIndexOf: function(searchValue) {
-	      var key = this.lastKeyOf(searchValue);
-	      return key === undefined ? -1 : key;
-	    },
-
-	    reverse: function() {
-	      return reify(this, reverseFactory(this, false));
-	    },
-
-	    slice: function(begin, end) {
-	      return reify(this, sliceFactory(this, begin, end, false));
-	    },
-
-	    splice: function(index, removeNum /*, ...values*/) {
-	      var numArgs = arguments.length;
-	      removeNum = Math.max(removeNum | 0, 0);
-	      if (numArgs === 0 || (numArgs === 2 && !removeNum)) {
-	        return this;
-	      }
-	      // If index is negative, it should resolve relative to the size of the
-	      // collection. However size may be expensive to compute if not cached, so
-	      // only call count() if the number is in fact negative.
-	      index = resolveBegin(index, index < 0 ? this.count() : this.size);
-	      var spliced = this.slice(0, index);
-	      return reify(
-	        this,
-	        numArgs === 1 ?
-	          spliced :
-	          spliced.concat(arrCopy(arguments, 2), this.slice(index + removeNum))
-	      );
-	    },
-
-
-	    // ### More collection methods
-
-	    findLastIndex: function(predicate, context) {
-	      var entry = this.findLastEntry(predicate, context);
-	      return entry ? entry[0] : -1;
-	    },
-
-	    first: function() {
-	      return this.get(0);
-	    },
-
-	    flatten: function(depth) {
-	      return reify(this, flattenFactory(this, depth, false));
-	    },
-
-	    get: function(index, notSetValue) {
-	      index = wrapIndex(this, index);
-	      return (index < 0 || (this.size === Infinity ||
-	          (this.size !== undefined && index > this.size))) ?
-	        notSetValue :
-	        this.find(function(_, key)  {return key === index}, undefined, notSetValue);
-	    },
-
-	    has: function(index) {
-	      index = wrapIndex(this, index);
-	      return index >= 0 && (this.size !== undefined ?
-	        this.size === Infinity || index < this.size :
-	        this.indexOf(index) !== -1
-	      );
-	    },
-
-	    interpose: function(separator) {
-	      return reify(this, interposeFactory(this, separator));
-	    },
-
-	    interleave: function(/*...iterables*/) {
-	      var iterables = [this].concat(arrCopy(arguments));
-	      var zipped = zipWithFactory(this.toSeq(), IndexedSeq.of, iterables);
-	      var interleaved = zipped.flatten(true);
-	      if (zipped.size) {
-	        interleaved.size = zipped.size * iterables.length;
-	      }
-	      return reify(this, interleaved);
-	    },
-
-	    keySeq: function() {
-	      return Range(0, this.size);
-	    },
-
-	    last: function() {
-	      return this.get(-1);
-	    },
-
-	    skipWhile: function(predicate, context) {
-	      return reify(this, skipWhileFactory(this, predicate, context, false));
-	    },
-
-	    zip: function(/*, ...iterables */) {
-	      var iterables = [this].concat(arrCopy(arguments));
-	      return reify(this, zipWithFactory(this, defaultZipper, iterables));
-	    },
-
-	    zipWith: function(zipper/*, ...iterables */) {
-	      var iterables = arrCopy(arguments);
-	      iterables[0] = this;
-	      return reify(this, zipWithFactory(this, zipper, iterables));
-	    }
-
-	  });
-
-	  IndexedIterable.prototype[IS_INDEXED_SENTINEL] = true;
-	  IndexedIterable.prototype[IS_ORDERED_SENTINEL] = true;
-
-
-
-	  mixin(SetIterable, {
-
-	    // ### ES6 Collection methods (ES6 Array and Map)
-
-	    get: function(value, notSetValue) {
-	      return this.has(value) ? value : notSetValue;
-	    },
-
-	    includes: function(value) {
-	      return this.has(value);
-	    },
-
-
-	    // ### More sequential methods
-
-	    keySeq: function() {
-	      return this.valueSeq();
-	    }
-
-	  });
-
-	  SetIterable.prototype.has = IterablePrototype.includes;
-	  SetIterable.prototype.contains = SetIterable.prototype.includes;
-
-
-	  // Mixin subclasses
-
-	  mixin(KeyedSeq, KeyedIterable.prototype);
-	  mixin(IndexedSeq, IndexedIterable.prototype);
-	  mixin(SetSeq, SetIterable.prototype);
-
-	  mixin(KeyedCollection, KeyedIterable.prototype);
-	  mixin(IndexedCollection, IndexedIterable.prototype);
-	  mixin(SetCollection, SetIterable.prototype);
-
-
-	  // #pragma Helper functions
-
-	  function keyMapper(v, k) {
-	    return k;
-	  }
-
-	  function entryMapper(v, k) {
-	    return [k, v];
-	  }
-
-	  function not(predicate) {
-	    return function() {
-	      return !predicate.apply(this, arguments);
-	    }
-	  }
-
-	  function neg(predicate) {
-	    return function() {
-	      return -predicate.apply(this, arguments);
-	    }
+	      clonedObj[finalPath] = target
+	      return clonedObj
+	    })
 	  }
-
-	  function quoteString(value) {
-	    return typeof value === 'string' ? JSON.stringify(value) : String(value);
-	  }
-
-	  function defaultZipper() {
-	    return arrCopy(arguments);
-	  }
-
-	  function defaultNegComparator(a, b) {
-	    return a < b ? 1 : a > b ? -1 : 0;
-	  }
-
-	  function hashIterable(iterable) {
-	    if (iterable.size === Infinity) {
-	      return 0;
-	    }
-	    var ordered = isOrdered(iterable);
-	    var keyed = isKeyed(iterable);
-	    var h = ordered ? 1 : 0;
-	    var size = iterable.__iterate(
-	      keyed ?
-	        ordered ?
-	          function(v, k)  { h = 31 * h + hashMerge(hash(v), hash(k)) | 0; } :
-	          function(v, k)  { h = h + hashMerge(hash(v), hash(k)) | 0; } :
-	        ordered ?
-	          function(v ) { h = 31 * h + hash(v) | 0; } :
-	          function(v ) { h = h + hash(v) | 0; }
-	    );
-	    return murmurHashOfSize(size, h);
-	  }
-
-	  function murmurHashOfSize(size, h) {
-	    h = imul(h, 0xCC9E2D51);
-	    h = imul(h << 15 | h >>> -15, 0x1B873593);
-	    h = imul(h << 13 | h >>> -13, 5);
-	    h = (h + 0xE6546B64 | 0) ^ size;
-	    h = imul(h ^ h >>> 16, 0x85EBCA6B);
-	    h = imul(h ^ h >>> 13, 0xC2B2AE35);
-	    h = smi(h ^ h >>> 16);
-	    return h;
-	  }
-
-	  function hashMerge(a, b) {
-	    return a ^ b + 0x9E3779B9 + (a << 6) + (a >> 2) | 0; // int
-	  }
-
-	  var Immutable = {
-
-	    Iterable: Iterable,
-
-	    Seq: Seq,
-	    Collection: Collection,
-	    Map: Map,
-	    OrderedMap: OrderedMap,
-	    List: List,
-	    Stack: Stack,
-	    Set: Set,
-	    OrderedSet: OrderedSet,
-
-	    Record: Record,
-	    Range: Range,
-	    Repeat: Repeat,
-
-	    is: is,
-	    fromJS: fromJS
 
-	  };
+	  return Object.keys(api).reduce(function (objectPathImmutable, method) {
+	    objectPathImmutable[method] = api[method].bind(null, null)
 
-	  return Immutable;
+	    return objectPathImmutable
+	  }, objectPathImmutable)
+	})
 
-	}));
 
 /***/ },
-/* 746 */
+/* 753 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _slicedToArray2 = __webpack_require__(747);
-
-	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.setIsInvalidatingForExistingEntity = exports.updateOrInsertEntitiesIntoState = exports.removeEntityFromState = undefined;
+	exports.ensureResourceTypeInState = exports.setIsInvalidatingForExistingResource = exports.updateOrInsertResourcesIntoState = exports.removeResourceFromState = exports.updateOrInsertResource = exports.addLinksToState = exports.makeUpdateReverseRelationship = undefined;
 
-	var _immutable = __webpack_require__(745);
+	var _keys = __webpack_require__(675);
 
-	var _immutable2 = _interopRequireDefault(_immutable);
+	var _keys2 = _interopRequireDefault(_keys);
 
-	var _pluralize = __webpack_require__(754);
+	var _typeof2 = __webpack_require__(754);
+
+	var _typeof3 = _interopRequireDefault(_typeof2);
+
+	var _slicedToArray2 = __webpack_require__(771);
+
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+	var _objectPathImmutable = __webpack_require__(752);
+
+	var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
+
+	var _pluralize = __webpack_require__(778);
 
 	var _pluralize2 = _interopRequireDefault(_pluralize);
 
+	var _utils = __webpack_require__(779);
+
+	var _deepEqual = __webpack_require__(780);
+
+	var _deepEqual2 = _interopRequireDefault(_deepEqual);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var updateReverseRelationship = function updateReverseRelationship(entity, relationship) {
-	  var newRelation = arguments.length <= 2 || arguments[2] === undefined ? {
-	    type: entity.get('type'),
-	    id: entity.get('id')
-	  } : arguments[2];
+	var makeUpdateReverseRelationship = exports.makeUpdateReverseRelationship = function makeUpdateReverseRelationship(resource, relationship) {
+	  var newRelation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+	    type: resource.type,
+	    id: resource.id
+	  };
 
-	  return function (foreignEntities) {
-	    var idx = foreignEntities.findIndex(function (item) {
-	      return item.get('id') === relationship.getIn(['data', 'id']);
+	  return function (foreignResources) {
+	    var idx = foreignResources.findIndex(function (item) {
+	      return item.id === relationship.data.id;
 	    });
 
 	    if (idx === -1) {
-	      return foreignEntities;
+	      return foreignResources;
 	    }
 
-	    return foreignEntities.update(idx, function (foreignEntity) {
-	      var _map = [1, 2].map(function (i) {
-	        return (0, _pluralize2.default)(entity.get('type'), i);
+	    var _map = [1, 2].map(function (i) {
+	      return (0, _pluralize2.default)(resource.type, i);
+	    }),
+	        _map2 = (0, _slicedToArray3.default)(_map, 2),
+	        singular = _map2[0],
+	        plural = _map2[1];
+
+	    var relCase = [singular, plural].find(function (r) {
+	      return (0, _utils.hasOwnProperties)(foreignResources[idx], ['relationships', r]);
+	    });
+
+	    if (!relCase) {
+	      return foreignResources;
+	    }
+
+	    var relPath = ['relationships', relCase, 'data'];
+	    var idxRelPath = [idx].concat(relPath);
+
+	    var immutableForeingResources = (0, _objectPathImmutable2.default)(foreignResources);
+
+	    if (!(0, _utils.hasOwnProperties)(foreignResources[idx], relPath)) {
+	      return immutableForeingResources.push(idxRelPath, newRelation).value();
+	    }
+
+	    var foreignResourceRel = foreignResources[idx].relationships[relCase].data;
+
+	    if (newRelation && Array.isArray(foreignResourceRel) && ~foreignResourceRel.findIndex(function (rel) {
+	      return rel.id === newRelation.id && rel.type === newRelation.type;
+	    }) || newRelation && foreignResourceRel && foreignResourceRel.id === newRelation.id && foreignResourceRel.type === newRelation.type) {
+	      return foreignResources;
+	    } else if (Array.isArray(foreignResourceRel) && !newRelation) {
+	      var relIdx = foreignResourceRel.findIndex(function (item) {
+	        return item.id === resource.id;
 	      });
 
-	      var _map2 = (0, _slicedToArray3.default)(_map, 2);
-
-	      var singular = _map2[0];
-	      var plural = _map2[1];
-
-	      var relCase = [singular, plural].find(function (r) {
-	        return foreignEntity.hasIn(['relationships', r]);
-	      });
-
-	      if (!relCase) {
-	        return foreignEntity;
+	      if (foreignResourceRel[relIdx]) {
+	        var deletePath = [idx, 'relationships', singular, 'data', relIdx];
+	        return (0, _objectPathImmutable2.default)(foreignResources).del(deletePath).value();
 	      }
 
-	      return foreignEntity.updateIn(['relationships', relCase, 'data'], function (relation) {
-	        if (relCase === singular) {
-	          return newRelation;
-	        }
+	      return foreignResources;
+	    }
 
-	        if (!relation) {
-	          return new _immutable2.default.List([newRelation]);
-	        }
+	    if (relCase === singular) {
+	      return immutableForeingResources.set(idxRelPath, newRelation).value();
+	    }
 
-	        return relation.push(newRelation);
-	      });
-	    });
+	    return immutableForeingResources.push(idxRelPath, newRelation).value();
 	  };
 	};
 
-	var updateOrInsertEntity = function updateOrInsertEntity(state, entity) {
-	  if (_immutable2.default.Map.isMap(entity) === false) {
+	var stateContainsResource = function stateContainsResource(state, resource) {
+	  var updatePath = [resource.type, 'data'];
+
+	  if ((0, _utils.hasOwnProperties)(state, updatePath)) {
+	    return state[resource.type].data.findIndex(function (item) {
+	      return item.id === resource.id;
+	    }) > -1;
+	  }
+
+	  return false;
+	};
+
+	var addLinksToState = exports.addLinksToState = function addLinksToState(state, links, options) {
+	  if (options === undefined || options.indexLinks === undefined) {
 	    return state;
 	  }
 
-	  return state.withMutations(function (s) {
-	    s.updateIn([entity.get('type'), 'data'], function () {
-	      var list = arguments.length <= 0 || arguments[0] === undefined ? new _immutable2.default.List() : arguments[0];
+	  var indexLinkName = options.indexLinks;
+	  var newState = _objectPathImmutable2.default.set(state, 'links.' + indexLinkName, links);
 
-	      return list.filter(function (e) {
-	        return e.get('id') !== entity.get('id');
-	      }).push(entity);
+	  return newState;
+	};
+
+	var updateOrInsertResource = exports.updateOrInsertResource = function updateOrInsertResource(state, resource) {
+	  if ((typeof resource === 'undefined' ? 'undefined' : (0, _typeof3.default)(resource)) !== 'object') {
+	    return state;
+	  }
+
+	  var newState = state;
+	  var updatePath = [resource.type, 'data'];
+
+	  if (stateContainsResource(state, resource)) {
+	    var resources = state[resource.type].data;
+	    var idx = resources.findIndex(function (item) {
+	      return item.id === resource.id;
 	    });
 
-	    var rels = entity.get('relationships');
+	    if (!(0, _deepEqual2.default)(resources[idx], resource)) {
+	      newState = _objectPathImmutable2.default.set(newState, updatePath.concat(idx), resource);
+	    }
+	  } else {
+	    newState = _objectPathImmutable2.default.push(newState, updatePath, resource);
+	  }
 
-	    if (!rels) {
+	  var rels = resource.relationships;
+
+	  if (!rels) {
+	    return newState;
+	  }
+
+	  (0, _keys2.default)(rels).forEach(function (relKey) {
+	    if (!(0, _utils.hasOwnProperties)(rels[relKey], ['data', 'type'])) {
 	      return;
 	    }
 
-	    rels.forEach(function (relationship) {
-	      var entityPath = [relationship.getIn(['data', 'type']), 'data'];
+	    var entityPath = [rels[relKey].data.type, 'data'];
 
-	      if (s.hasIn(entityPath) === false) {
-	        return;
-	      }
-
-	      s.updateIn(entityPath, updateReverseRelationship(entity, relationship));
-	    });
-	  });
-	};
-
-	var removeEntityFromState = exports.removeEntityFromState = function removeEntityFromState(state, entity) {
-	  return state.withMutations(function (newState) {
-	    newState.updateIn([entity.get('type'), 'data'], function (curVal) {
-	      return curVal.filter(function (l) {
-	        return l.get('id') !== entity.get('id');
-	      });
-	    });
-
-	    var rels = entity.get('relationships');
-	    if (!rels) {
+	    if (!(0, _utils.hasOwnProperties)(newState, entityPath)) {
 	      return;
 	    }
 
-	    rels.forEach(function (relationship) {
-	      var entityPath = [relationship.getIn(['data', 'type']), 'data'];
+	    var updateReverseRelationship = makeUpdateReverseRelationship(resource, rels[relKey]);
 
-	      if (newState.hasIn(entityPath) === false) {
-	        return;
-	      }
-
-	      newState.updateIn(entityPath, updateReverseRelationship(entity, relationship, null));
-	    });
+	    newState = _objectPathImmutable2.default.set(newState, entityPath, updateReverseRelationship(newState[rels[relKey].data.type].data));
 	  });
+
+	  return newState;
 	};
 
-	var updateOrInsertEntitiesIntoState = exports.updateOrInsertEntitiesIntoState = function updateOrInsertEntitiesIntoState(state, entities) {
-	  return entities.reduce(updateOrInsertEntity, state);
+	var removeResourceFromState = exports.removeResourceFromState = function removeResourceFromState(state, resource) {
+	  var index = state[resource.type].data.findIndex(function (e) {
+	    return e.id === resource.id;
+	  });
+	  var path = [resource.type, 'data', index];
+	  var entityRelationships = resource.relationships || {};
+
+	  return (0, _keys2.default)(entityRelationships).reduce(function (newState, key) {
+	    if (resource.relationships[key].data === null) {
+	      return newState;
+	    }
+
+	    var entityPath = [resource.relationships[key].data.type, 'data'];
+
+	    if ((0, _utils.hasOwnProperties)(state, entityPath)) {
+	      var updateReverseRelationship = makeUpdateReverseRelationship(resource, resource.relationships[key], null);
+
+	      return newState.set(entityPath, updateReverseRelationship(state[resource.relationships[key].data.type].data));
+	    }
+
+	    return newState;
+	  }, (0, _objectPathImmutable2.default)(state).del(path));
 	};
 
-	var setIsInvalidatingForExistingEntity = exports.setIsInvalidatingForExistingEntity = function setIsInvalidatingForExistingEntity(state, _ref, value) {
-	  var type = _ref.type;
-	  var id = _ref.id;
+	var updateOrInsertResourcesIntoState = exports.updateOrInsertResourcesIntoState = function updateOrInsertResourcesIntoState(state, resources) {
+	  return resources.reduce(updateOrInsertResource, state);
+	};
 
-	  return state.updateIn([type, 'data'], function (entities) {
-	    return entities.update(entities.findIndex(function (item) {
-	      return item.get('id') === id && item.get('type') === type;
-	    }), function (entity) {
-	      return value === null ? entity.delete('isInvalidating') : entity.set('isInvalidating', value);
-	    });
+	var setIsInvalidatingForExistingResource = exports.setIsInvalidatingForExistingResource = function setIsInvalidatingForExistingResource(state, _ref) {
+	  var type = _ref.type,
+	      id = _ref.id;
+	  var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+	  var idx = state[type].data.findIndex(function (e) {
+	    return e.id === id && e.type === type;
 	  });
+	  var updatePath = [type, 'data', idx, 'isInvalidating'];
+
+	  return value === null ? (0, _objectPathImmutable2.default)(state).del(updatePath) : (0, _objectPathImmutable2.default)(state).set(updatePath, value);
+	};
+
+	var ensureResourceTypeInState = exports.ensureResourceTypeInState = function ensureResourceTypeInState(state, type) {
+	  var path = [type, 'data'];
+	  return (0, _utils.hasOwnProperties)(state, [type]) ? state : (0, _objectPathImmutable2.default)(state).set(path, []).value();
 	};
 
 /***/ },
-/* 747 */
+/* 754 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _isIterable2 = __webpack_require__(748);
+	var _iterator = __webpack_require__(755);
+
+	var _iterator2 = _interopRequireDefault(_iterator);
+
+	var _symbol = __webpack_require__(758);
+
+	var _symbol2 = _interopRequireDefault(_symbol);
+
+	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	} : function (obj) {
+	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	};
+
+/***/ },
+/* 755 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(756), __esModule: true };
+
+/***/ },
+/* 756 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(707);
+	__webpack_require__(720);
+	module.exports = __webpack_require__(757).f('iterator');
+
+/***/ },
+/* 757 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports.f = __webpack_require__(718);
+
+/***/ },
+/* 758 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(759), __esModule: true };
+
+/***/ },
+/* 759 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(760);
+	__webpack_require__(706);
+	__webpack_require__(769);
+	__webpack_require__(770);
+	module.exports = __webpack_require__(662).Symbol;
+
+/***/ },
+/* 760 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	// ECMAScript 6 symbols shim
+	var global         = __webpack_require__(661)
+	  , has            = __webpack_require__(682)
+	  , DESCRIPTORS    = __webpack_require__(670)
+	  , $export        = __webpack_require__(660)
+	  , redefine       = __webpack_require__(711)
+	  , META           = __webpack_require__(761).KEY
+	  , $fails         = __webpack_require__(671)
+	  , shared         = __webpack_require__(691)
+	  , setToStringTag = __webpack_require__(717)
+	  , uid            = __webpack_require__(692)
+	  , wks            = __webpack_require__(718)
+	  , wksExt         = __webpack_require__(757)
+	  , wksDefine      = __webpack_require__(762)
+	  , keyOf          = __webpack_require__(763)
+	  , enumKeys       = __webpack_require__(764)
+	  , isArray        = __webpack_require__(765)
+	  , anObject       = __webpack_require__(667)
+	  , toIObject      = __webpack_require__(683)
+	  , toPrimitive    = __webpack_require__(673)
+	  , createDesc     = __webpack_require__(674)
+	  , _create        = __webpack_require__(714)
+	  , gOPNExt        = __webpack_require__(766)
+	  , $GOPD          = __webpack_require__(768)
+	  , $DP            = __webpack_require__(666)
+	  , $keys          = __webpack_require__(680)
+	  , gOPD           = $GOPD.f
+	  , dP             = $DP.f
+	  , gOPN           = gOPNExt.f
+	  , $Symbol        = global.Symbol
+	  , $JSON          = global.JSON
+	  , _stringify     = $JSON && $JSON.stringify
+	  , PROTOTYPE      = 'prototype'
+	  , HIDDEN         = wks('_hidden')
+	  , TO_PRIMITIVE   = wks('toPrimitive')
+	  , isEnum         = {}.propertyIsEnumerable
+	  , SymbolRegistry = shared('symbol-registry')
+	  , AllSymbols     = shared('symbols')
+	  , OPSymbols      = shared('op-symbols')
+	  , ObjectProto    = Object[PROTOTYPE]
+	  , USE_NATIVE     = typeof $Symbol == 'function'
+	  , QObject        = global.QObject;
+	// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+	var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+	// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+	var setSymbolDesc = DESCRIPTORS && $fails(function(){
+	  return _create(dP({}, 'a', {
+	    get: function(){ return dP(this, 'a', {value: 7}).a; }
+	  })).a != 7;
+	}) ? function(it, key, D){
+	  var protoDesc = gOPD(ObjectProto, key);
+	  if(protoDesc)delete ObjectProto[key];
+	  dP(it, key, D);
+	  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+	} : dP;
+
+	var wrap = function(tag){
+	  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+	  sym._k = tag;
+	  return sym;
+	};
+
+	var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+	  return typeof it == 'symbol';
+	} : function(it){
+	  return it instanceof $Symbol;
+	};
+
+	var $defineProperty = function defineProperty(it, key, D){
+	  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+	  anObject(it);
+	  key = toPrimitive(key, true);
+	  anObject(D);
+	  if(has(AllSymbols, key)){
+	    if(!D.enumerable){
+	      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+	      it[HIDDEN][key] = true;
+	    } else {
+	      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+	      D = _create(D, {enumerable: createDesc(0, false)});
+	    } return setSymbolDesc(it, key, D);
+	  } return dP(it, key, D);
+	};
+	var $defineProperties = function defineProperties(it, P){
+	  anObject(it);
+	  var keys = enumKeys(P = toIObject(P))
+	    , i    = 0
+	    , l = keys.length
+	    , key;
+	  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+	  return it;
+	};
+	var $create = function create(it, P){
+	  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+	};
+	var $propertyIsEnumerable = function propertyIsEnumerable(key){
+	  var E = isEnum.call(this, key = toPrimitive(key, true));
+	  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+	  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+	};
+	var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+	  it  = toIObject(it);
+	  key = toPrimitive(key, true);
+	  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+	  var D = gOPD(it, key);
+	  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+	  return D;
+	};
+	var $getOwnPropertyNames = function getOwnPropertyNames(it){
+	  var names  = gOPN(toIObject(it))
+	    , result = []
+	    , i      = 0
+	    , key;
+	  while(names.length > i){
+	    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+	  } return result;
+	};
+	var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+	  var IS_OP  = it === ObjectProto
+	    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
+	    , result = []
+	    , i      = 0
+	    , key;
+	  while(names.length > i){
+	    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
+	  } return result;
+	};
+
+	// 19.4.1.1 Symbol([description])
+	if(!USE_NATIVE){
+	  $Symbol = function Symbol(){
+	    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+	    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+	    var $set = function(value){
+	      if(this === ObjectProto)$set.call(OPSymbols, value);
+	      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+	      setSymbolDesc(this, tag, createDesc(1, value));
+	    };
+	    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+	    return wrap(tag);
+	  };
+	  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+	    return this._k;
+	  });
+
+	  $GOPD.f = $getOwnPropertyDescriptor;
+	  $DP.f   = $defineProperty;
+	  __webpack_require__(767).f = gOPNExt.f = $getOwnPropertyNames;
+	  __webpack_require__(701).f  = $propertyIsEnumerable;
+	  __webpack_require__(700).f = $getOwnPropertySymbols;
+
+	  if(DESCRIPTORS && !__webpack_require__(710)){
+	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+	  }
+
+	  wksExt.f = function(name){
+	    return wrap(wks(name));
+	  }
+	}
+
+	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+
+	for(var symbols = (
+	  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+	  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+	).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+
+	for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+
+	$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+	  // 19.4.2.1 Symbol.for(key)
+	  'for': function(key){
+	    return has(SymbolRegistry, key += '')
+	      ? SymbolRegistry[key]
+	      : SymbolRegistry[key] = $Symbol(key);
+	  },
+	  // 19.4.2.5 Symbol.keyFor(sym)
+	  keyFor: function keyFor(key){
+	    if(isSymbol(key))return keyOf(SymbolRegistry, key);
+	    throw TypeError(key + ' is not a symbol!');
+	  },
+	  useSetter: function(){ setter = true; },
+	  useSimple: function(){ setter = false; }
+	});
+
+	$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+	  // 19.1.2.2 Object.create(O [, Properties])
+	  create: $create,
+	  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+	  defineProperty: $defineProperty,
+	  // 19.1.2.3 Object.defineProperties(O, Properties)
+	  defineProperties: $defineProperties,
+	  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+	  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+	  // 19.1.2.7 Object.getOwnPropertyNames(O)
+	  getOwnPropertyNames: $getOwnPropertyNames,
+	  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+	  getOwnPropertySymbols: $getOwnPropertySymbols
+	});
+
+	// 24.3.2 JSON.stringify(value [, replacer [, space]])
+	$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+	  var S = $Symbol();
+	  // MS Edge converts symbol values to JSON as {}
+	  // WebKit converts symbol values to JSON as null
+	  // V8 throws on boxed symbols
+	  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+	})), 'JSON', {
+	  stringify: function stringify(it){
+	    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+	    var args = [it]
+	      , i    = 1
+	      , replacer, $replacer;
+	    while(arguments.length > i)args.push(arguments[i++]);
+	    replacer = args[1];
+	    if(typeof replacer == 'function')$replacer = replacer;
+	    if($replacer || !isArray(replacer))replacer = function(key, value){
+	      if($replacer)value = $replacer.call(this, key, value);
+	      if(!isSymbol(value))return value;
+	    };
+	    args[1] = replacer;
+	    return _stringify.apply($JSON, args);
+	  }
+	});
+
+	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(665)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+	// 19.4.3.5 Symbol.prototype[@@toStringTag]
+	setToStringTag($Symbol, 'Symbol');
+	// 20.2.1.9 Math[@@toStringTag]
+	setToStringTag(Math, 'Math', true);
+	// 24.3.3 JSON[@@toStringTag]
+	setToStringTag(global.JSON, 'JSON', true);
+
+/***/ },
+/* 761 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var META     = __webpack_require__(692)('meta')
+	  , isObject = __webpack_require__(668)
+	  , has      = __webpack_require__(682)
+	  , setDesc  = __webpack_require__(666).f
+	  , id       = 0;
+	var isExtensible = Object.isExtensible || function(){
+	  return true;
+	};
+	var FREEZE = !__webpack_require__(671)(function(){
+	  return isExtensible(Object.preventExtensions({}));
+	});
+	var setMeta = function(it){
+	  setDesc(it, META, {value: {
+	    i: 'O' + ++id, // object ID
+	    w: {}          // weak collections IDs
+	  }});
+	};
+	var fastKey = function(it, create){
+	  // return primitive with prefix
+	  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+	  if(!has(it, META)){
+	    // can't set metadata to uncaught frozen object
+	    if(!isExtensible(it))return 'F';
+	    // not necessary to add metadata
+	    if(!create)return 'E';
+	    // add missing metadata
+	    setMeta(it);
+	  // return object ID
+	  } return it[META].i;
+	};
+	var getWeak = function(it, create){
+	  if(!has(it, META)){
+	    // can't set metadata to uncaught frozen object
+	    if(!isExtensible(it))return true;
+	    // not necessary to add metadata
+	    if(!create)return false;
+	    // add missing metadata
+	    setMeta(it);
+	  // return hash weak collections IDs
+	  } return it[META].w;
+	};
+	// add metadata on freeze-family methods calling
+	var onFreeze = function(it){
+	  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+	  return it;
+	};
+	var meta = module.exports = {
+	  KEY:      META,
+	  NEED:     false,
+	  fastKey:  fastKey,
+	  getWeak:  getWeak,
+	  onFreeze: onFreeze
+	};
+
+/***/ },
+/* 762 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var global         = __webpack_require__(661)
+	  , core           = __webpack_require__(662)
+	  , LIBRARY        = __webpack_require__(710)
+	  , wksExt         = __webpack_require__(757)
+	  , defineProperty = __webpack_require__(666).f;
+	module.exports = function(name){
+	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+	  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+	};
+
+/***/ },
+/* 763 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var getKeys   = __webpack_require__(680)
+	  , toIObject = __webpack_require__(683);
+	module.exports = function(object, el){
+	  var O      = toIObject(object)
+	    , keys   = getKeys(O)
+	    , length = keys.length
+	    , index  = 0
+	    , key;
+	  while(length > index)if(O[key = keys[index++]] === el)return key;
+	};
+
+/***/ },
+/* 764 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// all enumerable object keys, includes symbols
+	var getKeys = __webpack_require__(680)
+	  , gOPS    = __webpack_require__(700)
+	  , pIE     = __webpack_require__(701);
+	module.exports = function(it){
+	  var result     = getKeys(it)
+	    , getSymbols = gOPS.f;
+	  if(getSymbols){
+	    var symbols = getSymbols(it)
+	      , isEnum  = pIE.f
+	      , i       = 0
+	      , key;
+	    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+	  } return result;
+	};
+
+/***/ },
+/* 765 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.2.2 IsArray(argument)
+	var cof = __webpack_require__(685);
+	module.exports = Array.isArray || function isArray(arg){
+	  return cof(arg) == 'Array';
+	};
+
+/***/ },
+/* 766 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+	var toIObject = __webpack_require__(683)
+	  , gOPN      = __webpack_require__(767).f
+	  , toString  = {}.toString;
+
+	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+	  ? Object.getOwnPropertyNames(window) : [];
+
+	var getWindowNames = function(it){
+	  try {
+	    return gOPN(it);
+	  } catch(e){
+	    return windowNames.slice();
+	  }
+	};
+
+	module.exports.f = function getOwnPropertyNames(it){
+	  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+	};
+
+
+/***/ },
+/* 767 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+	var $keys      = __webpack_require__(681)
+	  , hiddenKeys = __webpack_require__(693).concat('length', 'prototype');
+
+	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+	  return $keys(O, hiddenKeys);
+	};
+
+/***/ },
+/* 768 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pIE            = __webpack_require__(701)
+	  , createDesc     = __webpack_require__(674)
+	  , toIObject      = __webpack_require__(683)
+	  , toPrimitive    = __webpack_require__(673)
+	  , has            = __webpack_require__(682)
+	  , IE8_DOM_DEFINE = __webpack_require__(669)
+	  , gOPD           = Object.getOwnPropertyDescriptor;
+
+	exports.f = __webpack_require__(670) ? gOPD : function getOwnPropertyDescriptor(O, P){
+	  O = toIObject(O);
+	  P = toPrimitive(P, true);
+	  if(IE8_DOM_DEFINE)try {
+	    return gOPD(O, P);
+	  } catch(e){ /* empty */ }
+	  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+	};
+
+/***/ },
+/* 769 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(762)('asyncIterator');
+
+/***/ },
+/* 770 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(762)('observable');
+
+/***/ },
+/* 771 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	var _isIterable2 = __webpack_require__(772);
 
 	var _isIterable3 = _interopRequireDefault(_isIterable2);
 
-	var _getIterator2 = __webpack_require__(751);
+	var _getIterator2 = __webpack_require__(775);
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
@@ -50649,27 +46692,27 @@ webpackJsonp([1],[
 	}();
 
 /***/ },
-/* 748 */
+/* 772 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(749), __esModule: true };
+	module.exports = { "default": __webpack_require__(773), __esModule: true };
 
 /***/ },
-/* 749 */
+/* 773 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(713);
-	__webpack_require__(700);
-	module.exports = __webpack_require__(750);
+	__webpack_require__(720);
+	__webpack_require__(707);
+	module.exports = __webpack_require__(774);
 
 /***/ },
-/* 750 */
+/* 774 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(718)
-	  , ITERATOR  = __webpack_require__(711)('iterator')
-	  , Iterators = __webpack_require__(705);
-	module.exports = __webpack_require__(659).isIterable = function(it){
+	var classof   = __webpack_require__(725)
+	  , ITERATOR  = __webpack_require__(718)('iterator')
+	  , Iterators = __webpack_require__(712);
+	module.exports = __webpack_require__(662).isIterable = function(it){
 	  var O = Object(it);
 	  return O[ITERATOR] !== undefined
 	    || '@@iterator' in O
@@ -50677,33 +46720,33 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 751 */
+/* 775 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(752), __esModule: true };
+	module.exports = { "default": __webpack_require__(776), __esModule: true };
 
 /***/ },
-/* 752 */
+/* 776 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(713);
-	__webpack_require__(700);
-	module.exports = __webpack_require__(753);
+	__webpack_require__(720);
+	__webpack_require__(707);
+	module.exports = __webpack_require__(777);
 
 /***/ },
-/* 753 */
+/* 777 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject = __webpack_require__(664)
-	  , get      = __webpack_require__(723);
-	module.exports = __webpack_require__(659).getIterator = function(it){
+	var anObject = __webpack_require__(667)
+	  , get      = __webpack_require__(730);
+	module.exports = __webpack_require__(662).getIterator = function(it){
 	  var iterFn = get(it);
 	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
 	  return anObject(iterFn.call(it));
 	};
 
 /***/ },
-/* 754 */
+/* 778 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global define */
@@ -51142,7 +47185,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 755 */
+/* 779 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51155,7 +47198,7 @@ webpackJsonp([1],[
 	var noop = exports.noop = function noop() {};
 
 	var apiRequest = exports.apiRequest = function apiRequest(url) {
-	  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	  return fetch(url, options).then(function (res) {
 	    if (res.status >= 200 && res.status < 300) {
@@ -51174,1275 +47217,184 @@ webpackJsonp([1],[
 	  });
 	};
 
+	var hasOwnProperties = exports.hasOwnProperties = function hasOwnProperties(obj, propertyTree) {
+	  if (obj instanceof Object === false) {
+	    return false;
+	  }
+	  var property = propertyTree[0];
+	  var hasProperty = obj.hasOwnProperty(property);
+	  if (hasProperty) {
+	    if (propertyTree.length === 1) {
+	      return hasProperty;
+	    }
+	    return hasOwnProperties(obj[property], propertyTree.slice(1));
+	  }
+	  return false;
+	};
+
 /***/ },
-/* 756 */
+/* 780 */
 /***/ function(module, exports, __webpack_require__) {
+
+	var pSlice = Array.prototype.slice;
+	var objectKeys = __webpack_require__(781);
+	var isArguments = __webpack_require__(782);
+
+	var deepEqual = module.exports = function (actual, expected, opts) {
+	  if (!opts) opts = {};
+	  // 7.1. All identical values are equivalent, as determined by ===.
+	  if (actual === expected) {
+	    return true;
+
+	  } else if (actual instanceof Date && expected instanceof Date) {
+	    return actual.getTime() === expected.getTime();
+
+	  // 7.3. Other pairs that do not both pass typeof value == 'object',
+	  // equivalence is determined by ==.
+	  } else if (!actual || !expected || typeof actual != 'object' && typeof expected != 'object') {
+	    return opts.strict ? actual === expected : actual == expected;
+
+	  // 7.4. For all other Object pairs, including Array objects, equivalence is
+	  // determined by having the same number of owned properties (as verified
+	  // with Object.prototype.hasOwnProperty.call), the same set of keys
+	  // (although not necessarily the same order), equivalent values for every
+	  // corresponding key, and an identical 'prototype' property. Note: this
+	  // accounts for both named and indexed properties on Arrays.
+	  } else {
+	    return objEquiv(actual, expected, opts);
+	  }
+	}
+
+	function isUndefinedOrNull(value) {
+	  return value === null || value === undefined;
+	}
+
+	function isBuffer (x) {
+	  if (!x || typeof x !== 'object' || typeof x.length !== 'number') return false;
+	  if (typeof x.copy !== 'function' || typeof x.slice !== 'function') {
+	    return false;
+	  }
+	  if (x.length > 0 && typeof x[0] !== 'number') return false;
+	  return true;
+	}
+
+	function objEquiv(a, b, opts) {
+	  var i, key;
+	  if (isUndefinedOrNull(a) || isUndefinedOrNull(b))
+	    return false;
+	  // an identical 'prototype' property.
+	  if (a.prototype !== b.prototype) return false;
+	  //~~~I've managed to break Object.keys through screwy arguments passing.
+	  //   Converting to array solves the problem.
+	  if (isArguments(a)) {
+	    if (!isArguments(b)) {
+	      return false;
+	    }
+	    a = pSlice.call(a);
+	    b = pSlice.call(b);
+	    return deepEqual(a, b, opts);
+	  }
+	  if (isBuffer(a)) {
+	    if (!isBuffer(b)) {
+	      return false;
+	    }
+	    if (a.length !== b.length) return false;
+	    for (i = 0; i < a.length; i++) {
+	      if (a[i] !== b[i]) return false;
+	    }
+	    return true;
+	  }
+	  try {
+	    var ka = objectKeys(a),
+	        kb = objectKeys(b);
+	  } catch (e) {//happens when one is a string literal and the other isn't
+	    return false;
+	  }
+	  // having the same number of owned properties (keys incorporates
+	  // hasOwnProperty)
+	  if (ka.length != kb.length)
+	    return false;
+	  //the same set of keys (although not necessarily the same order),
+	  ka.sort();
+	  kb.sort();
+	  //~~~cheap key test
+	  for (i = ka.length - 1; i >= 0; i--) {
+	    if (ka[i] != kb[i])
+	      return false;
+	  }
+	  //equivalent values for every corresponding key, and
+	  //~~~possibly expensive deep test
+	  for (i = ka.length - 1; i >= 0; i--) {
+	    key = ka[i];
+	    if (!deepEqual(a[key], b[key], opts)) return false;
+	  }
+	  return typeof a === typeof b;
+	}
+
+
+/***/ },
+/* 781 */
+/***/ function(module, exports) {
+
+	exports = module.exports = typeof Object.keys === 'function'
+	  ? Object.keys : shim;
+
+	exports.shim = shim;
+	function shim (obj) {
+	  var keys = [];
+	  for (var key in obj) keys.push(key);
+	  return keys;
+	}
+
+
+/***/ },
+/* 782 */
+/***/ function(module, exports) {
+
+	var supportsArgumentsClass = (function(){
+	  return Object.prototype.toString.call(arguments)
+	})() == '[object Arguments]';
+
+	exports = module.exports = supportsArgumentsClass ? supported : unsupported;
+
+	exports.supported = supported;
+	function supported(object) {
+	  return Object.prototype.toString.call(object) == '[object Arguments]';
+	};
+
+	exports.unsupported = unsupported;
+	function unsupported(object){
+	  return object &&
+	    typeof object == 'object' &&
+	    typeof object.length == 'number' &&
+	    Object.prototype.hasOwnProperty.call(object, 'callee') &&
+	    !Object.prototype.propertyIsEnumerable.call(object, 'callee') ||
+	    false;
+	};
+
+
+/***/ },
+/* 783 */
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	// Action types of the library
+	var actionTypes = {};
 
-	var _keykey = __webpack_require__(757);
+	// Format the elements
+	['API_SET_ENDPOINT_HOST', 'API_SET_ENDPOINT_PATH', 'API_SET_HEADERS', 'API_SET_HEADER', 'API_WILL_CREATE', 'API_CREATED', 'API_CREATE_FAILED', 'API_WILL_READ', 'API_READ', 'API_READ_FAILED', 'API_WILL_UPDATE', 'API_UPDATED', 'API_UPDATE_FAILED', 'API_WILL_DELETE', 'API_DELETED', 'API_DELETE_FAILED'].forEach(function (action) {
+	  actionTypes[action] = action;
+	});
 
-	var _keykey2 = _interopRequireDefault(_keykey);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = (0, _keykey2.default)('API_SET_ENDPOINT_HOST', 'API_SET_ENDPOINT_PATH', 'API_SET_HEADERS', 'API_SET_HEADER', 'API_WILL_CREATE', 'API_CREATED', 'API_CREATE_FAILED', 'API_WILL_READ', 'API_READ', 'API_READ_FAILED', 'API_WILL_UPDATE', 'API_UPDATED', 'API_UPDATE_FAILED', 'API_WILL_DELETE', 'API_DELETED', 'API_DELETE_FAILED');
+	exports.default = actionTypes;
 	module.exports = exports['default'];
 
 /***/ },
-/* 757 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(758)
-
-
-/***/ },
-/* 758 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _util = __webpack_require__(759);
-
-	var _lruCache = __webpack_require__(762);
-
-	var _lruCache2 = _interopRequireDefault(_lruCache);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var WHITESPACE_X = /\s+/g;
-
-	function vaccuum(string) {
-	  return string.replace(WHITESPACE_X, '');
-	}
-
-	function hash(object) {
-	  return vaccuum((0, _util.inspect)(object, {
-	    depth: Infinity,
-	    showHidden: true
-	  }));
-	}
-
-	var cache = (0, _lruCache2.default)(100);
-
-	function validate(anArrayOfKeys) {
-	  var moduleOutputPrefix = '[keykey]';
-
-	  if (!Array.isArray(anArrayOfKeys)) {
-	    throw new TypeError(moduleOutputPrefix + ' Must call with an array.');
-	  }
-	}
-
-	function reduce(anArrayOfKeys, each) {
-	  var subObject = {};
-	  anArrayOfKeys.forEach(each.bind(each, subObject, anArrayOfKeys));
-	  return subObject;
-	}
-
-	function set(anArrayOfKeys) {
-	  var key = hash(anArrayOfKeys);
-	  return cache.set(key, anArrayOfKeys);
-	}
-
-	function create(anArrayOfKeys, bypassCache) {
-	  validate(anArrayOfKeys);
-
-	  var creation = reduce(anArrayOfKeys, function (result, _, key) {
-	    result[key] = key;
-	  });
-
-	  !bypassCache && set(creation);
-	  return creation;
-	}
-
-	function get(anArrayOfKeys) {
-	  return cache.get(hash(anArrayOfKeys)) || create(anArrayOfKeys);
-	}
-
-	function isUndef(o) {
-	  return typeof o === 'undefined';
-	}
-
-	function isBool(o) {
-	  return typeof o === 'boolean';
-	}
-
-	function last(a) {
-	  return a[a.length - 1];
-	}
-
-	function notUndefOrBool(o) {
-	  return !isUndef(o) && !isBool(o);
-	}
-
-	function KeyKey(anArrayOfKeys, bypassCache) {
-	  // Allow non-array input while maintaining cache decision-point
-	  if (notUndefOrBool(bypassCache)) {
-	    anArrayOfKeys = [].slice.call(arguments);
-	    var lastKey = last(anArrayOfKeys);
-	    if (isBool(lastKey)) {
-	      bypassCache = lastKey;
-	      anArrayOfKeys.pop();
-	    } else {
-	      bypassCache = false;
-	    }
-	  }
-
-	  return bypassCache ? create(anArrayOfKeys, bypassCache) : get(anArrayOfKeys);
-	}
-
-	module.exports = KeyKey;
-
-	module.exports.reset = function () {
-	  return cache.reset();
-	};
-
-	module.exports.resetCache = module.exports.reset;
-
-	module.exports.cacheKeys = function () {
-	  return cache.keys();
-	};
-
-	module.exports.cacheValues = function () {
-	  return cache.values();
-	};
-
-/***/ },
-/* 759 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
-	//
-	// Permission is hereby granted, free of charge, to any person obtaining a
-	// copy of this software and associated documentation files (the
-	// "Software"), to deal in the Software without restriction, including
-	// without limitation the rights to use, copy, modify, merge, publish,
-	// distribute, sublicense, and/or sell copies of the Software, and to permit
-	// persons to whom the Software is furnished to do so, subject to the
-	// following conditions:
-	//
-	// The above copyright notice and this permission notice shall be included
-	// in all copies or substantial portions of the Software.
-	//
-	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-	// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-	var formatRegExp = /%[sdj%]/g;
-	exports.format = function(f) {
-	  if (!isString(f)) {
-	    var objects = [];
-	    for (var i = 0; i < arguments.length; i++) {
-	      objects.push(inspect(arguments[i]));
-	    }
-	    return objects.join(' ');
-	  }
-
-	  var i = 1;
-	  var args = arguments;
-	  var len = args.length;
-	  var str = String(f).replace(formatRegExp, function(x) {
-	    if (x === '%%') return '%';
-	    if (i >= len) return x;
-	    switch (x) {
-	      case '%s': return String(args[i++]);
-	      case '%d': return Number(args[i++]);
-	      case '%j':
-	        try {
-	          return JSON.stringify(args[i++]);
-	        } catch (_) {
-	          return '[Circular]';
-	        }
-	      default:
-	        return x;
-	    }
-	  });
-	  for (var x = args[i]; i < len; x = args[++i]) {
-	    if (isNull(x) || !isObject(x)) {
-	      str += ' ' + x;
-	    } else {
-	      str += ' ' + inspect(x);
-	    }
-	  }
-	  return str;
-	};
-
-
-	// Mark that a method should not be used.
-	// Returns a modified function which warns once by default.
-	// If --no-deprecation is set, then it is a no-op.
-	exports.deprecate = function(fn, msg) {
-	  // Allow for deprecating things in the process of starting up.
-	  if (isUndefined(global.process)) {
-	    return function() {
-	      return exports.deprecate(fn, msg).apply(this, arguments);
-	    };
-	  }
-
-	  if (process.noDeprecation === true) {
-	    return fn;
-	  }
-
-	  var warned = false;
-	  function deprecated() {
-	    if (!warned) {
-	      if (process.throwDeprecation) {
-	        throw new Error(msg);
-	      } else if (process.traceDeprecation) {
-	        console.trace(msg);
-	      } else {
-	        console.error(msg);
-	      }
-	      warned = true;
-	    }
-	    return fn.apply(this, arguments);
-	  }
-
-	  return deprecated;
-	};
-
-
-	var debugs = {};
-	var debugEnviron;
-	exports.debuglog = function(set) {
-	  if (isUndefined(debugEnviron))
-	    debugEnviron = process.env.NODE_DEBUG || '';
-	  set = set.toUpperCase();
-	  if (!debugs[set]) {
-	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
-	      var pid = process.pid;
-	      debugs[set] = function() {
-	        var msg = exports.format.apply(exports, arguments);
-	        console.error('%s %d: %s', set, pid, msg);
-	      };
-	    } else {
-	      debugs[set] = function() {};
-	    }
-	  }
-	  return debugs[set];
-	};
-
-
-	/**
-	 * Echos the value of a value. Trys to print the value out
-	 * in the best way possible given the different types.
-	 *
-	 * @param {Object} obj The object to print out.
-	 * @param {Object} opts Optional options object that alters the output.
-	 */
-	/* legacy: obj, showHidden, depth, colors*/
-	function inspect(obj, opts) {
-	  // default options
-	  var ctx = {
-	    seen: [],
-	    stylize: stylizeNoColor
-	  };
-	  // legacy...
-	  if (arguments.length >= 3) ctx.depth = arguments[2];
-	  if (arguments.length >= 4) ctx.colors = arguments[3];
-	  if (isBoolean(opts)) {
-	    // legacy...
-	    ctx.showHidden = opts;
-	  } else if (opts) {
-	    // got an "options" object
-	    exports._extend(ctx, opts);
-	  }
-	  // set default options
-	  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
-	  if (isUndefined(ctx.depth)) ctx.depth = 2;
-	  if (isUndefined(ctx.colors)) ctx.colors = false;
-	  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
-	  if (ctx.colors) ctx.stylize = stylizeWithColor;
-	  return formatValue(ctx, obj, ctx.depth);
-	}
-	exports.inspect = inspect;
-
-
-	// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
-	inspect.colors = {
-	  'bold' : [1, 22],
-	  'italic' : [3, 23],
-	  'underline' : [4, 24],
-	  'inverse' : [7, 27],
-	  'white' : [37, 39],
-	  'grey' : [90, 39],
-	  'black' : [30, 39],
-	  'blue' : [34, 39],
-	  'cyan' : [36, 39],
-	  'green' : [32, 39],
-	  'magenta' : [35, 39],
-	  'red' : [31, 39],
-	  'yellow' : [33, 39]
-	};
-
-	// Don't use 'blue' not visible on cmd.exe
-	inspect.styles = {
-	  'special': 'cyan',
-	  'number': 'yellow',
-	  'boolean': 'yellow',
-	  'undefined': 'grey',
-	  'null': 'bold',
-	  'string': 'green',
-	  'date': 'magenta',
-	  // "name": intentionally not styling
-	  'regexp': 'red'
-	};
-
-
-	function stylizeWithColor(str, styleType) {
-	  var style = inspect.styles[styleType];
-
-	  if (style) {
-	    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
-	           '\u001b[' + inspect.colors[style][1] + 'm';
-	  } else {
-	    return str;
-	  }
-	}
-
-
-	function stylizeNoColor(str, styleType) {
-	  return str;
-	}
-
-
-	function arrayToHash(array) {
-	  var hash = {};
-
-	  array.forEach(function(val, idx) {
-	    hash[val] = true;
-	  });
-
-	  return hash;
-	}
-
-
-	function formatValue(ctx, value, recurseTimes) {
-	  // Provide a hook for user-specified inspect functions.
-	  // Check that value is an object with an inspect function on it
-	  if (ctx.customInspect &&
-	      value &&
-	      isFunction(value.inspect) &&
-	      // Filter out the util module, it's inspect function is special
-	      value.inspect !== exports.inspect &&
-	      // Also filter out any prototype objects using the circular check.
-	      !(value.constructor && value.constructor.prototype === value)) {
-	    var ret = value.inspect(recurseTimes, ctx);
-	    if (!isString(ret)) {
-	      ret = formatValue(ctx, ret, recurseTimes);
-	    }
-	    return ret;
-	  }
-
-	  // Primitive types cannot have properties
-	  var primitive = formatPrimitive(ctx, value);
-	  if (primitive) {
-	    return primitive;
-	  }
-
-	  // Look up the keys of the object.
-	  var keys = Object.keys(value);
-	  var visibleKeys = arrayToHash(keys);
-
-	  if (ctx.showHidden) {
-	    keys = Object.getOwnPropertyNames(value);
-	  }
-
-	  // IE doesn't make error fields non-enumerable
-	  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
-	  if (isError(value)
-	      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
-	    return formatError(value);
-	  }
-
-	  // Some type of object without properties can be shortcutted.
-	  if (keys.length === 0) {
-	    if (isFunction(value)) {
-	      var name = value.name ? ': ' + value.name : '';
-	      return ctx.stylize('[Function' + name + ']', 'special');
-	    }
-	    if (isRegExp(value)) {
-	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-	    }
-	    if (isDate(value)) {
-	      return ctx.stylize(Date.prototype.toString.call(value), 'date');
-	    }
-	    if (isError(value)) {
-	      return formatError(value);
-	    }
-	  }
-
-	  var base = '', array = false, braces = ['{', '}'];
-
-	  // Make Array say that they are Array
-	  if (isArray(value)) {
-	    array = true;
-	    braces = ['[', ']'];
-	  }
-
-	  // Make functions say that they are functions
-	  if (isFunction(value)) {
-	    var n = value.name ? ': ' + value.name : '';
-	    base = ' [Function' + n + ']';
-	  }
-
-	  // Make RegExps say that they are RegExps
-	  if (isRegExp(value)) {
-	    base = ' ' + RegExp.prototype.toString.call(value);
-	  }
-
-	  // Make dates with properties first say the date
-	  if (isDate(value)) {
-	    base = ' ' + Date.prototype.toUTCString.call(value);
-	  }
-
-	  // Make error with message first say the error
-	  if (isError(value)) {
-	    base = ' ' + formatError(value);
-	  }
-
-	  if (keys.length === 0 && (!array || value.length == 0)) {
-	    return braces[0] + base + braces[1];
-	  }
-
-	  if (recurseTimes < 0) {
-	    if (isRegExp(value)) {
-	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-	    } else {
-	      return ctx.stylize('[Object]', 'special');
-	    }
-	  }
-
-	  ctx.seen.push(value);
-
-	  var output;
-	  if (array) {
-	    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
-	  } else {
-	    output = keys.map(function(key) {
-	      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
-	    });
-	  }
-
-	  ctx.seen.pop();
-
-	  return reduceToSingleString(output, base, braces);
-	}
-
-
-	function formatPrimitive(ctx, value) {
-	  if (isUndefined(value))
-	    return ctx.stylize('undefined', 'undefined');
-	  if (isString(value)) {
-	    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-	                                             .replace(/'/g, "\\'")
-	                                             .replace(/\\"/g, '"') + '\'';
-	    return ctx.stylize(simple, 'string');
-	  }
-	  if (isNumber(value))
-	    return ctx.stylize('' + value, 'number');
-	  if (isBoolean(value))
-	    return ctx.stylize('' + value, 'boolean');
-	  // For some reason typeof null is "object", so special case here.
-	  if (isNull(value))
-	    return ctx.stylize('null', 'null');
-	}
-
-
-	function formatError(value) {
-	  return '[' + Error.prototype.toString.call(value) + ']';
-	}
-
-
-	function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-	  var output = [];
-	  for (var i = 0, l = value.length; i < l; ++i) {
-	    if (hasOwnProperty(value, String(i))) {
-	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-	          String(i), true));
-	    } else {
-	      output.push('');
-	    }
-	  }
-	  keys.forEach(function(key) {
-	    if (!key.match(/^\d+$/)) {
-	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-	          key, true));
-	    }
-	  });
-	  return output;
-	}
-
-
-	function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-	  var name, str, desc;
-	  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
-	  if (desc.get) {
-	    if (desc.set) {
-	      str = ctx.stylize('[Getter/Setter]', 'special');
-	    } else {
-	      str = ctx.stylize('[Getter]', 'special');
-	    }
-	  } else {
-	    if (desc.set) {
-	      str = ctx.stylize('[Setter]', 'special');
-	    }
-	  }
-	  if (!hasOwnProperty(visibleKeys, key)) {
-	    name = '[' + key + ']';
-	  }
-	  if (!str) {
-	    if (ctx.seen.indexOf(desc.value) < 0) {
-	      if (isNull(recurseTimes)) {
-	        str = formatValue(ctx, desc.value, null);
-	      } else {
-	        str = formatValue(ctx, desc.value, recurseTimes - 1);
-	      }
-	      if (str.indexOf('\n') > -1) {
-	        if (array) {
-	          str = str.split('\n').map(function(line) {
-	            return '  ' + line;
-	          }).join('\n').substr(2);
-	        } else {
-	          str = '\n' + str.split('\n').map(function(line) {
-	            return '   ' + line;
-	          }).join('\n');
-	        }
-	      }
-	    } else {
-	      str = ctx.stylize('[Circular]', 'special');
-	    }
-	  }
-	  if (isUndefined(name)) {
-	    if (array && key.match(/^\d+$/)) {
-	      return str;
-	    }
-	    name = JSON.stringify('' + key);
-	    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-	      name = name.substr(1, name.length - 2);
-	      name = ctx.stylize(name, 'name');
-	    } else {
-	      name = name.replace(/'/g, "\\'")
-	                 .replace(/\\"/g, '"')
-	                 .replace(/(^"|"$)/g, "'");
-	      name = ctx.stylize(name, 'string');
-	    }
-	  }
-
-	  return name + ': ' + str;
-	}
-
-
-	function reduceToSingleString(output, base, braces) {
-	  var numLinesEst = 0;
-	  var length = output.reduce(function(prev, cur) {
-	    numLinesEst++;
-	    if (cur.indexOf('\n') >= 0) numLinesEst++;
-	    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
-	  }, 0);
-
-	  if (length > 60) {
-	    return braces[0] +
-	           (base === '' ? '' : base + '\n ') +
-	           ' ' +
-	           output.join(',\n  ') +
-	           ' ' +
-	           braces[1];
-	  }
-
-	  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
-	}
-
-
-	// NOTE: These type checking functions intentionally don't use `instanceof`
-	// because it is fragile and can be easily faked with `Object.create()`.
-	function isArray(ar) {
-	  return Array.isArray(ar);
-	}
-	exports.isArray = isArray;
-
-	function isBoolean(arg) {
-	  return typeof arg === 'boolean';
-	}
-	exports.isBoolean = isBoolean;
-
-	function isNull(arg) {
-	  return arg === null;
-	}
-	exports.isNull = isNull;
-
-	function isNullOrUndefined(arg) {
-	  return arg == null;
-	}
-	exports.isNullOrUndefined = isNullOrUndefined;
-
-	function isNumber(arg) {
-	  return typeof arg === 'number';
-	}
-	exports.isNumber = isNumber;
-
-	function isString(arg) {
-	  return typeof arg === 'string';
-	}
-	exports.isString = isString;
-
-	function isSymbol(arg) {
-	  return typeof arg === 'symbol';
-	}
-	exports.isSymbol = isSymbol;
-
-	function isUndefined(arg) {
-	  return arg === void 0;
-	}
-	exports.isUndefined = isUndefined;
-
-	function isRegExp(re) {
-	  return isObject(re) && objectToString(re) === '[object RegExp]';
-	}
-	exports.isRegExp = isRegExp;
-
-	function isObject(arg) {
-	  return typeof arg === 'object' && arg !== null;
-	}
-	exports.isObject = isObject;
-
-	function isDate(d) {
-	  return isObject(d) && objectToString(d) === '[object Date]';
-	}
-	exports.isDate = isDate;
-
-	function isError(e) {
-	  return isObject(e) &&
-	      (objectToString(e) === '[object Error]' || e instanceof Error);
-	}
-	exports.isError = isError;
-
-	function isFunction(arg) {
-	  return typeof arg === 'function';
-	}
-	exports.isFunction = isFunction;
-
-	function isPrimitive(arg) {
-	  return arg === null ||
-	         typeof arg === 'boolean' ||
-	         typeof arg === 'number' ||
-	         typeof arg === 'string' ||
-	         typeof arg === 'symbol' ||  // ES6 symbol
-	         typeof arg === 'undefined';
-	}
-	exports.isPrimitive = isPrimitive;
-
-	exports.isBuffer = __webpack_require__(760);
-
-	function objectToString(o) {
-	  return Object.prototype.toString.call(o);
-	}
-
-
-	function pad(n) {
-	  return n < 10 ? '0' + n.toString(10) : n.toString(10);
-	}
-
-
-	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-	              'Oct', 'Nov', 'Dec'];
-
-	// 26 Feb 16:19:34
-	function timestamp() {
-	  var d = new Date();
-	  var time = [pad(d.getHours()),
-	              pad(d.getMinutes()),
-	              pad(d.getSeconds())].join(':');
-	  return [d.getDate(), months[d.getMonth()], time].join(' ');
-	}
-
-
-	// log is just a thin wrapper to console.log that prepends a timestamp
-	exports.log = function() {
-	  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
-	};
-
-
-	/**
-	 * Inherit the prototype methods from one constructor into another.
-	 *
-	 * The Function.prototype.inherits from lang.js rewritten as a standalone
-	 * function (not on Function.prototype). NOTE: If this file is to be loaded
-	 * during bootstrapping this function needs to be rewritten using some native
-	 * functions as prototype setup using normal JavaScript does not work as
-	 * expected during bootstrapping (see mirror.js in r114903).
-	 *
-	 * @param {function} ctor Constructor function which needs to inherit the
-	 *     prototype.
-	 * @param {function} superCtor Constructor function to inherit prototype from.
-	 */
-	exports.inherits = __webpack_require__(761);
-
-	exports._extend = function(origin, add) {
-	  // Don't do anything if add isn't an object
-	  if (!add || !isObject(add)) return origin;
-
-	  var keys = Object.keys(add);
-	  var i = keys.length;
-	  while (i--) {
-	    origin[keys[i]] = add[keys[i]];
-	  }
-	  return origin;
-	};
-
-	function hasOwnProperty(obj, prop) {
-	  return Object.prototype.hasOwnProperty.call(obj, prop);
-	}
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(294)))
-
-/***/ },
-/* 760 */
-/***/ function(module, exports) {
-
-	module.exports = function isBuffer(arg) {
-	  return arg && typeof arg === 'object'
-	    && typeof arg.copy === 'function'
-	    && typeof arg.fill === 'function'
-	    && typeof arg.readUInt8 === 'function';
-	}
-
-/***/ },
-/* 761 */
-/***/ function(module, exports) {
-
-	if (typeof Object.create === 'function') {
-	  // implementation from standard node.js 'util' module
-	  module.exports = function inherits(ctor, superCtor) {
-	    ctor.super_ = superCtor
-	    ctor.prototype = Object.create(superCtor.prototype, {
-	      constructor: {
-	        value: ctor,
-	        enumerable: false,
-	        writable: true,
-	        configurable: true
-	      }
-	    });
-	  };
-	} else {
-	  // old school shim for old browsers
-	  module.exports = function inherits(ctor, superCtor) {
-	    ctor.super_ = superCtor
-	    var TempCtor = function () {}
-	    TempCtor.prototype = superCtor.prototype
-	    ctor.prototype = new TempCtor()
-	    ctor.prototype.constructor = ctor
-	  }
-	}
-
-
-/***/ },
-/* 762 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = LRUCache
-
-	// This will be a proper iterable 'Map' in engines that support it,
-	// or a fakey-fake PseudoMap in older versions.
-	var Map = __webpack_require__(763)
-
-	function naiveLength () { return 1 }
-
-	function LRUCache (options) {
-	  if (!(this instanceof LRUCache))
-	    return new LRUCache(options)
-
-	  if (typeof options === 'number')
-	    options = { max: options }
-
-	  if (!options)
-	    options = {}
-
-	  this._max = options.max
-	  // Kind of weird to have a default max of Infinity, but oh well.
-	  if (!this._max || !(typeof this._max === "number") || this._max <= 0 )
-	    this._max = Infinity
-
-	  this._lengthCalculator = options.length || naiveLength
-	  if (typeof this._lengthCalculator !== "function")
-	    this._lengthCalculator = naiveLength
-
-	  this._allowStale = options.stale || false
-	  this._maxAge = options.maxAge || null
-	  this._dispose = options.dispose
-	  this.reset()
-	}
-
-	// resize the cache when the max changes.
-	Object.defineProperty(LRUCache.prototype, "max",
-	  { set : function (mL) {
-	      if (!mL || !(typeof mL === "number") || mL <= 0 ) mL = Infinity
-	      this._max = mL
-	      if (this._length > this._max) trim(this)
-	    }
-	  , get : function () { return this._max }
-	  , enumerable : true
-	  })
-
-	// resize the cache when the lengthCalculator changes.
-	Object.defineProperty(LRUCache.prototype, "lengthCalculator",
-	  { set : function (lC) {
-	      if (typeof lC !== "function") {
-	        this._lengthCalculator = naiveLength
-	        this._length = this._lruList.size
-	        this._cache.forEach(function (value, key) {
-	          value.length = 1
-	        })
-	      } else {
-	        this._lengthCalculator = lC
-	        this._length = 0
-	        this._cache.forEach(function (value, key) {
-	          value.length = this._lengthCalculator(value.value, key)
-	          this._length += value.length
-	        }, this)
-	      }
-
-	      if (this._length > this._max) trim(this)
-	    }
-	  , get : function () { return this._lengthCalculator }
-	  , enumerable : true
-	  })
-
-	Object.defineProperty(LRUCache.prototype, "length",
-	  { get : function () { return this._length }
-	  , enumerable : true
-	  })
-
-	Object.defineProperty(LRUCache.prototype, "itemCount",
-	  { get : function () { return this._lruList.size }
-	  , enumerable : true
-	  })
-
-	function reverseKeys (map) {
-	  // keys live in lruList map in insertion order.
-	  // we want them in reverse insertion order.
-	  // flip the list of keys.
-	  var itemCount = map.size
-	  var keys = new Array(itemCount)
-	  var i = itemCount
-	  map.forEach(function (value, key) {
-	    keys[--i] = key
-	  })
-
-	  return keys
-	}
-
-	LRUCache.prototype.rforEach = function (fn, thisp) {
-	  thisp = thisp || this
-	  this._lruList.forEach(function (hit) {
-	    forEachStep(this, fn, hit, thisp)
-	  }, this)
-	}
-
-	function forEachStep (self, fn, hit, thisp) {
-	  if (isStale(self, hit)) {
-	    del(self, hit)
-	    if (!self._allowStale) {
-	      hit = undefined
-	    }
-	  }
-	  if (hit) {
-	    fn.call(thisp, hit.value, hit.key, self)
-	  }
-	}
-
-
-	LRUCache.prototype.forEach = function (fn, thisp) {
-	  thisp = thisp || this
-
-	  var keys = reverseKeys(this._lruList)
-	  for (var k = 0; k < keys.length; k++) {
-	    var hit = this._lruList.get(keys[k])
-	    forEachStep(this, fn, hit, thisp)
-	  }
-	}
-
-	LRUCache.prototype.keys = function () {
-	  return reverseKeys(this._lruList).map(function (k) {
-	    return this._lruList.get(k).key
-	  }, this)
-	}
-
-	LRUCache.prototype.values = function () {
-	  return reverseKeys(this._lruList).map(function (k) {
-	    return this._lruList.get(k).value
-	  }, this)
-	}
-
-	LRUCache.prototype.reset = function () {
-	  if (this._dispose && this._cache) {
-	    this._cache.forEach(function (entry, key) {
-	      this._dispose(key, entry.value)
-	    }, this)
-	  }
-
-	  this._cache = new Map() // hash of items by key
-	  this._lruList = new Map() // list of items in order of use recency
-	  this._mru = 0 // most recently used
-	  this._lru = 0 // least recently used
-	  this._length = 0 // number of items in the list
-	}
-
-	LRUCache.prototype.dump = function () {
-	  var arr = []
-	  var i = 0
-	  var size = this._lruList.size
-	  return reverseKeys(this._lruList).map(function (k) {
-	    var hit = this._lruList.get(k)
-	    if (!isStale(this, hit)) {
-	      return {
-	        k: hit.key,
-	        v: hit.value,
-	        e: hit.now + (hit.maxAge || 0)
-	      }
-	    }
-	  }, this).filter(function (h) {
-	    return h
-	  })
-	}
-
-	LRUCache.prototype.dumpLru = function () {
-	  return this._lruList
-	}
-
-	LRUCache.prototype.set = function (key, value, maxAge) {
-	  maxAge = maxAge || this._maxAge
-
-	  var now = maxAge ? Date.now() : 0
-	  var len = this._lengthCalculator(value, key)
-
-	  if (this._cache.has(key)) {
-	    if (len > this._max) {
-	      del(this, this._cache.get(key))
-	      return false
-	    }
-
-	    var item = this._cache.get(key)
-
-	    // dispose of the old one before overwriting
-	    if (this._dispose)
-	      this._dispose(key, item.value)
-
-	    item.now = now
-	    item.maxAge = maxAge
-	    item.value = value
-	    this._length += (len - item.length)
-	    item.length = len
-	    this.get(key)
-
-	    if (this._length > this._max)
-	      trim(this)
-
-	    return true
-	  }
-
-	  var hit = new Entry(key, value, this._mru, len, now, maxAge)
-	  incMru(this)
-
-	  // oversized objects fall out of cache automatically.
-	  if (hit.length > this._max) {
-	    if (this._dispose) this._dispose(key, value)
-	    return false
-	  }
-
-	  this._length += hit.length
-	  this._cache.set(key, hit)
-	  this._lruList.set(hit.lu, hit)
-
-	  if (this._length > this._max)
-	    trim(this)
-
-	  return true
-	}
-
-	LRUCache.prototype.has = function (key) {
-	  if (!this._cache.has(key)) return false
-	  var hit = this._cache.get(key)
-	  if (isStale(this, hit)) {
-	    return false
-	  }
-	  return true
-	}
-
-	LRUCache.prototype.get = function (key) {
-	  return get(this, key, true)
-	}
-
-	LRUCache.prototype.peek = function (key) {
-	  return get(this, key, false)
-	}
-
-	LRUCache.prototype.pop = function () {
-	  var hit = this._lruList.get(this._lru)
-	  del(this, hit)
-	  return hit || null
-	}
-
-	LRUCache.prototype.del = function (key) {
-	  del(this, this._cache.get(key))
-	}
-
-	LRUCache.prototype.load = function (arr) {
-	  //reset the cache
-	  this.reset();
-
-	  var now = Date.now()
-	  // A previous serialized cache has the most recent items first
-	  for (var l = arr.length - 1; l >= 0; l--) {
-	    var hit = arr[l]
-	    var expiresAt = hit.e || 0
-	    if (expiresAt === 0) {
-	      // the item was created without expiration in a non aged cache
-	      this.set(hit.k, hit.v)
-	    } else {
-	      var maxAge = expiresAt - now
-	      // dont add already expired items
-	      if (maxAge > 0) {
-	        this.set(hit.k, hit.v, maxAge)
-	      }
-	    }
-	  }
-	}
-
-	function get (self, key, doUse) {
-	  var hit = self._cache.get(key)
-	  if (hit) {
-	    if (isStale(self, hit)) {
-	      del(self, hit)
-	      if (!self._allowStale) hit = undefined
-	    } else {
-	      if (doUse) use(self, hit)
-	    }
-	    if (hit) hit = hit.value
-	  }
-	  return hit
-	}
-
-	function isStale(self, hit) {
-	  if (!hit || (!hit.maxAge && !self._maxAge)) return false
-	  var stale = false;
-	  var diff = Date.now() - hit.now
-	  if (hit.maxAge) {
-	    stale = diff > hit.maxAge
-	  } else {
-	    stale = self._maxAge && (diff > self._maxAge)
-	  }
-	  return stale;
-	}
-
-	function use (self, hit) {
-	  shiftLU(self, hit)
-	  hit.lu = self._mru
-	  incMru(self)
-	  self._lruList.set(hit.lu, hit)
-	}
-
-	function trim (self) {
-	  if (self._length > self._max) {
-	    var keys = reverseKeys(self._lruList)
-	    for (var k = keys.length - 1; self._length > self._max; k--) {
-	      // We know that we're about to delete this one, and also
-	      // what the next least recently used key will be, so just
-	      // go ahead and set it now.
-	      self._lru = keys[k - 1]
-	      del(self, self._lruList.get(keys[k]))
-	    }
-	  }
-	}
-
-	function shiftLU (self, hit) {
-	  self._lruList.delete(hit.lu)
-	  if (hit.lu === self._lru)
-	    self._lru = reverseKeys(self._lruList).pop()
-	}
-
-	function del (self, hit) {
-	  if (hit) {
-	    if (self._dispose) self._dispose(hit.key, hit.value)
-	    self._length -= hit.length
-	    self._cache.delete(hit.key)
-	    shiftLU(self, hit)
-	  }
-	}
-
-	// classy, since V8 prefers predictable objects.
-	function Entry (key, value, lu, length, now, maxAge) {
-	  this.key = key
-	  this.value = value
-	  this.lu = lu
-	  this.length = length
-	  this.now = now
-	  if (maxAge) this.maxAge = maxAge
-	}
-
-
-	// Incrementers and decrementers that loop at MAX_SAFE_INTEGER
-	// only relevant for the lu, lru, and mru counters, since they
-	// get touched a lot and can get very large. Also, since they
-	// only go upwards, and the sets will tend to be much smaller than
-	// the max, we can very well assume that a very small number comes
-	// after a very large number, rather than before it.
-	var maxSafeInt = Number.MAX_SAFE_INTEGER || 9007199254740991
-	function intInc (number) {
-	  return (number === maxSafeInt) ? 0 : number + 1
-	}
-	function incMru (self) {
-	  do {
-	    self._mru = intInc(self._mru)
-	  } while (self._lruList.has(self._mru))
-	}
-
-
-/***/ },
-/* 763 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {if (process.env.npm_package_name === 'pseudomap' &&
-	    process.env.npm_lifecycle_script === 'test')
-	  process.env.TEST_PSEUDOMAP = 'true'
-
-	if (typeof Map === 'function' && !process.env.TEST_PSEUDOMAP) {
-	  module.exports = Map
-	} else {
-	  module.exports = __webpack_require__(764)
-	}
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
-
-/***/ },
-/* 764 */
-/***/ function(module, exports) {
-
-	var hasOwnProperty = Object.prototype.hasOwnProperty
-
-	module.exports = PseudoMap
-
-	function PseudoMap (set) {
-	  if (!(this instanceof PseudoMap)) // whyyyyyyy
-	    throw new TypeError("Constructor PseudoMap requires 'new'")
-
-	  this.clear()
-
-	  if (set) {
-	    if ((set instanceof PseudoMap) ||
-	        (typeof Map === 'function' && set instanceof Map))
-	      set.forEach(function (value, key) {
-	        this.set(key, value)
-	      }, this)
-	    else if (Array.isArray(set))
-	      set.forEach(function (kv) {
-	        this.set(kv[0], kv[1])
-	      }, this)
-	    else
-	      throw new TypeError('invalid argument')
-	  }
-	}
-
-	PseudoMap.prototype.forEach = function (fn, thisp) {
-	  thisp = thisp || this
-	  Object.keys(this._data).forEach(function (k) {
-	    if (k !== 'size')
-	      fn.call(thisp, this._data[k].value, this._data[k].key)
-	  }, this)
-	}
-
-	PseudoMap.prototype.has = function (k) {
-	  return !!find(this._data, k)
-	}
-
-	PseudoMap.prototype.get = function (k) {
-	  var res = find(this._data, k)
-	  return res && res.value
-	}
-
-	PseudoMap.prototype.set = function (k, v) {
-	  set(this._data, k, v)
-	}
-
-	PseudoMap.prototype.delete = function (k) {
-	  var res = find(this._data, k)
-	  if (res) {
-	    delete this._data[res._index]
-	    this._data.size--
-	  }
-	}
-
-	PseudoMap.prototype.clear = function () {
-	  var data = Object.create(null)
-	  data.size = 0
-
-	  Object.defineProperty(this, '_data', {
-	    value: data,
-	    enumerable: false,
-	    configurable: true,
-	    writable: false
-	  })
-	}
-
-	Object.defineProperty(PseudoMap.prototype, 'size', {
-	  get: function () {
-	    return this._data.size
-	  },
-	  set: function (n) {},
-	  enumerable: true,
-	  configurable: true
-	})
-
-	PseudoMap.prototype.values =
-	PseudoMap.prototype.keys =
-	PseudoMap.prototype.entries = function () {
-	  throw new Error('iterators are not implemented in this version')
-	}
-
-	// Either identical, or both NaN
-	function same (a, b) {
-	  return a === b || a !== a && b !== b
-	}
-
-	function Entry (k, v, i) {
-	  this.key = k
-	  this.value = v
-	  this._index = i
-	}
-
-	function find (data, k) {
-	  for (var i = 0, s = '_' + k, key = s;
-	       hasOwnProperty.call(data, key);
-	       key = s + i++) {
-	    if (same(data[key].key, k))
-	      return data[key]
-	  }
-	}
-
-	function set (data, k, v) {
-	  for (var i = 0, s = '_' + k, key = s;
-	       hasOwnProperty.call(data, key);
-	       key = s + i++) {
-	    if (same(data[key].key, k)) {
-	      data[key].value = v
-	      return
-	    }
-	  }
-	  data.size++
-	  data[key] = new Entry(k, v, key)
-	}
-
-
-/***/ },
-/* 765 */
+/* 784 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52455,7 +47407,7 @@ webpackJsonp([1],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(766);
+	var _classnames = __webpack_require__(785);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -52542,7 +47494,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 766 */
+/* 785 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -52596,7 +47548,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 767 */
+/* 786 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52613,19 +47565,19 @@ webpackJsonp([1],[
 
 	var _reactDnd = __webpack_require__(491);
 
-	var _biomaterial_table = __webpack_require__(768);
+	var _biomaterial_table = __webpack_require__(787);
 
-	var _droppable = __webpack_require__(770);
+	var _droppable = __webpack_require__(789);
 
 	var _droppable2 = _interopRequireDefault(_droppable);
 
-	var _item_types = __webpack_require__(771);
+	var _item_types = __webpack_require__(790);
 
-	var _reduxJsonApi = __webpack_require__(652);
+	var _reduxJsonApi = __webpack_require__(655);
 
 	var _actions = __webpack_require__(648);
 
-	var _selectors = __webpack_require__(772);
+	var _selectors = __webpack_require__(791);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52676,8 +47628,11 @@ webpackJsonp([1],[
 	      }
 	    };
 
-	    dispatch((0, _reduxJsonApi.updateEntity)(entity)).then(function () {
-	      dispatch((0, _actions.clearSelection)());
+	    return dispatch((0, _actions.fetchTokenIfNeeded)()).then(function () {
+	      return dispatch((0, _reduxJsonApi.updateEntity)(entity));
+	    }).then(function () {
+	      return dispatch((0, _actions.clearSelection)());
+	    }).then(function () {
 	      return dispatch((0, _reduxJsonApi.readEndpoint)('sets/' + set.id + '?include=materials'));
 	    });
 	  }
@@ -52722,7 +47677,9 @@ webpackJsonp([1],[
 	        }
 	      };
 
-	      dispatch((0, _reduxJsonApi.updateEntity)(entity)).then(function () {
+	      dispatch((0, _actions.fetchTokenIfNeeded)()).then(function () {
+	        return dispatch((0, _reduxJsonApi.updateEntity)(entity));
+	      }).then(function () {
 	        return dispatch((0, _reduxJsonApi.readEndpoint)('sets/' + set.id + '?include=materials'));
 	      });
 	    }
@@ -52732,7 +47689,7 @@ webpackJsonp([1],[
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DroppableBiomaterialTable);
 
 /***/ },
-/* 768 */
+/* 787 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52748,11 +47705,11 @@ webpackJsonp([1],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(766);
+	var _classnames = __webpack_require__(785);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _font_awesome = __webpack_require__(769);
+	var _font_awesome = __webpack_require__(788);
 
 	var _font_awesome2 = _interopRequireDefault(_font_awesome);
 
@@ -52925,7 +47882,7 @@ webpackJsonp([1],[
 	});
 
 /***/ },
-/* 769 */
+/* 788 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52940,7 +47897,7 @@ webpackJsonp([1],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(766);
+	var _classnames = __webpack_require__(785);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -53000,7 +47957,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 770 */
+/* 789 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53017,7 +47974,7 @@ webpackJsonp([1],[
 
 	var _reactDom = __webpack_require__(330);
 
-	var _classnames = __webpack_require__(766);
+	var _classnames = __webpack_require__(785);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -53048,7 +48005,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 771 */
+/* 790 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -53061,7 +48018,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 772 */
+/* 791 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53071,7 +48028,7 @@ webpackJsonp([1],[
 	});
 	exports.getSelectedBottomMaterials = exports.getSelectedTopMaterials = exports.getSelectedBottom = exports.getSelectedTop = undefined;
 
-	var _reselect = __webpack_require__(773);
+	var _reselect = __webpack_require__(792);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -53171,7 +48128,7 @@ webpackJsonp([1],[
 	var getSelectedBottomMaterials = exports.getSelectedBottomMaterials = (0, _reselect.createSelector)(getSelectedBottom, getBiomaterials, findResourceRelationshipFactory('materials'));
 
 /***/ },
-/* 773 */
+/* 792 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -53287,7 +48244,7 @@ webpackJsonp([1],[
 	}
 
 /***/ },
-/* 774 */
+/* 793 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53308,21 +48265,21 @@ webpackJsonp([1],[
 
 	var _actions = __webpack_require__(648);
 
-	var _reactOnclickoutside = __webpack_require__(775);
+	var _reactOnclickoutside = __webpack_require__(794);
 
 	var _reactOnclickoutside2 = _interopRequireDefault(_reactOnclickoutside);
 
-	var _draggable = __webpack_require__(776);
+	var _draggable = __webpack_require__(795);
 
 	var _draggable2 = _interopRequireDefault(_draggable);
 
-	var _item_types = __webpack_require__(771);
+	var _item_types = __webpack_require__(790);
 
-	var _selectors = __webpack_require__(772);
+	var _selectors = __webpack_require__(791);
 
-	var _biomaterial_table = __webpack_require__(768);
+	var _biomaterial_table = __webpack_require__(787);
 
-	var _font_awesome = __webpack_require__(769);
+	var _font_awesome = __webpack_require__(788);
 
 	var _font_awesome2 = _interopRequireDefault(_font_awesome);
 
@@ -53405,7 +48362,7 @@ webpackJsonp([1],[
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Wrapper);
 
 /***/ },
-/* 775 */
+/* 794 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -53665,7 +48622,7 @@ webpackJsonp([1],[
 
 
 /***/ },
-/* 776 */
+/* 795 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53710,7 +48667,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 777 */
+/* 796 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53772,7 +48729,7 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 778 */
+/* 797 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53787,7 +48744,9 @@ webpackJsonp([1],[
 
 	var _reactRedux = __webpack_require__(468);
 
-	var _reduxJsonApi = __webpack_require__(652);
+	var _reduxJsonApi = __webpack_require__(655);
+
+	var _actions = __webpack_require__(648);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53810,7 +48769,9 @@ webpackJsonp([1],[
 	          }
 	        };
 
-	        dispatch((0, _reduxJsonApi.createEntity)(set));
+	        dispatch((0, _actions.fetchTokenIfNeeded)()).then(function () {
+	          return dispatch((0, _reduxJsonApi.createEntity)(set));
+	        });
 	        input.value = '';
 	      } },
 	    _react2.default.createElement(
@@ -53838,7 +48799,7 @@ webpackJsonp([1],[
 	exports.default = AddSetForm;
 
 /***/ },
-/* 779 */
+/* 798 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53849,13 +48810,13 @@ webpackJsonp([1],[
 
 	var _redux = __webpack_require__(475);
 
-	var _reduxThunk = __webpack_require__(780);
+	var _reduxThunk = __webpack_require__(799);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reduxJsonApi = __webpack_require__(652);
+	var _reduxJsonApi = __webpack_require__(655);
 
-	var _reducers = __webpack_require__(781);
+	var _reducers = __webpack_require__(800);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -53877,13 +48838,14 @@ webpackJsonp([1],[
 	    selected: [],
 	    last_selected: null,
 	    last_shift_selected: []
-	  }
+	  },
+	  token: null
 	};
 
 	var store = (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 
-	store.dispatch((0, _reduxJsonApi.setEndpointHost)(Aker.config.sets_root));
-	store.dispatch((0, _reduxJsonApi.setEndpointPath)('/api/v1'));
+	store.dispatch((0, _reduxJsonApi.setEndpointHost)('/sets_service'));
+	store.dispatch((0, _reduxJsonApi.setEndpointPath)(''));
 	store.dispatch((0, _reduxJsonApi.setHeaders)({
 	  'Content-Type': 'application/vnd.api+json',
 	  Accept: 'application/vnd.api+json'
@@ -53892,7 +48854,7 @@ webpackJsonp([1],[
 	exports.default = store;
 
 /***/ },
-/* 780 */
+/* 799 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -53920,7 +48882,7 @@ webpackJsonp([1],[
 	exports['default'] = thunk;
 
 /***/ },
-/* 781 */
+/* 800 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53931,32 +48893,36 @@ webpackJsonp([1],[
 
 	var _redux = __webpack_require__(475);
 
-	var _reduxJsonApi = __webpack_require__(652);
+	var _reduxJsonApi = __webpack_require__(655);
 
-	var _selected = __webpack_require__(782);
+	var _selected = __webpack_require__(801);
 
 	var _selected2 = _interopRequireDefault(_selected);
 
-	var _browser = __webpack_require__(783);
+	var _browser = __webpack_require__(802);
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _materials = __webpack_require__(784);
+	var _materials = __webpack_require__(803);
 
 	var _materials2 = _interopRequireDefault(_materials);
 
-	var _collection_ids = __webpack_require__(785);
+	var _collection_ids = __webpack_require__(804);
 
 	var _collection_ids2 = _interopRequireDefault(_collection_ids);
 
+	var _token = __webpack_require__(805);
+
+	var _token2 = _interopRequireDefault(_token);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var reducers = (0, _redux.combineReducers)({ api: _reduxJsonApi.reducer, selected: _selected2.default, browser: _browser2.default, materials: _materials2.default, collection_ids: _collection_ids2.default });
+	var reducers = (0, _redux.combineReducers)({ api: _reduxJsonApi.reducer, selected: _selected2.default, browser: _browser2.default, materials: _materials2.default, collection_ids: _collection_ids2.default, token: _token2.default });
 
 	exports.default = reducers;
 
 /***/ },
-/* 782 */
+/* 801 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53984,7 +48950,7 @@ webpackJsonp([1],[
 	exports.default = selected;
 
 /***/ },
-/* 783 */
+/* 802 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54075,7 +49041,7 @@ webpackJsonp([1],[
 	exports.default = browser;
 
 /***/ },
-/* 784 */
+/* 803 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54113,7 +49079,7 @@ webpackJsonp([1],[
 	exports.default = materials;
 
 /***/ },
-/* 785 */
+/* 804 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54142,6 +49108,32 @@ webpackJsonp([1],[
 	};
 
 	exports.default = collection_ids;
+
+/***/ },
+/* 805 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _actions = __webpack_require__(648);
+
+	var token = function token() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _actions.RECEIVE_TOKEN:
+	      return action.token;
+	    default:
+	      return state;
+	  }
+	};
+
+	exports.default = token;
 
 /***/ }
 ]);
