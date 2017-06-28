@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import jwt_decode from "jwt-decode"
 
 const nullResource = { id: '', type: '', attributes: {}, links: {}, relationships: {} };
 
@@ -89,4 +90,23 @@ export const getSelectedTopMaterials = createSelector(
 export const getSelectedBottomMaterials = createSelector(
   getSelectedBottom, getBiomaterials,
   findResourceRelationshipFactory('materials')
+)
+
+export const getUserEmail = createSelector(
+  (state) => state.token,
+  (token) => {
+    if (!token) return;
+    return jwt_decode(token).data.email
+  }
+)
+
+export const getUserSets = createSelector(
+  getUserEmail,
+  getSets,
+  (email, sets) => {
+    return sets.reduce((memo, set)  => {
+      if (set.attributes.owner_id == email) memo.push(set.id);
+      return memo;
+    }, []);
+  }
 )

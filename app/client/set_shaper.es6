@@ -7,9 +7,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems, fetchCollections, fetchTokenIfNeeded } from './actions';
+import { selectEntity, storeItems, fetchCollections } from './actions';
 import { readEndpoint } from 'redux-json-api';
-import { getSelectedTop, getSelectedBottom } from './selectors';
+import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
 import store from './store.es6';
 
 // Load the sets and collecions up front
@@ -20,7 +20,8 @@ const mapStateToProps = (state) => {
   return {
     set: getSelectedTop(state),
     collection_ids: state.collection_ids,
-    entity: getSelectedBottom(state)
+    resource: getSelectedBottom(state),
+    user_set_ids: getUserSets(state)
   };
 };
 
