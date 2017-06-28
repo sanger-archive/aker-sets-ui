@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import FontAwesome from './font_awesome.es6';
 
 const SetTable = ({ sets, selected_set, onSetClick }) => {
   return (
@@ -33,7 +34,7 @@ const SetRow = ({ set, selected, onClick }) => {
 
   return (
     <tr className={ trClass } style={{cursor: 'pointer'}} onClick={ () => onClick(set.id) }>
-      <td>{ set.attributes.name }</td>
+      <td>{ set.attributes.name } { set.attributes.locked && <FontAwesome icon="lock" style={{"color": "#e61c1c"}} /> }</td>
       <td>{ new Date(set.attributes.created_at).toDateString() }</td>
       <td>{ set.meta.size }</td>
     </tr>
