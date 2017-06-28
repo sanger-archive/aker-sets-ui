@@ -32,8 +32,10 @@ export const BiomaterialTableRow = React.createClass({
       info: (selected.find((bm) => bm.id == biomaterial.id))
     })
 
+    const style = (biomaterial.available == false) ? { opacity: 0.5 } : {};
+
     return (
-      <tr className={trClass} onClick={(e) => onClick(biomaterial, index, e) }>
+      <tr className={trClass} style={style} onClick={(e) => onClick(biomaterial, index, e) }>
         <td>{biomaterial.id}</td>
         <td>{biomaterial.common_name}</td>
         <td>{biomaterial.gender}</td>
