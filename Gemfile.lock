@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/sanger/aker-authentication.git
-  revision: 5d4c160aa209ddcae32a5c59d72997a636f550d4
+  revision: 861112461bbd3479f12026de304969302bfda646
   specs:
-    aker_authentication_gem (0.1.1)
+    aker_authentication_gem (0.1.2)
       activemodel
       devise
       devise_ldap_authenticatable
@@ -358,4 +358,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.14.2
+   1.14.6
