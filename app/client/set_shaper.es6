@@ -7,7 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems, fetchCollections } from './actions';
+import { selectEntity, storeItems, fetchCollections, fetchSetAndMaterials } from './actions';
 import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
 import store from './store.es6';
@@ -15,6 +15,14 @@ import store from './store.es6';
 // Load the sets and collecions up front
 store.dispatch(readEndpoint('sets'));
 store.dispatch(fetchCollections());
+
+setInterval(() => {
+  let selected = store.getState().selected;
+
+  for (let position in selected) {
+    if (selected[position]) store.dispatch(fetchSetAndMaterials(selected[position]));
+  }
+}, 10000)
 
 const mapStateToProps = (state) => {
   return {
