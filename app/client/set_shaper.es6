@@ -12,6 +12,9 @@ import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
 import store from './store.es6';
 
+// Don't want to cache any of our requests
+$.ajaxSetup({ cache: false })
+
 // Load the sets and collecions up front
 store.dispatch(readEndpoint('sets'));
 store.dispatch(fetchCollections());
