@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode"
-import { setHeader } from "redux-json-api"
+import { setHeader, readEndpoint } from "redux-json-api"
 
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
@@ -97,6 +97,15 @@ export const receiveCollections = (collections) => {
   return {
     type: RECEIVE_COLLECTIONS,
     collections
+  }
+}
+
+export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
+export const fetchSetAndMaterials = function(setId) {
+  return function(dispatch) {
+    dispatch(fetchTokenIfNeeded())
+      .then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)) })
+      .then((json) => { return dispatch(fetchMaterials(json.included)) });
   }
 }
 
