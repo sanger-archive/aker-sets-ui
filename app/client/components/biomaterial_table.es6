@@ -71,7 +71,7 @@ export const BiomaterialTable = React.createClass({
         <thead>
           <tr>
             <th>ID</th>
-            <th>Common Name</th>
+            <th>Scientific Name</th>
             <th>Gender</th>
             <th>Phenotype</th>
             <th>Supplier Name</th>
