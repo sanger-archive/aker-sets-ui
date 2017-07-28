@@ -48025,7 +48025,7 @@ webpackJsonp([1],[
 	          _react2.default.createElement(
 	            'th',
 	            null,
-	            'Common Name'
+	            'Scientific Name'
 	          ),
 	          _react2.default.createElement(
 	            'th',
