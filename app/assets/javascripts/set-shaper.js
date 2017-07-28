@@ -47908,7 +47908,7 @@ webpackJsonp([1],[
 	      selected: [],
 	      biomaterial: {
 	        id: '',
-	        common_name: '',
+	        scientific_name: '',
 	        gender: '',
 	        phenotype: '',
 	        supplier_name: '',
@@ -47959,7 +47959,7 @@ webpackJsonp([1],[
 	      _react2.default.createElement(
 	        'td',
 	        null,
-	        biomaterial.common_name
+	        biomaterial.scientific_name
 	      ),
 	      _react2.default.createElement(
 	        'td',
