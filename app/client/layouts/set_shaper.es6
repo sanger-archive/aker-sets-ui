@@ -5,6 +5,8 @@ import DroppableSelectedSet from '../containers/droppable_selected_set.es6';
 import DraggableSelectedCollection from '../containers/draggable_selected_collection.es6';
 import LockedSelectedSet from '../containers/locked_selected_set.es6';
 import { Panel, Heading, Body, Footer } from '../components/panel.es6';
+import SetPanel from '../components/set_panel.es6';
+import BottomSetPanel from '../components/bottom_set_panel.es6';
 import SetForm from '../containers/add_set_form.es6';
 import FontAwesome from '../components/font_awesome.es6';
 
@@ -63,14 +65,7 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
         <div className="col-md-9">
           <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
 
-            <Panel key={`set-${set.id}`}>
-              <Heading title={setName} />
-
-              <Body style={{height: '424px', overflowY: 'scroll'}}>
-                { set.attributes.locked ? <LockedSelectedSet set={set} /> : <DroppableSelectedSet set={set} /> }
-              </Body>
-
-            </Panel>
+            <SetPanel set={set} title={setName} />
 
           </ReactCSSTransitionGroup>
         </div>
@@ -108,14 +103,7 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
 
         <div className="col-md-9">
           <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
-            <Panel key={`collection-${resource.id}`}>
-              <Heading title={resourceName} />
-
-              <Body style={{height: '424px', overflowY: 'scroll'}}>
-                <DraggableSelectedCollection />
-              </Body>
-
-            </Panel>
+            <BottomSetPanel resource={resource} title={resourceName} />
           </ReactCSSTransitionGroup>
         </div>
       </div>
