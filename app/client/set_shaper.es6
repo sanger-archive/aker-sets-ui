@@ -7,20 +7,32 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems, fetchCollections } from './actions';
+import { selectEntity, storeItems, fetchCollections, fetchSetAndMaterials } from './actions';
 import { readEndpoint } from 'redux-json-api';
-import { getSelectedTop, getSelectedBottom } from './selectors';
+import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
 import store from './store.es6';
+
+// Don't want to cache any of our requests
+$.ajaxSetup({ cache: false })
 
 // Load the sets and collecions up front
 store.dispatch(readEndpoint('sets'));
 store.dispatch(fetchCollections());
 
+setInterval(() => {
+  let selected = store.getState().selected;
+
+  for (let position in selected) {
+    if (selected[position]) store.dispatch(fetchSetAndMaterials(selected[position]));
+  }
+}, 10000)
+
 const mapStateToProps = (state) => {
   return {
     set: getSelectedTop(state),
     collection_ids: state.collection_ids,
-    entity: getSelectedBottom(state)
+    resource: getSelectedBottom(state),
+    user_set_ids: getUserSets(state)
   };
 };
 

@@ -10,7 +10,7 @@ export const BiomaterialTableRow = React.createClass({
       selected: [],
       biomaterial: {
         id: '',
-        common_name: '',
+        scientific_name: '',
         gender: '',
         phenotype: '',
         supplier_name: '',
@@ -32,10 +32,12 @@ export const BiomaterialTableRow = React.createClass({
       info: (selected.find((bm) => bm.id == biomaterial.id))
     })
 
+    const style = (biomaterial.available == false) ? { opacity: 0.5 } : {};
+
     return (
-      <tr className={trClass} onClick={(e) => onClick(biomaterial, index, e) }>
+      <tr className={trClass} style={style} onClick={(e) => onClick(biomaterial, index, e) }>
         <td>{biomaterial.id}</td>
-        <td>{biomaterial.common_name}</td>
+        <td>{biomaterial.scientific_name}</td>
         <td>{biomaterial.gender}</td>
         <td>{biomaterial.phenotype}</td>
         <td>{biomaterial.supplier_name}</td>
@@ -69,7 +71,7 @@ export const BiomaterialTable = React.createClass({
         <thead>
           <tr>
             <th>ID</th>
-            <th>Common Name</th>
+            <th>Scientific Name</th>
             <th>Gender</th>
             <th>Phenotype</th>
             <th>Supplier Name</th>

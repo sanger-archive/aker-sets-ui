@@ -60,7 +60,13 @@ Rails.application.configure do
 
   config.webpack[:use_manifest] = false
 
-  config.materials_root = 'http://materials.dev'
-  config.study_root = 'http://studies.dev/api/v1'
-  config.sets_root = 'http://sets.dev'
+  config.fake_ldap = true
+
+  config.materials_root = 'http://localhost:5000'
+  config.studies_root = 'http://localhost:3300/api/v1/'
+  config.sets_root = 'http://localhost:3000/api/v1/'
+
+  config.jwt_secret_key = 'development'
+  config.jwt_exp_time = 2 * 60
+  config.jwt_nbf_time = 1 * 60
 end

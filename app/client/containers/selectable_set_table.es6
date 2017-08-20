@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchMaterials, storeItems } from '../actions';
+import { select, fetchSetAndMaterials, storeItems } from '../actions';
 import { readEndpoint } from 'redux-json-api';
 import SetTable from '../components/set_table.es6';
 
@@ -22,13 +22,9 @@ const mapStateToProps = ({ api, selected }, { setIdList, selectionType }) => {
 
 const mapDispatchToProps = (dispatch, { selectionType }) => {
   return {
-    onSetClick: (id) => {
-      dispatch(select(id, selectionType));
-
-      dispatch(readEndpoint(`sets/${id}?include=materials`))
-        .then((json) => {
-          dispatch(fetchMaterials(json.included));
-        })
+    onSetClick: (setId) => {
+      dispatch(select(setId, selectionType));
+      dispatch(fetchSetAndMaterials(setId))
     }
   }
 }
