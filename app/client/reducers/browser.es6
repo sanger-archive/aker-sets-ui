@@ -1,4 +1,4 @@
-import {STORE_ITEMS, SELECT_ITEM, TOGGLE_ITEM, CLEAR_SELECTION, SHIFT_SELECT_ITEMS, selectItem} from '../actions';
+import {STORE_ITEMS, SELECT_ITEM, TOGGLE_ITEM, CLEAR_SELECTION, SHIFT_SELECT_ITEMS, selectItem} from '../actions/index.es6';
 
 const browser = (state = {}, action) => {
   switch (action.type) {

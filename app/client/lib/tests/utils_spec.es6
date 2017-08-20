@@ -1,4 +1,4 @@
-import { debounce } from '../../../app/client/lib/utils.es6';
+import { debounce } from '../utils.es6';
 
 describe('Utils', function() {
 

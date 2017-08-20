@@ -6,17 +6,18 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: __dirname + '/app/client',
+    basePath: __dirname,
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai-sinon'],
+    frameworks: ['mocha'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      '../../spec/js/js_spec.js'
+      'node_modules/babel-polyfill/dist/polyfill.js',
+      'spec/js/test_loader.js'
     ],
 
 
@@ -28,7 +29,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '../../spec/js/js_spec.js': ['webpack', 'sourcemap']
+      'app/client/**/*.es6': ['webpack', 'sourcemap'],
+      'spec/js/test_loader.js': ['webpack', 'sourcemap']
     },
 
     webpack: {
@@ -54,11 +56,12 @@ module.exports = function(config) {
       externals: {
         'react/addons': true,
         'react/lib/ExecutionEnvironment': true,
-        'react/lib/ReactContext': true,
+        'react/lib/ReactContext': true
       },
       plugins: [
         new webpack.ProvidePlugin({ $: "jquery", jQuery: "jquery" })
-      ]
+      ],
+      resolve: { alias: { sinon: 'sinon/pkg/sinon.js' } }
     },
 
     webpackMiddleware: {
