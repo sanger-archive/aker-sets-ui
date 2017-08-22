@@ -176,3 +176,75 @@ export const receiveToken = (token) => {
     token
   }
 }
+
+export const FETCH_MATERIAL_SCHEMA = "FETCH_MATERIAL_SCHEMA";
+export const fetchMaterialSchema = () => {
+  return (dispatch, getState) => {
+    return $.ajax({
+      method: 'GET',
+      url: "/materials_service/materials/schema",
+      accept: "application/json",
+    })
+
+    .then((response) => {
+      return dispatch(receiveMaterialSchema(response));
+    });
+  }
+}
+
+export const RECEIVE_MATERIAL_SCHEMA = "RECEIVE_MATERIAL_SCHEMA";
+export const receiveMaterialSchema = (response) => {
+  return {
+    type: RECEIVE_MATERIAL_SCHEMA,
+    schema: response
+  }
+}
+
+export const UPDATE_FILTER_NAME = "UPDATE_FILTER_NAME";
+export const updateFilterName = (index, value) => {
+  return {
+    type: UPDATE_FILTER_NAME,
+    index,
+    value
+  }
+}
+
+export const UPDATE_FILTER_COMPARATOR = "UPDATE_FILTER_COMPARATOR"
+export const updateFilterComparator = (index, value) => {
+  return {
+    type: UPDATE_FILTER_COMPARATOR,
+    index,
+    value
+  }
+}
+
+export const UPDATE_FILTER_VALUE = "UPDATE_FILTER_VALUE"
+export const updateFilterValue = (index, value) => {
+  return {
+    type: UPDATE_FILTER_VALUE,
+    index,
+    value
+  }
+}
+
+export const REMOVE_FILTER = "REMOVE_FILTER"
+export const removeFilter = (index) => {
+  return {
+    type: REMOVE_FILTER,
+    index
+  }
+}
+
+export const ADD_FILTER = "ADD_FILTER"
+export const addFilter = () => {
+  return {
+    type: ADD_FILTER
+  }
+}
+
+export const SET_CURRENT_SEARCH = "SET_CURRENT_SEARCH"
+export const setCurrentSearch = () => {
+  return {
+    type: SET_CURRENT_SEARCH
+  }
+}

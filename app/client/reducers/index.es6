@@ -5,7 +5,16 @@ import browser from './browser.es6';
 import materials from './materials.es6';
 import collection_ids from './collection_ids.es6';
 import token from './token.es6';
+import search from './search.es6';
 
-const reducers = combineReducers({ api, selected, browser, materials, collection_ids, token });
+const reducers = combineReducers({
+  api,
+  selected,
+  browser,
+  materials,
+  collection_ids,
+  token,
+  search
+});
 
 export default reducers;

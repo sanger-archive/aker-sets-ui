@@ -20,7 +20,14 @@ let initialState = {
     last_selected: null,
     last_shift_selected: []
   },
-  token: null
+  token: null,
+  search: {
+    fields: {},
+    filters: [
+      { id: 1, name: '', comparator: '', value: '' }
+    ],
+    current: [],
+  }
 }
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));

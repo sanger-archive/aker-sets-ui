@@ -30,7 +30,7 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
       <div className="row">
         <div className="col-md-12">
           <a href="/users/sign_out" className='btn btn-default vcenter' style={{float: 'right', marginTop: '40px'}} data-method='delete'>Log Out</a>
-          <h1 className="page-header">Shape Sets</h1>
+          <h1 className="page-header">Set Shaper</h1>
         </div>
       </div>
 
