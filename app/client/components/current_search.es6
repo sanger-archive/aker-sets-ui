@@ -19,7 +19,14 @@ export default class CurrentSearch extends React.Component {
         if (index > 0) {
           operator = 'AND ';
         }
-        return <p key={index}>{operator}{filter.name} {filter.comparator} {filter.value}</p>
+
+        return (
+          <p key={index}>
+            <strong>{operator}{filter.name} </strong>
+            <span className="label label-primary">{filter.comparator}</span>
+            <em> {filter.value}</em>
+          </p>
+        );
       });
     }
 
@@ -27,7 +34,9 @@ export default class CurrentSearch extends React.Component {
       <Panel>
         <Heading title='Current Search' />
         <Body>
-          { filterRows }
+          <div className='well'>
+            { filterRows }
+          </div>
         </Body>
       </Panel>
     )

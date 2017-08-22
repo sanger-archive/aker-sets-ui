@@ -33,7 +33,9 @@ class FilterPanel extends React.Component {
             {filter_rows}
           </CSSTransitionGroup>
           <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary">Add to Current Search</button>
-          <FontAwesome icon="plus" size="lg" style={{float: 'right', color: 'green', cursor: 'pointer', marginRight: '10px'}} onClick={() => dispatch(addFilter())}/>
+          <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success">
+            <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
+          </button>
         </Body>
       </Panel>
     )
@@ -69,7 +71,9 @@ class FilterRow extends React.Component {
           <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
         </div>
         <div className="col-md-1">
-          <FontAwesome icon="times" size="lg" style={{color: 'red', cursor: 'pointer'}} onClick={onRemove} />
+          <button onClick={onRemove} type="submit" className="btn btn-link">
+            <FontAwesome icon="times" size="lg" style={{color: 'red'}} />
+          </button>
         </div>
       </div>
     )
