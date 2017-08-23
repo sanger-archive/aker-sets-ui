@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH } from '../actions/index.es6';
+import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -75,7 +75,7 @@ const search = (state = {}, action) => {
 
         return filter;
       });
-      return Object.assign({}, state, { filters: newState })
+      return Object.assign({}, state, { filters: newState });
 
     case UPDATE_FILTER_COMPARATOR:
        newState = state.filters.map((filter, index) => {
@@ -85,7 +85,7 @@ const search = (state = {}, action) => {
         filter.comparator = action.value;
         return filter
       });
-      return Object.assign({}, state, { filters: newState })
+      return Object.assign({}, state, { filters: newState });
 
     case UPDATE_FILTER_VALUE:
       newState = state.filters.map((filter, index) => {
@@ -95,12 +95,12 @@ const search = (state = {}, action) => {
         filter.value = action.value;
         return filter
       });
-      return Object.assign({}, state, { filters: newState })
+      return Object.assign({}, state, { filters: newState });
 
     case REMOVE_FILTER:
       newState = state.filters.slice();
       newState.splice(action.index, 1);
-      return Object.assign({}, state, { filters: newState })
+      return Object.assign({}, state, { filters: newState });
 
     case ADD_FILTER:
       newState = state.filters.slice();
@@ -111,7 +111,11 @@ const search = (state = {}, action) => {
       newState = state.filters.map((filter) => {
         return Object.assign({}, filter);
       });
-      return Object.assign({}, state, { current: newState })
+      return Object.assign({}, state, { current: newState });
+
+    case RECEIVE_SEARCH_RESULTS:
+      newState = action.results;
+      return Object.assign({}, state, { results: newState });
 
     default:
       return state;

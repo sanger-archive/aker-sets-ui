@@ -260,15 +260,25 @@ export const performSearch = () => {
     const query = queryBuilder(filters)
 
     if (filters.length != 0){
-        return $.ajax({
+      return $.ajax({
         method: 'GET',
         url: `/materials_service/materials?${query}`,
         accept: "application/json",
         cache: true
       })
+      .then((response) => {
+        dispatch(receiveSearchResults(response._items));
+      });
     }
-
   }
+}
+
+export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
+export const receiveSearchResults = (items) => {
+  return {
+    type: RECEIVE_SEARCH_RESULTS,
+    results: items,
+  };
 }
 
 

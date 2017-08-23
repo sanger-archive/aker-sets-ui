@@ -1,6 +1,7 @@
 import React from 'react';
 import FilterPanel from '../components/filter_panel.es6';
 import CurrentSearch from '../components/current_search.es6';
+import SearchResultsTable from '../components/search_results_table.es6';
 
 const Search = ({ search }) => {
 
@@ -21,6 +22,12 @@ const Search = ({ search }) => {
 
         <div className="col-md-6">
           <CurrentSearch current={search.current} />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-md-12">
+          <SearchResultsTable headings={ Object.keys(search.fields) } items={ search.results } />
         </div>
       </div>
 

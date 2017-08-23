@@ -27,6 +27,7 @@ let initialState = {
       { id: 1, name: '', comparator: '', value: '' }
     ],
     current: [],
+    results: [],
   }
 }
 
