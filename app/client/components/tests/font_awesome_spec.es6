@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import FontAwesome from '../../../app/client/components/font_awesome.es6';
+import FontAwesome from '../font_awesome.es6';
 
 describe('<FontAwesome />', () => {
 
