@@ -47,7 +47,7 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
 
               <div className="tab-content">
                 <div role="tabpanel" className="tab-pane active" id="mySets">
-                  <SelectableSetTable selectionType="top" setIdList={user_set_ids} />
+                  <SelectableSetTable selectionType="top" setIdList={user_set_ids} hideOwner />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="allSets">
                   <SelectableSetTable selectionType="top"/>
@@ -85,10 +85,10 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
 
               <div className="tab-content">
                 <div role="tabpanel" className="tab-pane active" id="collections">
-                  <SelectableSetTable selectionType="bottom" setIdList={collection_ids} />
+                  <SelectableSetTable selectionType="bottom" setIdList={collection_ids} hideOwner />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="mySetsBottom">
-                  <SelectableSetTable selectionType="bottom" setIdList={user_set_ids} />
+                  <SelectableSetTable selectionType="bottom" setIdList={user_set_ids} hideOwner />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="sets">
                   <SelectableSetTable selectionType="bottom"/>
