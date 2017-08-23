@@ -70,6 +70,7 @@ const search = (state = {}, action) => {
         }
 
         filter.name = action.value;
+        filter.type = field.type;
         filter.comparator = state.fields[filter.name].comparators[0];
 
         return filter;

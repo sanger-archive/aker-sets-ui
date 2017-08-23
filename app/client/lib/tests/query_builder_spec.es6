@@ -12,7 +12,7 @@ describe('lib/query_builder', () => {
 
       const result = queryBuilder(filters);
       expect(result).to.equal(
-        `where={"hmdmc":{"$eq":"123"},"donor_id":{"$ne":"xyz"}}`
+        `where={"hmdmc":"123","donor_id":{"$ne":"xyz"}}`
       );
     });
 
@@ -27,7 +27,7 @@ describe('lib/query_builder', () => {
       // current date of receipt only sends the last key and value
       const onDate = new Date(filters[2].value).toUTCString();
       expect(result).to.equal(
-        `where={"date_of_receipt":{"$eq":"${onDate}"}}`
+        `where={"date_of_receipt":"${onDate}"}`
       );
     });
 
@@ -39,7 +39,7 @@ describe('lib/query_builder', () => {
 
       const result = queryBuilder(filters);
       expect(result).to.equal(
-        `where={"material_type":{"$eq":"dna"},"gender":{"$ne":"male"}}`
+        `where={"material_type":"dna","gender":{"$ne":"male"}}`
       );
     });
 
@@ -50,7 +50,7 @@ describe('lib/query_builder', () => {
 
       const result = queryBuilder(filters);
       expect(result).to.equal(
-        `where={"available":{"$eq":"true"}}`
+        `where={"available":"true"}`
       );
     });
 

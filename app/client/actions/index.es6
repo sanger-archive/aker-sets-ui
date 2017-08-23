@@ -1,5 +1,8 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
+import queryBuilder from '../lib/query_builder.es6'
+import { filterQuery } from '../lib/utils.es6';
+
 
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
@@ -248,3 +251,24 @@ export const setCurrentSearch = () => {
     type: SET_CURRENT_SEARCH
   }
 }
+
+export const PERFORM_SEARCH = "PERFORM_SEARCH"
+export const performSearch = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const filters = filterQuery(state.search.filters);
+    const query = queryBuilder(filters)
+
+    if (filters.length != 0){
+        return $.ajax({
+        method: 'GET',
+        url: `/materials_service/materials?${query}`,
+        accept: "application/json",
+        cache: true
+      })
+    }
+
+  }
+}
+
+

@@ -21,7 +21,6 @@ const Search = ({ search }) => {
 
         <div className="col-md-6">
           <CurrentSearch current={search.current} />
-          <button style={{width: '100%'}} type="submit" className="btn btn-success">Search</button>
         </div>
       </div>
 

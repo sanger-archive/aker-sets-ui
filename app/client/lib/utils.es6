@@ -12,3 +12,17 @@ export const debounce = (func, wait, immediate) => {
     if (callNow) func.apply(context, args);
   };
 };
+
+export const filterQuery = (currentFilters) => {
+  debugger
+   let filters = currentFilters.filter((filter) => {
+      if (filter.name) {
+        if (filter.type == 'date' && filter.comparator && !filter.value) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    });
+   return filters;
+}

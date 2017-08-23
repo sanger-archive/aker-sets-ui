@@ -1,12 +1,9 @@
 const queryBuilder = (filters) => {
 
   let comparators = {
-    'is': '$eq',
     'is not': '$ne',
     'before': '$lt',
-    'after': '$gt',
-    'on': '$eq',
-    'equals': '$eq'
+    'after': '$gt'
   }
 
   var result = filters.reduce((memo, filter) => {
@@ -18,8 +15,15 @@ const queryBuilder = (filters) => {
       const date = new Date(filter.value)
       filterValue = date.toUTCString();
     }
-    value[comparator] = filterValue;
-    memo[filter.name] = value;
+
+    const equalComparators = ["is", "on", "equals"]
+
+    if (equalComparators.includes(filter.comparator)) {
+      memo[filter.name] = filterValue;
+    } else {
+      value[comparator] = filterValue;
+      memo[filter.name] = value;
+    }
 
     return memo;
   }, {});
