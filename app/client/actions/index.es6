@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
 import queryBuilder from '../lib/query_builder.es6'
-import { filterQuery } from '../lib/utils.es6';
+import { filterLinks } from '../lib/utils.es6';
 
 
 export const SELECT = "SELECT";
@@ -253,32 +253,27 @@ export const setCurrentSearch = () => {
 }
 
 export const PERFORM_SEARCH = "PERFORM_SEARCH"
-export const performSearch = () => {
+export const performSearch = (url) => {
   return (dispatch, getState) => {
-    const state = getState();
-    const filters = filterQuery(state.search.filters);
-    const query = queryBuilder(filters)
-
-    if (filters.length != 0){
-      return $.ajax({
-        method: 'GET',
-        url: `/materials_service/materials?${query}`,
-        accept: "application/json",
-        cache: true
-      })
-      .then((response) => {
-        dispatch(receiveSearchResults(response._items));
-      });
-    }
+    return $.ajax({
+      method: 'GET',
+      url: url,
+      accept: "application/json",
+      cache: true
+    })
+    .then((response) => {
+      const filteredLinks = filterLinks(response._links);
+      dispatch(receiveSearchResults(response._items, filteredLinks));
+    });
   }
 }
 
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
-export const receiveSearchResults = (items) => {
+export const receiveSearchResults = (items, links) => {
   return {
     type: RECEIVE_SEARCH_RESULTS,
     results: items,
+    links: links,
   };
 }
-
 

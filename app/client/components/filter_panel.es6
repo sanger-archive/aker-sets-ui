@@ -32,7 +32,7 @@ class FilterPanel extends React.Component {
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
-          <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary">Add to Current Search</button>
+          <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary">Update Current Search</button>
           <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success">
             <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
           </button>

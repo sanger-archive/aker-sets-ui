@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
 import { performSearch } from '../actions/index.es6'
 import { filterQuery } from '../lib/utils.es6';
+import queryBuilder from '../lib/query_builder.es6'
+
 
 class CurrentSearch extends React.Component {
 
@@ -13,6 +15,9 @@ class CurrentSearch extends React.Component {
 
     let filterRows = [];
     const filteredCurrent = filterQuery(current);
+
+    const query = queryBuilder(filteredCurrent)
+    const url = `/materials_service/materials?${query}`
 
     if (filteredCurrent.length == 0) {
       filterRows.push(emptyFiltersRow)
@@ -41,7 +46,7 @@ class CurrentSearch extends React.Component {
           <div className='well'>
             { filterRows }
           </div>
-          <button onClick={() => dispatch(performSearch())} style={{width: '100%'}} type="submit" className="btn btn-success">Search</button>
+          <button disabled={filteredCurrent==0} onClick={() => dispatch(performSearch(url))} style={{width: '100%'}} type="submit" className="btn btn-success">Search</button>
         </Body>
       </Panel>
     )

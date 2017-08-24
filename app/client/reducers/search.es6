@@ -115,7 +115,8 @@ const search = (state = {}, action) => {
 
     case RECEIVE_SEARCH_RESULTS:
       newState = action.results;
-      return Object.assign({}, state, { results: newState });
+      const links = action.links;
+      return Object.assign({}, state, { results: newState, links: links });
 
     default:
       return state;
