@@ -277,3 +277,57 @@ export const receiveSearchResults = (items, links) => {
   };
 }
 
+export const CREATE_NEW_SET = "CREATE_NEW_SET"
+export const createNewSet = (items, setName) => {
+  return (dispatch)=> {
+    dispatch(createSetOnly(items, setName))
+    .then((response) => {
+      const setId = response.data.id
+      dispatch(addMaterialsToSet(items, setId))
+    })
+  }
+}
+
+export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
+export const createSetOnly = (items, setName) => {
+  return function(dispatch, getState) {
+    return dispatch(fetchTokenIfNeeded())
+    .then(() => {
+      const data = {data: { type: 'sets', attributes: {name: setName}}};
+      const body = Object.assign({}, data);
+      return $.ajax({
+        method: 'POST',
+        url: "/sets_service/sets",
+        contentType: "application/vnd.api+json",
+        accept: "application/vnd.api+json",
+        headers: {
+          "X-Authorisation": getState().token
+        },
+        data: JSON.stringify(body),
+        jsonp: false
+      })
+    })
+  }
+}
+
+export const ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET"
+export const addMaterialsToSet = (items, setId) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+   .then(()=>{
+      let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
+      const body = Object.assign({}, {data: uuids});
+      return $.ajax({
+        method: 'POST',
+        url: `/sets_service/sets/${setId}/relationships/materials`,
+        accept: "application/vnd.api+json",
+        contentType: "application/vnd.api+json",
+        headers: {
+          "X-Authorisation": getState().token
+        },
+        data: JSON.stringify(body),
+        jsonp: false
+      })
+    })
+  }
+}

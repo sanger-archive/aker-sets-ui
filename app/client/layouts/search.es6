@@ -2,6 +2,7 @@ import React from 'react';
 import FilterPanel from '../components/filter_panel.es6';
 import CurrentSearch from '../components/current_search.es6';
 import SearchResultsTable from '../components/search_results_table.es6';
+import ButtonsPannel from '../components/buttons_panel.es6';
 
 const Search = ({ search }) => {
 

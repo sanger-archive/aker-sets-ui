@@ -13,7 +13,6 @@ store.dispatch(fetchMaterialSchema())
 $.ajaxSetup({ cache: false })
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     search: state.search
   }
