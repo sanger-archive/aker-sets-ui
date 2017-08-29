@@ -18,12 +18,15 @@ const search = (state = {}, action) => {
         const property = properties[name];
         const type = property.type;
 
-        let field = memo[name] = {};
-
         // We don't want to include certain properties
         if (!allowedTypes.includes(type)) {
           return memo;
         }
+        if (!property.searchable) {
+          return memo;
+        }
+
+        let field = memo[name] = {};
 
         // String can actually be a date or list
         if (type == 'string') {
@@ -51,7 +54,7 @@ const search = (state = {}, action) => {
         }
 
         return memo;
-      }, {});
+      }, { "_id": { "type": "string", "comparators": comparators['string'] }});
 
       return Object.assign({}, state, { fields: fields });
 
