@@ -3,7 +3,6 @@ import { setHeader, readEndpoint } from "redux-json-api"
 import queryBuilder from '../lib/query_builder.es6'
 import { filterLinks } from '../lib/utils.es6';
 
-
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
   return {
@@ -331,3 +330,36 @@ export const addMaterialsToSet = (items, setId) => {
     })
   }
 }
+
+export const GET_ALL_SETS = "GET_ALL_SETS"
+export const getAllSets = () => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+    .then(() => {
+      const token = getState().token
+      const userEmail = jwt_decode(token).data.email;
+      return $.ajax({
+        method: 'GET',
+        url: `/sets_service/sets/?filter[owner_id]=${userEmail}`,
+        contentType: "application/vnd.api+json",
+        accept: "application/vnd.api+json",
+        headers: {
+          "X-Authorisation": getState().token
+        },
+        jsonp: false
+      })
+      .then((response) => {
+        dispatch(receiveAllSets(response))
+      });
+    })
+  }
+}
+
+export const RECEIVE_ALL_SETS = "RECEIVE_ALL_SETS"
+export const receiveAllSets = (response) => {
+  return {
+    type: RECEIVE_ALL_SETS,
+    sets: response
+  };
+}
+

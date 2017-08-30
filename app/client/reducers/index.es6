@@ -14,7 +14,7 @@ const reducers = combineReducers({
   materials,
   collection_ids,
   token,
-  search
+  search,
 });
 
 export default reducers;

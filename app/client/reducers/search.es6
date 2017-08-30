@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS } from '../actions/index.es6';
+import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -54,6 +54,7 @@ const search = (state = {}, action) => {
         }
 
         return memo;
+
       }, { "_id": { "type": "string", "comparators": comparators['string'] }});
 
       return Object.assign({}, state, { fields: fields });
@@ -120,6 +121,10 @@ const search = (state = {}, action) => {
       newState = action.results;
       const links = action.links;
       return Object.assign({}, state, { results: newState, links: links });
+
+    case RECEIVE_ALL_SETS:
+      const received_sets = action.sets
+      return Object.assign({}, state, { sets: received_sets.data });
 
     default:
       return state;

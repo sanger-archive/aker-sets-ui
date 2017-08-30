@@ -29,6 +29,7 @@ let initialState = {
     current: [],
     results: [],
     links: {},
+    sets: [],
   }
 }
 
