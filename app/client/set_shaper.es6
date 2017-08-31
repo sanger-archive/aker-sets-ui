@@ -17,7 +17,6 @@ $.ajaxSetup({ cache: false })
 
 // Load the sets and collecions up front
 store.dispatch(readEndpoint('sets'));
-store.dispatch(fetchCollections());
 
 setInterval(() => {
   let selected = store.getState().selected;
