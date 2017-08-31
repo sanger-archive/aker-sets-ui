@@ -9,7 +9,6 @@ let initialState = {
     materials:   { data: [] }
   },
   materials: {},
-  collection_ids: [],
   selected: {
     top: null,
     bottom: null

@@ -92,41 +92,12 @@ export const fetchMaterials = (materials) => {
   }
 }
 
-export const RECEIVE_COLLECTIONS = "RECEIVE_COLLECTIONS";
-export const receiveCollections = (collections) => {
-  return {
-    type: RECEIVE_COLLECTIONS,
-    collections
-  }
-}
-
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
 export const fetchSetAndMaterials = function(setId) {
   return function(dispatch) {
     dispatch(fetchTokenIfNeeded())
       .then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)) })
       .then((json) => { return dispatch(fetchMaterials(json.included)) });
-  }
-}
-
-export const FETCH_COLLECTIONS = "FETCH_COLLECTIONS";
-export const fetchCollections = function() {
-  return function(dispatch, getState) {
-    dispatch(fetchTokenIfNeeded())
-      .then(function() {
-        return $.ajax({
-          url: "/studies_service/collections",
-          contentType: "application/vnd.api+json",
-          accept: "application/vnd.api+json",
-          headers: {
-            "X-Authorisation": getState().token
-          },
-          jsonp: false
-        })
-      })
-      .then(function(response) {
-        dispatch(receiveCollections(response.data))
-      });
   }
 }
 
