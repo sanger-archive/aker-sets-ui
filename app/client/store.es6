@@ -10,7 +10,6 @@ let initialState = {
   },
   stampsInfo: { stamps: [], status: 'init', selectedStamp: null },
   materials: {},
-  collection_ids: [],
   selected: {
     top: null,
     bottom: null

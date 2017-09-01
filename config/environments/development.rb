@@ -64,10 +64,12 @@ Rails.application.configure do
 
   config.materials_root = 'http://localhost:5000'
   config.studies_root = 'http://localhost:3300/api/v1/'
-  config.sets_root = 'http://localhost:3000/api/v1/'
   config.stamps_root = 'http://localhost:7000/api/v1/'
+  config.sets_root = 'http://localhost:3000/api/v1'
 
   config.jwt_secret_key = 'development'
   config.jwt_exp_time = 2 * 60
   config.jwt_nbf_time = 1 * 60
+
+  config.middleware.insert(0, RackAkerServicesProxy, {ssl_verify_none: true})
 end
