@@ -1,4 +1,4 @@
-const queryBuilder = (filters) => {
+export const queryObjectBuilder = (filters) => {
 
   let comparators = {
     'is not': '$ne',
@@ -27,8 +27,12 @@ const queryBuilder = (filters) => {
 
     return memo;
   }, {});
-
-  return `where=${JSON.stringify(result)}`;
+  return result;
 }
 
+const queryBuilder = (filters) => {
+  return `where=${JSON.stringify(queryObjectBuilder(filters))}`; 
+};
+
 export default queryBuilder;
+

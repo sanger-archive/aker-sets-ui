@@ -1,13 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { connect, Provider } from 'react-redux';
-import { fetchMaterialSchema } from './actions';
+import { fetchMaterialSchema, fetchAllStamps } from './actions';
 
 import App from './layouts/search.es6';
 
 import store from './store.es6';
 
 store.dispatch(fetchMaterialSchema())
+store.dispatch(fetchAllStamps())
 
 // Don't want to cache any of our requests
 $.ajaxSetup({ cache: false })

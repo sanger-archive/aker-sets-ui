@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
 import { createNewSet } from '../actions';
 
+import StamperControl from '../containers/stamper_control.es6'
+
+
 class ButtonsPannel extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +24,6 @@ class ButtonsPannel extends React.Component {
   }
 
   render() {
-
     return (
       <Panel>
         <Body>
@@ -32,7 +34,7 @@ class ButtonsPannel extends React.Component {
             </label>
             <button disabled={this.props.items==0} onClick={this.handleClick} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create New Set</button>
           </form>
-
+          <StamperControl></StamperControl>
         </Body>
       </Panel>
     );
