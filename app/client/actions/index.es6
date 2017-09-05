@@ -46,6 +46,7 @@ const _apply_generation = (nameOperation) => {
           data: JSON.stringify({data: {query}}),
           jsonp: false
         }).then(()=>{
+          dispatch(userMessage('The stamp selected has been '+nameOperation, 'info'));
         }, (error)=> {
           if (error.status === 403) {
             dispatch(userMessage('You cannot stamp/unstamp permissions on materials that you do not own', 'danger'));
