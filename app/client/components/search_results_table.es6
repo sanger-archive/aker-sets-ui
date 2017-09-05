@@ -54,7 +54,7 @@ const SearchResultsRow = (props) => {
   const { headings, item } = props;
   return (
     <tr>
-      { headings.map((heading) => { return (<td>{item[heading]}</td>); }) }
+      { headings.map((heading, index) => { return (<td key={index}>{item[heading]}</td>); }) }
     </tr>
   );
 }
