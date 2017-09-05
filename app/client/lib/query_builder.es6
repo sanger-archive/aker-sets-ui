@@ -12,7 +12,7 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
 
     const comparator = comparators[filter.comparator];
     const value = {};
-    var filterValue = filter.value;
+    var filterValue = filter.value.trim();
     var filterName = filter.name;
 
     if (filter.type == 'date') {
