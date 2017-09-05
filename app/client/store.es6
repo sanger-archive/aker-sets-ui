@@ -3,12 +3,14 @@ import thunk from 'redux-thunk';
 import { setEndpointHost, setEndpointPath, setHeaders } from 'redux-json-api';
 import reducers from './reducers';
 
+import {STAMPS_INITIALIZATION} from './actions'
+
 let initialState = {
   api: {
     sets:        { data: [] },
     materials:   { data: [] },
   },
-  stampsInfo: { stamps: [], status: 'init', selectedStamp: null },
+  stampsInfo: { stamps: [], status: STAMPS_INITIALIZATION, selectedStamp: null },
   materials: {},
   selected: {
     top: null,

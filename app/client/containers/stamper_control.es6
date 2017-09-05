@@ -8,8 +8,7 @@ const mapStateToProps = (state) => {
   return {
     stamps: state.stampsInfo.stamps,
     status: state.stampsInfo.status,
-    selectedStamp: state.stampsInfo.selectedStamp,
-    shownItems: state.search.results.length > 0
+    selectedStamp: state.stampsInfo.selectedStamp
   };
 }
 

@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import { STAMPS_INITIALIZATION, RECEIVE_ALL_STAMPS, RECEIVE_EMPTY_STAMPS, 
+  RECEIVE_EMPTY_RESULTS, FETCH_ALL_STAMPS} from '../../actions/index.es6';
 
 import StamperPanel from '../stamper_panel.es6';
 
@@ -23,35 +25,45 @@ describe('<StamperPanel />', () => {
     };
   })
 
-  context('when shownItems is set to false', () => {
-    beforeEach(function() { this.STATUS.shownItems = false});
+  context('at init time', () => {
+    beforeEach(function() { this.STATUS.status = STAMPS_INITIALIZATION});
 
-    it('displays an empty div', function() {
+    it('displays an initialization message', function() {
       this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
-      expect(this.wrapper.contains(<div></div>)).to.equal(true);
+      expect(this.wrapper.text()).to.contains('Initializing stamps');
+    })
+  });
+
+  context('when starts fetching the stamps from server', () => {
+    beforeEach(function() { this.STATUS.status = FETCH_ALL_STAMPS});
+
+    it('displays a fetching message', function() {
+      this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
+      expect(this.wrapper.text()).to.contains('Loading stamps');        
     });
-  })
+  });
 
-  context('when shownItems is set to true', () => {
+  context('when actually fetchs the stamps from the server', () => {
+    context('when it gets an empty list of results', () => {
+      beforeEach(function() { this.STATUS.status = RECEIVE_EMPTY_RESULTS});
 
-    context('when status is init', () => {
-      beforeEach(function() { this.STATUS.status = 'init'});
-      it('displays an initialization message', function() {
+      it('displays an empty div', function() {
         this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
-        expect(this.wrapper.text()).to.contains('Initializing stamps');
-      })
-    });
-
-    context('when status is fetching', () => {
-      beforeEach(function() { this.STATUS.status = 'fetching'});
-      it('displays an fetching message', function() {
-        this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
-        expect(this.wrapper.text()).to.contains('Loading stamps');        
+        expect(this.wrapper.contains(<div></div>)).to.equal(true);
       });
     });
 
-    context('in any other case', () => {
-      beforeEach(function() { this.STATUS.status = 'running'});
+    context('when it gets an empty list of stamps', () => {
+      beforeEach(function() { this.STATUS.status = RECEIVE_EMPTY_STAMPS});
+
+      it('displays an empty div', function() {
+        this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
+        expect(this.wrapper.contains(<div></div>)).to.equal(true);
+      });      
+    })
+
+    context('when it gets a list of stamps and it has some results to apply stamps', () => {
+      beforeEach(function() { this.STATUS.status = RECEIVE_ALL_STAMPS});
 
       it('displays all the stamps inside a select', function() {
         this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
@@ -94,7 +106,7 @@ describe('<StamperPanel />', () => {
         });
 
       });
-
-    });
+    })
   });
+
 })
