@@ -17,6 +17,7 @@ let initialState = {
     bottom: null
   },
   browser: {
+    userMessage: null,
     items: [],
     selected: [],
     last_selected: null,

@@ -45,6 +45,11 @@ const _apply_generation = (nameOperation) => {
           },
           data: JSON.stringify({data: {query}}),
           jsonp: false
+        }).then(()=>{
+        }, (error)=> {
+          if (error.status === 403) {
+            dispatch(userMessage('You cannot stamp/unstamp permissions on materials that you do not own', 'danger'));
+          }
         })
       })
     }
@@ -218,6 +223,11 @@ export const receiveMaterialSchema = (response) => {
     schema: response
   }
 }
+
+export const USER_MESSAGE = "USER_MESSAGE";
+export const userMessage = (message, msgType) => {
+  return { type: USER_MESSAGE, message, msgType};
+};
 
 export const STAMPS_INITIALIZATION = "STAMPS_INITIALIZATION";
 export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
