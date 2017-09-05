@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
-import queryBuilder from '../lib/query_builder.es6'
+import { filterQuery } from '../lib/utils.es6';
 import { filterLinks } from '../lib/utils.es6';
 import queryMaterialBuilder from '../lib/query_builder.es6'
 
@@ -12,6 +12,51 @@ export const select = (id, selectionType) => {
     selectionType
   }
 }
+
+export const SELECT_STAMP = "SELECT_STAMP";
+export const selectStamp = (stampId) => {
+  return (dispatch, getState) => {
+    const selectedStamp = getState().stampsInfo.stamps.filter((stamp) => {
+      return (stamp.id == stampId);
+    })[0]
+    return {
+      type: SELECT_STAMP,
+      selectedStamp
+    }
+  }
+}
+
+const _apply_generation = (nameOperation) => {
+  return (stampId) => {
+    return (dispatch, getState) => {
+      return dispatch(fetchTokenIfNeeded())
+     .then(()=>{
+        const current = getState().search.current
+        const filteredCurrent = filterQuery(current);
+        const query = queryMaterialBuilder(filteredCurrent, [])
+
+        return $.ajax({
+          method: 'POST',
+          url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
+          accept: "application/vnd.api+json",
+          contentType: "application/vnd.api+json",
+          headers: {
+            "X-Authorisation": getState().token
+          },
+          data: JSON.stringify({data: {query}}),
+          jsonp: false
+        })
+      })
+    }
+  }
+}
+
+export const APPLY_STAMP = "APPLY_STAMP";
+export const applyStamp = _apply_generation('apply');
+
+export const UNAPPLY_STAMP = "UNAPPLY_STAMP";
+export const unapplyStamp = _apply_generation('unapply');
+
 
 export const SELECT_ENTITY = "SELECT_ENTITY";
 export const selectEntity = (id, entityType) => {
@@ -95,41 +140,12 @@ export const fetchMaterials = (materials) => {
   }
 }
 
-export const RECEIVE_COLLECTIONS = "RECEIVE_COLLECTIONS";
-export const receiveCollections = (collections) => {
-  return {
-    type: RECEIVE_COLLECTIONS,
-    collections
-  }
-}
-
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
 export const fetchSetAndMaterials = function(setId) {
   return function(dispatch) {
     dispatch(fetchTokenIfNeeded())
       .then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)) })
       .then((json) => { return dispatch(fetchMaterials(json.included)) });
-  }
-}
-
-export const FETCH_COLLECTIONS = "FETCH_COLLECTIONS";
-export const fetchCollections = function() {
-  return function(dispatch, getState) {
-    dispatch(fetchTokenIfNeeded())
-      .then(function() {
-        return $.ajax({
-          url: "/studies_service/collections",
-          contentType: "application/vnd.api+json",
-          accept: "application/vnd.api+json",
-          headers: {
-            "X-Authorisation": getState().token
-          },
-          jsonp: false
-        })
-      })
-      .then(function(response) {
-        dispatch(receiveCollections(response.data))
-      });
   }
 }
 
@@ -202,6 +218,37 @@ export const receiveMaterialSchema = (response) => {
     schema: response
   }
 }
+
+export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
+export const fetchAllStamps = () => {
+  return (dispatch, getState) => {
+    dispatch(function() { return { type: FETCH_ALL_STAMPS } });
+    return dispatch(fetchTokenIfNeeded())
+    .then(() => {
+    return $.ajax({
+      method: 'GET',
+      url: "/stamps_service/stamps",
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      headers: {
+        "X-Authorisation": getState().token
+      }
+
+      })
+    }).then((response) => {
+      return dispatch(receiveAllStamps(response));
+    });
+  }
+}
+
+export const RECEIVE_ALL_STAMPS = "RECEIVE_ALL_STAMPS";
+export const receiveAllStamps = (response) => {
+  return {
+    type: RECEIVE_ALL_STAMPS,
+    stamps: $.map(response.data, val => val )
+  }
+}
+
 
 export const UPDATE_FILTER_NAME = "UPDATE_FILTER_NAME";
 export const updateFilterName = (index, value) => {
@@ -279,7 +326,7 @@ export const performSearch = () => {
         debugger
         let filters = getState().search.filters;
         const searchQuery = queryMaterialBuilder(filters, setMaterials)
-        const url = `/materials_service/materials?${searchQuery}`
+        const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
 
         return $.ajax({
           method: 'GET',

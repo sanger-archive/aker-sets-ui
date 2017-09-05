@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
 import { createNewSet, addMaterialsToSet, removeMaterialsFromSet } from '../actions';
 
+import StamperControl from '../containers/stamper_control.es6'
+
+
 class ButtonsPannel extends React.Component {
   constructor(props) {
     super(props);
@@ -44,6 +47,7 @@ class ButtonsPannel extends React.Component {
 
   render() {
     const { items, sets, dispatch } = this.props;
+
     return (
       <Panel>
         <Body>
@@ -68,7 +72,7 @@ class ButtonsPannel extends React.Component {
             <ListSets sets={sets} onChange={this.handleChangeRemoveMaterialsFromSet} />
             <button onClick={this.handleClickRemoveMaterialsFromSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Remove Materials From Set</button>
           </form>
-
+          <StamperControl></StamperControl>
         </Body>
       </Panel>
     );

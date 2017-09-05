@@ -10,9 +10,9 @@ describe('lib/query_builder', () => {
         { name: 'donor_id', comparator: 'is not', value: 'xyz', type: 'string' },
       ]
 
-      const result = queryBuilder(filters);
+      const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `where={"hmdmc":"123","donor_id":{"$ne":"xyz"}}`
+        `{"hmdmc":"123","donor_id":{"$ne":"xyz"}}`
       );
     });
 
@@ -23,11 +23,11 @@ describe('lib/query_builder', () => {
         { name: 'date_of_receipt', comparator: 'on', value: '10/01/13', type: 'date' },
       ]
 
-      const result = queryBuilder(filters);
+      const result = JSON.stringify(queryBuilder(filters));
       // current date of receipt only sends the last key and value
       const onDate = new Date(filters[2].value).toUTCString();
       expect(result).to.equal(
-        `where={"date_of_receipt":"${onDate}"}`
+        `{"date_of_receipt":"${onDate}"}`
       );
     });
 
@@ -37,9 +37,9 @@ describe('lib/query_builder', () => {
         { name: 'gender', comparator: 'is not', value: 'male', type: 'list' },
       ]
 
-      const result = queryBuilder(filters);
+      const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `where={"material_type":"dna","gender":{"$ne":"male"}}`
+        `{"material_type":"dna","gender":{"$ne":"male"}}`
       );
     });
 
@@ -48,9 +48,9 @@ describe('lib/query_builder', () => {
         { name: 'available', comparator: 'equals', value: 'true', type: 'boolean'},
       ]
 
-      const result = queryBuilder(filters);
+      const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `where={"available":"true"}`
+        `{"available":"true"}`
       );
     });
 

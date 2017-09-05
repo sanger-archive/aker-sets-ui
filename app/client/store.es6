@@ -6,10 +6,10 @@ import reducers from './reducers';
 let initialState = {
   api: {
     sets:        { data: [] },
-    materials:   { data: [] }
+    materials:   { data: [] },
   },
+  stampsInfo: { stamps: [], status: 'init', selectedStamp: null },
   materials: {},
-  collection_ids: [],
   selected: {
     top: null,
     bottom: null

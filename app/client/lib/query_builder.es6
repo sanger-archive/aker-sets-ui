@@ -41,11 +41,10 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
     return memo;
   }, {});
 
+//Example result:
+//{"gender":"male","phenotype":{"$ne":"a"},"donor_id":"z","_id":{"$in":["7460454b-ec70-40a3-b883-faed34be3dba","2f330521-9d43-4ea8-8eb2-b97c82a1567a"]}}
 
-//Example query:
-//http://localhost:3002/materials_service/materials?where={"gender":"male","phenotype":{"$ne":"a"},"donor_id":"z","_id":{"$in":["7460454b-ec70-40a3-b883-faed34be3dba","2f330521-9d43-4ea8-8eb2-b97c82a1567a"]}}
-
-  return `where=${JSON.stringify(result)}`;
+  return result;
 }
 
 export default queryMaterialBuilder;

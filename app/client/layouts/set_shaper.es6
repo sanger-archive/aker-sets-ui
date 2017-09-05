@@ -2,7 +2,6 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import SelectableSetTable from '../containers/selectable_set_table.es6';
 import DroppableSelectedSet from '../containers/droppable_selected_set.es6';
-import DraggableSelectedCollection from '../containers/draggable_selected_collection.es6';
 import LockedSelectedSet from '../containers/locked_selected_set.es6';
 import { Panel, Heading, Body, Footer } from '../components/panel.es6';
 import SetPanel from '../components/set_panel.es6';
@@ -10,7 +9,7 @@ import BottomSetPanel from '../components/bottom_set_panel.es6';
 import SetForm from '../containers/add_set_form.es6';
 import FontAwesome from '../components/font_awesome.es6';
 
-const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
+const SetShaper = ({ set, resource, user_set_ids }) => {
 
   let setName = set.attributes.name;
   let resourceName = resource.attributes.name;
@@ -47,7 +46,7 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
 
               <div className="tab-content">
                 <div role="tabpanel" className="tab-pane active" id="mySets">
-                  <SelectableSetTable selectionType="top" setIdList={user_set_ids} />
+                  <SelectableSetTable selectionType="top" setIdList={user_set_ids} hideOwner />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="allSets">
                   <SelectableSetTable selectionType="top"/>
@@ -78,17 +77,13 @@ const SetShaper = ({ set, collection_ids, resource, user_set_ids }) => {
 
             <Body style={{height: '320px', overflowY: 'scroll'}}>
               <ul className="nav nav-tabs" role="tablist">
-                <li role="presentation" className="active"><a href="#collections" aria-controls="collections" role="tab" data-toggle="tab">Collections</a></li>
-                <li role="presentation"><a href="#mySetsBottom" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a></li>
+                <li role="presentation" className="active"><a href="#mySetsBottom" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a></li>
                 <li role="presentation"><a href="#sets" aria-controls="sets" role="tab" data-toggle="tab">All Sets</a></li>
               </ul>
 
               <div className="tab-content">
-                <div role="tabpanel" className="tab-pane active" id="collections">
-                  <SelectableSetTable selectionType="bottom" setIdList={collection_ids} />
-                </div>
                 <div role="tabpanel" className="tab-pane" id="mySetsBottom">
-                  <SelectableSetTable selectionType="bottom" setIdList={user_set_ids} />
+                  <SelectableSetTable selectionType="bottom" setIdList={user_set_ids} hideOwner />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="sets">
                   <SelectableSetTable selectionType="bottom"/>
