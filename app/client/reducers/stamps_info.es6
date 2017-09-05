@@ -5,7 +5,7 @@ const stampsInfo = (state = {}, action) => {
   
   switch(action.type) {
     case FETCH_ALL_STAMPS:
-      return Object.assign({}, state, {status: action.status});
+      return Object.assign({}, state, { status: FETCH_ALL_STAMPS });
     case RECEIVE_ALL_STAMPS:
     case RECEIVE_EMPTY_RESULTS:
     case RECEIVE_EMPTY_STAMPS:

@@ -223,7 +223,8 @@ export const STAMPS_INITIALIZATION = "STAMPS_INITIALIZATION";
 export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
 export const fetchAllStamps = () => {
   return (dispatch, getState) => {
-    dispatch(function() { return { type: FETCH_ALL_STAMPS } });
+    dispatch({ type: FETCH_ALL_STAMPS });
+    //dispatch(function() { return { type: FETCH_ALL_STAMPS } });
     return dispatch(fetchTokenIfNeeded())
     .then(() => {
     return $.ajax({
