@@ -1,12 +1,15 @@
-import { RECEIVE_ALL_STAMPS, FETCH_ALL_STAMPS, SELECT_STAMP, APPLY_STAMP, UNAPPLY_STAMP } from '../actions';
+import { RECEIVE_ALL_STAMPS, RECEIVE_EMPTY_RESULTS, RECEIVE_EMPTY_STAMPS,
+  FETCH_ALL_STAMPS, SELECT_STAMP, APPLY_STAMP, UNAPPLY_STAMP } from '../actions';
 
 const stampsInfo = (state = {}, action) => {
-  let newState;
+  
   switch(action.type) {
     case FETCH_ALL_STAMPS:
-      return Object.assign({}, state, {status: 'fetching'})
+      return Object.assign({}, state, { status: FETCH_ALL_STAMPS });
     case RECEIVE_ALL_STAMPS:
-      return Object.assign({}, state, {status: 'received', stamps: action.stamps } );
+    case RECEIVE_EMPTY_RESULTS:
+    case RECEIVE_EMPTY_STAMPS:
+      return Object.assign({}, state, { status: action.status, stamps: action.stamps } );
     case SELECT_STAMP:
       return Object.assign({}, state, {selectedStamp: action.selectedStamp});
     default:

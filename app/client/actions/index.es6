@@ -219,10 +219,12 @@ export const receiveMaterialSchema = (response) => {
   }
 }
 
+export const STAMPS_INITIALIZATION = "STAMPS_INITIALIZATION";
 export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
 export const fetchAllStamps = () => {
   return (dispatch, getState) => {
-    dispatch(function() { return { type: FETCH_ALL_STAMPS } });
+    dispatch({ type: FETCH_ALL_STAMPS });
+    //dispatch(function() { return { type: FETCH_ALL_STAMPS } });
     return dispatch(fetchTokenIfNeeded())
     .then(() => {
     return $.ajax({
@@ -242,10 +244,26 @@ export const fetchAllStamps = () => {
 }
 
 export const RECEIVE_ALL_STAMPS = "RECEIVE_ALL_STAMPS";
+export const RECEIVE_EMPTY_RESULTS = "RECEIVE_EMPTY_RESULTS";
+export const RECEIVE_EMPTY_STAMPS = "RECEIVE_EMPTY_STAMPS";
 export const receiveAllStamps = (response) => {
-  return {
-    type: RECEIVE_ALL_STAMPS,
-    stamps: $.map(response.data, val => val )
+  return (dispatch, getState) => {
+    let state = getState();
+    let stamps = $.map(response.data, val => val );
+
+    let status = RECEIVE_ALL_STAMPS;
+    if (state.search.results.length===0) {
+      status = RECEIVE_EMPTY_RESULTS;
+    }
+    if (stamps.length == 0) {
+      status = RECEIVE_EMPTY_STAMPS; 
+    }
+
+    return(dispatch({
+      type: RECEIVE_ALL_STAMPS,
+      stamps,
+      status: status
+    }));
   }
 }
 
