@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
 import { performSearch } from '../actions/index.es6'
 import { filterQuery } from '../lib/utils.es6';
-import queryBuilder from '../lib/query_builder.es6'
+import queryMaterialBuilder from '../lib/query_builder.es6'
 
 
 class CurrentSearch extends React.Component {
+  constructor(props) {
+    super(props);
+    this.performQuerySearch = this.performQuerySearch.bind(this);
+  }
+
+  performQuerySearch(event) {
+    event.preventDefault();
+    this.props.dispatch(performSearch())
+  }
 
   render() {
 
-    const {current, dispatch} = this.props;
     const emptyFiltersRow = (<p key="emptySearch" className="bg-info">No current search</p>);
 
     let filterRows = [];
-    const filteredCurrent = filterQuery(current);
-
-    const query = queryBuilder(filteredCurrent)
-    const url = `/materials_service/materials?${query}`
+    const filteredCurrent = filterQuery(this.props.current);
 
     if (filteredCurrent.length == 0) {
       filterRows.push(emptyFiltersRow)
@@ -46,7 +51,7 @@ class CurrentSearch extends React.Component {
           <div className='well'>
             { filterRows }
           </div>
-          <button disabled={filteredCurrent==0} onClick={() => dispatch(performSearch(url))} style={{width: '100%'}} type="submit" className="btn btn-success">Search</button>
+          <button disabled={filteredCurrent==0} onClick={this.performQuerySearch} style={{width: '100%'}} type="submit" className="btn btn-success">Search</button>
         </Body>
       </Panel>
     )

@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
 import queryBuilder from '../lib/query_builder.es6'
 import { filterLinks } from '../lib/utils.es6';
+import queryMaterialBuilder from '../lib/query_builder.es6'
 
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
@@ -251,19 +252,46 @@ export const setCurrentSearch = () => {
   }
 }
 
-export const PERFORM_SEARCH = "PERFORM_SEARCH"
-export const performSearch = (url) => {
+export const FETCH_SET_MATERIALS_IF_NEEDED = "FETCH_SET_MATERIALS_IF_NEEDED"
+export const fetchSetMaterialsIfNeeded = () => {
   return (dispatch, getState) => {
-    return $.ajax({
-      method: 'GET',
-      url: url,
-      accept: "application/json",
-      cache: true
-    })
-    .then((response) => {
-      const filteredLinks = filterLinks(response._links);
-      dispatch(receiveSearchResults(response._items, filteredLinks));
-    });
+    const filters = getState().search.current
+    const filterSearches = filters.reduce((memo, filter)=>{
+      if(filter.name == 'setMembership') {
+        memo.push(dispatch(performSetFilterSearch(filter)));
+      }
+      return memo;
+    }, [])
+
+    if (filterSearches.length > 0) {
+      return $.when.apply(null, filterSearches);
+    }
+    return $.Deferred().resolve();
+  }
+}
+
+export const PERFORM_SEARCH = "PERFORM_SEARCH"
+export const performSearch = () => {
+  return (dispatch, getState) => {
+    return dispatch(fetchSetMaterialsIfNeeded())
+      .then(() => {
+        const setMaterials = getState().search.setMaterials;
+        debugger
+        let filters = getState().search.filters;
+        const searchQuery = queryMaterialBuilder(filters, setMaterials)
+        const url = `/materials_service/materials?${searchQuery}`
+
+        return $.ajax({
+          method: 'GET',
+          url: url,
+          accept: "application/json",
+          cache: true
+        })
+      })
+      .then((response) => {
+        const filteredLinks = filterLinks(response._links);
+        dispatch(receiveSearchResults(response._items, filteredLinks));
+      });
   }
 }
 
@@ -274,6 +302,50 @@ export const receiveSearchResults = (items, links) => {
     results: items,
     links: links,
   };
+}
+
+export const PERFORM_SET_FILTER_SEARCH = "PERFORM_SET_FILTER_SEARCH"
+export const performSetFilterSearch = (filter) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+    .then(() => {
+      const setQuery = `filter[name]=${filter.value}`
+      const url = `/sets_service/sets?include=materials&${setQuery}`
+
+      return $.ajax({
+        method: 'GET',
+        url: url,
+        contentType: "application/vnd.api+json",
+        accept: "application/vnd.api+json",
+        headers: {
+          "X-Authorisation": getState().token
+        },
+        jsonp: false
+      })
+    })
+    .then((response) => {
+      let comparator = filter.comparator
+      if (filter.comparator=='not in') {
+        comparator = 'not_in'
+      }
+      const data = {}
+      let material_uuids = [];
+      if (response.included) {
+        material_uuids = response.included.map((material)=>{return material.id})
+      }
+      data[comparator] = material_uuids
+      const result = Object.assign({}, data)
+      return dispatch(receiveSetsFromFilter(result))
+    })
+  }
+}
+
+export const RECEIVE_SETS_FROM_FILTER = "RECEIVE_SETS_FROM_FILTER"
+export const receiveSetsFromFilter = (result) => {
+  return {
+    type: RECEIVE_SETS_FROM_FILTER,
+    setMaterials: result
+  }
 }
 
 export const CREATE_NEW_SET = "CREATE_NEW_SET"
@@ -299,28 +371,6 @@ export const createSetOnly = (items, setName) => {
         url: "/sets_service/sets",
         contentType: "application/vnd.api+json",
         accept: "application/vnd.api+json",
-        headers: {
-          "X-Authorisation": getState().token
-        },
-        data: JSON.stringify(body),
-        jsonp: false
-      })
-    })
-  }
-}
-
-export const ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET"
-export const addMaterialsToSet = (items, setId) => {
-  return (dispatch, getState) => {
-    return dispatch(fetchTokenIfNeeded())
-   .then(()=>{
-      let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
-      const body = Object.assign({}, {data: uuids});
-      return $.ajax({
-        method: 'POST',
-        url: `/sets_service/sets/${setId}/relationships/materials`,
-        accept: "application/vnd.api+json",
-        contentType: "application/vnd.api+json",
         headers: {
           "X-Authorisation": getState().token
         },
@@ -361,5 +411,57 @@ export const receiveAllSets = (response) => {
     type: RECEIVE_ALL_SETS,
     sets: response
   };
+}
+
+export const ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET"
+export const addMaterialsToSet = (items, setId) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+   .then(()=>{
+      let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
+      const body = Object.assign({}, {data: uuids});
+      return $.ajax({
+        method: 'POST',
+        url: `/sets_service/sets/${setId}/relationships/materials`,
+        accept: "application/vnd.api+json",
+        contentType: "application/vnd.api+json",
+        headers: {
+          "X-Authorisation": getState().token
+        },
+        data: JSON.stringify(body),
+        jsonp: false,
+        success: function(data, textStatus, xhr) {
+          console.log("Successfully added materials to set");
+        },
+        error: function(data, textStatus, xhr) {
+          console.log(data.responseText);
+        }
+      })
+    })
+  }
+}
+
+export const REMOVE_MATERIALS_FROM_SET = "REMOVE_MATERIALS_FROM_SET"
+export const removeMaterialsFromSet = (items, setId) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+   .then(()=>{
+      let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
+      const body = Object.assign({}, {data: uuids});
+      debugger
+      return $.ajax({
+        method: 'DELETE',
+        dataType: "json",
+        url: `/sets_service/sets/${setId}/relationships/materials`,
+        accept: "application/vnd.api+json",
+        contentType: "application/vnd.api+json",
+        headers: {
+          "X-Authorisation": getState().token
+        },
+        data: JSON.stringify(body),
+        jsonp: false
+      })
+    })
+  }
 }
 

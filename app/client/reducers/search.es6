@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS } from '../actions/index.es6';
+import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -8,10 +8,15 @@ const search = (state = {}, action) => {
         list: ['is', 'is not'],
         date: ['before', 'after', 'on'],
         string: ['is', 'is not'],
-        boolean: ['equals']
+        boolean: ['equals'],
+        containment: ['in', 'not in']
       };
       const allowedTypes = ['string', 'boolean'];
       const properties = action.schema.properties;
+
+      // add filter by set to searchable fields from materials service
+      const setData =  { required: true, type: "string", searchable: true };
+      properties['setMembership'] = Object.assign({}, setData)
 
       let fields = Object.keys(properties).reduce((memo, name) => {
 
@@ -42,6 +47,11 @@ const search = (state = {}, action) => {
             field['type'] = 'date';
             field['comparators'] = comparators['date'];
 
+          // Extra set name filter
+          } else if (name == 'setMembership') {
+            field['type'] = 'string';
+            field['comparators'] = comparators['containment'];
+
           // Just a regular type string
           } else {
             field['type'] = 'string';
@@ -56,7 +66,6 @@ const search = (state = {}, action) => {
         return memo;
 
       }, { "_id": { "type": "string", "comparators": comparators['string'] }});
-
       return Object.assign({}, state, { fields: fields });
 
     case UPDATE_FILTER_NAME:
@@ -125,6 +134,12 @@ const search = (state = {}, action) => {
     case RECEIVE_ALL_SETS:
       const received_sets = action.sets
       return Object.assign({}, state, { sets: received_sets.data });
+
+    case RECEIVE_SETS_FROM_FILTER:
+      const received_set_materials = action.setMaterials;
+      newState = state.setMaterials.slice();
+      newState.push(received_set_materials)
+      return Object.assign({}, state, { setMaterials: newState });
 
     default:
       return state;

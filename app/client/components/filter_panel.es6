@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
 import DatePicker from 'react-bootstrap-date-picker';
 import FontAwesome from './font_awesome.es6';

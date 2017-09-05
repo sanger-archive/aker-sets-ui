@@ -28,7 +28,7 @@ const Search = ({ search }) => {
 
       <div className="row">
         <div className="col-md-12">
-          <SearchResultsTable headings={ Object.keys(search.fields) } current={search.current} items={ search.results } links={ Object.entries(search.links) } sets={search.sets} />
+          <SearchResultsTable headings={ Object.keys(search.fields) } current={search.current} items={ search.results } links={ Object.entries(search.links) } sets={search.sets}/>
         </div>
       </div>
 
