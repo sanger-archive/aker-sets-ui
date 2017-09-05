@@ -224,7 +224,6 @@ export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
 export const fetchAllStamps = () => {
   return (dispatch, getState) => {
     dispatch({ type: FETCH_ALL_STAMPS });
-    //dispatch(function() { return { type: FETCH_ALL_STAMPS } });
     return dispatch(fetchTokenIfNeeded())
     .then(() => {
     return $.ajax({
@@ -252,9 +251,6 @@ export const receiveAllStamps = (response) => {
     let stamps = $.map(response.data, val => val );
 
     let status = RECEIVE_ALL_STAMPS;
-    if (state.search.results.length===0) {
-      status = RECEIVE_EMPTY_RESULTS;
-    }
     if (stamps.length == 0) {
       status = RECEIVE_EMPTY_STAMPS; 
     }
