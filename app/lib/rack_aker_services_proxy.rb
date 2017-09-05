@@ -25,5 +25,6 @@ private
     env["HTTP_HOST"] = uri.host
     env["SERVER_PORT"] = uri.port
     env["PATH_INFO"] = [uri.path, host_path].join("/")
+    env["HTTP_CONNECTION"] = "close"
   end
 end

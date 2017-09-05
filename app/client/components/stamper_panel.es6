@@ -3,7 +3,7 @@ import FontAwesome from './font_awesome.es6';
 
 const StamperPanel = ({stamps, selectedStamp, shownItems, status, onStampClick, onUnstampClick, onChangeSelectedStamp }) => {
 
-  const stampsOptions = $.map(stamps, (stamp) => { 
+  const stampsOptions = $.map(stamps, (stamp) => {
     return (
       <option key={stamp.id} value={ stamp.id }>{ stamp.attributes.name }</option>
     );
@@ -24,10 +24,10 @@ const StamperPanel = ({stamps, selectedStamp, shownItems, status, onStampClick, 
   const selectedStampId = selectedStamp ? selectedStamp.id : stamps[0].id;
 
   return (
-    <form className="form-inline">
+    <form className="form-inline" style={{marginTop: '5px'}}>
       <label>
         Select a stamp:
-        <select className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp } >
+        <select style={{marginLeft: '10px'}} className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp } >
           { stampsOptions }
         </select>
       </label>

@@ -89,7 +89,6 @@ const ListSets = ({sets, onChange}) => {
 
   return (
     <select onChange={onChange} className="form-control" style={{marginLeft: '10px'}}>
-      <option value='' key='emptyOption'> </option>
       { optionTags }
     </select>
   );

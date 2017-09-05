@@ -323,7 +323,6 @@ export const performSearch = () => {
     return dispatch(fetchSetMaterialsIfNeeded())
       .then(() => {
         const setMaterials = getState().search.setMaterials;
-        debugger
         let filters = getState().search.filters;
         const searchQuery = queryMaterialBuilder(filters, setMaterials)
         const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
@@ -478,10 +477,10 @@ export const addMaterialsToSet = (items, setId) => {
         data: JSON.stringify(body),
         jsonp: false,
         success: function(data, textStatus, xhr) {
-          console.log("Successfully added materials to set");
+          alert("Successfully added materials to set");
         },
         error: function(data, textStatus, xhr) {
-          console.log(data.responseText);
+          alert(data.responseText);
         }
       })
     })
@@ -495,18 +494,21 @@ export const removeMaterialsFromSet = (items, setId) => {
    .then(()=>{
       let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
       const body = Object.assign({}, {data: uuids});
-      debugger
       return $.ajax({
         method: 'DELETE',
-        dataType: "json",
         url: `/sets_service/sets/${setId}/relationships/materials`,
-        accept: "application/vnd.api+json",
         contentType: "application/vnd.api+json",
         headers: {
           "X-Authorisation": getState().token
         },
+        processData: false,
         data: JSON.stringify(body),
-        jsonp: false
+        success: function(data, textStatus, xhr) {
+          alert("Successfully removed materials from set");
+        },
+        error: function(data, textStatus, xhr) {
+          alert(data.responseText);
+        }
       })
     })
   }
