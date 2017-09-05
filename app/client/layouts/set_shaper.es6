@@ -8,6 +8,7 @@ import SetPanel from '../components/set_panel.es6';
 import BottomSetPanel from '../components/bottom_set_panel.es6';
 import SetForm from '../containers/add_set_form.es6';
 import FontAwesome from '../components/font_awesome.es6';
+import UserMessage from '../components/user_message.es6';
 
 const SetShaper = ({ set, resource, user_set_ids }) => {
 
@@ -32,6 +33,8 @@ const SetShaper = ({ set, resource, user_set_ids }) => {
           <h1 className="page-header">Set Shaper</h1>
         </div>
       </div>
+
+      <UserMessage></UserMessage>
 
       <div className="row">
         <div className="col-md-3">
