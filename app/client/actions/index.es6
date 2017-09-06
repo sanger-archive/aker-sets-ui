@@ -45,6 +45,12 @@ const _apply_generation = (nameOperation) => {
           },
           data: JSON.stringify({data: {query}}),
           jsonp: false
+        }).then(()=>{
+          dispatch(userMessage('The stamp selected has been '+nameOperation, 'info'));
+        }, (error)=> {
+          if (error.status === 403) {
+            dispatch(userMessage('You cannot stamp/unstamp permissions on materials that you do not own', 'danger'));
+          }
         })
       })
     }
@@ -219,12 +225,16 @@ export const receiveMaterialSchema = (response) => {
   }
 }
 
+export const USER_MESSAGE = "USER_MESSAGE";
+export const userMessage = (message, msgType) => {
+  return { type: USER_MESSAGE, message, msgType};
+};
+
 export const STAMPS_INITIALIZATION = "STAMPS_INITIALIZATION";
 export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
 export const fetchAllStamps = () => {
   return (dispatch, getState) => {
     dispatch({ type: FETCH_ALL_STAMPS });
-    //dispatch(function() { return { type: FETCH_ALL_STAMPS } });
     return dispatch(fetchTokenIfNeeded())
     .then(() => {
     return $.ajax({
@@ -252,9 +262,6 @@ export const receiveAllStamps = (response) => {
     let stamps = $.map(response.data, val => val );
 
     let status = RECEIVE_ALL_STAMPS;
-    if (state.search.results.length===0) {
-      status = RECEIVE_EMPTY_RESULTS;
-    }
     if (stamps.length == 0) {
       status = RECEIVE_EMPTY_STAMPS; 
     }
