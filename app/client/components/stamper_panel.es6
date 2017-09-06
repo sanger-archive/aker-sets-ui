@@ -26,10 +26,10 @@ const StamperPanel = ({stamps, selectedStamp, status, onStampClick, onUnstampCli
     const selectedStampId = selectedStamp ? selectedStamp.id : stamps[0].id;
 
     return (
-      <form className="form-inline">
+      <form className="form-inline" style={{marginTop: '5px'}}>
         <label>
           Select a stamp:
-          <select className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp } >
+          <select className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp } style={{marginLeft: '10px'}}>
             { stampsOptions }
           </select>
         </label>

@@ -49,7 +49,7 @@ const _apply_generation = (nameOperation) => {
           dispatch(userMessage('The stamp selected has been '+nameOperation, 'info'));
         }, (error)=> {
           if (error.status === 403) {
-            dispatch(userMessage('You cannot stamp/unstamp permissions on materials that you do not own', 'danger'));
+            dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
           }
         })
       })
@@ -263,7 +263,7 @@ export const receiveAllStamps = (response) => {
 
     let status = RECEIVE_ALL_STAMPS;
     if (stamps.length == 0) {
-      status = RECEIVE_EMPTY_STAMPS; 
+      status = RECEIVE_EMPTY_STAMPS;
     }
 
     return(dispatch({
@@ -502,10 +502,10 @@ export const addMaterialsToSet = (items, setId) => {
         data: JSON.stringify(body),
         jsonp: false,
         success: function(data, textStatus, xhr) {
-          alert("Successfully added materials to set");
+          dispatch(userMessage("Successfully added materials to set", 'info'));
         },
         error: function(data, textStatus, xhr) {
-          alert(data.responseText);
+          dispatch(userMessage('Failed to add materials to the set', 'danger'));
         }
       })
     })
@@ -529,10 +529,10 @@ export const removeMaterialsFromSet = (items, setId) => {
         processData: false,
         data: JSON.stringify(body),
         success: function(data, textStatus, xhr) {
-          alert("Successfully removed materials from set");
+          dispatch(userMessage("Successfully removed materials from the set", 'info'));
         },
         error: function(data, textStatus, xhr) {
-          alert(data.responseText);
+          dispatch(userMessage('Failed to remove materials from the set', 'danger'));
         }
       })
     })
