@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
-import { createNewSet, addMaterialsToSet, removeMaterialsFromSet } from '../actions';
+import { createNewSet, addMaterialsToSet, removeMaterialsFromSet } from '../actions/index.es6';
 
 import StamperControl from '../containers/stamper_control.es6'
 
-
-class ButtonsPannel extends React.Component {
+class ButtonsPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {newSetName: '', addMaterialsToSetId: '', removeMaterialsFromSetId: ''};
@@ -51,21 +50,21 @@ class ButtonsPannel extends React.Component {
     return (
       <Panel>
         <Body>
-          <form className="form-inline">
+          <form className="form-inline" id="create-set">
             <label>
               Create a set from the results:
               <input type="text" style={{marginLeft: '10px'}} className="form-control" placeholder="set name" onChange={this.handleChangeCreateNewSet} />
             </label>
             <button onClick={this.handleClickCreateNewSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create New Set</button>
           </form>
-          <form className="form-inline">
+          <form className="form-inline" id="add-materials-to-set">
             <label>
               Add result materials to an existing set:
             </label>
             <ListSets sets={sets} onChange={this.handleChangeAddMaterialsToSet} />
             <button onClick={this.handleClickAddMaterialsToSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Add Materials To Set</button>
           </form>
-          <form className="form-inline" style={{marginTop: '5px'}}>
+          <form className="form-inline" style={{marginTop: '5px'}} id="remove-materials-from-set">
             <label>
               Remove result materials from an existing set:
             </label>
@@ -79,8 +78,8 @@ class ButtonsPannel extends React.Component {
   }
 }
 
-ButtonsPannel = connect()(ButtonsPannel);
-export default ButtonsPannel;
+ButtonsPanel = connect()(ButtonsPanel);
+export default ButtonsPanel;
 
 const ListSets = ({sets, onChange}) => {
   const optionTags = sets.map((set, index) => {

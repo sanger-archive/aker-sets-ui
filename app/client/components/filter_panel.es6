@@ -1,10 +1,10 @@
-  import React from 'react';
+import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
 import DatePicker from 'react-bootstrap-date-picker';
 import FontAwesome from './font_awesome.es6';
 import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
-import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch} from '../actions';
+import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch} from '../actions/index.es6';
 import {debounce} from '../lib/utils.es6';
 
 
@@ -32,8 +32,8 @@ class FilterPanel extends React.Component {
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
-          <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary">Update Current Search</button>
-          <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success">
+          <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Update Current Search</button>
+          <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success add-filter-row">
             <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
           </button>
         </Body>
@@ -46,7 +46,7 @@ FilterPanel = connect()(FilterPanel);
 
 export default FilterPanel;
 
-class FilterRow extends React.Component {
+export class FilterRow extends React.Component {
 
   render() {
 
@@ -71,7 +71,7 @@ class FilterRow extends React.Component {
           <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
         </div>
         <div className="col-md-1">
-          <button onClick={onRemove} type="submit" className="btn btn-link">
+          <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row">
             <FontAwesome icon="times" size="lg" style={{color: 'red'}} />
           </button>
         </div>

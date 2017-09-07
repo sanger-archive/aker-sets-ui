@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk';
 import { setEndpointHost, setEndpointPath, setHeaders } from 'redux-json-api';
-import reducers from './reducers';
+import reducers from './reducers/index.es6';
 
-import {STAMPS_INITIALIZATION} from './actions'
+import {STAMPS_INITIALIZATION} from './actions/index.es6'
 
 let initialState = {
   api: {

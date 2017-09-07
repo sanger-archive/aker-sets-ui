@@ -1,8 +1,8 @@
 import { RECEIVE_ALL_STAMPS, RECEIVE_EMPTY_RESULTS, RECEIVE_EMPTY_STAMPS,
-  FETCH_ALL_STAMPS, SELECT_STAMP, APPLY_STAMP, UNAPPLY_STAMP } from '../actions';
+  FETCH_ALL_STAMPS, SELECT_STAMP, APPLY_STAMP, UNAPPLY_STAMP } from '../actions/index.es6';
 
 const stampsInfo = (state = {}, action) => {
-  
+
   switch(action.type) {
     case FETCH_ALL_STAMPS:
       return Object.assign({}, state, { status: FETCH_ALL_STAMPS });

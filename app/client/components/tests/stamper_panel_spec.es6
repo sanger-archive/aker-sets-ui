@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import { STAMPS_INITIALIZATION, RECEIVE_ALL_STAMPS, RECEIVE_EMPTY_STAMPS, 
+import { STAMPS_INITIALIZATION, RECEIVE_ALL_STAMPS, RECEIVE_EMPTY_STAMPS,
   RECEIVE_EMPTY_RESULTS, FETCH_ALL_STAMPS} from '../../actions/index.es6';
 
 import StamperPanel from '../stamper_panel.es6';
@@ -15,12 +15,12 @@ describe('<StamperPanel />', () => {
   beforeEach(function() {
     this.NUM_STAMPS = 50;
     this.stamps = stamps(this.NUM_STAMPS);
-    this.STATUS = { 
+    this.STATUS = {
       stamps: this.stamps,
-      shownItems: true, 
-      status: 'running', 
-      onStampClick: sinon.spy(), 
-      onUnstampClick: sinon.spy(), 
+      shownItems: true,
+      status: 'running',
+      onStampClick: sinon.spy(),
+      onUnstampClick: sinon.spy(),
       onChangeSelectedStamp: sinon.spy()
     };
   })
@@ -39,7 +39,7 @@ describe('<StamperPanel />', () => {
 
     it('displays a fetching message', function() {
       this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
-      expect(this.wrapper.text()).to.contains('Loading stamps');        
+      expect(this.wrapper.text()).to.contains('Loading stamps');
     });
   });
 
@@ -59,7 +59,7 @@ describe('<StamperPanel />', () => {
       it('displays an empty div', function() {
         this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
         expect(this.wrapper.contains(<div></div>)).to.equal(true);
-      });      
+      });
     })
 
     context('when it gets a list of stamps and it has some results to apply stamps', () => {
@@ -74,7 +74,7 @@ describe('<StamperPanel />', () => {
         it('selects the first stamp', function() {
           this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
           expect(this.wrapper.find('select').prop('defaultValue')).to.equal(this.STATUS.stamps[0].id);
-        });  
+        });
       });
       context('when selectedStamp is provided', function() {
         it('selects the stamp provided as selectedStamp', function() {
@@ -102,7 +102,7 @@ describe('<StamperPanel />', () => {
         it('calls on change handler when changing the select option', function() {
           this.wrapper = shallow(<StamperPanel {...this.STATUS} />);
           this.wrapper.find('select').simulate('change');
-          expect(this.STATUS.onChangeSelectedStamp).to.have.property('callCount', 1);        
+          expect(this.STATUS.onChangeSelectedStamp).to.have.property('callCount', 1);
         });
 
       });
