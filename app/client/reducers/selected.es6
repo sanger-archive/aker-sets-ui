@@ -1,4 +1,4 @@
-import {SELECT} from '../actions';
+import {SELECT} from '../actions/index.es6';
 
 const selected = (state = {}, action) => {
   switch (action.type) {

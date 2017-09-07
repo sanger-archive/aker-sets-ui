@@ -1,4 +1,4 @@
-import {RECEIVE_TOKEN} from '../actions';
+import {RECEIVE_TOKEN} from '../actions/index.es6';
 
 const token = (state = {}, action) => {
   switch (action.type) {

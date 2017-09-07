@@ -5,7 +5,8 @@ module.exports = {
 
   entry: {
     common: ['babel-polyfill'],
-    'set-shaper': './set_shaper'
+    'set-shaper': './set_shaper',
+    'search': './search'
   },
 
   output: {

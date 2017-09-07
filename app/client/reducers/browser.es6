@@ -1,7 +1,9 @@
-import {STORE_ITEMS, SELECT_ITEM, TOGGLE_ITEM, CLEAR_SELECTION, SHIFT_SELECT_ITEMS, selectItem} from '../actions/index.es6';
+import {USER_MESSAGE, STORE_ITEMS, SELECT_ITEM, TOGGLE_ITEM, CLEAR_SELECTION, SHIFT_SELECT_ITEMS, selectItem} from '../actions/index.es6';
 
 const browser = (state = {}, action) => {
   switch (action.type) {
+    case USER_MESSAGE:
+      return Object.assign({}, state, { userMessage: { message: action.message, msgType: action.msgType }});
     case STORE_ITEMS:
       return Object.assign({}, state, { items: action.items });
 

@@ -3,10 +3,6 @@ import classNames from 'classnames';
 import FontAwesome from './font_awesome.es6';
 
 const SetTable = ({ sets, selected_set, onSetClick, hideOwner }) => {
-  var ownerHeader = '';
-  if (!hideOwner){
-    ownerHeader = <th>Owner</th>;
-  }
   return (
     <table className="table table-striped table-hover">
       <thead>
@@ -14,7 +10,7 @@ const SetTable = ({ sets, selected_set, onSetClick, hideOwner }) => {
           <th>Name</th>
           <th>Created</th>
           <th>Size</th>
-          { ownerHeader }
+          { !hideOwner && <th>Owner</th>}
         </tr>
       </thead>
       <tbody>
@@ -37,7 +33,7 @@ const SetRow = ({ set, selected, onClick, hideOwner }) => {
     info: selected
   })
 
-  var ownerCell = '';
+  let ownerCell;
   if (!hideOwner) {
     if (set.attributes.owner_id) {
       ownerCell = <td>{ set.attributes.owner_id }</td>;
@@ -51,7 +47,7 @@ const SetRow = ({ set, selected, onClick, hideOwner }) => {
       <td>{ set.attributes.name } { set.attributes.locked && <FontAwesome icon="lock" style={{"color": "#e61c1c"}} /> }</td>
       <td>{ new Date(set.attributes.created_at).toDateString() }</td>
       <td>{ set.meta.size }</td>
-      { ownerCell }
+      { !hideOwner && ownerCell }
     </tr>
   );
 };
