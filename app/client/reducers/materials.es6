@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIALS } from '../actions';
+import { RECEIVE_MATERIALS } from '../actions/index.es6';
 
 const materials = (state = {}, action) => {
   switch (action.type) {
