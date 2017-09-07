@@ -19,7 +19,7 @@ class SearchResultsTable extends React.Component {
       <Panel>
         <Heading title={'Results'} />
         <Body>
-          <table className="table table-striped table-hover">
+          <table className="table table-striped table-hover search-results-table">
             <thead>
               <tr>
                 { headings.map((heading, index) => { return (<th key={index}>{heading}</th>); }) }
