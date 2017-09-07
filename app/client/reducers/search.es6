@@ -81,7 +81,6 @@ const search = (state = {}, action) => {
         } else {
           filter.value = '';
         }
-
         filter.name = action.value;
         filter.type = field.type;
         filter.comparator = state.fields[filter.name].comparators[0];

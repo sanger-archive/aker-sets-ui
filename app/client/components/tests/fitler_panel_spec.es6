@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import store from '../../store.es6'
-import {FilterRow} from '../filter_panel.es6'
+import { FilterRow, ContextualComparator, ContextualValue } from '../filter_panel.es6'
 import FilterPanel from '../filter_panel.es6'
 
 
@@ -31,7 +31,6 @@ describe('<FilterPanel />', () => {
   })
 
   context('when interacting with filter panel', () => {
-    beforeEach(function() { store.getState().search.filters = []});
     it('creates a new row when we click on the button to add new filter row', () => {
       const context = {
         store,
@@ -69,6 +68,55 @@ describe('<FilterPanel />', () => {
       const wrapper = mount(<FilterPanel {...store.getState().search}></FilterPanel>, { context });
       wrapper.find('button.set-current-search').simulate('click');
       expect(store.getState().search.current.length).to.equals(filters.length);
+    });
+
+    it('updates the comparator list when a field name is selected', ()=>{
+      const context = {
+        store,
+      };
+      const filters = [{}];
+      store.getState().search.filters = filters;
+
+      const fields = { gender: {type: 'string', allowed: ['male', 'female'], comparators: ['is', 'is not']}}
+      store.getState().search.fields = fields;
+
+      const wrapper = mount(<FilterPanel {...store.getState().search}></FilterPanel>, { context });
+
+      const mockedEvent = { target: { value: 'gender'} };
+      wrapper.find('select.change-field-name').simulate('change', mockedEvent);
+      expect(store.getState().search.filters[0].name).to.equals('gender');
+      expect(store.getState().search.filters[0].type).to.equals('string');
+      expect(store.getState().search.filters[0].comparator).to.equals('is');
+    });
+
+    it('updates the value type when a comparator is selected', ()=>{
+      const context = {
+        store,
+      };
+      const filters = [{}];
+      store.getState().search.filters = filters;
+      const fields = { gender: {type: 'string', allowed: ['male', 'female'], comparators: ['is', 'is not']}}
+      store.getState().search.fields = fields;
+
+      const wrapper = mount(<FilterPanel {...store.getState().search}></FilterPanel>, { context });
+      const mockedEvent = { target: { value: 'is not'} };
+      wrapper.find(ContextualComparator).simulate('change', mockedEvent);
+      expect(store.getState().search.filters[0].comparator).to.equals('is not');
+    });
+
+    it('updates the filter state when a filter value is selected', ()=>{
+      const context = {
+        store,
+      };
+      const filters = [{}];
+      store.getState().search.filters = filters;
+      const fields = { gender: {type: 'string', allowed: ['male', 'female'], comparators: ['is', 'is not']}}
+      store.getState().search.fields = fields;
+
+      const wrapper = mount(<FilterPanel {...store.getState().search}></FilterPanel>, { context });
+      const mockedEvent = { target: { value: 'female'} };
+      wrapper.find(ContextualValue).simulate('change', mockedEvent);
+      expect(store.getState().search.filters[0].value).to.equals('female');
     });
 
   })

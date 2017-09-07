@@ -59,7 +59,7 @@ export class FilterRow extends React.Component {
     return (
       <div className="row" style={{'marginBottom': '10px'}}>
         <div className="col-md-4">
-          <select value={filter.name} className="form-control" onChange={onNameChange}>
+          <select value={filter.name} className="form-control change-field-name" onChange={onNameChange}>
             <option value='' key='empty key'> </option>
             { options }
           </select>
@@ -80,7 +80,7 @@ export class FilterRow extends React.Component {
   }
 }
 
-class ContextualComparator extends React.Component {
+export class ContextualComparator extends React.Component {
 
   render() {
     const {filter, fields, onChange} = this.props;
@@ -91,7 +91,7 @@ class ContextualComparator extends React.Component {
 
 }
 
-class ContextualValue extends React.Component {
+export class ContextualValue extends React.Component {
   render() {
     const { filter, fields, onChange } = this.props
 
