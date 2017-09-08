@@ -375,6 +375,26 @@ export const performSearch = () => {
   }
 }
 
+export const PERFORM_SEARCH_WITH_URL = "PERFORM_SEARCH_WITH_URL";
+export const performSearchWithUrl = (url) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchSetMaterialsIfNeeded())
+      .then(() => {
+        return $.ajax({
+          url,
+          method: 'GET',
+          accept: "application/json",
+          cache: false
+        })
+      })
+      .then((response) => {
+        const filteredLinks = filterLinks(response._links);
+        dispatch(receiveSearchResults(response._items, filteredLinks));
+      }, (error) => { return dispatch(handleMaterialsServiceErrors(error)); });
+  }
+}
+
+
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
 export const receiveSearchResults = (items, links) => {
   return {
