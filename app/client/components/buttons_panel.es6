@@ -53,7 +53,7 @@ class ButtonsPanel extends React.Component {
           <form className="form-inline" id="create-set">
             <label>
               Create a set from the results:
-              <input type="text" style={{marginLeft: '10px'}} className="form-control" placeholder="set name" onChange={this.handleChangeCreateNewSet} />
+              <input type="text" style={{marginLeft: '10px'}} className="form-control" placeholder="Set name" onChange={this.handleChangeCreateNewSet} />
             </label>
             <button onClick={this.handleClickCreateNewSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create New Set</button>
           </form>

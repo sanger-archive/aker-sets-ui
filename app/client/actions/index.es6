@@ -49,7 +49,7 @@ const _apply_generation = (nameOperation) => {
           dispatch(userMessage('The stamp selected has been '+nameOperation, 'info'));
         }, (error)=> {
           if (error.status === 403) {
-            dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+            dispatch(userMessage(`You cannot ${nameOperation} stamp permissions if you do not own all the result materials.`, 'danger'));
           }
         })
       })
