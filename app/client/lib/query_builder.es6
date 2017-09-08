@@ -9,6 +9,9 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
   }
 
   var result = filters.reduce((memo, filter) => {
+    if (filter.name==""){
+      return memo;
+    }
 
     const comparator = comparators[filter.comparator];
     const value = {};
