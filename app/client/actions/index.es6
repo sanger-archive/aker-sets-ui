@@ -3,6 +3,8 @@ import { setHeader, readEndpoint } from "redux-json-api"
 import { filterQuery } from '../lib/utils.es6';
 import { filterLinks } from '../lib/utils.es6';
 import queryMaterialBuilder from '../lib/query_builder.es6'
+import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
+
 
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
@@ -49,7 +51,9 @@ const _apply_generation = (nameOperation) => {
           dispatch(userMessage('The stamp selected has been '+nameOperation, 'info'));
         }, (error)=> {
           if (error.status === 403) {
-            dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+            return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+          } else {
+            return dispatch(handleStampsServiceErrors(error));
           }
         })
       })
@@ -142,7 +146,7 @@ export const fetchMaterials = (materials) => {
       jsonp: false })
       .then(function(response) {
         dispatch(receiveMaterials(response._items))
-      });
+      }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
   }
 }
 
@@ -213,7 +217,7 @@ export const fetchMaterialSchema = () => {
 
     .then((response) => {
       return dispatch(receiveMaterialSchema(response));
-    });
+    }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
   }
 }
 
@@ -249,6 +253,11 @@ export const fetchAllStamps = () => {
       })
     }).then((response) => {
       return dispatch(receiveAllStamps(response));
+    }, (error) => {
+      if (error.status == 404) {
+        return dispatch(userMessage('Failed to obtain the stamps available. The stamps service might not be running. Please contact the administrators', 'danger'));
+      }
+      return dispatch(handleStampsServiceErrors(error));
     });
   }
 }
@@ -356,13 +365,13 @@ export const performSearch = () => {
           method: 'GET',
           url: url,
           accept: "application/json",
-          cache: true
+          cache: false
         })
       })
       .then((response) => {
         const filteredLinks = filterLinks(response._links);
         dispatch(receiveSearchResults(response._items, filteredLinks));
-      });
+      }, (error) => { return dispatch(handleMaterialsServiceErrors(error)); });
   }
 }
 
@@ -407,7 +416,7 @@ export const performSetFilterSearch = (filter) => {
       data[comparator] = material_uuids
       const result = Object.assign({}, data)
       return dispatch(receiveSetsFromFilter(result))
-    })
+    }, (error) => { return dispatch(handleSetsServiceErrors(error))});
   }
 }
 
@@ -447,7 +456,7 @@ export const createSetOnly = (items, setName) => {
         },
         data: JSON.stringify(body),
         jsonp: false
-      })
+      }).fail((error) => { return dispatch(handleSetsServiceErrors(error))});
     })
   }
 }
@@ -471,7 +480,7 @@ export const getAllSets = () => {
       })
       .then((response) => {
         dispatch(receiveAllSets(response))
-      });
+      }, (error) => { return dispatch(handleSetsServiceErrors(error));});
     })
   }
 }
@@ -538,4 +547,3 @@ export const removeMaterialsFromSet = (items, setId) => {
     })
   }
 }
-
