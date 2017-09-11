@@ -18,11 +18,11 @@ export const selectStamp = (stampId) => {
   return (dispatch, getState) => {
     const selectedStamp = getState().stampsInfo.stamps.filter((stamp) => {
       return (stamp.id == stampId);
-    })[0]
-    return {
+    })[0];
+    return dispatch({
       type: SELECT_STAMP,
       selectedStamp
-    }
+    });
   }
 }
 
