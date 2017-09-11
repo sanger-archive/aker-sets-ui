@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
-import { createNewSet, addMaterialsToSet, removeMaterialsFromSet } from '../actions/index.es6';
+import { createSetFromSearch, addMaterialsToSetFromSearch, removeMaterialsFromSetFromSearch } from '../actions/index.es6';
 
 import StamperControl from '../containers/stamper_control.es6'
 
@@ -23,7 +23,7 @@ class ButtonsPanel extends React.Component {
 
   handleClickCreateNewSet(event) {
     event.preventDefault();
-    this.props.dispatch(createNewSet(this.props.items, this.state.newSetName))
+    this.props.dispatch(createSetFromSearch(this.state.newSetName))
   }
 
   handleChangeAddMaterialsToSet(event) {
@@ -32,7 +32,7 @@ class ButtonsPanel extends React.Component {
 
   handleClickAddMaterialsToSet(event) {
     event.preventDefault();
-    this.props.dispatch(addMaterialsToSet(this.props.items, this.state.addMaterialsToSetId))
+    this.props.dispatch(addMaterialsToSetFromSearch(this.state.addMaterialsToSetId))
   }
 
   handleChangeRemoveMaterialsFromSet(event) {
@@ -41,7 +41,7 @@ class ButtonsPanel extends React.Component {
 
   handleClickRemoveMaterialsFromSet(event) {
     event.preventDefault();
-    this.props.dispatch(removeMaterialsFromSet(this.props.items, this.state.removeMaterialsFromSetId))
+    this.props.dispatch(removeMaterialsFromSetFromSearch(this.state.removeMaterialsFromSetId))
   }
 
   render() {

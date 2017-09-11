@@ -22,7 +22,7 @@ export const filterQuery = (currentFilters) => {
 
 export const filterLinks = (responseLinks) => {
   let links = responseLinks;
-  const linksToRemove = ['self', 'parent'];
+  const linksToRemove = ['parent'];
 
   Object.keys(links).map((link) => {
     if (linksToRemove.includes(link)){

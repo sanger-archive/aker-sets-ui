@@ -33,7 +33,8 @@ let initialState = {
     results: [],
     links: {},
     sets: [],
-    setMaterials: []
+    setMaterials: [],
+    meta: {}
   }
 }
 
