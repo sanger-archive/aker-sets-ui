@@ -6,6 +6,7 @@ import materials from './materials.es6';
 import token from './token.es6';
 import stampsInfo from './stamps_info.es6';
 import search from './search.es6';
+import loading from './loading.es6';
 
 const reducers = combineReducers({
   api,
@@ -14,7 +15,8 @@ const reducers = combineReducers({
   materials,
   token,
   search,
-  stampsInfo
+  stampsInfo,
+  loading
 });
 
 export default reducers;

@@ -35,6 +35,12 @@ let initialState = {
     sets: [],
     setMaterials: [],
     meta: {}
+  },
+  loading: {
+    creatingSet: false,
+    addMaterialsToSet: false,
+    removeMaterialsFromSet: false,
+    stamping: false
   }
 }
 

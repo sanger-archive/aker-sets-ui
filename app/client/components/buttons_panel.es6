@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
 import { createSetFromSearch, addMaterialsToSetFromSearch, removeMaterialsFromSetFromSearch } from '../actions/index.es6';
+import FontAwesome from './font_awesome.es6';
 
 import StamperControl from '../containers/stamper_control.es6'
 
@@ -45,7 +46,7 @@ class ButtonsPanel extends React.Component {
   }
 
   render() {
-    const { items, sets, dispatch } = this.props;
+    const { items, sets, loading, dispatch } = this.props;
 
     return (
       <Panel>
@@ -55,21 +56,24 @@ class ButtonsPanel extends React.Component {
               Create a set from the results:
               <input type="text" style={{marginLeft: '10px'}} className="form-control" placeholder="Set name" onChange={this.handleChangeCreateNewSet} />
             </label>
-            <button onClick={this.handleClickCreateNewSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create New Set</button>
+            <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create New Set</button>
+            { loading.creatingSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
           <form className="form-inline" id="add-materials-to-set">
             <label>
               Add result materials to an existing set:
             </label>
             <ListSets sets={sets} onChange={this.handleChangeAddMaterialsToSet} />
-            <button onClick={this.handleClickAddMaterialsToSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Add Materials To Set</button>
+            <button onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Add Materials To Set</button>
+            { loading.addMaterialsToSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
           <form className="form-inline" style={{marginTop: '5px'}} id="remove-materials-from-set">
             <label>
               Remove result materials from an existing set:
             </label>
             <ListSets sets={sets} onChange={this.handleChangeRemoveMaterialsFromSet} />
-            <button onClick={this.handleClickRemoveMaterialsFromSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Remove Materials From Set</button>
+            <button onClick={this.handleClickRemoveMaterialsFromSet} disabled={loading.removeMaterialsFromSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Remove Materials From Set</button>
+            { loading.removeMaterialsFromSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
           <StamperControl></StamperControl>
         </Body>
