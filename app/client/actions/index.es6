@@ -315,7 +315,7 @@ export const performSearch = () => {
         })
       })
       .then((response) => {
-        dispatch(receiveSearchResults(response));
+        return dispatch(receiveSearchResults(response));
       }, (error) => {
         return dispatch(handleMaterialsServiceErrors(error));
       });
@@ -342,7 +342,7 @@ export const paginateTo = (url) => {
   return (dispatch) => {
     return dispatch(performSearchWithUrl(url))
       .then((response) => {
-        dispatch(receiveSearchResults(response));
+        return dispatch(receiveSearchResults(response));
       }, (error) => {
         return dispatch(handleMaterialsServiceErrors(error));
       });
@@ -415,7 +415,7 @@ export const createNewSet = (items, setName) => {
     dispatch(createSetOnly(setName))
     .then((response) => {
       const setId = response.data.id
-      dispatch(addMaterialsToSet(items, setId))
+      return dispatch(addMaterialsToSet(items, setId))
     })
   }
 }
@@ -474,7 +474,7 @@ export const getAllSets = () => {
         jsonp: false
       })
       .then((response) => {
-        dispatch(receiveAllSets(response))
+        return dispatch(receiveAllSets(response))
       }, (error) => {
         return dispatch(handleSetsServiceErrors(error));
       });
