@@ -25,7 +25,6 @@ npm-debug.log
 /node_modules
 
 /public/dev-assets/*
-/public/assets/*
 /app/assets/javascripts/common.js
 /app/assets/javascripts/search.js
 /app/assets/javascripts/set-shaper.js
