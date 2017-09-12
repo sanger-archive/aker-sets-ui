@@ -21,7 +21,8 @@ describe('<StamperPanel />', () => {
       status: 'running',
       onStampClick: sinon.spy(),
       onUnstampClick: sinon.spy(),
-      onChangeSelectedStamp: sinon.spy()
+      onChangeSelectedStamp: sinon.spy(),
+      loading: {stamping: false}
     };
   })
 

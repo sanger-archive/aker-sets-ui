@@ -5,7 +5,7 @@ import SearchResultsTable from '../components/search_results_table.es6';
 import ButtonsPannel from '../components/buttons_panel.es6';
 import UserMessage from '../components/user_message.es6';
 
-const Search = ({ search }) => {
+const Search = ({ search, loading }) => {
 
   return (
     <div className="container-fluid">
@@ -31,7 +31,14 @@ const Search = ({ search }) => {
 
       <div className="row">
         <div className="col-md-12">
-          <SearchResultsTable headings={ Object.keys(search.fields) } current={search.current} items={ search.results } links={ Object.entries(search.links) } sets={search.sets}/>
+          <SearchResultsTable
+            headings={ Object.keys(search.fields) }
+            current={search.current}
+            items={ search.results }
+            links={ search.links }
+            sets={search.sets}
+            meta={search.meta}
+            loading={loading} />
         </div>
       </div>
 

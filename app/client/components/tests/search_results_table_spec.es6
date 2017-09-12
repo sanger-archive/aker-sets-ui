@@ -11,7 +11,7 @@ describe('<SearchResultsTable />', () => {
       const context = {
         store,
       };
-      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={[]} links={[]} sets={[]}></SearchResultsTable>, { context });
+      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={[]} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
       expect(wrapper.dive().find('th').length).to.equals(2);
     });
   });
@@ -23,13 +23,13 @@ describe('<SearchResultsTable />', () => {
 
     it('displays the results table with items in the rows', () => {
       const items = [{heading1: 'result1', heading2: 'result2'}];
-      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={items} links={[]} sets={[]}></SearchResultsTable>, { context });
+      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={items} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
       expect(wrapper.dive().find('tr').length).to.equals(1);
     });
 
     it('displays the buttons panel', () => {
       const items = [{heading1: 'result1', heading2: 'result2'}];
-      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={items} links={[]} sets={[]}></SearchResultsTable>, { context });
+      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={items} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
       expect(wrapper.dive().find(ButtonsPanel).length).to.equals(1);
     });
   })
