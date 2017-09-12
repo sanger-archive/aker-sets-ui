@@ -45,8 +45,6 @@ class SearchResultsTable extends React.Component {
 
         </Body>
       </Panel>
-
-
     );
   }
 }

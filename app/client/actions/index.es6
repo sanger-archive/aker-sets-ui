@@ -350,12 +350,13 @@ export const paginateTo = (url) => {
   }
 }
 
-
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
 export const receiveSearchResults = (response) => {
   const items = response._items;
   const links = filterLinks(response._links)
   const meta = response._meta
+  delete links['self']
+
   return {
     type: RECEIVE_SEARCH_RESULTS,
     results: items,
