@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER } from '../actions/index.es6';
+import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_SET } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -127,8 +127,15 @@ const search = (state = {}, action) => {
 
     case RECEIVE_SEARCH_RESULTS:
       newState = action.results;
-      const links = action.links;
-      return Object.assign({}, state, { results: newState, links: links });
+      let links = action.links;
+
+      // Add a first link because it's so much easier having one
+      if (links.prev) {
+        links.first = { href: links.self.href.replace(/&page=[0-9]+/, ''), title: 'first page'}
+      }
+
+      const meta = action.meta;
+      return Object.assign({}, state, { results: newState, links: links, meta: meta });
 
     case RECEIVE_ALL_SETS:
       const received_sets = action.sets
@@ -139,6 +146,12 @@ const search = (state = {}, action) => {
       newState = state.setMaterials.slice();
       newState.push(received_set_materials)
       return Object.assign({}, state, { setMaterials: newState });
+
+    case RECEIVE_SET:
+      const received_set = action.set
+      newState = state.sets.slice();
+      newState.push(received_set.data)
+      return Object.assign({}, state, { sets: newState });
 
     default:
       return state;

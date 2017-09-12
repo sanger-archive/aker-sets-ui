@@ -3,12 +3,12 @@ import { connect, getState } from 'react-redux';
 import StamperPanel from '../components/stamper_panel.es6'
 import { selectStamp, applyStamp, unapplyStamp} from '../actions/index.es6'
 
-
 const mapStateToProps = (state) => {
   return {
     stamps: state.stampsInfo.stamps,
     status: state.stampsInfo.status,
-    selectedStamp: state.stampsInfo.selectedStamp
+    selectedStamp: state.stampsInfo.selectedStamp,
+    loading: state.loading
   };
 }
 

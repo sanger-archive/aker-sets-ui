@@ -1,8 +1,9 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
 import { filterQuery } from '../lib/utils.es6';
-import { filterLinks } from '../lib/utils.es6';
 import queryMaterialBuilder from '../lib/query_builder.es6'
+import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
+import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
@@ -12,57 +13,6 @@ export const select = (id, selectionType) => {
     selectionType
   }
 }
-
-export const SELECT_STAMP = "SELECT_STAMP";
-export const selectStamp = (stampId) => {
-  return (dispatch, getState) => {
-    const selectedStamp = getState().stampsInfo.stamps.filter((stamp) => {
-      return (stamp.id == stampId);
-    })[0]
-    return {
-      type: SELECT_STAMP,
-      selectedStamp
-    }
-  }
-}
-
-const _apply_generation = (nameOperation) => {
-  return (stampId) => {
-    return (dispatch, getState) => {
-      return dispatch(fetchTokenIfNeeded())
-     .then(()=>{
-        const current = getState().search.current
-        const filteredCurrent = filterQuery(current);
-        const query = queryMaterialBuilder(filteredCurrent, [])
-
-        return $.ajax({
-          method: 'POST',
-          url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
-          accept: "application/vnd.api+json",
-          contentType: "application/vnd.api+json",
-          headers: {
-            "X-Authorisation": getState().token
-          },
-          data: JSON.stringify({data: {query}}),
-          jsonp: false
-        }).then(()=>{
-          dispatch(userMessage('The stamp selected has been '+nameOperation, 'info'));
-        }, (error)=> {
-          if (error.status === 403) {
-            dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
-          }
-        })
-      })
-    }
-  }
-}
-
-export const APPLY_STAMP = "APPLY_STAMP";
-export const applyStamp = _apply_generation('apply');
-
-export const UNAPPLY_STAMP = "UNAPPLY_STAMP";
-export const unapplyStamp = _apply_generation('unapply');
-
 
 export const SELECT_ENTITY = "SELECT_ENTITY";
 export const selectEntity = (id, entityType) => {
@@ -142,7 +92,7 @@ export const fetchMaterials = (materials) => {
       jsonp: false })
       .then(function(response) {
         dispatch(receiveMaterials(response._items))
-      });
+      }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
   }
 }
 
@@ -213,7 +163,7 @@ export const fetchMaterialSchema = () => {
 
     .then((response) => {
       return dispatch(receiveMaterialSchema(response));
-    });
+    }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
   }
 }
 
@@ -249,6 +199,11 @@ export const fetchAllStamps = () => {
       })
     }).then((response) => {
       return dispatch(receiveAllStamps(response));
+    }, (error) => {
+      if (error.status == 404) {
+        return dispatch(userMessage('Failed to obtain the stamps available. The stamps service might not be running. Please contact the administrators', 'danger'));
+      }
+      return dispatch(handleStampsServiceErrors(error));
     });
   }
 }
@@ -356,22 +311,55 @@ export const performSearch = () => {
           method: 'GET',
           url: url,
           accept: "application/json",
-          cache: true
+          cache: false
         })
       })
       .then((response) => {
-        const filteredLinks = filterLinks(response._links);
-        dispatch(receiveSearchResults(response._items, filteredLinks));
+        dispatch(receiveSearchResults(response));
+      }, (error) => {
+        return dispatch(handleMaterialsServiceErrors(error));
+      });
+  }
+}
+
+export const PERFORM_SEARCH_WITH_URL = "PERFORM_SEARCH_WITH_URL";
+export const performSearchWithUrl = (url) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchSetMaterialsIfNeeded())
+      .then(() => {
+        return $.ajax({
+          url: `/materials_service/${url}`,
+          method: 'GET',
+          accept: "application/json",
+          cache: false
+        })
+      })
+  }
+}
+
+export const PAGINATE_TO = "PAGINATE_TO"
+export const paginateTo = (url) => {
+  return (dispatch) => {
+    return dispatch(performSearchWithUrl(url))
+      .then((response) => {
+        dispatch(receiveSearchResults(response));
+      }, (error) => {
+        return dispatch(handleMaterialsServiceErrors(error));
       });
   }
 }
 
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
-export const receiveSearchResults = (items, links) => {
+export const receiveSearchResults = (response) => {
+  const items = response._items;
+  const links = response._links;
+  const meta = response._meta;
+
   return {
     type: RECEIVE_SEARCH_RESULTS,
     results: items,
     links: links,
+    meta: meta
   };
 }
 
@@ -407,7 +395,9 @@ export const performSetFilterSearch = (filter) => {
       data[comparator] = material_uuids
       const result = Object.assign({}, data)
       return dispatch(receiveSetsFromFilter(result))
-    })
+    }, (error) => {
+      return dispatch(handleSetsServiceErrors(error))
+    });
   }
 }
 
@@ -422,7 +412,7 @@ export const receiveSetsFromFilter = (result) => {
 export const CREATE_NEW_SET = "CREATE_NEW_SET"
 export const createNewSet = (items, setName) => {
   return (dispatch)=> {
-    dispatch(createSetOnly(items, setName))
+    dispatch(createSetOnly(setName))
     .then((response) => {
       const setId = response.data.id
       dispatch(addMaterialsToSet(items, setId))
@@ -431,7 +421,7 @@ export const createNewSet = (items, setName) => {
 }
 
 export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
-export const createSetOnly = (items, setName) => {
+export const createSetOnly = (setName) => {
   return function(dispatch, getState) {
     return dispatch(fetchTokenIfNeeded())
     .then(() => {
@@ -447,8 +437,22 @@ export const createSetOnly = (items, setName) => {
         },
         data: JSON.stringify(body),
         jsonp: false
-      })
+      }).fail((error) => {
+        return dispatch(handleSetsServiceErrors(error))
+      });
     })
+    .then((response)=>{
+      dispatch(receiveSet(response))
+      return response;
+    })
+  }
+}
+
+export const RECEIVE_SET = "RECEIVE_SET"
+export const receiveSet = (response) => {
+  return {
+    type: RECEIVE_SET,
+    set: response
   }
 }
 
@@ -471,6 +475,8 @@ export const getAllSets = () => {
       })
       .then((response) => {
         dispatch(receiveAllSets(response))
+      }, (error) => {
+        return dispatch(handleSetsServiceErrors(error));
       });
     })
   }
@@ -482,6 +488,88 @@ export const receiveAllSets = (response) => {
     type: RECEIVE_ALL_SETS,
     sets: response
   };
+}
+
+export const BY_SEARCH_PAGE = "BY_SEARCH_PAGE"
+export const bySearchPage = (search, action) => {
+  return (dispatch, getState) => {
+    const links = search.links;
+    let initialPage;
+
+    if (links.last) {
+      initialPage = links.last.href;
+    } else {
+      initialPage = links.self.href;
+    }
+
+    const pager = (pageLink) => {
+      return dispatch(performSearchWithUrl(pageLink))
+        .then((results) => {
+          return action(results._items)
+            .then(() => {
+              if (results._links.prev) {
+                return pager(results._links.prev.href);
+              } else {
+                return $.Deferred().resolve();
+              }
+            })
+        })
+    }
+
+    return pager(initialPage);
+  }
+}
+
+export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
+export const createSetFromSearch = (setName) => {
+  return (dispatch, getState) => {
+    dispatch(startCreateSet())
+    return dispatch(createSetOnly(setName))
+      .then((response) => {
+        return dispatch(bySearchPage(getState().search, (items) => {
+          return dispatch(addMaterialsToSet(items, response.data.id))
+        }));
+      })
+      .then(() => {
+        return dispatch(userMessage("Successfully created set", 'info'));
+      })
+      .always(() => {
+        dispatch(stopCreateSet())
+      });
+  }
+};
+
+export const ADD_MATERIALS_TO_SET_FROM_SEARCH = "ADD_MATERIALS_TO_SET_FROM_SEARCH"
+export const addMaterialsToSetFromSearch = (setId) =>{
+  return (dispatch, getState) => {
+    dispatch(startAddMaterialsToSet())
+    return dispatch(bySearchPage(getState().search, (items) => {
+      return dispatch(addMaterialsToSet(items, setId))
+    }))
+    .then(() => {
+      return dispatch(userMessage("Successfully added materials into set", 'info'));
+    })
+    .always(() => {
+      dispatch(stopAddMaterialsToSet())
+    });
+  }
+}
+
+export const REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = "REMOVE_MATERIALS_FROM_SET_FROM_SEARCH"
+export const removeMaterialsFromSetFromSearch = (setId) => {
+  return (dispatch, getState) => {
+    dispatch(startRemoveMaterialsFromSet())
+    return dispatch(bySearchPage(getState().search, (items) => {
+      return dispatch(removeMaterialsFromSet(items, setId))
+    }))
+    .then(() => {
+      return dispatch(userMessage("Successfully removed materials from set", 'info'));
+    })
+    .always(() => {
+      dispatch(stopRemoveMaterialsFromSet())
+    });
+
+  }
 }
 
 export const ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET"
@@ -499,14 +587,7 @@ export const addMaterialsToSet = (items, setId) => {
         headers: {
           "X-Authorisation": getState().token
         },
-        data: JSON.stringify(body),
-        jsonp: false,
-        success: function(data, textStatus, xhr) {
-          dispatch(userMessage("Successfully added materials to set", 'info'));
-        },
-        error: function(data, textStatus, xhr) {
-          dispatch(userMessage('Failed to add materials to the set', 'danger'));
-        }
+        data: JSON.stringify(body)
       })
     })
   }
@@ -527,15 +608,66 @@ export const removeMaterialsFromSet = (items, setId) => {
           "X-Authorisation": getState().token
         },
         processData: false,
-        data: JSON.stringify(body),
-        success: function(data, textStatus, xhr) {
-          dispatch(userMessage("Successfully removed materials from the set", 'info'));
-        },
-        error: function(data, textStatus, xhr) {
-          dispatch(userMessage('Failed to remove materials from the set', 'danger'));
-        }
+        data: JSON.stringify(body)
       })
     })
   }
 }
 
+export const SELECT_STAMP = "SELECT_STAMP";
+export const selectStamp = (stampId) => {
+  return (dispatch, getState) => {
+    const selectedStamp = getState().stampsInfo.stamps.filter((stamp) => {
+      return (stamp.id == stampId);
+    })[0];
+    return dispatch({
+      type: SELECT_STAMP,
+      selectedStamp
+    });
+  }
+}
+
+const _apply_generation = (nameOperation) => {
+  return (stampId) => {
+    return (dispatch, getState) => {
+      dispatch(startStamping())
+
+      return dispatch(fetchTokenIfNeeded())
+      .then(()=>{
+        return dispatch(bySearchPage(getState().search, (items) => {
+          let uuids = items.map((item)=>{ return item._id });
+          return $.ajax({
+            method: 'POST',
+            url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
+            accept: "application/vnd.api+json",
+            contentType: "application/vnd.api+json",
+            headers: {
+              "X-Authorisation": getState().token
+            },
+            data: JSON.stringify({data: {materials: uuids}}),
+            jsonp: false
+          })
+        }))
+        .then(()=>{
+          const message = nameOperation == 'apply' ? 'Stamp applied' : 'Stamp unapplied';
+          return dispatch(userMessage(message, 'info'));
+        }, (error)=> {
+          if (error.status === 403) {
+            return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+          } else {
+            return dispatch(handleStampsServiceErrors(error));
+          }
+        })
+        .always(() => {
+          dispatch(stopStamping())
+        });
+      })
+    }
+  }
+}
+
+export const APPLY_STAMP = "APPLY_STAMP";
+export const applyStamp = _apply_generation('apply');
+
+export const UNAPPLY_STAMP = "UNAPPLY_STAMP";
+export const unapplyStamp = _apply_generation('unapply');

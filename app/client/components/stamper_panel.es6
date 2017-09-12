@@ -2,7 +2,7 @@ import React from 'react';
 import FontAwesome from './font_awesome.es6';
 import { STAMPS_INITIALIZATION, RECEIVE_ALL_STAMPS, RECEIVE_EMPTY_STAMPS, RECEIVE_EMPTY_RESULTS, FETCH_ALL_STAMPS} from '../actions/index.es6';
 
-const StamperPanel = ({stamps, selectedStamp, status, onStampClick, onUnstampClick, onChangeSelectedStamp }) => {
+const StamperPanel = ({stamps, selectedStamp, status, onStampClick, onUnstampClick, onChangeSelectedStamp, loading }) => {
 
   const stampsOptions = $.map(stamps, (stamp) => {
     return (
@@ -33,8 +33,9 @@ const StamperPanel = ({stamps, selectedStamp, status, onStampClick, onUnstampCli
             { stampsOptions }
           </select>
         </label>
-        <button style={{marginLeft: '10px'}} type="button" className="btn btn-primary" onClick={ () => { onStampClick(selectedStampId) } }>Apply</button>
-        <button style={{marginLeft: '10px'}} type="button" className="btn btn-primary" onClick={ () => { onUnstampClick(selectedStampId) } }>Unapply</button>
+        <button style={{marginLeft: '10px'}} disabled={loading.stamping} type="button" className="btn btn-primary" onClick={ () => { onStampClick(selectedStampId) } }>Apply</button>
+        <button style={{marginLeft: '10px'}} disabled={loading.stamping} type="button" className="btn btn-primary" onClick={ () => { onUnstampClick(selectedStampId) } }>Unapply</button>
+        { loading.stamping && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
       </form>
     );
   };

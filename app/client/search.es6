@@ -16,7 +16,8 @@ $.ajaxSetup({ cache: false })
 
 const mapStateToProps = (state) => {
   return {
-    search: state.search
+    search: state.search,
+    loading: state.loading
   }
 };
 
