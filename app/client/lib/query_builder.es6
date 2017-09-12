@@ -1,11 +1,21 @@
-export const queryMaterialBuilder = (filters, setMaterials) => {
+export const queryMaterialBuilder = (filters, mergedMaterials) => {
+
+  console.log(`queryMaterialBuilder: filters: ${filters}, mergedMaterials: ${mergedMaterials}`);
+
+  /* TODO: This function needs refactoring due to the fact that the list(memo)
+  within the reduce is re-created each time but is exactly the same since
+  the mergedMaterials already contain the UUIDs of both the setMembership and
+  consume/editPermission filters.
+  */
 
   let comparators = {
     'is not': '$ne',
     'before': '$lt',
     'after': '$gt',
     'in': '$in',
-    'not in': '$nin'
+    'not in': '$nin',
+    'has': '$in',
+    'does not have': '$nin'
   }
 
   var result = filters.reduce((memo, filter) => {
@@ -22,15 +32,19 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
       const date = new Date(filter.value)
       filterValue = date.toUTCString();
     }
+
     if (filter.type == 'boolean') {
       filterValue = (filter.value == "true");
     }
-    if (setMaterials && filter.name == 'setMembership'){
+
+    // Handle set name and permissions in the merged list of UUIDs
+    if (mergedMaterials && (filter.name == 'setMembership' ||
+      filter.name == 'consumePermission' || filter.name == 'editPermission')) {
       const comparator = filter.comparator.split(' ').join('_')
 
-      setMaterials.map((setMaterial) => {
-        if (Object.keys(setMaterial).includes(comparator)){
-          filterValue = setMaterial[comparator]
+      mergedMaterials.map((mergedMaterial) => {
+        if (Object.keys(mergedMaterial).includes(comparator)) {
+          filterValue = mergedMaterial[comparator]
           filterName = '_id'
         }
       })
@@ -44,6 +58,11 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
       value[comparator] = filterValue;
       memo[filterName] = value;
     }
+
+    // TODO: could be done somewhere else? better?
+    delete(memo.consumePermission);
+    delete(memo.editPermission);
+
     return memo;
   }, {});
 

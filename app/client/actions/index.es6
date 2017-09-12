@@ -297,14 +297,61 @@ export const fetchSetMaterialsIfNeeded = () => {
   }
 }
 
+export const FETCH_STAMPS_IF_NEEDED = "FETCH_STAMPS_IF_NEEDED"
+export const fetchStampsIfNeeded = () => {
+  return (dispatch, getState) => {
+    const filters = getState().search.current;
+    const filterSearches = filters.reduce((memo, filter) => {
+      if (filter.name == 'consumePermission' || filter.name == 'editPermission') {
+        memo.push(dispatch(performStampFilterSearch(filter)));
+      }
+      return memo;
+    }, [])
+
+    if (filterSearches.length > 0) {
+      return $.when.apply(null, filterSearches);
+    }
+
+    return $.Deferred().resolve();
+  }
+}
+
 export const PERFORM_SEARCH = "PERFORM_SEARCH"
 export const performSearch = () => {
   return (dispatch, getState) => {
-    return dispatch(fetchSetMaterialsIfNeeded())
+    return $.when(dispatch(fetchSetMaterialsIfNeeded()), dispatch(fetchStampsIfNeeded()))
       .then(() => {
+
+        // TODO: NEEDS REFACTORING!!!
         const setMaterials = getState().search.setMaterials;
+        const stampMaterials = getState().search.stampMaterials;
+        let mergedUuids = [];
+
+        if (setMaterials || stampMaterials) {
+          let listSets;
+          let listStamps;
+          if (setMaterials.length > 0) {
+            listSets = Object.values(setMaterials[0])[0];
+            mergedUuids = listSets;
+          }
+          if (stampMaterials.length > 0) {
+            listStamps = Object.values(stampMaterials[0])[0];
+            mergedUuids = listStamps;
+          }
+
+          /* TODO: We need to figure out how to combine 'is' and 'is not' UUIDs
+            within a single function call.
+            */
+          // Intersect set and stamp UUIDs
+          if (listStamps && listSets) {
+            let b = new Set(listStamps);
+            mergedUuids = listSets.filter(x => b.has(x));
+          }
+        }
+
         let filters = getState().search.filters;
-        const searchQuery = queryMaterialBuilder(filters, setMaterials)
+
+        const searchQuery = queryMaterialBuilder(filters, [{'in': mergedUuids}])
         const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
 
         return $.ajax({
@@ -401,11 +448,58 @@ export const performSetFilterSearch = (filter) => {
   }
 }
 
+export const PERFORM_STAMP_FILTER_SEARCH = "PERFORM_STAMP_FILTER_SEARCH"
+export const performStampFilterSearch = (filter) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+      .then(() => {
+        let permissionType = filter.name.replace(/Permission/,'');
+        const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
+        const url = `/stamps_service/materials?${stampQuery}`;
+
+        return $.ajax({
+          method: 'GET',
+          url: url,
+          contentType: "application/vnd.api+json",
+          accept: "application/vnd.api+json",
+          headers: {
+            "X-Authorisation": getState().token
+          },
+          jsonp: false
+        });
+      })
+      .then((response) => {
+        let comparator = filter.comparator;
+        if (filter.comparator == 'has') {
+          comparator = 'has';
+        }
+        let data = {};
+        let material_uuids = [];
+        if (response.data) {
+          material_uuids = response.data.map((material) => {
+            return material.attributes['material-uuid'] });
+        }
+        data[comparator] = material_uuids;
+        const result = Object.assign({}, data);
+
+        return dispatch(receiveStampsFromFilter(result));
+      });
+  }
+}
+
 export const RECEIVE_SETS_FROM_FILTER = "RECEIVE_SETS_FROM_FILTER"
 export const receiveSetsFromFilter = (result) => {
   return {
     type: RECEIVE_SETS_FROM_FILTER,
     setMaterials: result
+  }
+}
+
+export const RECEIVE_STAMPS_FROM_FILTER = "RECEIVE_STAMPS_FROM_FILTER"
+export const receiveStampsFromFilter = (result) => {
+  return {
+    type: RECEIVE_STAMPS_FROM_FILTER,
+    stampMaterials: result
   }
 }
 

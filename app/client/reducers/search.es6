@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_SET } from '../actions/index.es6';
+import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_STAMPS_FROM_FILTER } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -9,7 +9,8 @@ const search = (state = {}, action) => {
         date: ['before', 'after', 'on'],
         string: ['is', 'is not'],
         boolean: ['equals'],
-        containment: ['in', 'not in']
+        containment: ['in', 'not in'],
+        possesion: ['has', 'does not have']
       };
       const allowedTypes = ['string', 'boolean'];
       const properties = action.schema.properties;
@@ -17,6 +18,11 @@ const search = (state = {}, action) => {
       // add filter by set to searchable fields from materials service
       const setData =  { required: true, type: "string", searchable: true };
       properties['setMembership'] = Object.assign({}, setData)
+
+      // add filter by permission to searchable fields from stamps service
+      const stampData =  { required: true, type: "string", searchable: true };
+      properties['consumePermission'] = Object.assign({}, stampData)
+      properties['editPermission'] = Object.assign({}, stampData)
 
       let fields = Object.keys(properties).reduce((memo, name) => {
 
@@ -51,6 +57,14 @@ const search = (state = {}, action) => {
           } else if (name == 'setMembership') {
             field['type'] = 'string';
             field['comparators'] = comparators['containment'];
+
+          // Extra permission filter
+          } else if (name == 'consumePermission') {
+            field['type'] = 'string';
+            field['comparators'] = comparators['possesion'];
+          } else if (name == 'editPermission') {
+            field['type'] = 'string';
+            field['comparators'] = comparators['possesion'];
 
           // Just a regular type string
           } else {
@@ -123,7 +137,8 @@ const search = (state = {}, action) => {
       newState = state.filters.map((filter) => {
         return Object.assign({}, filter);
       });
-      return Object.assign({}, state, { current: newState });
+      return Object.assign({}, state, { current: newState, stampMaterials: [],
+      setMaterials: [] });
 
     case RECEIVE_SEARCH_RESULTS:
       newState = action.results;
@@ -152,6 +167,37 @@ const search = (state = {}, action) => {
       newState = state.sets.slice();
       newState.push(received_set.data)
       return Object.assign({}, state, { sets: newState });
+
+    case RECEIVE_STAMPS_FROM_FILTER:
+      const received_stamp_materials = action.stampMaterials;
+      newState = state.stampMaterials.slice();
+
+      const merge = (listA, listB) => {
+        let b = new Set(listA);
+        return listB.filter(x => b.has(x));
+      }
+
+      newState.push(received_stamp_materials)
+      if (newState.length > 1) {
+        let mergedObject = newState.reduce((memo, elem) => {
+          let key = Object.keys(elem)[0];
+          if (!!memo[key]) {
+            memo[key] = merge(memo[key], Object.values(elem)[0]);
+          } else {
+            memo[key] = Object.values(elem)[0];
+          }
+          return memo;
+        }, new Object());
+        let listObject = [];
+        for (var key in mergedObject) {
+          let obj = new Object();
+          obj[key]=mergedObject[key];
+          listObject.push(obj);
+        }
+        newState = listObject;
+      }
+
+      return Object.assign({}, state, { stampMaterials: newState });
 
     default:
       return state;

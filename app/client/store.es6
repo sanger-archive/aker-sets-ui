@@ -34,6 +34,7 @@ let initialState = {
     links: {},
     sets: [],
     setMaterials: [],
+    stampMaterials: [],
     meta: {}
   },
   loading: {
