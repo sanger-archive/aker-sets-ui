@@ -13,9 +13,7 @@ export const queryMaterialBuilder = (filters, mergedMaterials) => {
     'before': '$lt',
     'after': '$gt',
     'in': '$in',
-    'not in': '$nin',
-    'has': '$in',
-    'does not have': '$nin'
+    'not in': '$nin'
   }
 
   var result = filters.reduce((memo, filter) => {

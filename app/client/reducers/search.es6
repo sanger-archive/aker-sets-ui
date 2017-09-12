@@ -1,4 +1,4 @@
-import { RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_STAMPS_FROM_FILTER } from '../actions/index.es6';
+import { RECEIVE_SET, RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_STAMPS_FROM_FILTER } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -9,8 +9,7 @@ const search = (state = {}, action) => {
         date: ['before', 'after', 'on'],
         string: ['is', 'is not'],
         boolean: ['equals'],
-        containment: ['in', 'not in'],
-        possesion: ['has', 'does not have']
+        containment: ['in', 'not in']
       };
       const allowedTypes = ['string', 'boolean'];
       const properties = action.schema.properties;
@@ -61,10 +60,10 @@ const search = (state = {}, action) => {
           // Extra permission filter
           } else if (name == 'consumePermission') {
             field['type'] = 'string';
-            field['comparators'] = comparators['possesion'];
+            field['comparators'] = comparators['containment'];
           } else if (name == 'editPermission') {
             field['type'] = 'string';
-            field['comparators'] = comparators['possesion'];
+            field['comparators'] = comparators['containment'];
 
           // Just a regular type string
           } else {
