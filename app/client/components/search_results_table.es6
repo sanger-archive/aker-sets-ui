@@ -4,7 +4,7 @@ import { Panel, Heading, Body } from './panel.es6';
 import { paginateTo } from '../actions/index.es6'
 import { filterQuery } from '../lib/utils.es6';
 import queryBuilder from '../lib/query_builder.es6'
-import ButtonsPannel from '../components/buttons_panel.es6';
+import ButtonsPanel from '../components/buttons_panel.es6';
 
 
 class SearchResultsTable extends React.Component {
@@ -33,12 +33,13 @@ class SearchResultsTable extends React.Component {
               { items.map((item, index) => { return <SearchResultsRow headings={headings} item={item} key={index} />; }) }
             </tbody>
           </table>
-          { links.map((link, index)=>{ return (<button onClick={() => dispatch(paginateTo(link[1].href))} style={{float: 'right', marginRight: '10px'}} className="btn btn-link" key={index} >{link[0]}</button>); })}
+
+          <PaginationLinks links={links} dispatch={dispatch} />
 
           <div className="row">
             <div className="col-md-12">
               {items.length != 0 &&
-                <ButtonsPannel loading={loading} items={items} sets={sets} dispatch={dispatch} />
+                <ButtonsPanel />
               }
             </div>
           </div>
@@ -61,6 +62,60 @@ const SearchResultsRow = (props) => {
       }) }
     </tr>
   );
+}
+
+const PaginationLinks = (props) => {
+  const { links, dispatch } = props;
+
+
+  if (links.length==0){
+    return null
+  }
+
+  const handleClick = (url) => dispatch(paginateTo(url));
+
+  let displayLinks = [];
+  displayLinks.push(<PaginationLink link={links.first} label='First' title='First' onClick={handleClick} key='First' />)
+  displayLinks.push(<PaginationLink link={links.prev} label='Previous' title='Previous' onClick={handleClick} key='Previous' />)
+  displayLinks.push(<PaginationLink link={links.next} label='Next' title='Next' onClick={handleClick} key='Next' />)
+  displayLinks.push(<PaginationLink link={links.last} label='Last' title='Last' onClick={handleClick} key='Last' />)
+
+  return (
+    <nav aria-label="Page navigation" className="pull-right">
+      <ul className="pagination">
+        {displayLinks}
+      </ul>
+    </nav>
+  );
+}
+
+class PaginationLink extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+
+    if (this.props.link) {
+      this.props.onClick(this.props.link.href);
+    }
+  }
+
+  render() {
+
+    const { link, label, title, onClick } = this.props;
+
+    return (
+      <li className={!link && 'disabled'} >
+        <a href={link && link.href} aria-label={label} onClick={this.handleClick} >
+          <span aria-hidden="true">{title}</span>
+        </a>
+      </li>
+    );
+  }
+
 }
 
 

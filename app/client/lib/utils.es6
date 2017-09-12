@@ -19,16 +19,3 @@ export const filterQuery = (currentFilters) => {
   });
  return filters;
 }
-
-export const filterLinks = (responseLinks) => {
-  let links = responseLinks;
-  const linksToRemove = ['parent'];
-
-  Object.keys(links).map((link) => {
-    if (linksToRemove.includes(link)){
-      delete links[link];
-    }
-  });
-
-  return links
-}

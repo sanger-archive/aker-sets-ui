@@ -22,6 +22,9 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
       const date = new Date(filter.value)
       filterValue = date.toUTCString();
     }
+    if (filter.type == 'boolean') {
+      filterValue = (filter.value == "true");
+    }
     if (setMaterials && filter.name == 'setMembership'){
       const comparator = filter.comparator.split(' ').join('_')
 

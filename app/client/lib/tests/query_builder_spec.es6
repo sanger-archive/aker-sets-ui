@@ -50,7 +50,7 @@ describe('lib/query_builder', () => {
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"available":"true"}`
+        `{"available":true}`
       );
     });
 

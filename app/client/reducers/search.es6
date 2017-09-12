@@ -127,7 +127,13 @@ const search = (state = {}, action) => {
 
     case RECEIVE_SEARCH_RESULTS:
       newState = action.results;
-      const links = action.links;
+      let links = action.links;
+
+      // Add a first link because it's so much easier having one
+      if (links.prev) {
+        links.first = { href: links.self.href.replace(/&page=[0-9]+/, ''), title: 'first page'}
+      }
+
       const meta = action.meta;
       return Object.assign({}, state, { results: newState, links: links, meta: meta });
 

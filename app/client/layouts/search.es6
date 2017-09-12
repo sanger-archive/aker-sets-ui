@@ -35,7 +35,7 @@ const Search = ({ search, loading }) => {
             headings={ Object.keys(search.fields) }
             current={search.current}
             items={ search.results }
-            links={ Object.entries(search.links) }
+            links={ search.links }
             sets={search.sets}
             meta={search.meta}
             loading={loading} />

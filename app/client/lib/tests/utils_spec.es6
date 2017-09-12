@@ -34,15 +34,4 @@ describe('Utils', function() {
 
   });
 
-  describe('#filterLink', () => {
-    it('filters out any links that are not accepted', () => {
-      const links = { self: 'self', parent: "parent", first: "first", last: "last", x: "y" };
-
-      const filteredLinks = filterLinks(links);
-      expect(Object.keys(filteredLinks).length).to.equal(3);
-      expect(filteredLinks.self).to.equal(undefined);
-      expect(filteredLinks.parent).to.equal(undefined);
-    })
-  });
-
 });

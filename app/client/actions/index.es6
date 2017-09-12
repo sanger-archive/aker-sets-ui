@@ -1,7 +1,6 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
 import { filterQuery } from '../lib/utils.es6';
-import { filterLinks } from '../lib/utils.es6';
 import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
@@ -353,9 +352,8 @@ export const paginateTo = (url) => {
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
 export const receiveSearchResults = (response) => {
   const items = response._items;
-  const links = filterLinks(response._links)
-  const meta = response._meta
-  delete links['self']
+  const links = response._links;
+  const meta = response._meta;
 
   return {
     type: RECEIVE_SEARCH_RESULTS,
