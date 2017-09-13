@@ -316,8 +316,19 @@ export const fetchStampsIfNeeded = () => {
   }
 }
 
-export const PERFORM_SEARCH = "PERFORM_SEARCH"
-export const performSearch = () => {
+export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
+export const performSearchToPage = (pageNumber, maxResults) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchPageForSearch(pageNumber, maxResults)).then((response) => {
+        return dispatch(receiveSearchResults(response));
+      }, (error) => {
+        return dispatch(handleMaterialsServiceErrors(error));
+      });
+  }
+};
+
+export const FETCH_PAGE_FOR_SEARCH = "FETCH_PAGE_FOR_SEARCH"
+export const fetchPageForSearch = (pageNumber, maxResults) => {
   return (dispatch, getState) => {
     return $.when(dispatch(fetchSetMaterialsIfNeeded()), dispatch(fetchStampsIfNeeded()))
       .then(() => {
@@ -352,19 +363,21 @@ export const performSearch = () => {
         let filters = getState().search.filters;
 
         const searchQuery = queryMaterialBuilder(filters, [{'in': mergedUuids}])
-        const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
+        //const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
+        const url = "/materials_service/materials/search";
 
         return $.ajax({
-          method: 'GET',
+          method: 'POST',
           url: url,
+          contentType: "application/json; charset=utf-8",
           accept: "application/json",
+          data: JSON.stringify({ 
+            where: searchQuery, 
+            max_results: maxResults, 
+            page: pageNumber
+          }),
           cache: false
-        })
-      })
-      .then((response) => {
-        return dispatch(receiveSearchResults(response));
-      }, (error) => {
-        return dispatch(handleMaterialsServiceErrors(error));
+        });
       });
   }
 }
@@ -384,17 +397,20 @@ export const performSearchWithUrl = (url) => {
   }
 }
 
-export const PAGINATE_TO = "PAGINATE_TO"
-export const paginateTo = (url) => {
-  return (dispatch) => {
-    return dispatch(performSearchWithUrl(url))
-      .then((response) => {
-        return dispatch(receiveSearchResults(response));
-      }, (error) => {
-        return dispatch(handleMaterialsServiceErrors(error));
-      });
-  }
-}
+export const PAGINATE_TO = "PAGINATE_TO";
+export const paginateTo = (numPage) => {
+  return (dispatch, getState) => {
+    return dispatch(performSearchToPage(numPage, getState().search.maxResults));
+  };
+};
+
+export const PERFORM_SEARCH = "PERFORM_SEARCH"
+export const performSearch = () => {
+  return (dispatch, getState) => {
+    return dispatch(performSearchToPage(getState().search.pageNumber, getState().search.maxResults));
+  };
+};
+
 
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
 export const receiveSearchResults = (response) => {
@@ -587,30 +603,22 @@ export const receiveAllSets = (response) => {
 export const BY_SEARCH_PAGE = "BY_SEARCH_PAGE"
 export const bySearchPage = (search, action) => {
   return (dispatch, getState) => {
-    const links = search.links;
-    let initialPage;
 
-    if (links.last) {
-      initialPage = links.last.href;
-    } else {
-      initialPage = links.self.href;
-    }
-
-    const pager = (pageLink) => {
-      return dispatch(performSearchWithUrl(pageLink))
-        .then((results) => {
-          return action(results._items)
-            .then(() => {
-              if (results._links.prev) {
-                return pager(results._links.prev.href);
-              } else {
-                return $.Deferred().resolve();
-              }
+    const pager = (pageNumber) => {
+          return dispatch(fetchPageForSearch(pageNumber, getState().search.batchGroup))
+            .then((results) => {
+              return action(results._items)
+                .then(() => {
+                  if (results._links.next) {
+                    return pager(results._links.next.page);
+                  } else {
+                    return $.Deferred().resolve();
+                  }
+                })
             })
-        })
-    }
+        }    
 
-    return pager(initialPage);
+    return pager(1);
   }
 }
 

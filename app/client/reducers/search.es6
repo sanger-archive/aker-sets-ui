@@ -1,4 +1,4 @@
-import { RECEIVE_SET, RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_STAMPS_FROM_FILTER } from '../actions/index.es6';
+import { PAGINATE_TO, RECEIVE_SET, RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME, UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER, SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER, RECEIVE_STAMPS_FROM_FILTER } from '../actions/index.es6';
 
 const search = (state = {}, action) => {
   let newState;
@@ -145,7 +145,7 @@ const search = (state = {}, action) => {
 
       // Add a first link because it's so much easier having one
       if (links.prev) {
-        links.first = { href: links.self.href.replace(/&page=[0-9]+/, ''), title: 'first page'}
+        links.first = { page: 1};
       }
 
       const meta = action.meta;
