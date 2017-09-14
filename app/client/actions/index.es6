@@ -281,7 +281,7 @@ export const setCurrentSearch = () => {
 export const FETCH_SET_MATERIALS_IF_NEEDED = "FETCH_SET_MATERIALS_IF_NEEDED"
 export const fetchSetMaterialsIfNeeded = () => {
   return (dispatch, getState) => {
-    const filters = getState().search.current
+    const filters = getState().search.current;
     const filterSearches = filters.reduce((memo, filter)=>{
       if(filter.name == 'setMembership') {
         memo.push(dispatch(performSetFilterSearch(filter)));
