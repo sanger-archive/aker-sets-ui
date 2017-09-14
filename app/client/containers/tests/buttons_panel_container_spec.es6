@@ -24,7 +24,7 @@ describe('<ButtonsPanelContainer />', () => {
   it('should render at least one form', () => {
     const ConnectedComponent = connect(mapStateToProps, undefined)(ButtonsPanelContainer)
     const wrapper = shallowWithStore(<ConnectedComponent />, store);
-    expect(wrapper.dive().find('form')).to.have.length(3);
+    expect(wrapper.dive().find('form')).to.have.length(2);
   });
 
   it('should render the <StamperControl>', () => {
@@ -62,7 +62,7 @@ describe('<ButtonsPanelContainer />', () => {
 
     const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ButtonsPanelContainer)
     const wrapper = shallowWithStore(<ConnectedComponent />, store);
-    wrapper.dive().find("#add-materials-to-set button").simulate('click', { preventDefault() {} });
+    wrapper.dive().find("#add-button").simulate('click', { preventDefault() {} });
 
     expect(addMaterialsToSetSpy.calledOnce).to.equal(true);
   });
@@ -78,7 +78,7 @@ describe('<ButtonsPanelContainer />', () => {
     const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ButtonsPanelContainer)
     const wrapper = shallowWithStore(<ConnectedComponent />, store);
 
-    wrapper.dive().find("#remove-materials-from-set button").simulate('click', { preventDefault() {} });
+    wrapper.dive().find("#remove-button").simulate('click', { preventDefault() {} });
     expect(removeMaterialsFromSetSpy.calledOnce).to.equal(true);
   });
 

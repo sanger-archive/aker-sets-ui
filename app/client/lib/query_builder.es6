@@ -50,9 +50,6 @@ const queryMaterialBuilder = (filters, materialFilters) => {
   }
 
   var result = filters.reduce((memo, filter) => {
-    if (filter.name==""){
-      return memo;
-    }
 
     const comparator = comparators[filter.comparator];
     const value = {};
