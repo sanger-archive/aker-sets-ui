@@ -16,36 +16,40 @@ class SearchResultsTable extends React.Component {
     const hasResults = items.length!=0;
     let title = 'Results'
     if (meta.total) {
-      title += ` (${meta.total})`
+      title += ` (${meta.total}), showing page ${meta.page} (of ${links.last ? links.last.page : meta.page})`
     }
 
     return (
-      <Panel>
-        <Heading title={title} />
-        <Body>
-          <table className="table table-striped table-hover search-results-table">
-            <thead>
-              <tr>
-                { headings.map((heading, index) => { return (<th key={index}>{heading}</th>); }) }
-              </tr>
-            </thead>
-            <tbody>
-              { items.map((item, index) => { return <SearchResultsRow headings={headings} item={item} key={index} />; }) }
-            </tbody>
-          </table>
+      <div>
+        <PaginationLinks links={links} dispatch={dispatch}></PaginationLinks>
+        
+        <Panel>
+          <Heading title={title}>
+          </Heading>
+          <Body>            
+            <table className="table table-striped table-hover search-results-table">
+              <thead>
+                <tr>
+                  { headings.map((heading, index) => { return (<th key={index}>{heading}</th>); }) }
+                </tr>
+              </thead>
+              <tbody>
+                { items.map((item, index) => { return <SearchResultsRow headings={headings} item={item} key={index} />; }) }
+              </tbody>
+            </table>
+          </Body>
+        </Panel>
 
-          <PaginationLinks links={links} dispatch={dispatch} />
+        <PaginationLinks links={links} dispatch={dispatch} />
 
-          <div className="row">
-            <div className="col-md-12">
-              {items.length != 0 &&
-                <ButtonsPanel />
-              }
-            </div>
+        <div className="row">
+          <div className="col-md-12">
+            {items.length != 0 &&
+              <ButtonsPanel />
+            }
           </div>
-
-        </Body>
-      </Panel>
+        </div>
+      </div>
     );
   }
 }
@@ -72,7 +76,7 @@ const PaginationLinks = (props) => {
     return null
   }
 
-  const handleClick = (url) => dispatch(paginateTo(url));
+  const handleClick = (pageNumber) => dispatch(paginateTo(pageNumber));
 
   let displayLinks = [];
   displayLinks.push(<PaginationLink link={links.first} label='First' title='First' onClick={handleClick} key='First' />)
@@ -81,11 +85,15 @@ const PaginationLinks = (props) => {
   displayLinks.push(<PaginationLink link={links.last} label='Last' title='Last' onClick={handleClick} key='Last' />)
 
   return (
-    <nav aria-label="Page navigation" className="pull-right">
-      <ul className="pagination">
-        {displayLinks}
-      </ul>
-    </nav>
+    <div className="row">
+      <div className="col-md-12">    
+        <nav aria-label="Page navigation" className="pull-right">
+          <ul className="pagination">
+            {displayLinks}
+          </ul>
+        </nav>          
+      </div>
+    </div>
   );
 }
 
@@ -98,8 +106,8 @@ class PaginationLink extends React.Component {
   handleClick(e) {
     e.preventDefault();
 
-    if (this.props.link) {
-      this.props.onClick(this.props.link.href);
+    if (this.props.link && this.props.link.page) {
+      this.props.onClick(this.props.link.page);
     }
   }
 
@@ -109,7 +117,7 @@ class PaginationLink extends React.Component {
 
     return (
       <li className={!link && 'disabled'} >
-        <a href={link && link.href} aria-label={label} onClick={this.handleClick} >
+        <a href='#' aria-label={label} onClick={this.handleClick} >
           <span aria-hidden="true">{title}</span>
         </a>
       </li>

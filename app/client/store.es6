@@ -25,6 +25,9 @@ let initialState = {
   },
   token: null,
   search: {
+    pageNumber: 1,
+    maxResults: 50,
+    batchGroup: 1000,
     fields: {},
     filters: [
       { id: 1, name: '', comparator: '', value: '' }
@@ -34,6 +37,7 @@ let initialState = {
     links: {},
     sets: [],
     setMaterials: [],
+    stampMaterials: [],
     meta: {}
   },
   loading: {
