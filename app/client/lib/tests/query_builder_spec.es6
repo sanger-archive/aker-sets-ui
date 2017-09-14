@@ -7,12 +7,14 @@ describe('lib/query_builder', () => {
     it('converts a list of filters into a query for type string', () => {
       const filters = [
         { name: 'hmdmc', comparator: 'is', value: '123', type: 'string' },
+        { name: 'hmdmc', comparator: 'is', value: '456', type: 'string' },
         { name: 'donor_id', comparator: 'is not', value: 'xyz', type: 'string' },
+        { name: 'donor_id', comparator: 'is', value: 'zyx', type: 'string' }
       ]
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"hmdmc":"123","donor_id":{"$ne":"xyz"}}`
+        `{"hmdmc":{"$in":["123","456"]},"donor_id":{"$nin":["xyz"],"$in":["zyx"]}}`
       );
     });
 
@@ -24,33 +26,37 @@ describe('lib/query_builder', () => {
       ]
 
       const result = JSON.stringify(queryBuilder(filters));
-      // current date of receipt only sends the last key and value
+      const beforeDate = new Date(filters[0].value).toUTCString();
+      const afterDate = new Date(filters[1].value).toUTCString();
       const onDate = new Date(filters[2].value).toUTCString();
       expect(result).to.equal(
-        `{"date_of_receipt":"${onDate}"}`
-      );
+        `{"date_of_receipt":{"$lt":["${beforeDate}"],"$gt":["${afterDate}"],"$in":["${onDate}"]}}`
+     );
     });
 
     it('converts a list of filters into a query for type list', () => {
       const filters = [
         { name: 'material_type', comparator: 'is', value: 'dna', type: 'list'},
+        { name: 'material_type', comparator: 'is not', value: 'blood', type: 'list'},
         { name: 'gender', comparator: 'is not', value: 'male', type: 'list' },
+        { name: 'scientific_name', comparator: 'is not', value: 'Homo sapiens', type: 'list' },
       ]
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"material_type":"dna","gender":{"$ne":"male"}}`
+        `{"material_type":{"$in":["dna"],"$nin":["blood"]},"gender":{"$nin":["male"]},"scientific_name":{"$nin":["Homo sapiens"]}}`
       );
     });
 
     it('converts a list of filters into a query for type boolean', () => {
       const filters = [
         { name: 'available', comparator: 'equals', value: 'true', type: 'boolean'},
+        { name: 'available', comparator: 'equals', value: 'false', type: 'boolean'},
       ]
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"available":true}`
+        `{"available":{"$in":[true,false]}}`
       );
     });
 
