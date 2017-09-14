@@ -6,6 +6,7 @@ import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
 import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
 import { debounce } from '../lib/utils.es6';
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 
 class FilterPanel extends React.Component {
@@ -39,6 +40,10 @@ class FilterPanel extends React.Component {
       <Panel>
         <Heading title='Add Filter' />
         <Body>
+          <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
+            <button>WHAT' THIS?</button>
+          </OverlayTrigger>
+
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
@@ -151,3 +156,13 @@ const ListField = ({value, options, onChange, includeEmptyRow}) => {
     </select>
   );
 }
+
+const popoverHover = (
+  <Popover id="popover-trigger-hover-focus" title="What's this?">
+    This page allows you to search for materials that match a set of search criteria.<br/>
+    Build up a search by selecting criteria (e.g. phenotype), and adding them to your query. The more criteria you add, the more restrictive your search will be.<br/>
+    Run the search query by pushing the Search button. The results (if any) will be shown below. Use the next and previous links to view more pages of results.<br/>
+    When you have a list of materials that you are happy with, you can add or remove them from a set, or apply/unapply permission stamps to the list, to update the privileges. (You can only alter the privileges of materials that you own.)<br/>
+    Trying to perform operations on long lists will take a long time with the current version of the software.
+  </Popover>
+);
