@@ -133,7 +133,6 @@ export class ContextualValue extends React.Component {
   }
 }
 
-
 const InputTextField = ({value, onChange}) => {
   return <input type="text" className="form-control" onChange={onChange} value={value} />
 };
