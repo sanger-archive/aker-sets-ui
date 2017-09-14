@@ -3,6 +3,16 @@ const merge = (listA, listB) => {
   return listB.filter(x => b.has(x));
 }
 
+const objectToList = (mergedObject) => {
+  let listObject = [];
+  for (var key in mergedObject) {
+    let obj = new Object();
+    obj[key]=mergedObject[key];
+    listObject.push(obj);
+  }  
+  return listObject;
+}
+
 export const reduceFilterList = (filterList) => {
   let mergedObject = filterList.reduce((memo, elem) => {
     if (Object.keys(elem).length > 1) {
@@ -18,31 +28,15 @@ export const reduceFilterList = (filterList) => {
     return memo;
   }, new Object());
 
-  let listObject = [];
-  for (var key in mergedObject) {
-    let obj = new Object();
-    obj[key]=mergedObject[key];
-    listObject.push(obj);
-  }
-
-  return listObject;
+  return mergedObject;
 }
 
-/*export const mergeMaterials = (stampMaterials, setMaterials) => {
 
-}*/
-
-const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
-
-  const mergedMaterials = mergeMaterials(setMaterials, stampMaterials);
-
-  console.log(`queryMaterialBuilder: filters: ${filters}, mergedMaterials: ${mergedMaterials}`);
-
-  /* TODO: This function needs refactoring due to the fact that the list(memo)
-  within the reduce is re-created each time but is exactly the same since
-  the mergedMaterials already contain the UUIDs of both the setMembership and
-  consume/editPermission filters.
-  */
+const queryMaterialBuilder = (filters, materialFilters) => {
+  if (typeof materialFilters == 'undefined') {
+    materialFilters = [];
+  }
+  const mergedObject = reduceFilterList(materialFilters);
 
   let comparators = {
     'equals': '$in',
@@ -75,16 +69,12 @@ const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
     }
 
     // Handle set name and permissions in the merged list of UUIDs
-    if (mergedMaterials && (filter.name == 'setMembership' ||
+    if (mergedObject && (filter.name == 'setMembership' ||
       filter.name == 'consumePermission' || filter.name == 'editPermission')) {
       const comparator = filter.comparator.split(' ').join('_')
 
-      mergedMaterials.map((mergedMaterial) => {
-        if (Object.keys(mergedMaterial).includes(comparator)) {
-          filterValue = mergedMaterial[comparator]
-          filterName = '_id'
-        }
-      })
+      filterValue = mergedObject[comparator];
+      filterName = '_id'
     }
 
 // filterValue could be an array, eg for setMembership, so convert all filterValue's to arrays to help build query
@@ -95,9 +85,16 @@ const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
     const comp = comparators[filter.comparator];
     if (memo[filterName]) {
       if (memo[filterName][comp]) {
-        filterValue.map((value)=>{
-          memo[filterName][comp].push(value)
-        })
+        // If we ever want to rolback and change it to do an OR between values of fields instead of and AND, 
+        // (like gender='male' OR gender='female') we would need to concat() the list of values
+        // 
+        //  memo[filterName][comp] = memo[filterName][comp].concat(filterValue)
+        //
+        // but if we want an AND we need to do an intersection of the values:
+        // 
+        //  memo[filterName][comp] = merge(memo[filterName][comp], filterValue);
+        //
+        memo[filterName][comp] = merge(memo[filterName][comp], filterValue);
       } else {
         memo[filterName][comp] = filterValue;
       }
@@ -105,10 +102,6 @@ const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
       value[comp] = filterValue;
       memo[filterName] = value;
     }
-
-    // TODO: could be done somewhere else? better?
-    delete(memo.consumePermission);
-    delete(memo.editPermission);
 
     return memo;
   }, {});

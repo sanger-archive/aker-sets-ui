@@ -16,7 +16,12 @@ export const handleServiceErrors = (serviceName) => {
     if (error.status === 404) {
       return userMessage('HTTP 404 - Not found URL at '+serviceName, 'danger');
     }
-    return userMessage('HTTP '+error.status+' - There was an error in '+serviceName, 'danger');
+    if (error.status) {
+      return userMessage('HTTP '+error.status+' - There was an error in '+serviceName, 'danger');
+    }
+    if (error.message) {
+      return userMessage(error.message); 
+    }
   }
 }
 

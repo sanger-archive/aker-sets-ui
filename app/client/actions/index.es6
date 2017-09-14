@@ -332,38 +332,12 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
   return (dispatch, getState) => {
     return $.when(dispatch(fetchSetMaterialsIfNeeded()), dispatch(fetchStampsIfNeeded()))
       .then(() => {
-
-        // TODO: NEEDS REFACTORING!!!
         const setMaterials = getState().search.setMaterials;
         const stampMaterials = getState().search.stampMaterials;
-        let mergedUuids = [];
-
-        if (setMaterials || stampMaterials) {
-          let listSets;
-          let listStamps;
-          if (setMaterials.length > 0) {
-            listSets = Object.values(setMaterials[0])[0];
-            mergedUuids = listSets;
-          }
-          if (stampMaterials.length > 0) {
-            listStamps = Object.values(stampMaterials[0])[0];
-            mergedUuids = listStamps;
-          }
-
-          /* TODO: We need to figure out how to combine 'is' and 'is not' UUIDs
-            within a single function call.
-            */
-          // Intersect set and stamp UUIDs
-          if (listStamps && listSets) {
-            let b = new Set(listStamps);
-            mergedUuids = listSets.filter(x => b.has(x));
-          }
-        }
 
         let filters = getState().search.filters;
 
-        const searchQuery = queryMaterialBuilder(filters, [{'in': mergedUuids}])
-        //const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
+        const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
         const url = "/materials_service/materials/search";
 
         return $.ajax({

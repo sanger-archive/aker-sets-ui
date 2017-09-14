@@ -140,8 +140,7 @@ const search = (state = {}, action) => {
         }
         return Object.assign({}, filter);
       });
-      return Object.assign({}, state, { current: newState, stampMaterials: [],
-      setMaterials: [] });
+      return Object.assign({}, state, { current: newState, stampMaterials: [], setMaterials: [] });
 
     case RECEIVE_SEARCH_RESULTS:
       newState = action.results;
