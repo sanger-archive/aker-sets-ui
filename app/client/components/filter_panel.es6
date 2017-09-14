@@ -41,7 +41,7 @@ class FilterPanel extends React.Component {
         <Heading title='Add Filter' />
         <Body>
           <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
-            <button>WHAT' THIS?</button>
+            <button>WHAT'S THIS?</button>
           </OverlayTrigger>
 
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
