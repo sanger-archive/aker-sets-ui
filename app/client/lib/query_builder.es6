@@ -45,11 +45,14 @@ const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
   */
 
   let comparators = {
-    'is not': '$ne',
-    'before': '$lt',
-    'after': '$gt',
+    'equals': '$in',
+    'is': '$in',
+    'is not': '$nin',
     'in': '$in',
-    'not in': '$nin'
+    'not in': '$nin',
+    'on': '$in',
+    'before': '$lt',
+    'after': '$gt'
   }
 
   var result = filters.reduce((memo, filter) => {
@@ -84,12 +87,22 @@ const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
       })
     }
 
-    const equalComparators = ["is", "on", "equals"]
+// filterValue could be an array, eg for setMembership, so convert all filterValue's to arrays to help build query
+    if (!Array.isArray(filterValue)){
+      filterValue = [filterValue]
+    }
 
-    if (equalComparators.includes(filter.comparator)) {
-      memo[filterName] = filterValue;
+    const comp = comparators[filter.comparator];
+    if (memo[filterName]) {
+      if (memo[filterName][comp]) {
+        filterValue.map((value)=>{
+          memo[filterName][comp].push(value)
+        })
+      } else {
+        memo[filterName][comp] = filterValue;
+      }
     } else {
-      value[comparator] = filterValue;
+      value[comp] = filterValue;
       memo[filterName] = value;
     }
 
@@ -101,7 +114,7 @@ const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
   }, {});
 
 //Example result:
-//{"gender":"male","phenotype":{"$ne":"a"},"donor_id":"z","_id":{"$in":["7460454b-ec70-40a3-b883-faed34be3dba","2f330521-9d43-4ea8-8eb2-b97c82a1567a"]}}
+//{"gender":{"$in":["male"]},"phenotype":{"$nin":["a","b"]},"_id":{"$in":["123","234"],"$nin":["456"]}}
 
   return result;
 }

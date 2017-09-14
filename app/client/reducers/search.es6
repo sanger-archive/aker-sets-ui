@@ -134,6 +134,10 @@ const search = (state = {}, action) => {
 
     case SET_CURRENT_SEARCH:
       newState = state.filters.map((filter) => {
+        if (filter.name == 'owner_id' && !filter.value.includes("@")){
+          const owner = filter.value.trim().toLowerCase();
+          filter.value = `${owner}@sanger.ac.uk`;
+        }
         return Object.assign({}, filter);
       });
       return Object.assign({}, state, { current: newState, stampMaterials: [],
