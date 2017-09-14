@@ -1,4 +1,40 @@
-export const queryMaterialBuilder = (filters, mergedMaterials) => {
+const merge = (listA, listB) => {
+  let b = new Set(listA);
+  return listB.filter(x => b.has(x));
+}
+
+export const reduceFilterList = (filterList) => {
+  let mergedObject = filterList.reduce((memo, elem) => {
+    if (Object.keys(elem).length > 1) {
+      throw new Error('Incorrect format for filter object');
+    }
+
+    let key = Object.keys(elem)[0];
+    if (!!memo[key]) {
+      memo[key] = merge(memo[key], Object.values(elem)[0]);
+    } else {
+      memo[key] = Object.values(elem)[0];
+    }
+    return memo;
+  }, new Object());
+
+  let listObject = [];
+  for (var key in mergedObject) {
+    let obj = new Object();
+    obj[key]=mergedObject[key];
+    listObject.push(obj);
+  }
+
+  return listObject;
+}
+
+/*export const mergeMaterials = (stampMaterials, setMaterials) => {
+
+}*/
+
+const queryMaterialBuilder = (filters, setMaterials, stampMaterials) => {
+
+  const mergedMaterials = mergeMaterials(setMaterials, stampMaterials);
 
   console.log(`queryMaterialBuilder: filters: ${filters}, mergedMaterials: ${mergedMaterials}`);
 

@@ -170,32 +170,7 @@ const search = (state = {}, action) => {
     case RECEIVE_STAMPS_FROM_FILTER:
       const received_stamp_materials = action.stampMaterials;
       newState = state.stampMaterials.slice();
-
-      const merge = (listA, listB) => {
-        let b = new Set(listA);
-        return listB.filter(x => b.has(x));
-      }
-
-      newState.push(received_stamp_materials)
-      if (newState.length > 1) {
-        let mergedObject = newState.reduce((memo, elem) => {
-          let key = Object.keys(elem)[0];
-          if (!!memo[key]) {
-            memo[key] = merge(memo[key], Object.values(elem)[0]);
-          } else {
-            memo[key] = Object.values(elem)[0];
-          }
-          return memo;
-        }, new Object());
-        let listObject = [];
-        for (var key in mergedObject) {
-          let obj = new Object();
-          obj[key]=mergedObject[key];
-          listObject.push(obj);
-        }
-        newState = listObject;
-      }
-
+      newState.push(received_stamp_materials);
       return Object.assign({}, state, { stampMaterials: newState });
 
     default:
