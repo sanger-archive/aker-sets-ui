@@ -1,8 +1,4 @@
 import search from '../search.es6'
-import { filterQuery } from '../../lib/utils.es6';
-import queryBuilder from '../../lib/query_builder.es6'
-
-
 import { updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch, receiveSearchResults } from '../../actions/index.es6'
 
 describe('reducers/search', () => {

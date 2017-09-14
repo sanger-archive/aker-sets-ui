@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel.es6';
 import { paginateTo } from '../actions/index.es6'
-import { filterQuery } from '../lib/utils.es6';
-import queryBuilder from '../lib/query_builder.es6'
 import ButtonsPanel from '../components/buttons_panel.es6';
 
 
@@ -11,8 +9,6 @@ class SearchResultsTable extends React.Component {
 
   render() {
     const { headings, current, items, links, sets, dispatch, meta, loading } = this.props;
-    const filteredCurrent = filterQuery(current);
-    const query = queryBuilder(filteredCurrent)
     const hasResults = items.length!=0;
     let title = 'Results'
     if (meta.total) {
@@ -21,6 +17,12 @@ class SearchResultsTable extends React.Component {
 
     return (
       <Panel>
+        <div className="row">
+          <div className="col-md-12">
+            { hasResults && <ButtonsPanel /> }
+          </div>
+        </div>
+
         <Heading title={title} />
         <Body>
           <table className="table table-striped table-hover search-results-table">
@@ -35,15 +37,6 @@ class SearchResultsTable extends React.Component {
           </table>
 
           <PaginationLinks links={links} dispatch={dispatch} />
-
-          <div className="row">
-            <div className="col-md-12">
-              {items.length != 0 &&
-                <ButtonsPanel />
-              }
-            </div>
-          </div>
-
         </Body>
       </Panel>
     );

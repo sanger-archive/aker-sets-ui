@@ -1,6 +1,5 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
-import { filterQuery } from '../lib/utils.es6';
 import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
@@ -303,7 +302,8 @@ export const performSearch = () => {
     return dispatch(fetchSetMaterialsIfNeeded())
       .then(() => {
         const setMaterials = getState().search.setMaterials;
-        let filters = getState().search.filters;
+        let filters = getState().search.current;
+        // search.current contains only complete filter rows
         const searchQuery = queryMaterialBuilder(filters, setMaterials)
         const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
 

@@ -5,7 +5,7 @@ import FontAwesome from './font_awesome.es6';
 import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
 import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
-import {debounce} from '../lib/utils.es6';
+import { debounce } from '../lib/utils.es6';
 
 
 class FilterPanel extends React.Component {
