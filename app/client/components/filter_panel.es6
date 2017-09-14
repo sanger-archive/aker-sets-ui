@@ -4,11 +4,21 @@ import DatePicker from 'react-bootstrap-date-picker';
 import FontAwesome from './font_awesome.es6';
 import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
-import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch} from '../actions/index.es6';
+import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
 import {debounce} from '../lib/utils.es6';
 
 
 class FilterPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.performSearch = this.performSearch.bind(this);
+  }
+
+  performSearch(event) {
+    event.preventDefault();
+    this.props.dispatch(setCurrentSearch());
+    this.props.dispatch(performSearch());
+  }
 
   render() {
 
@@ -32,7 +42,7 @@ class FilterPanel extends React.Component {
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
-          <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Update Current Search</button>
+          <button onClick={this.performSearch} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Search</button>
           <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success add-filter-row">
             <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
           </button>
@@ -43,7 +53,6 @@ class FilterPanel extends React.Component {
 }
 
 FilterPanel = connect()(FilterPanel);
-
 export default FilterPanel;
 
 export class FilterRow extends React.Component {
