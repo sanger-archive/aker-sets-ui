@@ -61,7 +61,7 @@ export const queryMaterialBuilder = (filters, setMaterials) => {
   }, {});
 
 //Example result:
-//{"gender":"male","phenotype":{"$ne":"a"},"donor_id":"z","_id":{"$in":["123","234"], "$nin":["456"]}}
+//{"gender":{"$in":["male"]},"phenotype":{"$nin":["a","b"]},"_id":{"$in":["123","234"],"$nin":["456"]}}
 
   return result;
 }
