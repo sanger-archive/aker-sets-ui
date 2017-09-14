@@ -120,7 +120,6 @@ const search = (state = {}, action) => {
       return Object.assign({}, state, { filters: newState });
 
     case SET_CURRENT_SEARCH:
-
       newState = state.filters.reduce((memo, filter)=>{
         const value = filter.value.trim();
 
