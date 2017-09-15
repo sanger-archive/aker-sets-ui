@@ -36,7 +36,6 @@ export const BiomaterialTableRow = React.createClass({
 
     return (
       <tr className={trClass} style={style} onClick={(e) => onClick(biomaterial, index, e) }>
-        <td>{biomaterial.id}</td>
         <td>{biomaterial.scientific_name}</td>
         <td>{biomaterial.gender}</td>
         <td>{biomaterial.phenotype}</td>
@@ -70,7 +69,6 @@ export const BiomaterialTable = React.createClass({
       <table className={tableClass}>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Scientific Name</th>
             <th>Gender</th>
             <th>Phenotype</th>
