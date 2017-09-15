@@ -13,7 +13,7 @@ export const debounce = (func, wait, immediate) => {
   };
 };
 
-export const filterQuery = (currentFilters) => {
+export const currentSearchQueryBuilder = (currentFilters) => {
  let filters = currentFilters.filter((filter) => {
     return (filter.name && !(filter.type == 'date' && filter.comparator && !filter.value));
   });

@@ -1,6 +1,5 @@
 import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
-import { filterQuery } from '../lib/utils.es6';
 import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
@@ -282,7 +281,7 @@ export const setCurrentSearch = () => {
 export const FETCH_SET_MATERIALS_IF_NEEDED = "FETCH_SET_MATERIALS_IF_NEEDED"
 export const fetchSetMaterialsIfNeeded = () => {
   return (dispatch, getState) => {
-    const filters = getState().search.current
+    const filters = getState().search.current;
     const filterSearches = filters.reduce((memo, filter)=>{
       if(filter.name == 'setMembership') {
         memo.push(dispatch(performSetFilterSearch(filter)));
@@ -297,27 +296,62 @@ export const fetchSetMaterialsIfNeeded = () => {
   }
 }
 
-export const PERFORM_SEARCH = "PERFORM_SEARCH"
-export const performSearch = () => {
+export const FETCH_STAMPS_IF_NEEDED = "FETCH_STAMPS_IF_NEEDED"
+export const fetchStampsIfNeeded = () => {
   return (dispatch, getState) => {
-    return dispatch(fetchSetMaterialsIfNeeded())
-      .then(() => {
-        const setMaterials = getState().search.setMaterials;
-        let filters = getState().search.filters;
-        const searchQuery = queryMaterialBuilder(filters, setMaterials)
-        const url = `/materials_service/materials?where=${JSON.stringify(searchQuery)}`
+    const filters = getState().search.current;
+    const filterSearches = filters.reduce((memo, filter) => {
+      if (filter.name == 'consumePermission' || filter.name == 'editPermission') {
+        memo.push(dispatch(performStampFilterSearch(filter)));
+      }
+      return memo;
+    }, [])
 
-        return $.ajax({
-          method: 'GET',
-          url: url,
-          accept: "application/json",
-          cache: false
-        })
-      })
-      .then((response) => {
+    if (filterSearches.length > 0) {
+      return $.when.apply(null, filterSearches);
+    }
+
+    return $.Deferred().resolve();
+  }
+}
+
+export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
+export const performSearchToPage = (pageNumber, maxResults) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchPageForSearch(pageNumber, maxResults)).then((response) => {
         return dispatch(receiveSearchResults(response));
       }, (error) => {
         return dispatch(handleMaterialsServiceErrors(error));
+      });
+  }
+};
+
+export const FETCH_PAGE_FOR_SEARCH = "FETCH_PAGE_FOR_SEARCH"
+export const fetchPageForSearch = (pageNumber, maxResults) => {
+  return (dispatch, getState) => {
+    return $.when(dispatch(fetchSetMaterialsIfNeeded()), dispatch(fetchStampsIfNeeded()))
+      .then(() => {
+        const setMaterials = getState().search.setMaterials;
+        const stampMaterials = getState().search.stampMaterials;
+
+        let filters = getState().search.current;
+        // search.current contains only complete filter rows        
+
+        const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
+        const url = "/materials_service/materials/search";
+
+        return $.ajax({
+          method: 'POST',
+          url: url,
+          contentType: "application/json; charset=utf-8",
+          accept: "application/json",
+          data: JSON.stringify({ 
+            where: searchQuery, 
+            max_results: maxResults, 
+            page: pageNumber
+          }),
+          cache: false
+        });
       });
   }
 }
@@ -337,17 +371,20 @@ export const performSearchWithUrl = (url) => {
   }
 }
 
-export const PAGINATE_TO = "PAGINATE_TO"
-export const paginateTo = (url) => {
-  return (dispatch) => {
-    return dispatch(performSearchWithUrl(url))
-      .then((response) => {
-        return dispatch(receiveSearchResults(response));
-      }, (error) => {
-        return dispatch(handleMaterialsServiceErrors(error));
-      });
-  }
-}
+export const PAGINATE_TO = "PAGINATE_TO";
+export const paginateTo = (numPage) => {
+  return (dispatch, getState) => {
+    return dispatch(performSearchToPage(numPage, getState().search.maxResults));
+  };
+};
+
+export const PERFORM_SEARCH = "PERFORM_SEARCH"
+export const performSearch = () => {
+  return (dispatch, getState) => {
+    return dispatch(performSearchToPage(getState().search.pageNumber, getState().search.maxResults));
+  };
+};
+
 
 export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
 export const receiveSearchResults = (response) => {
@@ -401,11 +438,58 @@ export const performSetFilterSearch = (filter) => {
   }
 }
 
+export const PERFORM_STAMP_FILTER_SEARCH = "PERFORM_STAMP_FILTER_SEARCH"
+export const performStampFilterSearch = (filter) => {
+  return (dispatch, getState) => {
+    return dispatch(fetchTokenIfNeeded())
+      .then(() => {
+        let permissionType = filter.name.replace(/Permission/,'');
+        const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
+        const url = `/stamps_service/materials?${stampQuery}`;
+
+        return $.ajax({
+          method: 'GET',
+          url: url,
+          contentType: "application/vnd.api+json",
+          accept: "application/vnd.api+json",
+          headers: {
+            "X-Authorisation": getState().token
+          },
+          jsonp: false
+        });
+      })
+      .then((response) => {
+        let comparator = filter.comparator;
+        if (filter.comparator == 'has') {
+          comparator = 'has';
+        }
+        let data = {};
+        let material_uuids = [];
+        if (response.data) {
+          material_uuids = response.data.map((material) => {
+            return material.attributes['material-uuid'] });
+        }
+        data[comparator] = material_uuids;
+        const result = Object.assign({}, data);
+
+        return dispatch(receiveStampsFromFilter(result));
+      });
+  }
+}
+
 export const RECEIVE_SETS_FROM_FILTER = "RECEIVE_SETS_FROM_FILTER"
 export const receiveSetsFromFilter = (result) => {
   return {
     type: RECEIVE_SETS_FROM_FILTER,
     setMaterials: result
+  }
+}
+
+export const RECEIVE_STAMPS_FROM_FILTER = "RECEIVE_STAMPS_FROM_FILTER"
+export const receiveStampsFromFilter = (result) => {
+  return {
+    type: RECEIVE_STAMPS_FROM_FILTER,
+    stampMaterials: result
   }
 }
 
@@ -493,30 +577,22 @@ export const receiveAllSets = (response) => {
 export const BY_SEARCH_PAGE = "BY_SEARCH_PAGE"
 export const bySearchPage = (search, action) => {
   return (dispatch, getState) => {
-    const links = search.links;
-    let initialPage;
 
-    if (links.last) {
-      initialPage = links.last.href;
-    } else {
-      initialPage = links.self.href;
-    }
-
-    const pager = (pageLink) => {
-      return dispatch(performSearchWithUrl(pageLink))
-        .then((results) => {
-          return action(results._items)
-            .then(() => {
-              if (results._links.prev) {
-                return pager(results._links.prev.href);
-              } else {
-                return $.Deferred().resolve();
-              }
+    const pager = (pageNumber) => {
+          return dispatch(fetchPageForSearch(pageNumber, getState().search.batchGroup))
+            .then((results) => {
+              return action(results._items)
+                .then(() => {
+                  if (results._links.next) {
+                    return pager(results._links.next.page);
+                  } else {
+                    return $.Deferred().resolve();
+                  }
+                })
             })
-        })
-    }
+        }    
 
-    return pager(initialPage);
+    return pager(1);
   }
 }
 

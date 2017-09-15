@@ -1,8 +1,4 @@
 import search from '../search.es6'
-import { filterQuery } from '../../lib/utils.es6';
-import queryBuilder from '../../lib/query_builder.es6'
-
-
 import { updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch, receiveSearchResults } from '../../actions/index.es6'
 
 describe('reducers/search', () => {
@@ -76,7 +72,9 @@ describe('reducers/search', () => {
         filters: [
           { name: 'gender', comparator: 'after', value: 'female' },
           { name: 'donor_id', comparator: 'equals', value: 'female' },
-          { name: 'material_type', comparator: 'equals', value: 'male' }
+          { name: 'material_type', comparator: 'equals', value: 'male' },
+          { name: 'owner_id', comparator: 'equals', value: 'aKeR   ' },
+          { name: 'owner_id', comparator: 'equals', value: 'aker@sanger.ac.uk' }
         ]
       }
     })
@@ -84,10 +82,12 @@ describe('reducers/search', () => {
     it('Updates the state to have current search', () => {
       const action = setCurrentSearch()
       const newState = search(oldState, action)
-      expect(newState.current).to.have.lengthOf(3)
+      expect(newState.current).to.have.lengthOf(5)
       expect(newState.current[0]).to.include({ name: 'gender', comparator: 'after', value: 'female' })
       expect(newState.current[1]).to.include({ name: 'donor_id', comparator: 'equals', value: 'female' })
       expect(newState.current[2]).to.include({ name: 'material_type', comparator: 'equals', value: 'male' })
+      expect(newState.current[3]).to.include({ name: 'owner_id', comparator: 'equals', value: 'aker@sanger.ac.uk' })
+      expect(newState.current[4]).to.include({ name: 'owner_id', comparator: 'equals', value: 'aker@sanger.ac.uk' })
     })
   });
 

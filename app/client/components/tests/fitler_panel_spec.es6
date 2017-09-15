@@ -61,7 +61,7 @@ describe('<FilterPanel />', () => {
         store,
       };
 
-      const filters = [{id: 'an id', name: 'a filters name'}];
+      const filters = [{id: 'an id', name: 'a filters name', comparator: 'is', value: 'xxx'}];
       store.getState().search.filters = filters;
       store.getState().search.current = [];
       expect(store.getState().search.current.length).to.equals(0);
