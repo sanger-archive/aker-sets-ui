@@ -1,4 +1,4 @@
-import { debounce, filterQuery, filterLinks } from '../utils.es6';
+import { debounce, currentSearchQueryBuilder, filterLinks } from '../utils.es6';
 
 describe('Utils', function() {
 
@@ -20,7 +20,7 @@ describe('Utils', function() {
 
   });
 
-  describe('#filterQuery', () => {
+  describe('#currentSearchQueryBuilder', () => {
     it('filters out any filter that does not match the criteria', () => {
       const filters = [
         { id: 1, name: "available", comparator: "equals", value: "true", type: "boolean" },
@@ -28,7 +28,7 @@ describe('Utils', function() {
         { id: 1, name: "", comparator: "", value: "" },
       ];
 
-      const filtered = filterQuery(filters);
+      const filtered = currentSearchQueryBuilder(filters);
       expect(filtered.length).to.equal(2);
     })
 

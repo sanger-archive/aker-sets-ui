@@ -4,11 +4,22 @@ import DatePicker from 'react-bootstrap-date-picker';
 import FontAwesome from './font_awesome.es6';
 import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
-import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch} from '../actions/index.es6';
-import {debounce} from '../lib/utils.es6';
+import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
+import { debounce } from '../lib/utils.es6';
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 
 class FilterPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.performSearch = this.performSearch.bind(this);
+  }
+
+  performSearch(event) {
+    event.preventDefault();
+    this.props.dispatch(setCurrentSearch());
+    this.props.dispatch(performSearch());
+  }
 
   render() {
 
@@ -29,10 +40,14 @@ class FilterPanel extends React.Component {
       <Panel>
         <Heading title='Add Filter' />
         <Body>
+          <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
+            <button>WHAT'S THIS?</button>
+          </OverlayTrigger>
+
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
-          <button onClick={() => dispatch(setCurrentSearch())} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Update Current Search</button>
+          <button onClick={this.performSearch} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Search</button>
           <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success add-filter-row">
             <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
           </button>
@@ -43,7 +58,6 @@ class FilterPanel extends React.Component {
 }
 
 FilterPanel = connect()(FilterPanel);
-
 export default FilterPanel;
 
 export class FilterRow extends React.Component {
@@ -119,7 +133,6 @@ export class ContextualValue extends React.Component {
   }
 }
 
-
 const InputTextField = ({value, onChange}) => {
   return <input type="text" className="form-control" onChange={onChange} value={value} />
 };
@@ -142,3 +155,15 @@ const ListField = ({value, options, onChange, includeEmptyRow}) => {
     </select>
   );
 }
+
+const popoverHover = (
+  <Popover id="popover-trigger-hover-focus" title="What's this?">
+    <p>
+      This page allows you to search for materials that match a set of search criteria.<br/>
+      Build up a search by selecting criteria (e.g. phenotype), and adding them to your query. The more criteria you add, the more restrictive your search will be.<br/>
+      Run the search query by pushing the Search button. The results (if any) will be shown below. Use the next and previous links to view more pages of results.<br/>
+      When you have a list of materials that you are happy with, you can add or remove them from a set, or apply/unapply permission stamps to the list, to update the privileges. (You can only alter the privileges of materials that you own.)<br/>
+      Trying to perform operations on long lists will take a long time with the current version of the software.
+      </p>
+  </Popover>
+);

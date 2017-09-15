@@ -133,14 +133,20 @@ const search = (state = {}, action) => {
       return Object.assign({}, state, { filters: newState });
 
     case SET_CURRENT_SEARCH:
-      newState = state.filters.map((filter) => {
-        if (filter.name == 'owner_id' && !filter.value.includes("@")){
-          const owner = filter.value.trim().toLowerCase();
+      let filteredFilters = state.filters.reduce((memo, filter)=>{
+        const value = filter.value.trim();
+
+        if (value.length===0){
+          return memo;
+        }
+        if (filter.name == 'owner_id' && !value.includes("@")){
+          const owner = value.toLowerCase();
           filter.value = `${owner}@sanger.ac.uk`;
         }
-        return Object.assign({}, filter);
-      });
-      return Object.assign({}, state, { current: newState, stampMaterials: [], setMaterials: [] });
+        memo.push(filter);
+        return memo;
+      }, []);
+      return Object.assign({}, state, { current: filteredFilters, stampMaterials: [], setMaterials: [] });
 
     case RECEIVE_SEARCH_RESULTS:
       newState = action.results;
