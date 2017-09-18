@@ -24,7 +24,7 @@ npm-debug.log
 # Ignore javascript modules installed through npm
 /node_modules
 
-/public/dev-assets
+/public/dev-assets/*
 /app/assets/javascripts/common.js
 /app/assets/javascripts/search.js
 /app/assets/javascripts/set-shaper.js
