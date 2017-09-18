@@ -335,7 +335,7 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
         const stampMaterials = getState().search.stampMaterials;
 
         let filters = getState().search.current;
-        // search.current contains only complete filter rows        
+        // search.current contains only complete filter rows
 
         const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
         const url = "/materials_service/materials/search";
@@ -345,9 +345,9 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
           url: url,
           contentType: "application/json; charset=utf-8",
           accept: "application/json",
-          data: JSON.stringify({ 
-            where: searchQuery, 
-            max_results: maxResults, 
+          data: JSON.stringify({
+            where: searchQuery,
+            max_results: maxResults,
             page: pageNumber
           }),
           cache: false
@@ -590,7 +590,7 @@ export const bySearchPage = (search, action) => {
                   }
                 })
             })
-        }    
+        }
 
     return pager(1);
   }
@@ -664,7 +664,9 @@ export const addMaterialsToSet = (items, setId) => {
           "X-Authorisation": getState().token
         },
         data: JSON.stringify(body)
-      })
+      }).fail((error) => {
+        return dispatch(userMessage("Failed to add materials to set", 'danger'))
+      });
     })
   }
 }
@@ -685,7 +687,9 @@ export const removeMaterialsFromSet = (items, setId) => {
         },
         processData: false,
         data: JSON.stringify(body)
-      })
+      }).fail((error) => {
+        return dispatch(userMessage("Failed to remove materials from set", 'danger'))
+      });
     })
   }
 }
