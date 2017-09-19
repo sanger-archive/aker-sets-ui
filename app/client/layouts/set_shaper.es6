@@ -29,7 +29,7 @@ const SetShaper = ({ set, resource, user_set_ids }) => {
 
       <div className="row">
         <div className="col-md-12">
-          <h1 className="page-header">Set Shaper</h1>
+          <h1>Set Shaper</h1>
         </div>
       </div>
 
