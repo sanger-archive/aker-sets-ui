@@ -85,6 +85,9 @@ RSpec.configure do |config|
 
   config.before(:each, js: true) do
     DatabaseCleaner.strategy = :truncation
+
+    # Prevent loading of Google Fonts for Jenkins compatibility
+    page.driver.browser.url_blacklist = ["https://fonts.googleapis.com"]
   end
 
   config.before(:each) do
