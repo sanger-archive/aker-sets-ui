@@ -522,7 +522,8 @@ export const createSetOnly = (setName) => {
         data: JSON.stringify(body),
         jsonp: false
       }).fail((error) => {
-        return dispatch(handleSetsServiceErrors(error))
+        const detail = _getErrorDetails(error);
+        return dispatch(userMessage('Failed to create set. '+detail, 'danger'));
       });
     })
     .then((response)=>{
@@ -665,7 +666,8 @@ export const addMaterialsToSet = (items, setId) => {
         },
         data: JSON.stringify(body)
       }).fail((error) => {
-        return dispatch(userMessage("Failed to add materials to set", 'danger'))
+        const detail = _getErrorDetails(error);
+        return dispatch(userMessage('Failed to add materials to set. '+detail, 'danger'));
       });
     })
   }
@@ -688,7 +690,8 @@ export const removeMaterialsFromSet = (items, setId) => {
         processData: false,
         data: JSON.stringify(body)
       }).fail((error) => {
-        return dispatch(userMessage("Failed to remove materials from set", 'danger'))
+        const detail = _getErrorDetails(error);
+        return dispatch(userMessage('Failed to remove materials from set. '+detail, 'danger'));
       });
     })
   }
@@ -744,6 +747,17 @@ const _apply_generation = (nameOperation) => {
       })
     }
   }
+}
+
+const _getErrorDetails = (error) => {
+  let detail = '';
+  if (error.responseJSON.errors) {
+    detail = error.responseJSON.errors.reduce((memo, e) => {
+      memo.push(e.detail);
+      return memo;
+    }, []);
+  }
+  return detail;
 }
 
 export const APPLY_STAMP = "APPLY_STAMP";
