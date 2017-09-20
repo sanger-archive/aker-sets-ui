@@ -523,7 +523,7 @@ export const createSetOnly = (setName) => {
         jsonp: false
       }).fail((error) => {
         const detail = _getErrorDetails(error);
-        return dispatch(userMessage('Failed to create set. '+detail, 'danger'));
+        return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
       });
     })
     .then((response)=>{
@@ -667,7 +667,7 @@ export const addMaterialsToSet = (items, setId) => {
         data: JSON.stringify(body)
       }).fail((error) => {
         const detail = _getErrorDetails(error);
-        return dispatch(userMessage('Failed to add materials to set. '+detail, 'danger'));
+        return dispatch(userMessage(`Failed to add materials to set. ${detail}`, 'danger'));
       });
     })
   }
@@ -691,7 +691,7 @@ export const removeMaterialsFromSet = (items, setId) => {
         data: JSON.stringify(body)
       }).fail((error) => {
         const detail = _getErrorDetails(error);
-        return dispatch(userMessage('Failed to remove materials from set. '+detail, 'danger'));
+        return dispatch(userMessage(`Failed to remove materials from set. ${detail}`, 'danger'));
       });
     })
   }
@@ -750,7 +750,7 @@ const _apply_generation = (nameOperation) => {
 }
 
 const _getErrorDetails = (error) => {
-  let detail = '';
+  let detail = [];
   if (error.responseJSON.errors) {
     detail = error.responseJSON.errors.reduce((memo, e) => {
       memo.push(e.detail);
