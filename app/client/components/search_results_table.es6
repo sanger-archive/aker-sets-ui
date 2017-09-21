@@ -16,15 +16,13 @@ class SearchResultsTable extends React.Component {
 
     return (
       <div>
-        <PaginationLinks links={links} dispatch={dispatch}></PaginationLinks>
-
         <Panel>
           <div className="row">
             <div className="col-md-12">
               { hasResults && <ButtonsPanel /> }
             </div>
           </div>
-
+          <PaginationLinks links={links} dispatch={dispatch}></PaginationLinks>
           <Heading title={title}>
           </Heading>
 
@@ -40,9 +38,9 @@ class SearchResultsTable extends React.Component {
               </tbody>
             </table>
           </Body>
+          <PaginationLinks links={links} dispatch={dispatch} />
         </Panel>
 
-        <PaginationLinks links={links} dispatch={dispatch} />
 
       </div>
     );
