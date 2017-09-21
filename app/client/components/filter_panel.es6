@@ -38,11 +38,11 @@ class FilterPanel extends React.Component {
 
     return (
       <Panel>
-        <Heading title='Add Filter' />
+        <Heading title='Add Filter'><OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
+          <span style={{ color: '#367FD2', width: '400px' }}>What&#39;s this?</span>
+        </OverlayTrigger></Heading>
         <Body>
-          <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
-            <button>What&#39;s this?</button>
-          </OverlayTrigger>
+
 
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
