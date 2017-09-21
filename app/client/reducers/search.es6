@@ -9,7 +9,8 @@ const search = (state = {}, action) => {
         date: ['before', 'after', 'on'],
         string: ['is', 'is not'],
         boolean: ['equals'],
-        containment: ['in', 'not in']
+        containment: ['in', 'not in'],
+        privilege: ['granted to', 'not granted to']
       };
       const allowedTypes = ['string', 'boolean'];
       const properties = action.schema.properties;
@@ -60,10 +61,10 @@ const search = (state = {}, action) => {
           // Extra permission filter
           } else if (name == 'consumePermission') {
             field['type'] = 'string';
-            field['comparators'] = comparators['containment'];
+            field['comparators'] = comparators['privilege'];
           } else if (name == 'editPermission') {
             field['type'] = 'string';
-            field['comparators'] = comparators['containment'];
+            field['comparators'] = comparators['privilege'];
 
           // Just a regular type string
           } else {

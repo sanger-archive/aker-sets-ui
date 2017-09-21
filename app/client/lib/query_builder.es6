@@ -18,7 +18,7 @@ const objectToList = (mergedObject) => {
     let obj = new Object();
     obj[key]=mergedObject[key];
     listObject.push(obj);
-  }  
+  }
   return listObject;
 }
 
@@ -36,7 +36,7 @@ export const reduceFilterList = (filterList) => {
       throw new Error('Incorrect format for filter object');
     }
     let key = keys[0];
-    if (key==='in') {
+    if (key==='in' || key==='granted to') {
       if (ins===null) {
         ins = elem[key];
       } else {
