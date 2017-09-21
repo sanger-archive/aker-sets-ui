@@ -115,7 +115,6 @@ describe("lib/query_builder", () => {
                     {"in": ["a1", "c1", "a3", "d1"]}, {"not_in": ["a1", "b1"] },
                     {"in": ["b1", "c1", "b3", "d1"]}, {"not_in": ["b1", "c1"]}];
 
-          debugger
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
             `{"$and":[{"_id":{"$in":["d1"]}}]}`
