@@ -56,4 +56,6 @@ This creates the minified js files and also creates a manifest file that Rails c
         git add -A
     fi
 
+(You would put this in `.git/hooks/pre-commit` and make the file executable.)
+
 There is some Rack middleware that is inserted in the development environment file. This is to proxy any requests to external services e.g. set service, materials service and avoid CORS issues.
