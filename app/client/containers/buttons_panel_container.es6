@@ -45,7 +45,7 @@ class ButtonsPanelContainer extends React.Component {
 
     return (
         <Body>
-          <form className="form-inline" id="create-set">
+          <form className="form-inline pull-left" id="create-set">
             <label>
               Create new set:
               <input type="text" style={{marginLeft: '10px'}} className="form-control" placeholder="Set name" onChange={this.handleChangeCreateNewSet} />
@@ -53,7 +53,7 @@ class ButtonsPanelContainer extends React.Component {
             <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create</button>
             { loading.creatingSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
-          <form className="form-inline" id="add-remove-materials-from-set">
+          <form className="form-inline pull-right" id="add-remove-materials-from-set">
             <label>
               Select a set:
             </label>
