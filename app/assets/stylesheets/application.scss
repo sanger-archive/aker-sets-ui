@@ -61,11 +61,15 @@ body#login {
   background-color: #e0ebeb;
 }
 
-.container#login_box, .container#search{
-  margin-top: 20px;
-  padding-bottom: 10px;
-  background-color: white;
-  margin-bottom: 20px;
+.container {
+  &#login_box, &#search {
+    margin-top: 20px;
+    padding-bottom: 10px;
+    background-color: white;
+  }
+  &#login {
+    margin-bottom: 20px;
+  }
 }
 
 /* Disable text-wrapping on the advanced set-shaper table to save vertical space*/
@@ -77,8 +81,16 @@ body#login {
 .bg-info, .alert-info {
   background-color: #d9edf7;
 }
+
+/* Change alert font colour from white to grey */
 .alert {
   color: #444;
+}
+
+ul.pagination {
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 h1 {
