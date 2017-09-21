@@ -44,7 +44,6 @@ class ButtonsPanelContainer extends React.Component {
     const { sets, loading, dispatch } = this.props;
 
     return (
-      <Panel>
         <Body>
           <form className="form-inline" id="create-set">
             <label>
@@ -66,7 +65,6 @@ class ButtonsPanelContainer extends React.Component {
           </form>
           <StamperControl></StamperControl>
         </Body>
-      </Panel>
     );
   }
 }
@@ -84,5 +82,3 @@ const ListSets = ({sets, onChange}) => {
     </select>
   );
 }
-
-

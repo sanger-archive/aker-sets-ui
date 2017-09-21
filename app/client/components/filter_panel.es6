@@ -41,7 +41,7 @@ class FilterPanel extends React.Component {
         <Heading title='Add Filter' />
         <Body>
           <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
-            <button>WHAT'S THIS?</button>
+            <button>What&#39;s this?</button>
           </OverlayTrigger>
 
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
@@ -78,13 +78,13 @@ export class FilterRow extends React.Component {
             { options }
           </select>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <ContextualComparator filter={filter} fields={fields} onChange={onComparatorChange} />
         </div>
         <div className="col-md-4">
           <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
         </div>
-        <div className="col-md-1">
+        <div className="col-md-2 col-lg-1">
           <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row">
             <FontAwesome icon="times" size="lg" style={{color: 'red'}} />
           </button>
