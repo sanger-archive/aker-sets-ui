@@ -14,7 +14,7 @@ describe("lib/query_builder", () => {
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"hmdmc":{"$in":[]},"donor_id":{"$nin":["xyz"],"$in":["zyx"]}}`
+        `{"$and":[{"hmdmc":{"$eq":"123"}},{"hmdmc":{"$eq":"456"}},{"donor_id":{"$ne":"xyz"}},{"donor_id":{"$eq":"zyx"}}]}`
       );
     });
 
@@ -30,7 +30,7 @@ describe("lib/query_builder", () => {
       const afterDate = new Date(filters[1].value).toUTCString();
       const onDate = new Date(filters[2].value).toUTCString();
       expect(result).to.equal(
-        `{"date_of_receipt":{"$lt":["${beforeDate}"],"$gt":["${afterDate}"],"$in":["${onDate}"]}}`
+        `{"$and":[{"date_of_receipt":{"$lt":"${beforeDate}"}},{"date_of_receipt":{"$gt":"${afterDate}"}},{"date_of_receipt":{"$eq":"${onDate}"}}]}`
      );
     });
 
@@ -44,7 +44,7 @@ describe("lib/query_builder", () => {
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"material_type":{"$in":["dna"],"$nin":["blood"]},"gender":{"$nin":["male"]},"scientific_name":{"$nin":["Homo sapiens"]}}`
+        `{"$and":[{"material_type":{"$eq":"dna"}},{"material_type":{"$ne":"blood"}},{"gender":{"$ne":"male"}},{"scientific_name":{"$ne":"Homo sapiens"}}]}`
       );
     });
 
@@ -56,7 +56,7 @@ describe("lib/query_builder", () => {
 
       const result = JSON.stringify(queryBuilder(filters));
       expect(result).to.equal(
-        `{"available":{"$in":[]}}`
+        `{"$and":[{"available":{"$eq":true}},{"available":{"$eq":false}}]}`
       );
     });
 
@@ -72,8 +72,8 @@ describe("lib/query_builder", () => {
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
-            `{"_id":{"$in":[]}}`
-          );          
+            `{"$and":[{"_id":{"$in":[]}}]}`
+          );
         });
 
         it("returns a query filtering with the common elements if some elements are the same in both lists", () => {
@@ -86,11 +86,11 @@ describe("lib/query_builder", () => {
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
-            `{"_id":{"$in":["c1","d1"]}}`
-          );          
+            `{"$and":[{"_id":{"$in":["c1","d1"]}}]}`
+          );
         });
 
-        
+
         it("returns query with all the elements of both lists if the lists have shared elements but their comparators are different", () => {
           const filters = [
             {name: "setMembership", comparator: "in", value: "a name", type: "string"},
@@ -101,10 +101,10 @@ describe("lib/query_builder", () => {
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
-            `{"_id":{"$in":["a1","c1","a3","d1"],"$nin":["b1","c1","b3","d1"]}}`
-          );          
+            `{"$and":[{"_id":{"$in":["a1","a3"]}}]}`
+          );
         });
-        
+
         it("returns a query with the shared elements for each comparator when using different comparators", () => {
           const filters = [
             {name: "setMembership", comparator: "in", value: "a name", type: "string"},
@@ -112,15 +112,16 @@ describe("lib/query_builder", () => {
           ];
 
           const filteringList = [
-                    {"in": ["a1", "c1", "a3", "d1"]}, {"not_in": ["a1", "b1"] }, 
+                    {"in": ["a1", "c1", "a3", "d1"]}, {"not_in": ["a1", "b1"] },
                     {"in": ["b1", "c1", "b3", "d1"]}, {"not_in": ["b1", "c1"]}];
 
+          debugger
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
-            `{"_id":{"$in":["c1","d1"],"$nin":["b1"]}}`
+            `{"$and":[{"_id":{"$in":["d1"]}}]}`
           );
         });
-        
+
         it("should fail with an exception if more than one comparator is included in one of the filter objects of the list", () => {
           const filters = [
             {name: "setMembership", comparator: "in", value: "a name", type: "string"},
@@ -128,7 +129,7 @@ describe("lib/query_builder", () => {
           ];
 
           const filteringList = [
-                    {"in": ["a1"], "not_in": ["b1"]}, 
+                    {"in": ["a1"], "not_in": ["b1"]},
                     {"in": ["b1", "c1", "b3"]}];
 
           expect(queryBuilder.bind(this, filters, filteringList)).to.throw(Error);
