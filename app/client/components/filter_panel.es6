@@ -6,7 +6,9 @@ import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
 import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
 import { debounce } from '../lib/utils.es6';
-import { Popover, OverlayTrigger } from 'react-bootstrap'
+import { Popover, OverlayTrigger } from 'react-bootstrap';
+
+import FIELD_NAMES from '../lib/field_names.es6';
 
 
 class FilterPanel extends React.Component {
@@ -41,7 +43,7 @@ class FilterPanel extends React.Component {
         <Heading title='Add Filter' />
         <Body>
           <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
-            <button>What&#39;s this?</button>
+            <button>{"What's this?"}</button>
           </OverlayTrigger>
 
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
@@ -67,7 +69,7 @@ export class FilterRow extends React.Component {
     let {fields, filter, onNameChange, onComparatorChange, onValueChange, onRemove} = this.props;
 
     const options = Object.keys(fields).map((name, index) => {
-      return (<option value={name} key={index}>{name}</option>);
+      return (<option value={name} key={index}>{FIELD_NAMES[name] && FIELD_NAMES[name].friendly_name || name}</option>);
     });
 
     return (

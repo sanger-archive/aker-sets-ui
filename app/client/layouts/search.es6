@@ -11,10 +11,9 @@ const Search = ({ search, loading }) => {
     <div>
       <div className="container" id="search">
 
-        <div className="row">
-          <div className="col-md-12">
-            <h1>Set Shaper <small>Curate Samples</small></h1>
-          </div>
+      <div className="row">
+        <div className="col-md-12">
+          <h1>{"Set Shaper "}<small>Curate Samples</small></h1>
         </div>
 
         <UserMessage></UserMessage>
