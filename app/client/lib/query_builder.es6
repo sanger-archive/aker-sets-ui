@@ -1,6 +1,15 @@
-const merge = (listA, listB) => {
-  let b = new Set(listA);
-  return listB.filter(x => b.has(x));
+const intersect = (listA, listB) => {
+  let a = new Set(listA);
+  return listB.filter(x => a.has(x));
+}
+
+const union = (listA, listB) => {
+  return Array.from(new Set(listA.concat(listB)));
+}
+
+const difference = (listA, listB) => {
+  let b = new Set(listB);
+  return listA.filter(x => !b.has(x));
 }
 
 const objectToList = (mergedObject) => {
@@ -9,28 +18,44 @@ const objectToList = (mergedObject) => {
     let obj = new Object();
     obj[key]=mergedObject[key];
     listObject.push(obj);
-  }  
+  }
   return listObject;
 }
 
 export const reduceFilterList = (filterList) => {
-  let mergedObject = filterList.reduce((memo, elem) => {
-    if (Object.keys(elem).length > 1) {
+
+  var ins = null;
+  var notins = null;
+
+  const len = filterList.length;
+
+  for (var i = 0; i < len; ++i) {
+    var elem = filterList[i];
+    var keys = Object.keys(elem);
+    if (keys.length > 1) {
       throw new Error('Incorrect format for filter object');
     }
-
-    let key = Object.keys(elem)[0];
-    if (!!memo[key]) {
-      memo[key] = merge(memo[key], Object.values(elem)[0]);
+    let key = keys[0];
+    if (key==='in' || key==='granted to') {
+      if (ins===null) {
+        ins = elem[key];
+      } else {
+        ins = intersect(ins, elem[key]);
+      }
     } else {
-      memo[key] = Object.values(elem)[0];
+      if (notins===null) {
+        notins = elem[key];
+      } else {
+        notins = union(notins, elem[key]);
+      }
     }
-    return memo;
-  }, new Object());
-
-  return mergedObject;
+    if (ins!==null && notins!==null) {
+      ins = difference(ins, notins);
+      notins = null;
+    }
+  }
+  return { 'in': ins, 'not_in': notins };
 }
-
 
 const queryMaterialBuilder = (filters, materialFilters) => {
   if (typeof materialFilters == 'undefined') {
@@ -39,74 +64,66 @@ const queryMaterialBuilder = (filters, materialFilters) => {
   const mergedObject = reduceFilterList(materialFilters);
 
   let comparators = {
-    'equals': '$in',
-    'is': '$in',
-    'is not': '$nin',
+    'equals': '$eq',
+    'is': '$eq',
+    'is not': '$ne',
     'in': '$in',
     'not in': '$nin',
-    'on': '$in',
+    'on': '$on',
     'before': '$lt',
-    'after': '$gt'
+    'after': '$gte'
   }
 
-  var result = filters.reduce((memo, filter) => {
+  let specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
 
-    const comparator = comparators[filter.comparator];
-    const value = {};
+  var results = filters.reduce((memo, filter) => {
     var filterValue = filter.value.trim();
     var filterName = filter.name;
-
+    if (specialFilters.includes(filterName)) {
+      return memo;
+    }
+    const comp = comparators[filter.comparator];
     if (filter.type == 'date') {
-      const date = new Date(filter.value)
+      const date = new Date(filterValue);
+      date.setUTCHours(0,0,0,0); // midnight on this day
+
+      if (comp=='$on') {
+        const afterFilter = {};
+        afterFilter[filterName] = { '$gte': date.toUTCString() };
+        memo.push(afterFilter);
+        date.setUTCHours(24,0,0,0); // midnight the next day
+        const beforeFilter = {};
+        beforeFilter[filterName] = { '$lt': date.toUTCString() };
+        memo.push(beforeFilter);
+        return memo;
+      }
+
       filterValue = date.toUTCString();
     }
-
     if (filter.type == 'boolean') {
       filterValue = (filter.value == "true");
     }
-
-    // Handle set name and permissions in the merged list of UUIDs
-    if (mergedObject && (filter.name == 'setMembership' ||
-      filter.name == 'consumePermission' || filter.name == 'editPermission')) {
-      const comparator = filter.comparator.split(' ').join('_')
-
-      filterValue = mergedObject[comparator];
-      filterName = '_id'
-    }
-
-// filterValue could be an array, eg for setMembership, so convert all filterValue's to arrays to help build query
-    if (!Array.isArray(filterValue)){
-      filterValue = [filterValue]
-    }
-
-    const comp = comparators[filter.comparator];
-    if (memo[filterName]) {
-      if (memo[filterName][comp]) {
-        // If we ever want to rolback and change it to do an OR between values of fields instead of and AND, 
-        // (like gender='male' OR gender='female') we would need to concat() the list of values
-        // 
-        //  memo[filterName][comp] = memo[filterName][comp].concat(filterValue)
-        //
-        // but if we want an AND we need to do an intersection of the values:
-        // 
-        //  memo[filterName][comp] = merge(memo[filterName][comp], filterValue);
-        //
-        memo[filterName][comp] = merge(memo[filterName][comp], filterValue);
-      } else {
-        memo[filterName][comp] = filterValue;
-      }
-    } else {
-      value[comp] = filterValue;
-      memo[filterName] = value;
-    }
-
+    const fieldPredicate = {};
+    const predicate = {};
+    predicate[comp] = filterValue;
+    fieldPredicate[filterName] = predicate;
+    memo.push(fieldPredicate);
     return memo;
-  }, {});
+  }, []);
+
+  if (mergedObject) {
+    if (mergedObject['in']) {
+      results.push({'_id':{'$in':mergedObject['in']}});
+    }
+    if (mergedObject['not_in']) {
+      results.push({'_id':{'$nin':mergedObject['not_in']}});
+    }
+  }
+
+  return {"$and": results};
 
 //Example result:
-//{"gender":{"$in":["male"]},"phenotype":{"$nin":["a","b"]},"_id":{"$in":["123","234"],"$nin":["456"]}}
-
-  return result;
+// {"$and":[{"gender":{"$eq":"male"}}, {"phenotype":{"$ne":"a"}}, {"phenotype":{"$ne":"b"}}], {"_id":{"$in":["123","234"]}}}
 }
 
 export default queryMaterialBuilder;

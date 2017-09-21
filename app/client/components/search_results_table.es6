@@ -4,7 +4,6 @@ import { Panel, Heading, Body } from './panel.es6';
 import { paginateTo } from '../actions/index.es6'
 import ButtonsPanel from '../components/buttons_panel.es6';
 
-
 class SearchResultsTable extends React.Component {
 
   render() {
@@ -18,7 +17,7 @@ class SearchResultsTable extends React.Component {
     return (
       <div>
         <PaginationLinks links={links} dispatch={dispatch}></PaginationLinks>
-        
+
         <Panel>
           <div className="row">
             <div className="col-md-12">
@@ -28,7 +27,7 @@ class SearchResultsTable extends React.Component {
 
           <Heading title={title}>
           </Heading>
-          <Body>            
+          <Body>
             <table className="table table-striped table-hover search-results-table">
               <thead>
                 <tr>
@@ -66,7 +65,6 @@ const SearchResultsRow = (props) => {
 const PaginationLinks = (props) => {
   const { links, dispatch } = props;
 
-
   if (links.length==0){
     return null
   }
@@ -81,12 +79,12 @@ const PaginationLinks = (props) => {
 
   return (
     <div className="row">
-      <div className="col-md-12">    
+      <div className="col-md-12">
         <nav aria-label="Page navigation" className="pull-right">
           <ul className="pagination">
             {displayLinks}
           </ul>
-        </nav>          
+        </nav>
       </div>
     </div>
   );
@@ -107,7 +105,6 @@ class PaginationLink extends React.Component {
   }
 
   render() {
-
     const { link, label, title, onClick } = this.props;
 
     return (
@@ -118,7 +115,4 @@ class PaginationLink extends React.Component {
       </li>
     );
   }
-
 }
-
-
