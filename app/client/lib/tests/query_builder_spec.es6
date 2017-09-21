@@ -20,9 +20,9 @@ describe("lib/query_builder", () => {
 
     it("converts a list of filters into a query for type date", () => {
       const filters = [
-        { name: "date_of_receipt", comparator: "before", value: "10/01/15", type: "date" },
-        { name: "date_of_receipt", comparator: "after", value: "10/01/11", type: "date" },
-        { name: "date_of_receipt", comparator: "on", value: "10/01/13", type: "date" },
+        { name: "date_of_receipt", comparator: "before", value: "2015-01-01", type: "date" },
+        { name: "date_of_receipt", comparator: "after", value: "2015-02-01", type: "date" },
+        { name: "date_of_receipt", comparator: "on", value: "2015-03-01", type: "date" },
       ]
 
       const result = JSON.stringify(queryBuilder(filters));
@@ -30,7 +30,7 @@ describe("lib/query_builder", () => {
       const afterDate = new Date(filters[1].value).toUTCString();
       const onDate = new Date(filters[2].value).toUTCString();
       expect(result).to.equal(
-        `{"$and":[{"date_of_receipt":{"$lt":"${beforeDate}"}},{"date_of_receipt":{"$gt":"${afterDate}"}},{"date_of_receipt":{"$eq":"${onDate}"}}]}`
+        '{"$and":[{"date_of_receipt":{"$lt":"Thu, 01 Jan 2015 00:00:00 GMT"}},{"date_of_receipt":{"$gte":"Sun, 01 Feb 2015 00:00:00 GMT"}},{"date_of_receipt":{"$gte":"Sun, 01 Mar 2015 00:00:00 GMT"}},{"date_of_receipt":{"$lt":"Mon, 02 Mar 2015 00:00:00 GMT"}}]}'
      );
     });
 

@@ -69,45 +69,58 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     'is not': '$ne',
     'in': '$in',
     'not in': '$nin',
-    'on': '$eq',
+    'on': '$on',
     'before': '$lt',
-    'after': '$gt'
+    'after': '$gte'
   }
 
   let specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
 
-  if (mergedObject) {
-    filters = filters.filter((filter) => !specialFilters.includes(filter.name));
-  }
-
-  var result = filters.map((filter) => {
+  var results = filters.reduce((memo, filter) => {
     var filterValue = filter.value.trim();
     var filterName = filter.name;
+    if (specialFilters.includes(filterName)) {
+      return memo;
+    }
+    const comp = comparators[filter.comparator];
     if (filter.type == 'date') {
       const date = new Date(filterValue);
+      date.setUTCHours(0,0,0,0); // midnight on this day
+
+      if (comp=='$on') {
+        const afterFilter = {};
+        afterFilter[filterName] = { '$gte': date.toUTCString() };
+        memo.push(afterFilter);
+        date.setUTCHours(24,0,0,0); // midnight the next day
+        const beforeFilter = {};
+        beforeFilter[filterName] = { '$lt': date.toUTCString() };
+        memo.push(beforeFilter);
+        return memo;
+      }
+
       filterValue = date.toUTCString();
     }
     if (filter.type == 'boolean') {
       filterValue = (filter.value == "true");
     }
-    const comp = comparators[filter.comparator];
-    const operand = {};
-    const desc = {};
-    desc[comp] = filterValue;
-    operand[filterName] = desc;
-    return operand;
-  });
+    const fieldPredicate = {};
+    const predicate = {};
+    predicate[comp] = filterValue;
+    fieldPredicate[filterName] = predicate;
+    memo.push(fieldPredicate);
+    return memo;
+  }, []);
 
   if (mergedObject) {
     if (mergedObject['in']) {
-      result.push({'_id':{'$in':mergedObject['in']}});
+      results.push({'_id':{'$in':mergedObject['in']}});
     }
     if (mergedObject['not_in']) {
-      result.push({'_id':{'$nin':mergedObject['not_in']}});
+      results.push({'_id':{'$nin':mergedObject['not_in']}});
     }
   }
 
-  return {"$and": result};
+  return {"$and": results};
 
 //Example result:
 // {"$and":[{"gender":{"$eq":"male"}}, {"phenotype":{"$ne":"a"}}, {"phenotype":{"$ne":"b"}}], {"_id":{"$in":["123","234"]}}}
