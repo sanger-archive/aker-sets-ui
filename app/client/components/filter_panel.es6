@@ -84,7 +84,7 @@ export class FilterRow extends React.Component {
         <div className="col-md-4">
           <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
         </div>
-        <div className="col-md-2 col-lg-1">
+        <div className="col-md-2">
           <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row">
             <FontAwesome icon="times" size="lg" style={{color: 'red'}} />
           </button>
