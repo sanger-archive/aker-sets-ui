@@ -8,7 +8,7 @@ class CurrentSearch extends React.Component {
 
   render() {
 
-    const emptyFiltersRow = (<p key="emptySearch" className="bg-info">No current search</p>);
+    const emptyFiltersRow = (<p key="emptySearch">No current search</p>);
 
     let filterRows = [];
     const filteredCurrent = currentSearchQueryBuilder(this.props.current);

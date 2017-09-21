@@ -27,7 +27,8 @@ class SearchResultsTable extends React.Component {
 
           <Heading title={title}>
           </Heading>
-          <Body>
+
+          <Body style={{overflow: 'scroll'}}>
             <table className="table table-striped table-hover search-results-table">
               <thead>
                 <tr>

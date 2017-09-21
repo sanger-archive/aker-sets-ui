@@ -8,39 +8,43 @@ import UserMessage from '../components/user_message.es6';
 const Search = ({ search, loading }) => {
 
   return (
-    <div className="container-fluid">
+    <div>
+      <div className="container" id="search">
 
-      <div className="row">
-        <div className="col-md-12">
-          <h1>Set Shaper <small>Curate Samples</small></h1>
+        <div className="row">
+          <div className="col-md-12">
+            <h1>Set Shaper <small>Curate Samples</small></h1>
+          </div>
+        </div>
+
+        <UserMessage></UserMessage>
+
+        <div className="row">
+          <div className="col-md-6">
+            <FilterPanel filters={search.filters} fields={search.fields} />
+          </div>
+
+          <div className="col-md-6">
+            <CurrentSearch current={search.current} />
+          </div>
         </div>
       </div>
 
-      <UserMessage></UserMessage>
-
-      <div className="row">
-        <div className="col-md-6">
-          <FilterPanel filters={search.filters} fields={search.fields} />
+      <div className="container-fluid" id="materials">
+        <div className="row">
+          <div className="col-md-12">
+            <SearchResultsTable
+              headings={ Object.keys(search.fields) }
+              current={search.current}
+              items={ search.results }
+              links={ search.links }
+              sets={search.sets}
+              meta={search.meta}
+              loading={loading} />
+          </div>
         </div>
 
-        <div className="col-md-6">
-          <CurrentSearch current={search.current} />
-        </div>
       </div>
-
-      <div className="row">
-        <div className="col-md-12">
-          <SearchResultsTable
-            headings={ Object.keys(search.fields) }
-            current={search.current}
-            items={ search.results }
-            links={ search.links }
-            sets={search.sets}
-            meta={search.meta}
-            loading={loading} />
-        </div>
-      </div>
-
     </div>
   )
 };

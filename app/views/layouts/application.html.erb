@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Set Shaper</title>
+    <title>Set Shaper | Aker</title>
 
     <%= csrf_meta_tags %>
     <%= javascript_include_tag 'application' %>
@@ -38,7 +38,9 @@
       </div>
     </nav>
 
-    <div class="container-fluid" id="application"><%= yield %></div>
+    <!-- <div class="container-fluid" id="application"><%= yield %></div> -->
+    <div id="application"><%= yield %></div>
+
 
     <%= webpack_manifest_script %>
     <%= webpack_include_tag 'common' %>
