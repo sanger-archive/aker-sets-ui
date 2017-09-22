@@ -13,18 +13,18 @@ const Search = ({ search, loading }) => {
 
         <div className="row">
           <div className="col-md-12">
-            <h1>Set Shaper <small>Curate Samples</small></h1>
+            <h1>{"Set Shaper "}<small>Curate Samples</small></h1>
           </div>
         </div>
 
         <UserMessage></UserMessage>
 
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-7">
             <FilterPanel filters={search.filters} fields={search.fields} />
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-5">
             <CurrentSearch current={search.current} />
           </div>
         </div>

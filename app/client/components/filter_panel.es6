@@ -6,7 +6,9 @@ import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
 import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
 import { debounce } from '../lib/utils.es6';
-import { Popover, OverlayTrigger } from 'react-bootstrap'
+import { Popover, OverlayTrigger } from 'react-bootstrap';
+
+import FIELD_NAMES from '../lib/field_names.es6';
 
 
 class FilterPanel extends React.Component {
@@ -38,12 +40,10 @@ class FilterPanel extends React.Component {
 
     return (
       <Panel>
-        <Heading title='Add Filter' />
+        <Heading title='Add Filter'><OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
+          <span style={{ color: '#367FD2', width: '400px' }}>What&#39;s this?</span>
+        </OverlayTrigger></Heading>
         <Body>
-          <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover} >
-            <button>What&#39;s this?</button>
-          </OverlayTrigger>
-
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
@@ -67,25 +67,25 @@ export class FilterRow extends React.Component {
     let {fields, filter, onNameChange, onComparatorChange, onValueChange, onRemove} = this.props;
 
     const options = Object.keys(fields).map((name, index) => {
-      return (<option value={name} key={index}>{name}</option>);
+      return (<option value={name} key={index}>{FIELD_NAMES[name] && FIELD_NAMES[name].friendly_name || name}</option>);
     });
 
     return (
       <div className="row" style={{'marginBottom': '10px'}}>
         <div className="col-md-4">
           <select value={filter.name} className="form-control change-field-name" onChange={onNameChange}>
-            <option value='' key='empty key'> </option>
+            <option value='' key='empty key' disabled>Property</option>
             { options }
           </select>
         </div>
-        <div className="col-md-2">
+        <div className="col-md-3">
           <ContextualComparator filter={filter} fields={fields} onChange={onComparatorChange} />
         </div>
         <div className="col-md-4">
           <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
         </div>
-        <div className="col-md-2">
-          <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row">
+        <div className="col-md-1">
+          <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row pull-right">
             <FontAwesome icon="times" size="lg" style={{color: 'red'}} />
           </button>
         </div>
@@ -99,7 +99,7 @@ export class ContextualComparator extends React.Component {
   render() {
     const {filter, fields, onChange} = this.props;
     const field = fields[filter.name];
-    const options = (field) ? field.comparators : [];
+    const options = (field) ? field.comparators : ['Comparator'];
     return <ListField value={filter.comparator} options={options} onChange={onChange} />
   }
 
@@ -134,7 +134,7 @@ export class ContextualValue extends React.Component {
 }
 
 const InputTextField = ({value, onChange}) => {
-  return <input type="text" className="form-control" onChange={onChange} value={value} />
+  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder={'Value'} />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
