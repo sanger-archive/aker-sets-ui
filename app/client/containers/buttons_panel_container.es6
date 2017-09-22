@@ -45,25 +45,23 @@ class ButtonsPanelContainer extends React.Component {
 
     return (
         <Body>
-          <form className="form col-md-4" id="create-set">
+          <form className="form-inline" id="create-set">
             <label>
               Create new set:
+              <input type="text" style={{marginLeft: '10px'}} className="form-control" placeholder="Set name" onChange={this.handleChangeCreateNewSet} />
             </label>
-              <input type="text" className="form-control" placeholder="Set name" onChange={this.handleChangeCreateNewSet} />
-            <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} type="submit" className="btn btn-primary set-btn">Create</button>
+            <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Create</button>
             { loading.creatingSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
-          <form className="form col-md-4" id="add-remove-materials-from-set">
+          <form className="form-inline" id="add-remove-materials-from-set">
             <label>
               Select a set:
             </label>
             <ListSets sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} />
-            <div className="btn-toolbar">
-            <button id="add-button" onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} type="submit" className="btn btn-primary set-btn">Add Materials To Set</button>
+            <button id="add-button" onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Add Materials To Set</button>
             { loading.addMaterialsToSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
-            <button id="remove-button" onClick={this.handleClickRemoveMaterialsFromSet} disabled={loading.removeMaterialsFromSet} type="submit" className="btn btn-danger set-btn">Remove Materials From Set</button>
+            <button id="remove-button" onClick={this.handleClickRemoveMaterialsFromSet} disabled={loading.removeMaterialsFromSet} style={{marginLeft: '10px'}} type="submit" className="btn btn-primary">Remove Materials From Set</button>
             { loading.removeMaterialsFromSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
-            </div>
           </form>
           <StamperControl></StamperControl>
         </Body>
@@ -79,7 +77,7 @@ const ListSets = ({sets, onChange}) => {
   });
 
   return (
-    <select onChange={onChange} className="form-control">
+    <select onChange={onChange} className="form-control" style={{marginLeft: '10px'}}>
       { optionTags }
     </select>
   );

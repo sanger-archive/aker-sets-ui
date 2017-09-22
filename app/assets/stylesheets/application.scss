@@ -61,15 +61,11 @@ body#login {
   background-color: #e0ebeb;
 }
 
-.container {
-  &#login_box, &#search {
-    margin-top: 20px;
-    padding-bottom: 10px;
-    background-color: white;
-  }
-  &#login {
-    margin-bottom: 20px;
-  }
+.container#login_box, .container#search{
+  margin-top: 20px;
+  padding-bottom: 10px;
+  background-color: white;
+  margin-bottom: 20px;
 }
 
 /* Disable text-wrapping on the advanced set-shaper table to save vertical space*/
@@ -81,41 +77,13 @@ body#login {
 .bg-info, .alert-info {
   background-color: #d9edf7;
 }
-
-/* Change alert-info font colour from white to grey */
-.alert-info {
+.alert {
   color: #444;
-}
-
-ul.pagination {
-  margin-right: 15px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-/* Positioning for set creation buttons*/
-.set-btn {
-  margin-top: 8px;
-  margin-right: 5px;
-}
-
-.remove-filter-row {
-  padding: 5px;
-  margin-top: 2px;
 }
 
 h1 {
   margin-top: 0;
   font-size: 40px;
-}
-
-.popover {
-  margin-top: 20px;
-  max-width: 600px;
-}
-
-.navbar-text {
-  color: #b2dbfb !important;
 }
 
 /* Emphasize the nav button of the current page */

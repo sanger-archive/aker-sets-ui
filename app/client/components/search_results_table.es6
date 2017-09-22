@@ -16,17 +16,19 @@ class SearchResultsTable extends React.Component {
 
     return (
       <div>
+        <PaginationLinks links={links} dispatch={dispatch}></PaginationLinks>
+
         <Panel>
           <div className="row">
             <div className="col-md-12">
               { hasResults && <ButtonsPanel /> }
             </div>
           </div>
+
           <Heading title={title}>
           </Heading>
-          <PaginationLinks links={links} dispatch={dispatch} />
 
-          <Body style={{overflow: 'scroll', paddingBottom: '0', paddingTop: '0'}}>
+          <Body style={{overflow: 'scroll'}}>
             <table className="table table-striped table-hover search-results-table">
               <thead>
                 <tr>
@@ -38,9 +40,9 @@ class SearchResultsTable extends React.Component {
               </tbody>
             </table>
           </Body>
-          <PaginationLinks links={links} dispatch={dispatch} />
         </Panel>
 
+        <PaginationLinks links={links} dispatch={dispatch} />
 
       </div>
     );
