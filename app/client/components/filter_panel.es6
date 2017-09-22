@@ -42,8 +42,6 @@ class FilterPanel extends React.Component {
           <span style={{ color: '#367FD2', width: '400px' }}>What&#39;s this?</span>
         </OverlayTrigger></Heading>
         <Body>
-
-
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             {filter_rows}
           </CSSTransitionGroup>
@@ -74,7 +72,7 @@ export class FilterRow extends React.Component {
       <div className="row" style={{'marginBottom': '10px'}}>
         <div className="col-md-4">
           <select value={filter.name} className="form-control change-field-name" onChange={onNameChange}>
-            <option value='' key='empty key'> </option>
+            <option value='' key='empty key' disabled>Property</option>
             { options }
           </select>
         </div>
@@ -99,7 +97,7 @@ export class ContextualComparator extends React.Component {
   render() {
     const {filter, fields, onChange} = this.props;
     const field = fields[filter.name];
-    const options = (field) ? field.comparators : [];
+    const options = (field) ? field.comparators : ['Comparator'];
     return <ListField value={filter.comparator} options={options} onChange={onChange} />
   }
 
@@ -134,7 +132,7 @@ export class ContextualValue extends React.Component {
 }
 
 const InputTextField = ({value, onChange}) => {
-  return <input type="text" className="form-control" onChange={onChange} value={value} />
+  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder={'Value'} />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
