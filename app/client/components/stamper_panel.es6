@@ -26,15 +26,15 @@ const StamperPanel = ({stamps, selectedStamp, status, onStampClick, onUnstampCli
     const selectedStampId = selectedStamp ? selectedStamp.id : stamps[0].id;
 
     return (
-      <form className="form col-md-4">
+      <form className="form-inline" style={{marginTop: '5px'}}>
         <label>
           Select a stamp:
-        </label>
-          <select className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp }>
+          <select className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp } style={{marginLeft: '10px'}}>
             { stampsOptions }
           </select>
-        <button disabled={loading.stamping} type="button" className="btn btn-primary set-btn" onClick={ () => { onStampClick(selectedStampId) } }>Apply</button>
-        <button disabled={loading.stamping} type="button" className="btn btn-danger set-btn" onClick={ () => { onUnstampClick(selectedStampId) } }>Unapply</button>
+        </label>
+        <button style={{marginLeft: '10px'}} disabled={loading.stamping} type="button" className="btn btn-primary" onClick={ () => { onStampClick(selectedStampId) } }>Apply</button>
+        <button style={{marginLeft: '10px'}} disabled={loading.stamping} type="button" className="btn btn-primary" onClick={ () => { onUnstampClick(selectedStampId) } }>Unapply</button>
         { loading.stamping && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
       </form>
     );
