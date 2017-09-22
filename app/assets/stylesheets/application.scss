@@ -94,16 +94,14 @@ ul.pagination {
 }
 
 /* Positioning for set creation buttons*/
-#create-set-btn {
-  margin-left: 20px;
-}
-.mat-btn {
+.set-btn {
   margin-top: 8px;
   margin-right: 5px;
 }
-.stamp-btn {
-  margin-top: 8px;
-  margin-right: 5px;
+
+.remove-filter-row {
+  padding: 5px;
+  margin-top: 2px;
 }
 
 h1 {

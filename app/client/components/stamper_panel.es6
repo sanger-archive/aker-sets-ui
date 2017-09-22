@@ -29,12 +29,12 @@ const StamperPanel = ({stamps, selectedStamp, status, onStampClick, onUnstampCli
       <form className="form col-md-4">
         <label>
           Select a stamp:
+        </label>
           <select className='form-control' defaultValue={selectedStampId} onChange={ onChangeSelectedStamp }>
             { stampsOptions }
           </select>
-        </label>
-        <button disabled={loading.stamping} type="button" className="btn btn-primary stamp-btn" onClick={ () => { onStampClick(selectedStampId) } }>Apply</button>
-        <button disabled={loading.stamping} type="button" className="btn btn-danger stamp-btn" onClick={ () => { onUnstampClick(selectedStampId) } }>Unapply</button>
+        <button disabled={loading.stamping} type="button" className="btn btn-primary set-btn" onClick={ () => { onStampClick(selectedStampId) } }>Apply</button>
+        <button disabled={loading.stamping} type="button" className="btn btn-danger set-btn" onClick={ () => { onUnstampClick(selectedStampId) } }>Unapply</button>
         { loading.stamping && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
       </form>
     );
