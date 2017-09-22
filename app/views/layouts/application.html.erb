@@ -32,6 +32,7 @@
             <li><%= link_to 'Advanced', search_url, id: ('current_page' if params[:action] == 'search') %></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar-text">Logged in as <%= current_user.email.split('@')[0] %></p></li>
             <li><%= link_to 'Log Out', destroy_user_session_url, method: :delete if user_signed_in? %></li>
           </ul>
         </div>

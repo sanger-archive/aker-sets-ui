@@ -465,10 +465,13 @@ export const performStampFilterSearch = (filter) => {
         }
         let data = {};
         let material_uuids = [];
+
+        // Extract the material UUIDs from the response
         if (response.data) {
           material_uuids = response.data.map((material) => {
             return material.attributes['material-uuid'] });
         }
+
         data[comparator] = material_uuids;
         const result = Object.assign({}, data);
 
