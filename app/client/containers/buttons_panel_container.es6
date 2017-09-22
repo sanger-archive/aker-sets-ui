@@ -58,10 +58,12 @@ class ButtonsPanelContainer extends React.Component {
               Select a set:
             </label>
             <ListSets sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} />
+            <div className="btn-toolbar">
             <button id="add-button" onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} type="submit" className="btn btn-primary set-btn">Add Materials To Set</button>
             { loading.addMaterialsToSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
             <button id="remove-button" onClick={this.handleClickRemoveMaterialsFromSet} disabled={loading.removeMaterialsFromSet} type="submit" className="btn btn-danger set-btn">Remove Materials From Set</button>
             { loading.removeMaterialsFromSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
+            </div>
           </form>
           <StamperControl></StamperControl>
         </Body>
