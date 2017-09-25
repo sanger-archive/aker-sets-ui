@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Set Shaper</title>
+    <title>Set Shaper | Aker</title>
 
     <%= csrf_meta_tags %>
     <%= javascript_include_tag 'application' %>
@@ -32,13 +32,16 @@
             <li><%= link_to 'Advanced', search_url, id: ('current_page' if params[:action] == 'search') %></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar-text">Logged in as <%= current_user.email.split('@')[0] %></p></li>
             <li><%= link_to 'Log Out', destroy_user_session_url, method: :delete if user_signed_in? %></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="container-fluid" id="application"><%= yield %></div>
+    <!-- <div class="container-fluid" id="application"><%= yield %></div> -->
+    <div id="application"><%= yield %></div>
+
 
     <%= webpack_manifest_script %>
     <%= webpack_include_tag 'common' %>

@@ -8,7 +8,7 @@ class CurrentSearch extends React.Component {
 
   render() {
 
-    const emptyFiltersRow = (<p key="emptySearch" className="bg-info">No current search</p>);
+    const emptyFiltersRow = (<p key="emptySearch">No current search</p>);
 
     let filterRows = [];
     const filteredCurrent = currentSearchQueryBuilder(this.props.current);
@@ -23,11 +23,16 @@ class CurrentSearch extends React.Component {
           operator = 'AND ';
         }
 
+        let value = filter.value;
+        if (filter.type=='date') {
+          value = new Date(value).toDateString();
+        }
+
         return (
           <p key={index}>
             <strong>{operator}{filter.name} </strong>
             <span className="label label-primary">{filter.comparator}</span>
-            <em> "{filter.value}"</em>
+            <em> "{value}"</em>
           </p>
         );
       });

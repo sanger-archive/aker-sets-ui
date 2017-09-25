@@ -43586,6 +43586,8 @@
 	var PERFORM_SEARCH_TO_PAGE = exports.PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE";
 	var performSearchToPage = exports.performSearchToPage = function performSearchToPage(pageNumber, maxResults) {
 	  return function (dispatch, getState) {
+	    // remove user messages if there are any showing
+	    dispatch(userMessage(''));
 	    return dispatch(fetchPageForSearch(pageNumber, maxResults)).then(function (response) {
 	      return dispatch(receiveSearchResults(response));
 	    }, function (error) {
@@ -43602,7 +43604,7 @@
 	      var stampMaterials = getState().search.stampMaterials;
 
 	      var filters = getState().search.current;
-	      // search.current contains only complete filter rows        
+	      // search.current contains only complete filter rows
 
 	      var searchQuery = (0, _query_builder2.default)(filters, setMaterials.concat(stampMaterials));
 	      var url = "/materials_service/materials/search";
@@ -43728,6 +43730,7 @@
 	      }
 	      var data = {};
 	      var material_uuids = [];
+	      // Extract the material UUIDs from the response
 	      if (response.data) {
 	        material_uuids = response.data.map(function (material) {
 	          return material.attributes['material-uuid'];
@@ -43784,7 +43787,8 @@
 	        data: JSON.stringify(body),
 	        jsonp: false
 	      }).fail(function (error) {
-	        return dispatch((0, _service_errors.handleSetsServiceErrors)(error));
+	        var detail = _getErrorDetails(error);
+	        return dispatch(userMessage("Failed to create set. " + detail, 'danger'));
 	      });
 	    }).then(function (response) {
 	      dispatch(receiveSet(response));
@@ -43914,6 +43918,9 @@
 	          "X-Authorisation": getState().token
 	        },
 	        data: JSON.stringify(body)
+	      }).fail(function (error) {
+	        var detail = _getErrorDetails(error);
+	        return dispatch(userMessage("Failed to add materials to set. " + detail, 'danger'));
 	      });
 	    });
 	  };
@@ -43936,6 +43943,9 @@
 	        },
 	        processData: false,
 	        data: JSON.stringify(body)
+	      }).fail(function (error) {
+	        var detail = _getErrorDetails(error);
+	        return dispatch(userMessage("Failed to remove materials from set. " + detail, 'danger'));
 	      });
 	    });
 	  };
@@ -43990,6 +44000,17 @@
 	      });
 	    };
 	  };
+	};
+
+	var _getErrorDetails = function _getErrorDetails(error) {
+	  var detail = [];
+	  if (error.responseJSON.errors) {
+	    detail = error.responseJSON.errors.reduce(function (memo, e) {
+	      memo.push(e.detail);
+	      return memo;
+	    }, []);
+	  }
+	  return detail;
 	};
 
 	var APPLY_STAMP = exports.APPLY_STAMP = "APPLY_STAMP";
@@ -49561,10 +49582,21 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var merge = function merge(listA, listB) {
-	  var b = new Set(listA);
+	var intersect = function intersect(listA, listB) {
+	  var a = new Set(listA);
 	  return listB.filter(function (x) {
-	    return b.has(x);
+	    return a.has(x);
+	  });
+	};
+
+	var union = function union(listA, listB) {
+	  return Array.from(new Set(listA.concat(listB)));
+	};
+
+	var difference = function difference(listA, listB) {
+	  var b = new Set(listB);
+	  return listA.filter(function (x) {
+	    return !b.has(x);
 	  });
 	};
 
@@ -49579,21 +49611,38 @@
 	};
 
 	var reduceFilterList = exports.reduceFilterList = function reduceFilterList(filterList) {
-	  var mergedObject = filterList.reduce(function (memo, elem) {
-	    if (Object.keys(elem).length > 1) {
+
+	  var ins = null;
+	  var notins = null;
+
+	  var len = filterList.length;
+
+	  for (var i = 0; i < len; ++i) {
+	    var elem = filterList[i];
+	    var keys = Object.keys(elem);
+	    if (keys.length > 1) {
 	      throw new Error('Incorrect format for filter object');
 	    }
-
-	    var key = Object.keys(elem)[0];
-	    if (!!memo[key]) {
-	      memo[key] = merge(memo[key], Object.values(elem)[0]);
+	    var key = keys[0];
+	    if (key === 'in' || key === 'granted to') {
+	      if (ins === null) {
+	        ins = elem[key];
+	      } else {
+	        ins = intersect(ins, elem[key]);
+	      }
 	    } else {
-	      memo[key] = Object.values(elem)[0];
+	      if (notins === null) {
+	        notins = elem[key];
+	      } else {
+	        notins = union(notins, elem[key]);
+	      }
 	    }
-	    return memo;
-	  }, new Object());
-
-	  return mergedObject;
+	    if (ins !== null && notins !== null) {
+	      ins = difference(ins, notins);
+	      notins = null;
+	    }
+	  }
+	  return { 'in': ins, 'not_in': notins };
 	};
 
 	var queryMaterialBuilder = function queryMaterialBuilder(filters, materialFilters) {
@@ -49603,73 +49652,68 @@
 	  var mergedObject = reduceFilterList(materialFilters);
 
 	  var comparators = {
-	    'equals': '$in',
-	    'is': '$in',
-	    'is not': '$nin',
+	    'equals': '$eq',
+	    'is': '$eq',
+	    'is not': '$ne',
 	    'in': '$in',
 	    'not in': '$nin',
-	    'on': '$in',
+	    'on': '$on',
 	    'before': '$lt',
-	    'after': '$gt'
+	    'after': '$gte'
 	  };
 
-	  var result = filters.reduce(function (memo, filter) {
+	  var specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
 
-	    var comparator = comparators[filter.comparator];
-	    var value = {};
+	  var results = filters.reduce(function (memo, filter) {
 	    var filterValue = filter.value.trim();
 	    var filterName = filter.name;
-
+	    if (specialFilters.includes(filterName)) {
+	      return memo;
+	    }
+	    var comp = comparators[filter.comparator];
 	    if (filter.type == 'date') {
-	      var date = new Date(filter.value);
+	      var date = new Date(filterValue);
+	      date.setUTCHours(0, 0, 0, 0); // midnight on this day
+
+	      if (comp == '$on') {
+	        var afterFilter = {};
+	        afterFilter[filterName] = { '$gte': date.toUTCString() };
+	        memo.push(afterFilter);
+	        date.setUTCHours(24, 0, 0, 0); // midnight the next day
+	        var beforeFilter = {};
+	        beforeFilter[filterName] = { '$lt': date.toUTCString() };
+	        memo.push(beforeFilter);
+	        return memo;
+	      }
+
 	      filterValue = date.toUTCString();
 	    }
-
 	    if (filter.type == 'boolean') {
 	      filterValue = filter.value == "true";
 	    }
-
-	    // Handle set name and permissions in the merged list of UUIDs
-	    if (mergedObject && (filter.name == 'setMembership' || filter.name == 'consumePermission' || filter.name == 'editPermission')) {
-	      var _comparator = filter.comparator.split(' ').join('_');
-
-	      filterValue = mergedObject[_comparator];
-	      filterName = '_id';
-	    }
-
-	    // filterValue could be an array, eg for setMembership, so convert all filterValue's to arrays to help build query
-	    if (!Array.isArray(filterValue)) {
-	      filterValue = [filterValue];
-	    }
-
-	    var comp = comparators[filter.comparator];
-	    if (memo[filterName]) {
-	      if (memo[filterName][comp]) {
-	        // If we ever want to rolback and change it to do an OR between values of fields instead of and AND, 
-	        // (like gender='male' OR gender='female') we would need to concat() the list of values
-	        // 
-	        //  memo[filterName][comp] = memo[filterName][comp].concat(filterValue)
-	        //
-	        // but if we want an AND we need to do an intersection of the values:
-	        // 
-	        //  memo[filterName][comp] = merge(memo[filterName][comp], filterValue);
-	        //
-	        memo[filterName][comp] = merge(memo[filterName][comp], filterValue);
-	      } else {
-	        memo[filterName][comp] = filterValue;
-	      }
-	    } else {
-	      value[comp] = filterValue;
-	      memo[filterName] = value;
-	    }
-
+	    var fieldPredicate = {};
+	    var predicate = {};
+	    predicate[comp] = filterValue;
+	    fieldPredicate[filterName] = predicate;
+	    memo.push(fieldPredicate);
 	    return memo;
-	  }, {});
+	  }, []);
+
+	  if (mergedObject) {
+	    if (mergedObject['in']) {
+	      results.push({ '_id': { '$in': mergedObject['in'] } });
+	    }
+	    if (mergedObject['not_in']) {
+	      results.push({ '_id': { '$nin': mergedObject['not_in'] } });
+	    }
+	  }
+	  if (results.length == 0) {
+	    throw new Error('Please select a filter to search');
+	  }
+	  return { "$and": results };
 
 	  //Example result:
-	  //{"gender":{"$in":["male"]},"phenotype":{"$nin":["a","b"]},"_id":{"$in":["123","234"],"$nin":["456"]}}
-
-	  return result;
+	  // {"$and":[{"gender":{"$eq":"male"}}, {"phenotype":{"$ne":"a"}}, {"phenotype":{"$ne":"b"}}], {"_id":{"$in":["123","234"]}}}
 	};
 
 	exports.default = queryMaterialBuilder;
@@ -50212,7 +50256,8 @@
 /* 885 */,
 /* 886 */,
 /* 887 */,
-/* 888 */
+/* 888 */,
+/* 889 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50253,7 +50298,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(UserMessageComponent);
 
 /***/ }),
-/* 889 */
+/* 890 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50264,13 +50309,13 @@
 
 	var _redux = __webpack_require__(524);
 
-	var _reduxThunk = __webpack_require__(890);
+	var _reduxThunk = __webpack_require__(891);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
 	var _reduxJsonApi = __webpack_require__(551);
 
-	var _index = __webpack_require__(891);
+	var _index = __webpack_require__(892);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -50331,7 +50376,7 @@
 	exports.default = store;
 
 /***/ }),
-/* 890 */
+/* 891 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -50359,7 +50404,7 @@
 	exports['default'] = thunk;
 
 /***/ }),
-/* 891 */
+/* 892 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50372,31 +50417,31 @@
 
 	var _reduxJsonApi = __webpack_require__(551);
 
-	var _selected = __webpack_require__(892);
+	var _selected = __webpack_require__(893);
 
 	var _selected2 = _interopRequireDefault(_selected);
 
-	var _browser = __webpack_require__(893);
+	var _browser = __webpack_require__(894);
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _materials = __webpack_require__(894);
+	var _materials = __webpack_require__(895);
 
 	var _materials2 = _interopRequireDefault(_materials);
 
-	var _token = __webpack_require__(895);
+	var _token = __webpack_require__(896);
 
 	var _token2 = _interopRequireDefault(_token);
 
-	var _stamps_info = __webpack_require__(896);
+	var _stamps_info = __webpack_require__(897);
 
 	var _stamps_info2 = _interopRequireDefault(_stamps_info);
 
-	var _search = __webpack_require__(897);
+	var _search = __webpack_require__(898);
 
 	var _search2 = _interopRequireDefault(_search);
 
-	var _loading = __webpack_require__(898);
+	var _loading = __webpack_require__(899);
 
 	var _loading2 = _interopRequireDefault(_loading);
 
@@ -50416,7 +50461,7 @@
 	exports.default = reducers;
 
 /***/ }),
-/* 892 */
+/* 893 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50444,7 +50489,7 @@
 	exports.default = selected;
 
 /***/ }),
-/* 893 */
+/* 894 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50537,7 +50582,7 @@
 	exports.default = browser;
 
 /***/ }),
-/* 894 */
+/* 895 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50575,7 +50620,7 @@
 	exports.default = materials;
 
 /***/ }),
-/* 895 */
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50601,7 +50646,7 @@
 	exports.default = token;
 
 /***/ }),
-/* 896 */
+/* 897 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50634,7 +50679,7 @@
 	exports.default = stampsInfo;
 
 /***/ }),
-/* 897 */
+/* 898 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50657,12 +50702,13 @@
 	        date: ['before', 'after', 'on'],
 	        string: ['is', 'is not'],
 	        boolean: ['equals'],
-	        containment: ['in', 'not in']
+	        containment: ['in', 'not in'],
+	        privilege: ['granted to', 'not granted to']
 	      };
 	      var allowedTypes = ['string', 'boolean'];
 	      var properties = action.schema.properties;
 
-	      // add filter by set to searchable fields from materials service
+	      // add filter by set name to searchable fields from materials service
 	      var setData = { required: true, type: "string", searchable: true };
 	      properties['setMembership'] = Object.assign({}, setData);
 
@@ -50708,10 +50754,10 @@
 	            // Extra permission filter
 	          } else if (name == 'consumePermission') {
 	            field['type'] = 'string';
-	            field['comparators'] = comparators['containment'];
+	            field['comparators'] = comparators['privilege'];
 	          } else if (name == 'editPermission') {
 	            field['type'] = 'string';
-	            field['comparators'] = comparators['containment'];
+	            field['comparators'] = comparators['privilege'];
 
 	            // Just a regular type string
 	          } else {
@@ -50793,7 +50839,9 @@
 	        memo.push(filter);
 	        return memo;
 	      }, []);
-	      return Object.assign({}, state, { current: filteredFilters, stampMaterials: [], setMaterials: [] });
+	      return Object.assign({}, state, { current: filteredFilters,
+	        stampMaterials: [],
+	        setMaterials: [] });
 
 	    case _index.RECEIVE_SEARCH_RESULTS:
 	      newState = action.results;
@@ -50837,7 +50885,7 @@
 	exports.default = search;
 
 /***/ }),
-/* 898 */
+/* 899 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

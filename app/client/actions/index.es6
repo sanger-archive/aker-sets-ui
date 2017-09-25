@@ -318,6 +318,8 @@ export const fetchStampsIfNeeded = () => {
 export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
 export const performSearchToPage = (pageNumber, maxResults) => {
   return (dispatch, getState) => {
+    // remove user messages if there are any showing
+    dispatch(userMessage(''));
     return dispatch(fetchPageForSearch(pageNumber, maxResults)).then((response) => {
         return dispatch(receiveSearchResults(response));
       }, (error) => {
@@ -465,6 +467,7 @@ export const performStampFilterSearch = (filter) => {
         }
         let data = {};
         let material_uuids = [];
+        // Extract the material UUIDs from the response
         if (response.data) {
           material_uuids = response.data.map((material) => {
             return material.attributes['material-uuid'] });

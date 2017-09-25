@@ -57,19 +57,51 @@
   transform: translate3d(250px,0,0);
 }
 
-body {
+body#login {
   background-color: #e0ebeb;
 }
 
-.container-fluid, .container#login_box {
-  margin-top: 20px;
-  padding-bottom: 10px;
-  background-color: white;
-  margin-bottom: 20px;
+.container {
+  &#login_box, &#search {
+    margin-top: 20px;
+    padding-bottom: 10px;
+    background-color: white;
+  }
+  &#login {
+    margin-bottom: 20px;
+  }
 }
 
-.bg-info {
+/* Disable text-wrapping on the advanced set-shaper table to save vertical space*/
+.container-fluid#materials {
+  white-space: nowrap;
+}
+
+/* Replace purple with blue */
+.bg-info, .alert-info {
   background-color: #d9edf7;
+}
+
+/* Change alert-info font colour from white to grey */
+.alert-info {
+  color: #444;
+}
+
+ul.pagination {
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Positioning for set creation buttons*/
+.set-btn {
+  margin-top: 8px;
+  margin-right: 5px;
+}
+
+.remove-filter-row {
+  padding: 5px;
+  margin-top: 2px;
 }
 
 h1 {
@@ -77,20 +109,31 @@ h1 {
   font-size: 40px;
 }
 
-h2 {
-  font-size: 35px;
+.popover {
+  margin-top: 20px;
+  max-width: 600px;
 }
 
+.navbar-text {
+  color: #b2dbfb !important;
+}
+
+/* Emphasize the nav button of the current page */
 #current_page {
   background-color: #0073e6;
   font-weight: bold;
 }
 
-textarea, textarea.form-control, input.form-control, input[type=text], input[type=password], input[type=email], input[type=number], [type=text].form-control, [type=password].form-control, [type=email].form-control, [type=tel].form-control, [contenteditable].form-control {
+/* Double thickness of the line under a textbox to improve clarity */
+textarea, textarea.form-control, input.form-control, input[type=text],
+input[type=password], input[type=email], input[type=number], [type=text].form-control,
+[type=password].form-control,[type=email].form-control, [type=tel].form-control,
+[contenteditable].form-control {
     -webkit-box-shadow: inset 0 -2px 0 #ddd;
     box-shadow: inset 0 -2px 0 #ddd;
 }
 
+/* Replace purple highlights with blue */
 .table > thead > tr > td.info,
 .table > thead > tr > th.info,
 .table > thead > tr.info > td,
@@ -105,7 +148,6 @@ textarea, textarea.form-control, input.form-control, input[type=text], input[typ
 .table > tfoot > tr.info > th {
   background-color: #d9edf7;
 }
-
 .table-hover > tbody > tr > td.info:hover,
 .table-hover > tbody > tr > th.info:hover,
 .table-hover > tbody > tr.info:hover > td,
