@@ -20,11 +20,11 @@ const Search = ({ search, loading }) => {
         <UserMessage></UserMessage>
 
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-7">
             <FilterPanel filters={search.filters} fields={search.fields} />
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-5">
             <CurrentSearch current={search.current} />
           </div>
         </div>
