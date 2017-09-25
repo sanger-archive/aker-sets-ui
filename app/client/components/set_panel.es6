@@ -6,7 +6,7 @@ import DroppableSelectedSet from '../containers/droppable_selected_set.es6';
 const SetPanel = (props) => {
   let set = props.set;
   let title = props.title;
-  if (!set.id) {
+  if (!set || !set.id) {
     return (
       <Panel key='set-'>
         <Heading title='No set selected'/>

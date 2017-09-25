@@ -5,8 +5,8 @@ import { BiomaterialTable } from '../components/biomaterial_table.es6';
 import droppable from '../hocs/droppable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
 import { updateEntity, readEndpoint } from 'redux-json-api';
-import { clearSelection, storeItems, fetchTokenIfNeeded } from '../actions';
-import { getSelectedTopMaterials } from '../selectors';
+import { clearSelection, storeItems, fetchTokenIfNeeded } from '../actions/index.es6';
+import { getSelectedTopMaterials } from '../selectors/index.es6';
 
 let DroppableBiomaterialTable = droppable(BiomaterialTable);
 

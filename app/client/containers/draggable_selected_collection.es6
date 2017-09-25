@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
-import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions';
+import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions/index.es6';
 import onClickOutside from 'react-onclickoutside';
 
 import draggable from '../hocs/draggable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
-import { getSelectedBottomMaterials } from '../selectors';
+import { getSelectedBottomMaterials } from '../selectors/index.es6';
 
 import { BiomaterialTable, BiomaterialTableRow } from '../components/biomaterial_table.es6';
 import FontAwesome from '../components/font_awesome.es6';

@@ -5,13 +5,14 @@ import DraggableSelectedCollection from '../containers/draggable_selected_collec
 const BottomSetPanel = (props) => {
   let resource = props.resource;
   let title = props.title;
-  if (!resource.id) {
+  if (!resource || !resource.id) {
     return (
       <Panel key='collection-'>
         <Heading title='No set selected'/>
       </Panel>
     );
   }
+
   return (
     <Panel key={`collection-${resource.id}`}>
       <Heading title={title} />

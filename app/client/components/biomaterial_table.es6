@@ -29,7 +29,7 @@ export const BiomaterialTableRow = React.createClass({
     }
 
     const trClass = classNames({
-      info: (selected.find((bm) => bm.id == biomaterial.id))
+      info: selected.find((bm) => bm.id == biomaterial.id)
     })
 
     const style = (biomaterial.available == false) ? { opacity: 0.5 } : {};
@@ -78,7 +78,6 @@ export const BiomaterialTable = React.createClass({
         </thead>
           <tbody>
             { biomaterials.map((biomaterial, index) => {
-
               if (biomaterial.id in materials) {
                 biomaterial = materials[biomaterial.id]
               }

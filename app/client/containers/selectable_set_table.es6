@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchSetAndMaterials, storeItems } from '../actions';
+import { select, fetchSetAndMaterials, storeItems } from '../actions/index.es6';
 import { readEndpoint } from 'redux-json-api';
 import SetTable from '../components/set_table.es6';
 
 const mapStateToProps = ({ api, selected }, { setIdList, selectionType }) => {
   let sets = api.sets.data;
-
   if (Array.isArray(setIdList)) {
     sets = sets.filter((s) => setIdList.includes(s.id));
   } else {
