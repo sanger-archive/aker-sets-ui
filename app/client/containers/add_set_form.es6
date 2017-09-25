@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createEntity } from 'redux-json-api';
-import { fetchTokenIfNeeded } from '../actions';
+import { fetchTokenIfNeeded } from '../actions/index.es6';
 
 let AddSetForm = ({ dispatch }) => {
   let input;

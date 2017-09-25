@@ -14,7 +14,6 @@ describe('<BottomSetPanel />', () => {
     it('renders a panel with a body', () => {
       const resource = {id: 'my_id'};
       let wrapper = shallow(<BottomSetPanel resource={resource} />);
-      console.log(wrapper.find('Body'));
       expect(wrapper.find('Body')).to.have.length(1);
     });
   })
