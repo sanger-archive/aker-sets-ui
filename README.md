@@ -42,7 +42,7 @@ Note that if any changes are made in the `app/client` or `app/assets` directorie
     rm -r public/assets
     RAILS_ENV=production bundle exec rake webpack:compile
 
-This creates the minified js files and also creates a manifest file that Rails can use to serve these files. You may want to do all this automatically as a git pre-commit hook e.g.
+This creates the minified js files and also creates a manifest file that Rails can use to serve these files. THESE MUST BE COMMITTED. You may want to do all this automatically as a git pre-commit hook e.g.
 
     #!/bin/sh
 
@@ -55,5 +55,7 @@ This creates the minified js files and also creates a manifest file that Rails c
         RAILS_ENV=production bundle exec rake webpack:compile
         git add -A
     fi
+
+(You would put this in `.git/hooks/pre-commit` and make the file executable.)
 
 There is some Rack middleware that is inserted in the development environment file. This is to proxy any requests to external services e.g. set service, materials service and avoid CORS issues.

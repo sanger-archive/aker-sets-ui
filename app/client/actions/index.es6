@@ -318,6 +318,8 @@ export const fetchStampsIfNeeded = () => {
 export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
 export const performSearchToPage = (pageNumber, maxResults) => {
   return (dispatch, getState) => {
+    // remove user messages if there are any showing
+    dispatch(userMessage(''));
     return dispatch(fetchPageForSearch(pageNumber, maxResults)).then((response) => {
         return dispatch(receiveSearchResults(response));
       }, (error) => {
@@ -335,7 +337,7 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
         const stampMaterials = getState().search.stampMaterials;
 
         let filters = getState().search.current;
-        // search.current contains only complete filter rows        
+        // search.current contains only complete filter rows
 
         const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
         const url = "/materials_service/materials/search";
@@ -345,9 +347,9 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
           url: url,
           contentType: "application/json; charset=utf-8",
           accept: "application/json",
-          data: JSON.stringify({ 
-            where: searchQuery, 
-            max_results: maxResults, 
+          data: JSON.stringify({
+            where: searchQuery,
+            max_results: maxResults,
             page: pageNumber
           }),
           cache: false
@@ -465,6 +467,7 @@ export const performStampFilterSearch = (filter) => {
         }
         let data = {};
         let material_uuids = [];
+        // Extract the material UUIDs from the response
         if (response.data) {
           material_uuids = response.data.map((material) => {
             return material.attributes['material-uuid'] });
@@ -522,7 +525,8 @@ export const createSetOnly = (setName) => {
         data: JSON.stringify(body),
         jsonp: false
       }).fail((error) => {
-        return dispatch(handleSetsServiceErrors(error))
+        const detail = _getErrorDetails(error);
+        return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
       });
     })
     .then((response)=>{
@@ -590,7 +594,7 @@ export const bySearchPage = (search, action) => {
                   }
                 })
             })
-        }    
+        }
 
     return pager(1);
   }
@@ -664,7 +668,10 @@ export const addMaterialsToSet = (items, setId) => {
           "X-Authorisation": getState().token
         },
         data: JSON.stringify(body)
-      })
+      }).fail((error) => {
+        const detail = _getErrorDetails(error);
+        return dispatch(userMessage(`Failed to add materials to set. ${detail}`, 'danger'));
+      });
     })
   }
 }
@@ -685,7 +692,10 @@ export const removeMaterialsFromSet = (items, setId) => {
         },
         processData: false,
         data: JSON.stringify(body)
-      })
+      }).fail((error) => {
+        const detail = _getErrorDetails(error);
+        return dispatch(userMessage(`Failed to remove materials from set. ${detail}`, 'danger'));
+      });
     })
   }
 }
@@ -740,6 +750,17 @@ const _apply_generation = (nameOperation) => {
       })
     }
   }
+}
+
+const _getErrorDetails = (error) => {
+  let detail = [];
+  if (error.responseJSON.errors) {
+    detail = error.responseJSON.errors.reduce((memo, e) => {
+      memo.push(e.detail);
+      return memo;
+    }, []);
+  }
+  return detail;
 }
 
 export const APPLY_STAMP = "APPLY_STAMP";
