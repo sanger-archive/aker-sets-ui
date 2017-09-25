@@ -84,7 +84,7 @@ const SetShaper = ({ set, resource, user_set_ids }) => {
               </ul>
 
               <div className="tab-content">
-                <div role="tabpanel" className="tab-pane" id="mySetsBottom">
+                <div role="tabpanel" className="tab-pane active" id="mySetsBottom">
                   <SelectableSetTable selectionType="bottom" setIdList={user_set_ids} hideOwner />
                 </div>
                 <div role="tabpanel" className="tab-pane" id="sets">

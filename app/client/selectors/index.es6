@@ -105,7 +105,8 @@ export const getUserSets = createSelector(
   getSets,
   (email, sets) => {
     return sets.reduce((memo, set)  => {
-      if (set.attributes.owner_id == email) memo.push(set.id);
+      if (set.attributes.owner_id === null) { return memo; }
+      if (set.attributes.owner_id === email) memo.push(set.id);
       return memo;
     }, []);
   }
