@@ -33,10 +33,10 @@ class SearchResultsTable extends React.Component {
             <table className="table table-striped table-hover search-results-table">
               <thead>
                 <tr>
-                  // Use the "display" property to toggle displaying the heading
-                  // and the "friendly_name" to show a "friendly" version of
-                  // the field
-                  { headings.map((heading, index) => {
+                  { // Use the "display" property to toggle displaying the heading
+                    // and the "friendly_name" to show a "friendly" version of
+                    // the field
+                    headings.map((heading, index) => {
                       if (FIELD_NAMES.hasOwnProperty(heading.toString())) {
                         if (FIELD_NAMES[heading.toString()].display) {
                           return (
