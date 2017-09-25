@@ -119,7 +119,9 @@ const queryMaterialBuilder = (filters, materialFilters) => {
       results.push({'_id':{'$nin':mergedObject['not_in']}});
     }
   }
-
+  if (results.length == 0) {
+    throw new Error('Please select a filter to search');
+  }
   return {"$and": results};
 
 //Example result:

@@ -318,6 +318,8 @@ export const fetchStampsIfNeeded = () => {
 export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
 export const performSearchToPage = (pageNumber, maxResults) => {
   return (dispatch, getState) => {
+    // remove user messages if there are any showing
+    dispatch(userMessage(''));
     return dispatch(fetchPageForSearch(pageNumber, maxResults)).then((response) => {
         return dispatch(receiveSearchResults(response));
       }, (error) => {

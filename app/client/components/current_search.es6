@@ -23,11 +23,16 @@ class CurrentSearch extends React.Component {
           operator = 'AND ';
         }
 
+        let value = filter.value;
+        if (filter.type=='date') {
+          value = new Date(value).toDateString();
+        }
+
         return (
           <p key={index}>
             <strong>{operator}{filter.name} </strong>
             <span className="label label-primary">{filter.comparator}</span>
-            <em> "{filter.value}"</em>
+            <em> "{value}"</em>
           </p>
         );
       });
