@@ -13,7 +13,7 @@ const Search = ({ search, loading }) => {
 
         <div className="row">
           <div className="col-md-12">
-            <h1>Set Shaper <small>Curate Samples</small></h1>
+            <h1>{"Set Shaper "}<small>Curate Samples</small></h1>
           </div>
         </div>
 

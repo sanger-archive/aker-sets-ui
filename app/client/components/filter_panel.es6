@@ -8,6 +8,8 @@ import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilte
 import { debounce } from '../lib/utils.es6';
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 
+import FIELD_NAMES from '../lib/field_names.es6';
+
 
 class FilterPanel extends React.Component {
   constructor(props) {
@@ -65,7 +67,7 @@ export class FilterRow extends React.Component {
     let {fields, filter, onNameChange, onComparatorChange, onValueChange, onRemove} = this.props;
 
     const options = Object.keys(fields).map((name, index) => {
-      return (<option value={name} key={index}>{name}</option>);
+      return (<option value={name} key={index}>{FIELD_NAMES[name] && FIELD_NAMES[name].friendly_name || name}</option>);
     });
 
     return (
