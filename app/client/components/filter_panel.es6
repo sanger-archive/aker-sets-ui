@@ -45,7 +45,8 @@ class FilterPanel extends React.Component {
         </OverlayTrigger></Heading>
         <Body>
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
-            {filter_rows}
+            { filterPanelHeadings }
+            { filter_rows }
           </CSSTransitionGroup>
           <button onClick={this.performSearch} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Search</button>
           <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success add-filter-row">
@@ -74,7 +75,6 @@ export class FilterRow extends React.Component {
       <div className="row" style={{'marginBottom': '10px'}}>
         <div className="col-md-4">
           <select value={filter.name} className="form-control change-field-name" onChange={onNameChange}>
-            <option value='' key='empty key' disabled>Property</option>
             { options }
           </select>
         </div>
@@ -99,7 +99,7 @@ export class ContextualComparator extends React.Component {
   render() {
     const {filter, fields, onChange} = this.props;
     const field = fields[filter.name];
-    const options = (field) ? field.comparators : ['Comparator'];
+    const options = (field) ? field.comparators : [];
     return <ListField value={filter.comparator} options={options} onChange={onChange} />
   }
 
@@ -134,7 +134,7 @@ export class ContextualValue extends React.Component {
 }
 
 const InputTextField = ({value, onChange}) => {
-  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder='Value' />
+  return <input type="text" className="form-control" onChange={onChange} value={value} />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
@@ -166,4 +166,12 @@ const popoverHover = (
       Trying to perform operations on long lists will take a long time with the current version of the software.
       </p>
   </Popover>
+);
+
+const filterPanelHeadings = (
+  <div>
+    <div className="col-md-4"><div>Property</div></div>
+    <div className="col-md-3"><div>Comparator</div></div>
+    <div className="col-md-4"><div>Value</div></div>
+  </div>
 );
