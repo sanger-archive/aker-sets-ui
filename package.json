@@ -38,6 +38,7 @@
     "react-bootstrap-date-picker": "^5.1.0",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
+    "react-dnd-test-backend": "^2.5.1",
     "react-dom": "^15.2.1",
     "react-onclickoutside": "^5.3.3",
     "react-redux": "^4.4.5",
@@ -45,6 +46,7 @@
     "react-treebeard": "^1.1.2",
     "redux": "^3.5.2",
     "redux-json-api": "^1.4.4",
+    "redux-test-utils": "^0.1.2",
     "redux-thunk": "^2.1.0",
     "reselect": "^2.5.3",
     "webpack": "^1.13.1"
