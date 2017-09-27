@@ -170,8 +170,8 @@ const popoverHover = (
 
 const filterPanelHeadings = (
   <div>
-    <div className="col-md-4"><div>Property</div></div>
-    <div className="col-md-3"><div>Comparator</div></div>
-    <div className="col-md-4"><div>Value</div></div>
+    <div className="col-md-4">Property</div>
+    <div className="col-md-3">Comparator</div>
+    <div className="col-md-4">Value</div>
   </div>
 );
