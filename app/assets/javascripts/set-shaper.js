@@ -38,11 +38,10 @@ webpackJsonp([2],{
 	// Don't want to cache any of our requests
 	$.ajaxSetup({ cache: false });
 
-	// Authenticates the user
-	_store2.default.dispatch((0, _actions.fetchTokenIfNeeded)());
-
 	// Load the sets up front
 	_store2.default.dispatch((0, _reduxJsonApi.readEndpoint)('sets'));
+
+	_store2.default.dispatch(setUserEmail(Aker.userEmail));
 
 	setInterval(function () {
 	  var selected = _store2.default.getState().selected;
@@ -10888,9 +10887,7 @@ webpackJsonp([2],{
 	      }
 	    };
 
-	    return dispatch((0, _index.fetchTokenIfNeeded)()).then(function () {
-	      return dispatch((0, _reduxJsonApi.updateEntity)(entity));
-	    }).then(function () {
+	    return dispatch((0, _reduxJsonApi.updateEntity)(entity)).then(function () {
 	      return dispatch((0, _index.clearSelection)());
 	    }).then(function () {
 	      return dispatch((0, _reduxJsonApi.readEndpoint)('sets/' + set.id + '?include=materials'));
@@ -10937,9 +10934,7 @@ webpackJsonp([2],{
 	        }
 	      };
 
-	      dispatch((0, _index.fetchTokenIfNeeded)()).then(function () {
-	        return dispatch((0, _reduxJsonApi.updateEntity)(entity));
-	      }).then(function () {
+	      dispatch((0, _reduxJsonApi.updateEntity)(entity)).then(function () {
 	        return dispatch((0, _reduxJsonApi.readEndpoint)('sets/' + set.id + '?include=materials'));
 	      });
 	    }
@@ -11205,7 +11200,7 @@ webpackJsonp([2],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getUserSets = exports.getUserEmail = exports.getSelectedBottomMaterials = exports.getSelectedTopMaterials = exports.getSelectedBottom = exports.getSelectedTop = undefined;
+	exports.getUserSets = exports.getSelectedBottomMaterials = exports.getSelectedTopMaterials = exports.getSelectedBottom = exports.getSelectedTop = undefined;
 
 	var _reselect = __webpack_require__(1066);
 
@@ -11231,6 +11226,10 @@ webpackJsonp([2],{
 	};
 	var getSets = getApiData('sets');
 	var getBiomaterials = getApiData('materials');
+
+	var getUserEmail = function getUserEmail(state) {
+	  return state.userEmail;
+	};
 
 	// Selected
 	var getSelectedId = function getSelectedId(key) {
@@ -11311,13 +11310,6 @@ webpackJsonp([2],{
 	var getSelectedTopMaterials = exports.getSelectedTopMaterials = (0, _reselect.createSelector)(getSelectedTop, getBiomaterials, findResourceRelationshipFactory('materials'));
 
 	var getSelectedBottomMaterials = exports.getSelectedBottomMaterials = (0, _reselect.createSelector)(getSelectedBottom, getBiomaterials, findResourceRelationshipFactory('materials'));
-
-	var getUserEmail = exports.getUserEmail = (0, _reselect.createSelector)(function (state) {
-	  return state.token;
-	}, function (token) {
-	  if (!token) return;
-	  return (0, _jwtDecode2.default)(token).data.email;
-	});
 
 	var getUserSets = exports.getUserSets = (0, _reselect.createSelector)(getUserEmail, getSets, function (email, sets) {
 	  return sets.reduce(function (memo, set) {
@@ -12076,8 +12068,6 @@ webpackJsonp([2],{
 
 	var _reduxJsonApi = __webpack_require__(546);
 
-	var _index = __webpack_require__(542);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AddSetForm = function AddSetForm(_ref) {
@@ -12099,9 +12089,7 @@ webpackJsonp([2],{
 	          }
 	        };
 
-	        dispatch((0, _index.fetchTokenIfNeeded)()).then(function () {
-	          return dispatch((0, _reduxJsonApi.createEntity)(set));
-	        });
+	        dispatch((0, _reduxJsonApi.createEntity)(set));
 	        input.value = '';
 	      } },
 	    _react2.default.createElement(

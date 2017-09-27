@@ -43191,8 +43191,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.unapplyStamp = exports.UNAPPLY_STAMP = exports.applyStamp = undefined;
-	exports.APPLY_STAMP = exports.selectStamp = exports.SELECT_STAMP = exports.removeMaterialsFromSet = exports.REMOVE_MATERIALS_FROM_SET = exports.addMaterialsToSet = exports.ADD_MATERIALS_TO_SET = exports.removeMaterialsFromSetFromSearch = exports.REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = exports.addMaterialsToSetFromSearch = exports.ADD_MATERIALS_TO_SET_FROM_SEARCH = exports.createSetFromSearch = exports.CREATE_SET_FROM_SEARCH = exports.bySearchPage = exports.BY_SEARCH_PAGE = exports.receiveAllSets = exports.RECEIVE_ALL_SETS = exports.getAllSets = exports.GET_ALL_SETS = exports.receiveSet = exports.RECEIVE_SET = exports.createSetOnly = exports.CREATE_SET_ONLY = exports.createNewSet = exports.CREATE_NEW_SET = exports.receiveStampsFromFilter = exports.RECEIVE_STAMPS_FROM_FILTER = exports.receiveSetsFromFilter = exports.RECEIVE_SETS_FROM_FILTER = exports.performStampFilterSearch = exports.PERFORM_STAMP_FILTER_SEARCH = exports.performSetFilterSearch = exports.PERFORM_SET_FILTER_SEARCH = exports.receiveSearchResults = exports.RECEIVE_SEARCH_RESULTS = exports.performSearch = exports.PERFORM_SEARCH = exports.paginateTo = exports.PAGINATE_TO = exports.performSearchWithUrl = exports.PERFORM_SEARCH_WITH_URL = exports.fetchPageForSearch = exports.FETCH_PAGE_FOR_SEARCH = exports.performSearchToPage = exports.PERFORM_SEARCH_TO_PAGE = exports.fetchStampsIfNeeded = exports.FETCH_STAMPS_IF_NEEDED = exports.fetchSetMaterialsIfNeeded = exports.FETCH_SET_MATERIALS_IF_NEEDED = exports.setCurrentSearch = exports.SET_CURRENT_SEARCH = exports.addFilter = exports.ADD_FILTER = exports.removeFilter = exports.REMOVE_FILTER = exports.updateFilterValue = exports.UPDATE_FILTER_VALUE = exports.updateFilterComparator = exports.UPDATE_FILTER_COMPARATOR = exports.updateFilterName = exports.UPDATE_FILTER_NAME = exports.receiveAllStamps = exports.RECEIVE_EMPTY_STAMPS = exports.RECEIVE_EMPTY_RESULTS = exports.RECEIVE_ALL_STAMPS = exports.fetchAllStamps = exports.FETCH_ALL_STAMPS = exports.STAMPS_INITIALIZATION = exports.userMessage = exports.USER_MESSAGE = exports.receiveMaterialSchema = exports.RECEIVE_MATERIAL_SCHEMA = exports.fetchMaterialSchema = exports.FETCH_MATERIAL_SCHEMA = exports.receiveToken = exports.RECEIVE_TOKEN = exports.fetchToken = exports.FETCH_TOKEN = exports.fetchTokenIfNeeded = exports.FETCH_TOKEN_IF_NEEDED = exports.fetchSetAndMaterials = exports.FETCH_SET_AND_MATERIALS = exports.fetchMaterials = exports.FETCH_MATERIALS = exports.receiveMaterials = exports.RECEIVE_MATERIALS = exports.shiftSelectItems = exports.SHIFT_SELECT_ITEMS = exports.toggleItem = exports.TOGGLE_ITEM = exports.clearSelection = exports.CLEAR_SELECTION = exports.selectItem = exports.SELECT_ITEM = exports.storeItems = exports.STORE_ITEMS = exports.selectEntity = exports.SELECT_ENTITY = exports.select = exports.SELECT = undefined;
+	exports.unapplyStamp = exports.UNAPPLY_STAMP = exports.applyStamp = exports.APPLY_STAMP = exports.selectStamp = exports.SELECT_STAMP = exports.removeMaterialsFromSet = exports.REMOVE_MATERIALS_FROM_SET = exports.addMaterialsToSet = exports.ADD_MATERIALS_TO_SET = exports.removeMaterialsFromSetFromSearch = exports.REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = exports.addMaterialsToSetFromSearch = exports.ADD_MATERIALS_TO_SET_FROM_SEARCH = exports.createSetFromSearch = exports.CREATE_SET_FROM_SEARCH = exports.bySearchPage = exports.BY_SEARCH_PAGE = exports.receiveAllSets = exports.RECEIVE_ALL_SETS = exports.getAllSets = exports.GET_ALL_SETS = exports.receiveSet = exports.RECEIVE_SET = exports.createSetOnly = exports.CREATE_SET_ONLY = exports.createNewSet = exports.CREATE_NEW_SET = exports.receiveStampsFromFilter = exports.RECEIVE_STAMPS_FROM_FILTER = exports.receiveSetsFromFilter = exports.RECEIVE_SETS_FROM_FILTER = exports.performStampFilterSearch = exports.PERFORM_STAMP_FILTER_SEARCH = exports.performSetFilterSearch = exports.PERFORM_SET_FILTER_SEARCH = exports.receiveSearchResults = exports.RECEIVE_SEARCH_RESULTS = exports.performSearch = exports.PERFORM_SEARCH = exports.paginateTo = exports.PAGINATE_TO = exports.performSearchWithUrl = exports.PERFORM_SEARCH_WITH_URL = exports.fetchPageForSearch = exports.FETCH_PAGE_FOR_SEARCH = exports.performSearchToPage = exports.PERFORM_SEARCH_TO_PAGE = exports.fetchStampsIfNeeded = exports.FETCH_STAMPS_IF_NEEDED = exports.fetchSetMaterialsIfNeeded = exports.FETCH_SET_MATERIALS_IF_NEEDED = exports.setCurrentSearch = exports.SET_CURRENT_SEARCH = exports.addFilter = exports.ADD_FILTER = exports.removeFilter = exports.REMOVE_FILTER = exports.updateFilterValue = exports.UPDATE_FILTER_VALUE = exports.updateFilterComparator = exports.UPDATE_FILTER_COMPARATOR = exports.updateFilterName = exports.UPDATE_FILTER_NAME = exports.receiveAllStamps = exports.RECEIVE_EMPTY_STAMPS = exports.RECEIVE_EMPTY_RESULTS = exports.RECEIVE_ALL_STAMPS = exports.fetchAllStamps = exports.FETCH_ALL_STAMPS = exports.STAMPS_INITIALIZATION = exports.userMessage = exports.USER_MESSAGE = exports.receiveMaterialSchema = exports.RECEIVE_MATERIAL_SCHEMA = exports.fetchMaterialSchema = exports.FETCH_MATERIAL_SCHEMA = exports.fetchSetAndMaterials = exports.FETCH_SET_AND_MATERIALS = exports.fetchMaterials = exports.FETCH_MATERIALS = exports.receiveMaterials = exports.RECEIVE_MATERIALS = exports.shiftSelectItems = exports.SHIFT_SELECT_ITEMS = exports.toggleItem = exports.TOGGLE_ITEM = exports.clearSelection = exports.CLEAR_SELECTION = exports.selectItem = exports.SELECT_ITEM = exports.storeItems = exports.STORE_ITEMS = exports.selectEntity = exports.SELECT_ENTITY = exports.select = exports.SELECT = exports.setUserEmail = exports.SET_USER_EMAIL = undefined;
 
 	var _jwtDecode = __webpack_require__(543);
 
@@ -43209,6 +43208,14 @@
 	var _loading = __webpack_require__(682);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SET_USER_EMAIL = exports.SET_USER_EMAIL = 'SET_USER_EMAIL';
+	var setUserEmail = exports.setUserEmail = function setUserEmail(userEmail) {
+	  return {
+	    type: SET_USER_EMAIL,
+	    userEmail: userEmail
+	  };
+	};
 
 	var SELECT = exports.SELECT = "SELECT";
 	var select = exports.select = function select(id, selectionType) {
@@ -43307,58 +43314,9 @@
 	var FETCH_SET_AND_MATERIALS = exports.FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
 	var fetchSetAndMaterials = exports.fetchSetAndMaterials = function fetchSetAndMaterials(setId) {
 	  return function (dispatch) {
-	    dispatch(fetchTokenIfNeeded()).then(function () {
-	      return dispatch((0, _reduxJsonApi.readEndpoint)("sets/" + setId + "?include=materials"));
-	    }).then(function (json) {
+	    dispatch((0, _reduxJsonApi.readEndpoint)("sets/" + setId + "?include=materials")).then(function (json) {
 	      return dispatch(fetchMaterials(json.included));
 	    });
-	  };
-	};
-
-	var FETCH_TOKEN_IF_NEEDED = exports.FETCH_TOKEN_IF_NEEDED = "FETCH_TOKEN_IF_NEEDED";
-	var fetchTokenIfNeeded = exports.fetchTokenIfNeeded = function fetchTokenIfNeeded() {
-	  return function (dispatch, getState) {
-	    var token = getState().token;
-
-	    if (!token || isExpired(token)) {
-	      return dispatch(fetchToken());
-	    }
-
-	    return $.Deferred().resolve();
-	  };
-	};
-
-	var isExpired = function isExpired(token) {
-	  var payload = (0, _jwtDecode2.default)(token);
-	  return payload.exp < Date.now() / 1000;
-	};
-
-	var FETCH_TOKEN = exports.FETCH_TOKEN = "FETCH_TOKEN";
-	var fetchToken = exports.fetchToken = function fetchToken() {
-	  return function (dispatch, getState) {
-	    return $.ajax({
-	      method: 'POST',
-	      url: "/token",
-	      accept: "application/json"
-	    })
-
-	    // Put the token in the Store
-	    .then(function (response) {
-	      return dispatch(receiveToken(response.token));
-	    })
-
-	    // Set it as a default header for redux-json-api
-	    .then(function () {
-	      return dispatch((0, _reduxJsonApi.setHeader)({ "X-Authorisation": getState().token }));
-	    });
-	  };
-	};
-
-	var RECEIVE_TOKEN = exports.RECEIVE_TOKEN = "RECEIVE_TOKEN";
-	var receiveToken = exports.receiveToken = function receiveToken(token) {
-	  return {
-	    type: RECEIVE_TOKEN,
-	    token: token
 	  };
 	};
 
@@ -43395,17 +43353,12 @@
 	var fetchAllStamps = exports.fetchAllStamps = function fetchAllStamps() {
 	  return function (dispatch, getState) {
 	    dispatch({ type: FETCH_ALL_STAMPS });
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      return $.ajax({
-	        method: 'GET',
-	        url: "/stamps_service/stamps",
-	        contentType: "application/vnd.api+json",
-	        accept: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        }
 
-	      });
+	    return $.ajax({
+	      method: 'GET',
+	      url: "/stamps_service/stamps",
+	      contentType: "application/vnd.api+json",
+	      accept: "application/vnd.api+json"
 	    }).then(function (response) {
 	      return dispatch(receiveAllStamps(response));
 	    }, function (error) {
@@ -43613,20 +43566,15 @@
 	var PERFORM_SET_FILTER_SEARCH = exports.PERFORM_SET_FILTER_SEARCH = "PERFORM_SET_FILTER_SEARCH";
 	var performSetFilterSearch = exports.performSetFilterSearch = function performSetFilterSearch(filter) {
 	  return function (dispatch, getState) {
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      var setQuery = "filter[name]=" + filter.value;
-	      var url = "/sets_service/sets?include=materials&" + setQuery;
+	    var setQuery = "filter[name]=" + filter.value;
+	    var url = "/sets_service/sets?include=materials&" + setQuery;
 
-	      return $.ajax({
-	        method: 'GET',
-	        url: url,
-	        contentType: "application/vnd.api+json",
-	        accept: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        },
-	        jsonp: false
-	      });
+	    return $.ajax({
+	      method: 'GET',
+	      url: url,
+	      contentType: "application/vnd.api+json",
+	      accept: "application/vnd.api+json",
+	      jsonp: false
 	    }).then(function (response) {
 	      var comparator = filter.comparator;
 	      if (filter.comparator == 'not in') {
@@ -43651,21 +43599,16 @@
 	var PERFORM_STAMP_FILTER_SEARCH = exports.PERFORM_STAMP_FILTER_SEARCH = "PERFORM_STAMP_FILTER_SEARCH";
 	var performStampFilterSearch = exports.performStampFilterSearch = function performStampFilterSearch(filter) {
 	  return function (dispatch, getState) {
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      var permissionType = filter.name.replace(/Permission/, '');
-	      var stampQuery = "filter[permitted]=" + filter.value + "&filter[permission_type]=" + permissionType;
-	      var url = "/stamps_service/materials?" + stampQuery;
+	    var permissionType = filter.name.replace(/Permission/, '');
+	    var stampQuery = "filter[permitted]=" + filter.value + "&filter[permission_type]=" + permissionType;
+	    var url = "/stamps_service/materials?" + stampQuery;
 
-	      return $.ajax({
-	        method: 'GET',
-	        url: url,
-	        contentType: "application/vnd.api+json",
-	        accept: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        },
-	        jsonp: false
-	      });
+	    return $.ajax({
+	      method: 'GET',
+	      url: url,
+	      contentType: "application/vnd.api+json",
+	      accept: "application/vnd.api+json",
+	      jsonp: false
 	    }).then(function (response) {
 	      var comparator = filter.comparator;
 	      if (filter.comparator == 'has') {
@@ -43716,23 +43659,18 @@
 	var CREATE_SET_ONLY = exports.CREATE_SET_ONLY = "CREATE_SET_ONLY";
 	var createSetOnly = exports.createSetOnly = function createSetOnly(setName) {
 	  return function (dispatch, getState) {
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      var data = { data: { type: 'sets', attributes: { name: setName } } };
-	      var body = Object.assign({}, data);
-	      return $.ajax({
-	        method: 'POST',
-	        url: "/sets_service/sets",
-	        contentType: "application/vnd.api+json",
-	        accept: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        },
-	        data: JSON.stringify(body),
-	        jsonp: false
-	      }).fail(function (error) {
-	        var detail = _getErrorDetails(error);
-	        return dispatch(userMessage("Failed to create set. " + detail, 'danger'));
-	      });
+	    var data = { data: { type: 'sets', attributes: { name: setName } } };
+	    var body = Object.assign({}, data);
+	    return $.ajax({
+	      method: 'POST',
+	      url: "/sets_service/sets",
+	      contentType: "application/vnd.api+json",
+	      accept: "application/vnd.api+json",
+	      data: JSON.stringify(body),
+	      jsonp: false
+	    }).fail(function (error) {
+	      var detail = _getErrorDetails(error);
+	      return dispatch(userMessage("Failed to create set. " + detail, 'danger'));
 	    }).then(function (response) {
 	      dispatch(receiveSet(response));
 	      return response;
@@ -43751,23 +43689,17 @@
 	var GET_ALL_SETS = exports.GET_ALL_SETS = "GET_ALL_SETS";
 	var getAllSets = exports.getAllSets = function getAllSets() {
 	  return function (dispatch, getState) {
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      var token = getState().token;
-	      var userEmail = (0, _jwtDecode2.default)(token).data.email;
-	      return $.ajax({
-	        method: 'GET',
-	        url: "/sets_service/sets/?filter[owner_id]=" + userEmail,
-	        contentType: "application/vnd.api+json",
-	        accept: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        },
-	        jsonp: false
-	      }).then(function (response) {
-	        return dispatch(receiveAllSets(response));
-	      }, function (error) {
-	        return dispatch((0, _service_errors.handleSetsServiceErrors)(error));
-	      });
+	    var userEmail = getState().userEmail;
+	    return $.ajax({
+	      method: 'GET',
+	      url: "/sets_service/sets/?filter[owner_id]=" + userEmail,
+	      contentType: "application/vnd.api+json",
+	      accept: "application/vnd.api+json",
+	      jsonp: false
+	    }).then(function (response) {
+	      return dispatch(receiveAllSets(response));
+	    }, function (error) {
+	      return dispatch((0, _service_errors.handleSetsServiceErrors)(error));
 	    });
 	  };
 	};
@@ -43783,10 +43715,10 @@
 	var BY_SEARCH_PAGE = exports.BY_SEARCH_PAGE = "BY_SEARCH_PAGE";
 	var bySearchPage = exports.bySearchPage = function bySearchPage(search, action) {
 	  return function (dispatch, getState) {
-
+	    var batchSize = getState().search.backGroup;
 	    var pager = function pager(pageNumber) {
-	      return dispatch(fetchPageForSearch(pageNumber, getState().search.batchGroup)).then(function (results) {
-	        return action(results._items).then(function () {
+	      return dispatch(fetchPageForSearch(pageNumber, 0)).then(function (results) {
+	        return batchAction(results._items, action, batchSize).then(function () {
 	          if (results._links.next) {
 	            return pager(results._links.next.page);
 	          } else {
@@ -43798,6 +43730,25 @@
 
 	    return pager(1);
 	  };
+	};
+
+	var batchAction = function batchAction(items, action, batchSize) {
+	  var batcher = function batcher(items) {
+	    var batch = items;
+	    var remaining = [];
+	    if (items.length > batchSize) {
+	      batch = items.slice(0, batchSize);
+	      remaining = items.slice(batchSize);
+	    }
+	    return action(batch).then(function () {
+	      if (remaining.length > 0) {
+	        return batcher(remaining);
+	      } else {
+	        return $.Deferred().resolve();
+	      }
+	    });
+	  };
+	  return batcher(items);
 	};
 
 	var CREATE_SET_FROM_SEARCH = exports.CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH";
@@ -43847,24 +43798,19 @@
 	var ADD_MATERIALS_TO_SET = exports.ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET";
 	var addMaterialsToSet = exports.addMaterialsToSet = function addMaterialsToSet(items, setId) {
 	  return function (dispatch, getState) {
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      var uuids = items.map(function (item) {
-	        return Object.assign({}, { id: item._id, type: 'materials' });
-	      });
-	      var body = Object.assign({}, { data: uuids });
-	      return $.ajax({
-	        method: 'POST',
-	        url: "/sets_service/sets/" + setId + "/relationships/materials",
-	        accept: "application/vnd.api+json",
-	        contentType: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        },
-	        data: JSON.stringify(body)
-	      }).fail(function (error) {
-	        var detail = _getErrorDetails(error);
-	        return dispatch(userMessage("Failed to add materials to set. " + detail, 'danger'));
-	      });
+	    var uuids = items.map(function (item) {
+	      return Object.assign({}, { id: item._id, type: 'materials' });
+	    });
+	    var body = Object.assign({}, { data: uuids });
+	    return $.ajax({
+	      method: 'POST',
+	      url: "/sets_service/sets/" + setId + "/relationships/materials",
+	      accept: "application/vnd.api+json",
+	      contentType: "application/vnd.api+json",
+	      data: JSON.stringify(body)
+	    }).fail(function (error) {
+	      var detail = _getErrorDetails(error);
+	      return dispatch(userMessage("Failed to add materials to set. " + detail, 'danger'));
 	    });
 	  };
 	};
@@ -43872,24 +43818,19 @@
 	var REMOVE_MATERIALS_FROM_SET = exports.REMOVE_MATERIALS_FROM_SET = "REMOVE_MATERIALS_FROM_SET";
 	var removeMaterialsFromSet = exports.removeMaterialsFromSet = function removeMaterialsFromSet(items, setId) {
 	  return function (dispatch, getState) {
-	    return dispatch(fetchTokenIfNeeded()).then(function () {
-	      var uuids = items.map(function (item) {
-	        return Object.assign({}, { id: item._id, type: 'materials' });
-	      });
-	      var body = Object.assign({}, { data: uuids });
-	      return $.ajax({
-	        method: 'DELETE',
-	        url: "/sets_service/sets/" + setId + "/relationships/materials",
-	        contentType: "application/vnd.api+json",
-	        headers: {
-	          "X-Authorisation": getState().token
-	        },
-	        processData: false,
-	        data: JSON.stringify(body)
-	      }).fail(function (error) {
-	        var detail = _getErrorDetails(error);
-	        return dispatch(userMessage("Failed to remove materials from set. " + detail, 'danger'));
-	      });
+	    var uuids = items.map(function (item) {
+	      return Object.assign({}, { id: item._id, type: 'materials' });
+	    });
+	    var body = Object.assign({}, { data: uuids });
+	    return $.ajax({
+	      method: 'DELETE',
+	      url: "/sets_service/sets/" + setId + "/relationships/materials",
+	      contentType: "application/vnd.api+json",
+	      processData: false,
+	      data: JSON.stringify(body)
+	    }).fail(function (error) {
+	      var detail = _getErrorDetails(error);
+	      return dispatch(userMessage("Failed to remove materials from set. " + detail, 'danger'));
 	    });
 	  };
 	};
@@ -43912,34 +43853,29 @@
 	    return function (dispatch, getState) {
 	      dispatch((0, _loading.startStamping)());
 
-	      return dispatch(fetchTokenIfNeeded()).then(function () {
-	        return dispatch(bySearchPage(getState().search, function (items) {
-	          var uuids = items.map(function (item) {
-	            return item._id;
-	          });
-	          return $.ajax({
-	            method: 'POST',
-	            url: "/stamps_service/stamps/" + stampId + "/" + nameOperation,
-	            accept: "application/vnd.api+json",
-	            contentType: "application/vnd.api+json",
-	            headers: {
-	              "X-Authorisation": getState().token
-	            },
-	            data: JSON.stringify({ data: { materials: uuids } }),
-	            jsonp: false
-	          });
-	        })).then(function () {
-	          var message = nameOperation == 'apply' ? 'Stamp applied' : 'Stamp unapplied';
-	          return dispatch(userMessage(message, 'info'));
-	        }, function (error) {
-	          if (error.status === 403) {
-	            return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
-	          } else {
-	            return dispatch((0, _service_errors.handleStampsServiceErrors)(error));
-	          }
-	        }).always(function () {
-	          dispatch((0, _loading.stopStamping)());
+	      return dispatch(bySearchPage(getState().search, function (items) {
+	        var uuids = items.map(function (item) {
+	          return item._id;
 	        });
+	        return $.ajax({
+	          method: 'POST',
+	          url: "/stamps_service/stamps/" + stampId + "/" + nameOperation,
+	          accept: "application/vnd.api+json",
+	          contentType: "application/vnd.api+json",
+	          data: JSON.stringify({ data: { materials: uuids } }),
+	          jsonp: false
+	        });
+	      })).then(function () {
+	        var message = nameOperation == 'apply' ? 'Stamp applied' : 'Stamp unapplied';
+	        return dispatch(userMessage(message, 'info'));
+	      }, function (error) {
+	        if (error.status === 403) {
+	          return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+	        } else {
+	          return dispatch((0, _service_errors.handleStampsServiceErrors)(error));
+	        }
+	      }).always(function () {
+	        dispatch((0, _loading.stopStamping)());
 	      });
 	    };
 	  };
@@ -50256,7 +50192,7 @@
 	    last_selected: null,
 	    last_shift_selected: []
 	  },
-	  token: null,
+	  userEmail: null,
 	  search: {
 	    pageNumber: 1,
 	    maxResults: 50,
@@ -50344,21 +50280,21 @@
 
 	var _materials2 = _interopRequireDefault(_materials);
 
-	var _token = __webpack_require__(891);
-
-	var _token2 = _interopRequireDefault(_token);
-
-	var _stamps_info = __webpack_require__(892);
+	var _stamps_info = __webpack_require__(891);
 
 	var _stamps_info2 = _interopRequireDefault(_stamps_info);
 
-	var _search = __webpack_require__(893);
+	var _search = __webpack_require__(892);
 
 	var _search2 = _interopRequireDefault(_search);
 
-	var _loading = __webpack_require__(894);
+	var _loading = __webpack_require__(893);
 
 	var _loading2 = _interopRequireDefault(_loading);
+
+	var _user_email = __webpack_require__(894);
+
+	var _user_email2 = _interopRequireDefault(_user_email);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50367,10 +50303,10 @@
 	  selected: _selected2.default,
 	  browser: _browser2.default,
 	  materials: _materials2.default,
-	  token: _token2.default,
 	  search: _search2.default,
 	  stampsInfo: _stamps_info2.default,
-	  loading: _loading2.default
+	  loading: _loading2.default,
+	  userEmail: _user_email2.default
 	});
 
 	exports.default = reducers;
@@ -50546,32 +50482,6 @@
 
 	var _index = __webpack_require__(542);
 
-	var token = function token() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case _index.RECEIVE_TOKEN:
-	      return action.token;
-	    default:
-	      return state;
-	  }
-	};
-
-	exports.default = token;
-
-/***/ }),
-/* 892 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _index = __webpack_require__(542);
-
 	var stampsInfo = function stampsInfo() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
@@ -50594,7 +50504,7 @@
 	exports.default = stampsInfo;
 
 /***/ }),
-/* 893 */
+/* 892 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50800,7 +50710,7 @@
 	exports.default = search;
 
 /***/ }),
-/* 894 */
+/* 893 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50844,6 +50754,32 @@
 	};
 
 	exports.default = loading;
+
+/***/ }),
+/* 894 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _index = __webpack_require__(542);
+
+	var userEmail = function userEmail() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _index.SET_USER_EMAIL:
+	      return action.userEmail;
+	    default:
+	      return state;
+	  }
+	};
+
+	exports.default = userEmail;
 
 /***/ })
 /******/ ]);
