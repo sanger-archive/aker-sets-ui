@@ -169,7 +169,7 @@ const popoverHover = (
 );
 
 const filterPanelHeadings = (
-  <div>
+  <div className="row hidden-sm hidden-xs">
     <div className="col-md-4">Property</div>
     <div className="col-md-3">Comparator</div>
     <div className="col-md-4">Value</div>
