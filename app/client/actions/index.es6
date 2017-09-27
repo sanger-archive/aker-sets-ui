@@ -581,11 +581,11 @@ export const receiveAllSets = (response) => {
 export const BY_SEARCH_PAGE = "BY_SEARCH_PAGE"
 export const bySearchPage = (search, action) => {
   return (dispatch, getState) => {
-
+    const batchSize = getState().search.backGroup;
     const pager = (pageNumber) => {
-          return dispatch(fetchPageForSearch(pageNumber, getState().search.batchGroup))
+          return dispatch(fetchPageForSearch(pageNumber, 0))
             .then((results) => {
-              return action(results._items)
+              return batchAction(results._items, action, batchSize)
                 .then(() => {
                   if (results._links.next) {
                     return pager(results._links.next.page);
@@ -598,6 +598,25 @@ export const bySearchPage = (search, action) => {
 
     return pager(1);
   }
+}
+
+const batchAction = (items, action, batchSize) => {
+  const batcher = (items) => {
+    let batch = items;
+    let remaining = [];
+    if (items.length > batchSize) {
+      batch = items.slice(0, batchSize);
+      remaining = items.slice(batchSize);
+    }
+    return action(batch).then(() => {
+      if (remaining.length > 0) {
+        return batcher(remaining);
+      } else {
+        return $.Deferred().resolve();
+      }
+    })
+  };
+  return batcher(items);
 }
 
 export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
