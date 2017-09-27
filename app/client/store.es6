@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { setEndpointHost, setEndpointPath, setHeaders } from 'redux-json-api';
 import reducers from './reducers/index.es6';
 
-import {STAMPS_INITIALIZATION} from './actions/index.es6'
+import { STAMPS_INITIALIZATION, setUserEmail } from './actions/index.es6'
 
 let initialState = {
   api: {
@@ -23,7 +23,7 @@ let initialState = {
     last_selected: null,
     last_shift_selected: []
   },
-  token: null,
+  userEmail: null,
   search: {
     pageNumber: 1,
     maxResults: 50,

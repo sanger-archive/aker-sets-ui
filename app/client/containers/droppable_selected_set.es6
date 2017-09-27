@@ -5,7 +5,7 @@ import { BiomaterialTable } from '../components/biomaterial_table.es6';
 import droppable from '../hocs/droppable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
 import { updateEntity, readEndpoint } from 'redux-json-api';
-import { clearSelection, storeItems, fetchTokenIfNeeded } from '../actions/index.es6';
+import { clearSelection, storeItems } from '../actions/index.es6';
 import { getSelectedTopMaterials } from '../selectors/index.es6';
 
 let DroppableBiomaterialTable = droppable(BiomaterialTable);
@@ -45,8 +45,7 @@ const setTarget = {
       }
     };
 
-    return dispatch(fetchTokenIfNeeded())
-      .then(() => { return dispatch(updateEntity(entity)) })
+    return dispatch(updateEntity(entity))
       .then(() => { return dispatch(clearSelection()) })
       .then(() => { return dispatch(readEndpoint(`sets/${set.id}?include=materials`)) });
   }
@@ -88,8 +87,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
       };
 
-      dispatch(fetchTokenIfNeeded())
-        .then(() => dispatch(updateEntity(entity)))
+      dispatch(updateEntity(entity))
         .then(() => dispatch(readEndpoint(`sets/${set.id}?include=materials`)));
     }
   }

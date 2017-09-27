@@ -42,8 +42,7 @@ gem 'rubocop', '~> 0.41.2', require: false
 gem 'pg'
 gem 'rack-proxy', '~> 0.6.2', require: true
 
-gem 'aker_authentication_gem', github: 'sanger/aker-authentication'
-gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
+gem 'aker_credentials_gem', github: 'sanger/aker-credentials', branch: 'noguest'
 gem 'faraday'
 
 gem 'bootstrap_form'

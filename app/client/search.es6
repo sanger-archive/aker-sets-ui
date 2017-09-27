@@ -7,6 +7,7 @@ import App from './layouts/search.es6';
 
 import store from './store.es6';
 
+store.dispatch(setUserEmail(Aker.userEmail));
 store.dispatch(getAllSets())
 store.dispatch(fetchMaterialSchema())
 store.dispatch(fetchAllStamps())

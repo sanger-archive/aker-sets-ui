@@ -4,6 +4,14 @@ import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 
+export const SET_USER_EMAIL = 'SET_USER_EMAIL';
+export const setUserEmail = (userEmail) => {
+  return {
+    type: SET_USER_EMAIL,
+    userEmail
+  }
+}
+
 export const SELECT = "SELECT";
 export const select = (id, selectionType) => {
   return {
@@ -98,56 +106,8 @@ export const fetchMaterials = (materials) => {
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
 export const fetchSetAndMaterials = function(setId) {
   return function(dispatch) {
-    dispatch(fetchTokenIfNeeded())
-      .then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)) })
+    dispatch(readEndpoint(`sets/${setId}?include=materials`))
       .then((json) => { return dispatch(fetchMaterials(json.included)) });
-  }
-}
-
-export const FETCH_TOKEN_IF_NEEDED = "FETCH_TOKEN_IF_NEEDED";
-export const fetchTokenIfNeeded = () => {
-  return function(dispatch, getState) {
-    let token = getState().token;
-
-    if (!token || isExpired(token)) {
-      return dispatch(fetchToken());
-    }
-
-    return $.Deferred().resolve();
-  }
-}
-
-const isExpired = (token) => {
-  const payload = jwt_decode(token);
-  return payload.exp < Date.now()/1000;
-}
-
-export const FETCH_TOKEN = "FETCH_TOKEN";
-export const fetchToken = () => {
-  return (dispatch, getState) => {
-    return $.ajax({
-      method: 'POST',
-      url: "/token",
-      accept: "application/json",
-    })
-
-    // Put the token in the Store
-    .then(function(response) {
-      return dispatch(receiveToken(response.token))
-    })
-
-    // Set it as a default header for redux-json-api
-    .then(function() {
-      return dispatch(setHeader({"X-Authorisation": getState().token}));
-    });
-  }
-}
-
-export const RECEIVE_TOKEN = "RECEIVE_TOKEN";
-export const receiveToken = (token) => {
-  return {
-    type: RECEIVE_TOKEN,
-    token
   }
 }
 
@@ -184,18 +144,12 @@ export const FETCH_ALL_STAMPS = "FETCH_ALL_STAMPS";
 export const fetchAllStamps = () => {
   return (dispatch, getState) => {
     dispatch({ type: FETCH_ALL_STAMPS });
-    return dispatch(fetchTokenIfNeeded())
-    .then(() => {
+
     return $.ajax({
       method: 'GET',
       url: "/stamps_service/stamps",
       contentType: "application/vnd.api+json",
-      accept: "application/vnd.api+json",
-      headers: {
-        "X-Authorisation": getState().token
-      }
-
-      })
+      accept: "application/vnd.api+json"
     }).then((response) => {
       return dispatch(receiveAllStamps(response));
     }, (error) => {
@@ -405,21 +359,15 @@ export const receiveSearchResults = (response) => {
 export const PERFORM_SET_FILTER_SEARCH = "PERFORM_SET_FILTER_SEARCH"
 export const performSetFilterSearch = (filter) => {
   return (dispatch, getState) => {
-    return dispatch(fetchTokenIfNeeded())
-    .then(() => {
-      const setQuery = `filter[name]=${filter.value}`
-      const url = `/sets_service/sets?include=materials&${setQuery}`
+    const setQuery = `filter[name]=${filter.value}`
+    const url = `/sets_service/sets?include=materials&${setQuery}`
 
-      return $.ajax({
-        method: 'GET',
-        url: url,
-        contentType: "application/vnd.api+json",
-        accept: "application/vnd.api+json",
-        headers: {
-          "X-Authorisation": getState().token
-        },
-        jsonp: false
-      })
+    return $.ajax({
+      method: 'GET',
+      url: url,
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      jsonp: false
     })
     .then((response) => {
       let comparator = filter.comparator
@@ -443,40 +391,34 @@ export const performSetFilterSearch = (filter) => {
 export const PERFORM_STAMP_FILTER_SEARCH = "PERFORM_STAMP_FILTER_SEARCH"
 export const performStampFilterSearch = (filter) => {
   return (dispatch, getState) => {
-    return dispatch(fetchTokenIfNeeded())
-      .then(() => {
-        let permissionType = filter.name.replace(/Permission/,'');
-        const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
-        const url = `/stamps_service/materials?${stampQuery}`;
+    let permissionType = filter.name.replace(/Permission/,'');
+    const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
+    const url = `/stamps_service/materials?${stampQuery}`;
 
-        return $.ajax({
-          method: 'GET',
-          url: url,
-          contentType: "application/vnd.api+json",
-          accept: "application/vnd.api+json",
-          headers: {
-            "X-Authorisation": getState().token
-          },
-          jsonp: false
-        });
-      })
-      .then((response) => {
-        let comparator = filter.comparator;
-        if (filter.comparator == 'has') {
-          comparator = 'has';
-        }
-        let data = {};
-        let material_uuids = [];
-        // Extract the material UUIDs from the response
-        if (response.data) {
-          material_uuids = response.data.map((material) => {
-            return material.attributes['material-uuid'] });
-        }
-        data[comparator] = material_uuids;
-        const result = Object.assign({}, data);
+    return $.ajax({
+      method: 'GET',
+      url: url,
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      jsonp: false
+    })
+    .then((response) => {
+      let comparator = filter.comparator;
+      if (filter.comparator == 'has') {
+        comparator = 'has';
+      }
+      let data = {};
+      let material_uuids = [];
+      // Extract the material UUIDs from the response
+      if (response.data) {
+        material_uuids = response.data.map((material) => {
+          return material.attributes['material-uuid'] });
+      }
+      data[comparator] = material_uuids;
+      const result = Object.assign({}, data);
 
-        return dispatch(receiveStampsFromFilter(result));
-      });
+      return dispatch(receiveStampsFromFilter(result));
+    });
   }
 }
 
@@ -510,24 +452,18 @@ export const createNewSet = (items, setName) => {
 export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
 export const createSetOnly = (setName) => {
   return function(dispatch, getState) {
-    return dispatch(fetchTokenIfNeeded())
-    .then(() => {
-      const data = {data: { type: 'sets', attributes: {name: setName}}};
-      const body = Object.assign({}, data);
-      return $.ajax({
-        method: 'POST',
-        url: "/sets_service/sets",
-        contentType: "application/vnd.api+json",
-        accept: "application/vnd.api+json",
-        headers: {
-          "X-Authorisation": getState().token
-        },
-        data: JSON.stringify(body),
-        jsonp: false
-      }).fail((error) => {
-        const detail = _getErrorDetails(error);
-        return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
-      });
+    const data = {data: { type: 'sets', attributes: {name: setName}}};
+    const body = Object.assign({}, data);
+    return $.ajax({
+      method: 'POST',
+      url: "/sets_service/sets",
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      data: JSON.stringify(body),
+      jsonp: false
+    }).fail((error) => {
+      const detail = _getErrorDetails(error);
+      return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
     })
     .then((response)=>{
       dispatch(receiveSet(response))
@@ -547,26 +483,19 @@ export const receiveSet = (response) => {
 export const GET_ALL_SETS = "GET_ALL_SETS"
 export const getAllSets = () => {
   return (dispatch, getState) => {
-    return dispatch(fetchTokenIfNeeded())
-    .then(() => {
-      const token = getState().token
-      const userEmail = jwt_decode(token).data.email;
-      return $.ajax({
-        method: 'GET',
-        url: `/sets_service/sets/?filter[owner_id]=${userEmail}`,
-        contentType: "application/vnd.api+json",
-        accept: "application/vnd.api+json",
-        headers: {
-          "X-Authorisation": getState().token
-        },
-        jsonp: false
-      })
-      .then((response) => {
-        return dispatch(receiveAllSets(response))
-      }, (error) => {
-        return dispatch(handleSetsServiceErrors(error));
-      });
+    const userEmail = getState().userEmail;
+    return $.ajax({
+      method: 'GET',
+      url: `/sets_service/sets/?filter[owner_id]=${userEmail}`,
+      contentType: "application/vnd.api+json",
+      accept: "application/vnd.api+json",
+      jsonp: false
     })
+    .then((response) => {
+      return dispatch(receiveAllSets(response))
+    }, (error) => {
+      return dispatch(handleSetsServiceErrors(error));
+    });
   }
 }
 
@@ -674,48 +603,36 @@ export const removeMaterialsFromSetFromSearch = (setId) => {
 export const ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET"
 export const addMaterialsToSet = (items, setId) => {
   return (dispatch, getState) => {
-    return dispatch(fetchTokenIfNeeded())
-   .then(()=>{
-      let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
-      const body = Object.assign({}, {data: uuids});
-      return $.ajax({
-        method: 'POST',
-        url: `/sets_service/sets/${setId}/relationships/materials`,
-        accept: "application/vnd.api+json",
-        contentType: "application/vnd.api+json",
-        headers: {
-          "X-Authorisation": getState().token
-        },
-        data: JSON.stringify(body)
-      }).fail((error) => {
-        const detail = _getErrorDetails(error);
-        return dispatch(userMessage(`Failed to add materials to set. ${detail}`, 'danger'));
-      });
-    })
+    let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
+    const body = Object.assign({}, {data: uuids});
+    return $.ajax({
+      method: 'POST',
+      url: `/sets_service/sets/${setId}/relationships/materials`,
+      accept: "application/vnd.api+json",
+      contentType: "application/vnd.api+json",
+      data: JSON.stringify(body)
+    }).fail((error) => {
+      const detail = _getErrorDetails(error);
+      return dispatch(userMessage(`Failed to add materials to set. ${detail}`, 'danger'));
+    });
   }
 }
 
 export const REMOVE_MATERIALS_FROM_SET = "REMOVE_MATERIALS_FROM_SET"
 export const removeMaterialsFromSet = (items, setId) => {
   return (dispatch, getState) => {
-    return dispatch(fetchTokenIfNeeded())
-   .then(()=>{
-      let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
-      const body = Object.assign({}, {data: uuids});
-      return $.ajax({
-        method: 'DELETE',
-        url: `/sets_service/sets/${setId}/relationships/materials`,
-        contentType: "application/vnd.api+json",
-        headers: {
-          "X-Authorisation": getState().token
-        },
-        processData: false,
-        data: JSON.stringify(body)
-      }).fail((error) => {
-        const detail = _getErrorDetails(error);
-        return dispatch(userMessage(`Failed to remove materials from set. ${detail}`, 'danger'));
-      });
-    })
+    let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
+    const body = Object.assign({}, {data: uuids});
+    return $.ajax({
+      method: 'DELETE',
+      url: `/sets_service/sets/${setId}/relationships/materials`,
+      contentType: "application/vnd.api+json",
+      processData: false,
+      data: JSON.stringify(body)
+    }).fail((error) => {
+      const detail = _getErrorDetails(error);
+      return dispatch(userMessage(`Failed to remove materials from set. ${detail}`, 'danger'));
+    });
   }
 }
 
@@ -737,36 +654,30 @@ const _apply_generation = (nameOperation) => {
     return (dispatch, getState) => {
       dispatch(startStamping())
 
-      return dispatch(fetchTokenIfNeeded())
-      .then(()=>{
-        return dispatch(bySearchPage(getState().search, (items) => {
-          let uuids = items.map((item)=>{ return item._id });
-          return $.ajax({
-            method: 'POST',
-            url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
-            accept: "application/vnd.api+json",
-            contentType: "application/vnd.api+json",
-            headers: {
-              "X-Authorisation": getState().token
-            },
-            data: JSON.stringify({data: {materials: uuids}}),
-            jsonp: false
-          })
-        }))
-        .then(()=>{
-          const message = nameOperation == 'apply' ? 'Stamp applied' : 'Stamp unapplied';
-          return dispatch(userMessage(message, 'info'));
-        }, (error)=> {
-          if (error.status === 403) {
-            return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
-          } else {
-            return dispatch(handleStampsServiceErrors(error));
-          }
+      return dispatch(bySearchPage(getState().search, (items) => {
+        let uuids = items.map((item)=>{ return item._id });
+        return $.ajax({
+          method: 'POST',
+          url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
+          accept: "application/vnd.api+json",
+          contentType: "application/vnd.api+json",
+          data: JSON.stringify({data: {materials: uuids}}),
+          jsonp: false
         })
-        .always(() => {
-          dispatch(stopStamping())
-        });
+      }))
+      .then(()=>{
+        const message = nameOperation == 'apply' ? 'Stamp applied' : 'Stamp unapplied';
+        return dispatch(userMessage(message, 'info'));
+      }, (error)=> {
+        if (error.status === 403) {
+          return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+        } else {
+          return dispatch(handleStampsServiceErrors(error));
+        }
       })
+      .always(() => {
+        dispatch(stopStamping())
+      });
     }
   }
 }
