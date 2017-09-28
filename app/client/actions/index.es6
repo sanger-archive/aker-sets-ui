@@ -581,7 +581,7 @@ export const receiveAllSets = (response) => {
 export const BY_SEARCH_PAGE = "BY_SEARCH_PAGE"
 export const bySearchPage = (search, action) => {
   return (dispatch, getState) => {
-    const batchSize = getState().search.backGroup;
+    const batchSize = getState().search.batchGroup;
     const pager = (pageNumber) => {
           return dispatch(fetchPageForSearch(pageNumber, 0))
             .then((results) => {
