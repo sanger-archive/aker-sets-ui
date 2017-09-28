@@ -16,17 +16,16 @@ const getContext = (status) => {
 describe('<DraggableSelectedCollection />', () => {
   it('should render the element', () => {
     const status = {
-      materials: {}, 
+      materials: {},
       browser: {selected: []},
       selected: {
         top: null, bottom: null
-      }, 
+      },
       api: {
         sets:        { data: [] },
         materials:   { data: [] }
       }
      };
-    let fetchTokenIfNeeded = sinon.spy();
     let dispatch = sinon.spy();
     const wrapper = mount(<DraggableSelectedCollection></DraggableSelectedCollection>, getContext(status));
 
