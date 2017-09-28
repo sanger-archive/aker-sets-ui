@@ -7,7 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems, fetchSetAndMaterials, fetchTokenIfNeeded } from './actions';
+import { selectEntity, storeItems, fetchSetAndMaterials } from './actions';
 import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
 import store from './store.es6';
@@ -15,11 +15,10 @@ import store from './store.es6';
 // Don't want to cache any of our requests
 $.ajaxSetup({ cache: false })
 
-// Authenticates the user
-store.dispatch(fetchTokenIfNeeded());
-
 // Load the sets up front
 store.dispatch(readEndpoint('sets'));
+
+store.dispatch(setUserEmail(Aker.userEmail));
 
 setInterval(() => {
   let selected = store.getState().selected;

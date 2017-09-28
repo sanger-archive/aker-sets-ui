@@ -71,5 +71,10 @@ Rails.application.configure do
   config.jwt_exp_time = 2 * 60
   config.jwt_nbf_time = 1 * 60
 
+  config.default_jwt_user = { email: ENV.fetch('USER', 'user')+'@sanger.ac.uk', groups: ['world'] }
+
+  config.login_url = '#'
+  config.logout_url = '#'
+
   config.middleware.insert(0, RackAkerServicesProxy, {ssl_verify_none: true})
 end
