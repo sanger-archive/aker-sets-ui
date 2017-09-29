@@ -51,16 +51,17 @@ const mapStateToProps = (state) => {
 let Wrapper = onClickOutside(React.createClass({
 
   onClick(biomaterial, index, evt) {
+    const key = biomaterial.id;
     const {dispatch, biomaterials} = this.props;
 
     dispatch(storeItems(biomaterials));
 
     if (evt.metaKey) {
-      dispatch(toggleItem(index));
+      dispatch(toggleItem(key));
     } else if (evt.shiftKey) {
-      dispatch(shiftSelectItems(index))
+      dispatch(shiftSelectItems(key))
     } else {
-      dispatch(selectItem(index));
+      dispatch(selectItem(key));
     }
   },
 

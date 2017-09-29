@@ -61,48 +61,84 @@ export const shiftSelectItems = (key) => {
 }
 
 export const RECEIVE_MATERIALS = "RECEIVE_MATERIALS";
-export const receiveMaterials = (materials) => {
+export const receiveMaterials = (materials, links, setId) => {
   return {
     type: RECEIVE_MATERIALS,
-    materials
+    materials,
+    links,
+    setId
   }
 }
 
-const BATCH_SIZE = 25;
 export const FETCH_MATERIALS = "FETCH_MATERIALS";
-export const fetchMaterials = (materials) => {
-  return function(dispatch) {
+export const fetchMaterials = (json, setId) => {
+  const materials = json.data;
+  const links = json.links;
+  return function(dispatch, getState) {
     if (!materials) return false;
-
-    // We need to fetch materials in batches, otherwise the url params get too long
-    if (materials.length > BATCH_SIZE) {
-      dispatch(fetchMaterials(materials.splice(BATCH_SIZE)))
-    }
-
     const ids = materials.map((material) => material.id);
+    const url = "/materials_service/materials/search";
 
-    const params = encodeURIComponent(`{"_id" : { "$in": ["${ids.join('","')}"] } }`);
-    const url    = `/materials_service/materials?where=${params}`;
-
-    $.ajax({
-      url,
-      contentType: "application/json",
+    return $.ajax({
+      method: 'POST',
+      url: url,
+      contentType: "application/json; charset=utf-8",
       accept: "application/json",
-      jsonp: false })
-      .then(function(response) {
-        dispatch(receiveMaterials(response._items))
-      }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
+      data: JSON.stringify({
+        where:  {"_id" : { "$in": ids } },
+        /*max_results: BATCH_SIZE,
+        page: 1*/
+      }),
+      cache: false
+    }).then((response) => {
+      return dispatch(receiveMaterials(response._items, links, setId)) }, 
+    (error) => {
+      return dispatch(handleMaterialsServiceErrors(error))
+    });
   }
+}
+
+
+/*export const FETCH_MATERIALS_FOR_SET = "FETCH_MATERIALS_FOR_SET";
+export const fetchMaterialsForSet = function(setId, page, count) {
+  return function(dispatch) {
+    return dispatch(fetchTokenIfNeeded())
+      .then(() => { return dispatch(readEndpoint(`sets/${setId}/materials?page[number]=1&page[size]=20`)) });
+  }
+}*/
+
+const urlForMaterialsFromSet = function(setId, pageNumber, pageSize) {
+  return encodeURI(`sets/${setId}/materials?page[number]=${pageNumber}&page[size]=${pageSize}`);  
+}
+
+export const FETCH_MATERIALS_FROM_SET_BY_URL = "FETCH_MATERIALS_FROM_SET_BY_URL";
+export const fetchMaterialsFromSetByUrl = function(url) {
+  const setId = url.match(/sets\/([^/]*)/)[1]
+  const pageNumber = url.match(new RegExp(encodeURI("page[number]") + "=(\\d*)"))[1]
+  const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d*)"))[1]
+
+  return function(dispatch) {
+    return dispatch(fetchTokenIfNeeded())
+      .then(() => { 
+        return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)));
+      })
+      .then((json) => { return dispatch(fetchMaterials(json, setId)) });
+  }  
 }
 
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
-export const fetchSetAndMaterials = function(setId) {
+export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
   return function(dispatch) {
-    dispatch(fetchTokenIfNeeded())
-      .then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)) })
-      .then((json) => { return dispatch(fetchMaterials(json.included)) });
+    return dispatch(fetchMaterialsFromSetByUrl(urlForMaterialsFromSet(setId, pageNumber, sizeNumber)));
   }
 }
+/*  return function(dispatch) {
+    dispatch(fetchTokenIfNeeded())
+      .then(() => { return dispatch(fetchMaterialsForSet(setId, 1, 25)); })
+      //.then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)); })
+      .then((json) => { return dispatch(fetchMaterials(json, setId)) });
+  }
+}*/
 
 export const FETCH_TOKEN_IF_NEEDED = "FETCH_TOKEN_IF_NEEDED";
 export const fetchTokenIfNeeded = () => {

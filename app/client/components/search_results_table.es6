@@ -12,6 +12,9 @@ class SearchResultsTable extends React.Component {
   render() {
     const { headings, current, items, links, sets, dispatch, meta, loading } = this.props;
     const hasResults = items.length != 0;
+
+    const handleClick = (pageNumber) => dispatch(paginateTo(pageNumber));
+
     let title = 'Results'
     if (meta.total) {
       title += ` (${meta.total}), showing page ${meta.page} (of ${links.last ? links.last.page : meta.page})`
@@ -27,7 +30,7 @@ class SearchResultsTable extends React.Component {
           </div>
           <Heading title={title}>
           </Heading>
-          <PaginationLinks links={links} dispatch={dispatch} />
+          <PaginationLinks links={links} handleClick={handleClick} />
 
           <Body style={{overflow: 'scroll', paddingBottom: '0', paddingTop: '0'}}>
             <table className="table table-striped table-hover search-results-table">
@@ -61,7 +64,7 @@ class SearchResultsTable extends React.Component {
               </tbody>
             </table>
           </Body>
-          <PaginationLinks links={links} dispatch={dispatch} />
+          <PaginationLinks links={links} handleClick={handleClick} />
         </Panel>
       </div>
     );
@@ -96,14 +99,12 @@ const SearchResultsRow = (props) => {
   );
 }
 
-const PaginationLinks = (props) => {
-  const { links, dispatch } = props;
+export const PaginationLinks = (props) => {
+  const { links, handleClick } = props;
 
-  if (links.length == 0){
+  if (!links || Object.keys(links).length == 0){
     return null
   }
-
-  const handleClick = (pageNumber) => dispatch(paginateTo(pageNumber));
 
   let displayLinks = [];
   displayLinks.push(<PaginationLink link={links.first} label='First' title='First' onClick={handleClick} key='First' />)

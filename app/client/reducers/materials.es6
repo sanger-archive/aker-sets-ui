@@ -15,7 +15,10 @@ const materials = (state = {}, action) => {
         return memo;
       }, {});
 
-      return Object.assign({}, state, received_materials);
+      let newstate = {}
+      newstate[action.setId] = {instances: received_materials, links: action.links}
+
+      return Object.assign({}, state, newstate);
     default:
       return state;
   }

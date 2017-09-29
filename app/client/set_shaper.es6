@@ -25,7 +25,7 @@ setInterval(() => {
   let selected = store.getState().selected;
 
   for (let position in selected) {
-    if (selected[position]) store.dispatch(fetchSetAndMaterials(selected[position]));
+    if (selected[position]) store.dispatch(fetchSetAndMaterials(selected[position], 1, 25));
   }
 }, 10000)
 

@@ -6,12 +6,13 @@ const nullResource = { id: '', type: '', attributes: {}, links: {}, relationship
 // API
 const getApi = (state) => state.api;
 
-const getApiData  = (type) => { return (state) => state.api[type].data };
+const getApiData  = (type) => { return (state) => { return state.api[type].data } };
 const getSets                = getApiData('sets');
 const getBiomaterials        = getApiData('materials');
 
 // Selected
 const getSelectedId = (key)  => { return (state) => state.selected[key] };
+const getSelectedMaterials = (key, state) => { return (state) => state.materials[key] }
 const getSelectedTopId    = getSelectedId('top');
 const getSelectedBottomId = getSelectedId('bottom');
 
@@ -23,7 +24,6 @@ const getSelectedBottomId = getSelectedId('bottom');
 // that will find all the relations for a resource (or collection of resources)
 const findResourceRelationshipFactory = (relationshipType) => {
   return (resources, relatedResources) => {
-
     // If we don't have a resource, just return an array
     if (!resources) {
       return [];
@@ -82,12 +82,40 @@ export const getSelectedBottom = createSelector(
 )
 
 // selected{Resource}Biomaterials Selectors
-export const getSelectedTopMaterials = createSelector(
+export const getSelectedTopSetMaterials = createSelector(
+  (state) => {  return state.materials; },
+  getSelectedTop, 
+  (materials, set) => {
+    if (set.id in materials) {
+      return materials[set.id];
+    }
+    return {};
+  }
+)
+
+export const getSelectedBottomSetMaterials = createSelector(
+  (state) => {  return state.materials; },
+  getSelectedBottom, 
+  (materials, set) => {
+    if (set.id in materials) {
+      return materials[set.id];
+    }
+    return {};
+  }
+)
+
+export const getSelectedTopMaterials = (state) => getSelectedTopSetMaterials(state).instances;
+export const getSelectedBottomMaterials = (state) => getSelectedBottomSetMaterials(state).instances;
+export const getSelectedTopLinks = (state) => getSelectedTopSetMaterials(state).links;
+export const getSelectedBottomLinks = (state) => getSelectedBottomSetMaterials(state).links;
+
+
+export const OLDgetSelectedTopMaterials = createSelector(
   getSelectedTop, getBiomaterials,
   findResourceRelationshipFactory('materials')
 )
 
-export const getSelectedBottomMaterials = createSelector(
+export const OLDgetSelectedBottomMaterials = createSelector(
   getSelectedBottom, getBiomaterials,
   findResourceRelationshipFactory('materials')
 )

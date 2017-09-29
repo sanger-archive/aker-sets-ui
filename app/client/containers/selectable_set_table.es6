@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch, { selectionType }) => {
   return {
     onSetClick: (setId) => {
       dispatch(select(setId, selectionType));
-      dispatch(fetchSetAndMaterials(setId))
+      dispatch(fetchSetAndMaterials(setId, 1, 25))
     }
   }
 }

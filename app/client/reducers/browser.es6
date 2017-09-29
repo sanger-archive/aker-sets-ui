@@ -5,7 +5,7 @@ const browser = (state = {}, action) => {
     case USER_MESSAGE:
       return Object.assign({}, state, { userMessage: { message: action.message, msgType: action.msgType }});
     case STORE_ITEMS:
-      return Object.assign({}, state, { items: action.items });
+      return Object.assign({}, state, { items: action.items.values() });
 
     case SELECT_ITEM:
       return Object.assign({}, state, { last_shift_selected: [], last_selected: action.key, selected: [state.items[action.key]] });
