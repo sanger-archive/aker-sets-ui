@@ -1,22 +1,8 @@
 GIT
-  remote: git://github.com/sanger/aker-authentication.git
-  revision: 98bdeb1ace2ee1ace171f5e5347b06623cd019fb
-  specs:
-    aker_authentication_gem (0.1.3)
-      activemodel
-      bootstrap-sass
-      bootstrap_form
-      devise
-      devise_ldap_authenticatable
-      jwt
-      net-ldap
-      request_store
-
-GIT
   remote: git://github.com/sanger/aker-credentials.git
-  revision: 09109fd6bd59705979903c5e3b3cf2a91d067355
+  revision: 33b3bc774d25ecb9564290e58f41f58d43bea3e2
   specs:
-    aker_credentials_gem (0.1.1)
+    aker_credentials_gem (0.1.2)
       jwt
       request_store
 
@@ -70,7 +56,6 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
-    bcrypt (3.1.11)
     bindex (0.5.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -94,15 +79,6 @@ GEM
     database_cleaner (1.6.1)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
-    devise (4.3.0)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.2)
-      responders
-      warden (~> 1.2.3)
-    devise_ldap_authenticatable (0.8.5)
-      devise (>= 3.4.1)
-      net-ldap (>= 0.6.0, <= 0.11)
     diff-lcs (1.3)
     docile (1.1.5)
     equalizer (0.0.11)
@@ -144,7 +120,7 @@ GEM
     jsonapi-resources (0.7.1.beta2)
       concurrent-ruby
       rails (>= 4.0)
-    jwt (1.5.6)
+    jwt (2.0.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.19)
@@ -164,11 +140,9 @@ GEM
     minitest (5.10.3)
     multi_json (1.12.1)
     multipart-post (2.0.0)
-    net-ldap (0.11)
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
-    orm_adapter (0.5.0)
     parser (2.4.0.0)
       ast (~> 2.2)
     path_expander (1.0.2)
@@ -220,9 +194,6 @@ GEM
       rainbow (~> 2.0)
     ref (2.0.0)
     request_store (1.3.2)
-    responders (2.4.0)
-      actionpack (>= 4.2.0, < 5.3)
-      railties (>= 4.2.0, < 5.3)
     rspec-core (3.6.0)
       rspec-support (~> 3.6.0)
     rspec-expectations (3.6.0)
@@ -309,8 +280,6 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
-    warden (1.2.7)
-      rack (>= 1.0)
     web-console (3.5.1)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -326,7 +295,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aker_authentication_gem!
   aker_credentials_gem!
   bootstrap-sass (~> 3.3.6)
   bootstrap_form

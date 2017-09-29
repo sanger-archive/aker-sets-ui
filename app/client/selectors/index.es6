@@ -10,6 +10,8 @@ const getApiData  = (type) => { return (state) => { return state.api[type].data 
 const getSets                = getApiData('sets');
 const getBiomaterials        = getApiData('materials');
 
+const getUserEmail           = (state) => state.userEmail;
+
 // Selected
 const getSelectedId = (key)  => { return (state) => state.selected[key] };
 const getSelectedMaterials = (key, state) => { return (state) => state.materials[key] }
@@ -118,14 +120,6 @@ export const OLDgetSelectedTopMaterials = createSelector(
 export const OLDgetSelectedBottomMaterials = createSelector(
   getSelectedBottom, getBiomaterials,
   findResourceRelationshipFactory('materials')
-)
-
-export const getUserEmail = createSelector(
-  (state) => state.token,
-  (token) => {
-    if (!token) return;
-    return jwt_decode(token).data.email
-  }
 )
 
 export const getUserSets = createSelector(
