@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { connect, Provider } from 'react-redux';
-import { getAllSets, fetchMaterialSchema, fetchAllStamps } from './actions/index.es6';
+import { getAllSets, fetchMaterialSchema, fetchAllStamps, setUserEmail } from './actions/index.es6';
 
 import App from './layouts/search.es6';
 
