@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchSetAndMaterials, storeItems } from '../actions/index.es6';
+import { select, fetchFirstPageSetAndMaterials, storeItems } from '../actions/index.es6';
 import { readEndpoint } from 'redux-json-api';
 import SetTable from '../components/set_table.es6';
 
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch, { selectionType }) => {
   return {
     onSetClick: (setId) => {
       dispatch(select(setId, selectionType));
-      dispatch(fetchSetAndMaterials(setId, 1, 25))
+      dispatch(fetchFirstPageSetAndMaterials(setId))
     }
   }
 }

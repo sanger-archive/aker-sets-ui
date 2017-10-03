@@ -7,7 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import App from './layouts/set_shaper.es6';
 
-import { selectEntity, storeItems, fetchSetAndMaterials, setUserEmail } from './actions';
+import { selectEntity, storeItems, fetchFirstPageSetAndMaterials, setUserEmail } from './actions';
 import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
 import store from './store.es6';
@@ -24,7 +24,7 @@ setInterval(() => {
   let selected = store.getState().selected;
 
   for (let position in selected) {
-    if (selected[position]) store.dispatch(fetchSetAndMaterials(selected[position], 1, 25));
+    if (selected[position]) store.dispatch(fetchFirstPageSetAndMaterials(selected[position]));
   }
 }, 10000)
 

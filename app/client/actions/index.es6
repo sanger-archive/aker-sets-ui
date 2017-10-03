@@ -126,18 +126,59 @@ export const fetchMaterialsFromSetByUrl = function(url) {
   const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d*)"))[1]
 
   return function(dispatch) {
-    return dispatch(fetchTokenIfNeeded())
-      .then(() => { 
-        return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)));
-      })
-      .then((json) => { return dispatch(fetchMaterials(json, setId)) });
-  }  
+    return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)))
+    .then((json) => { return dispatch(fetchMaterials(json, setId)) });
+  };
 }
 
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
 export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
   return function(dispatch) {
     return dispatch(fetchMaterialsFromSetByUrl(urlForMaterialsFromSet(setId, pageNumber, sizeNumber)));
+  }
+}
+
+export const FETCH_FIRST_PAGE_SET_AND_MATERIALS = "FETCH_FIRST_PAGE_SET_AND_MATERIALS";
+export const fetchFirstPageSetAndMaterials = function(setId) {
+  return function(dispatch) {
+    return dispatch(fetchSetAndMaterials(setId, 1, 25));
+  }
+}
+
+export const APPEND_MATERIALS_TO_SET = "APPEND_MATERIALS_TO_SET";
+export const appendMaterialsToSet = function(materials, set) {
+  return function(dispatch) {
+    return $.ajax({
+      method: 'POST',
+      url: encodeURI(`sets_service/sets/${set.id}/relationships/materials`),
+      accept: 'application/vnd.api+json',
+      contentType: 'application/vnd.api+json',
+      data: JSON.stringify(
+        {
+          data: materials.map(
+            (material) => {
+              return { id: material.id, type: 'materials'};
+            }
+          )
+        }
+      )
+    }
+    ).then(() => {
+      return dispatch(readEndpoint(`sets/${set.id}`))
+    });
+  }
+}
+
+export const DELETE_MATERIAL_FROM_SET = "DELETE_MATERIAL_FROM_SET";
+export const deleteMaterialFromSet = function(material, set) {
+  return function(dispatch) {
+    return $.ajax({
+      method: 'DELETE',
+      url: encodeURI(`sets_service/sets/${set.id}/relationships/materials`),
+      accept: 'application/vnd.api+json',
+      contentType: 'application/vnd.api+json',
+      data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
+    }).then(() => {dispatch(readEndpoint(`sets/${set.id}`))});
   }
 }
 /*  return function(dispatch) {

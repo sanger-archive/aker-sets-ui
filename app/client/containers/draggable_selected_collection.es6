@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 let Wrapper = onClickOutside(React.createClass({
 
   onClick(biomaterial, index, evt) {
-    const key = biomaterial.id;
+    const key = index; //biomaterial.id;
     const {dispatch, biomaterials} = this.props;
 
     dispatch(storeItems(biomaterials));
