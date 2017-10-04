@@ -167,6 +167,10 @@ export const appendMaterialsToSet = function(materials, set) {
     }
     ).then(() => {
       return dispatch(readEndpoint(`sets/${set.id}`))
+    }, (error) => {
+      if (error.status == 403) {
+        return dispatch(userMessage('You do not have permission to append materials to this set', 'danger'));
+      }
     });
   }
 }
