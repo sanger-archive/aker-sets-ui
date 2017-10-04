@@ -69,17 +69,19 @@ export const shiftSelectItems = (key) => {
 }
 
 export const RECEIVE_MATERIALS = "RECEIVE_MATERIALS";
-export const receiveMaterials = (materials, links, setId) => {
+export const receiveMaterials = (materials, links, setId, page, url) => {
   return {
     type: RECEIVE_MATERIALS,
     materials,
     links,
-    setId
+    setId,
+    page,
+    url
   }
 }
 
 export const FETCH_MATERIALS = "FETCH_MATERIALS";
-export const fetchMaterials = (json, setId) => {
+export const fetchMaterials = (json, setId, numPage, pageUrl) => {
   const materials = json.data;
   const links = json.links;
   return function(dispatch, getState) {
@@ -99,7 +101,7 @@ export const fetchMaterials = (json, setId) => {
       }),
       cache: false
     }).then((response) => {
-      return dispatch(receiveMaterials(response._items, links, setId)) }, 
+      return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) }, 
     (error) => {
       return dispatch(handleMaterialsServiceErrors(error))
     });
@@ -127,7 +129,7 @@ export const fetchMaterialsFromSetByUrl = function(url) {
 
   return function(dispatch) {
     return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)))
-    .then((json) => { return dispatch(fetchMaterials(json, setId)) });
+    .then((json) => { return dispatch(fetchMaterials(json, setId, pageNumber, url)) });
   };
 }
 

@@ -3,19 +3,22 @@ import { connect } from 'react-redux';
 import { PaginationLinks } from '../components/search_results_table.es6';
 import {fetchMaterialsFromSetByUrl} from '../actions/index.es6';
 
-const linksToPaginatorLink = (links) => {
+const linksToPaginatorLink = (links, url) => {
   if (!links) {
     return {};
   }
   return Object.keys(links).reduce((memo, key) => {
-    memo[key] = { page: links[key] }
+    if (!links[key].endsWith(url)) {
+      memo[key] = { page: links[key] }
+    }
     return memo;
   }, {});
 }
 
 const mapStateToProps = (state, props) => {
   return {
-    links: linksToPaginatorLink(props.getLinks(state))
+    links: linksToPaginatorLink(props.getLinks(state), props.getUrl(state)),
+    page: props.getPage(state)
   };
 }
 

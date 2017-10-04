@@ -11,7 +11,6 @@ import { getSelectedTopMaterials } from '../selectors/index.es6';
 let DroppableBiomaterialTable = droppable(BiomaterialTable);
 const setTarget = {
   drop(props, monitor, component) {
-    debugger;
     const { dispatch, set, materials } = props;
     const { biomaterial, selected } = monitor.getItem();
 

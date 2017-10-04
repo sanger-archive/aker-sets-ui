@@ -88,7 +88,7 @@ export const getSelectedTopSetMaterials = createSelector(
   (state) => {  return state.materials; },
   getSelectedTop, 
   (materials, set) => {
-    if (set.id in materials) {
+    if (set && (set.id in materials)) {
       return materials[set.id];
     }
     return {};
@@ -99,7 +99,7 @@ export const getSelectedBottomSetMaterials = createSelector(
   (state) => {  return state.materials; },
   getSelectedBottom, 
   (materials, set) => {
-    if (set.id in materials) {
+    if (set && (set.id in materials)) {
       return materials[set.id];
     }
     return {};
@@ -110,6 +110,10 @@ export const getSelectedTopMaterials = (state) => getSelectedTopSetMaterials(sta
 export const getSelectedBottomMaterials = (state) => getSelectedBottomSetMaterials(state).instances;
 export const getSelectedTopLinks = (state) => getSelectedTopSetMaterials(state).links;
 export const getSelectedBottomLinks = (state) => getSelectedBottomSetMaterials(state).links;
+export const getSelectedTopPage = (state) => getSelectedTopSetMaterials(state).page;
+export const getSelectedBottomPage = (state) => getSelectedBottomSetMaterials(state).page;
+export const getSelectedTopUrl = (state) => getSelectedTopSetMaterials(state).url;
+export const getSelectedBottomUrl = (state) => getSelectedBottomSetMaterials(state).url;
 
 
 export const OLDgetSelectedTopMaterials = createSelector(

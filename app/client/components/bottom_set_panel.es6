@@ -2,7 +2,7 @@ import React from 'react';
 import {Panel, Heading, Body} from './panel.es6';
 import DraggableSelectedCollection from '../containers/draggable_selected_collection.es6';
 import PaginationContainer from '../containers/pagination_container.es6';
-import { getSelectedBottomLinks } from '../selectors/index.es6';
+import { getSelectedBottomLinks, getSelectedBottomUrl, getSelectedBottomPage } from '../selectors/index.es6';
 
 
 const BottomSetPanel = (props) => {
@@ -23,7 +23,7 @@ const BottomSetPanel = (props) => {
       <Body style={{height: '231px', overflowY: 'scroll'}}>
         <DraggableSelectedCollection />
       </Body>
-      <PaginationContainer getLinks={getSelectedBottomLinks}></PaginationContainer>
+      <PaginationContainer getLinks={getSelectedBottomLinks} getUrl={getSelectedBottomUrl} getPage={getSelectedBottomPage}></PaginationContainer>
     </Panel>
   );
 };

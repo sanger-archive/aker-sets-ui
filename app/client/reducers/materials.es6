@@ -16,7 +16,7 @@ const materials = (state = {}, action) => {
       }, {});
 
       let newstate = {}
-      newstate[action.setId] = {instances: received_materials, links: action.links}
+      newstate[action.setId] = {instances: received_materials, links: action.links, page: action.page, url: action.url }
 
       return Object.assign({}, state, newstate);
     default:

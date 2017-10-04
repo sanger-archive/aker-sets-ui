@@ -107,6 +107,7 @@ export const PaginationLinks = (props) => {
   }
 
   let displayLinks = [];
+
   displayLinks.push(<PaginationLink link={links.first} label='First' title='First' onClick={handleClick} key='First' />)
   displayLinks.push(<PaginationLink link={links.prev} label='Previous' title='Previous' onClick={handleClick} key='Previous' />)
   displayLinks.push(<PaginationLink link={links.next} label='Next' title='Next' onClick={handleClick} key='Next' />)
@@ -115,7 +116,13 @@ export const PaginationLinks = (props) => {
   return (
     <div className="row">
       <div className="col-md-12">
+        <div className="col-md-2 pull-left">
+         <span className="badge badge-secondary">
+         {props.page ? 'Page '+props.page : '' } 
+         </span></div>
         <nav aria-label="Page navigation" className="pull-right">
+          
+
           <ul className="pagination">
             {displayLinks}
           </ul>
