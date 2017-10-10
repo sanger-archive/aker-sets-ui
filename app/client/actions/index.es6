@@ -4,6 +4,9 @@ import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 
+export const SET_SERVICE_API = 'sets_service/api/v1'
+export const STAMPS_SERVICE_API = 'stamps_service/api/v1'
+
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
   return {
@@ -152,7 +155,7 @@ export const appendMaterialsToSet = function(materials, set) {
   return function(dispatch) {
     return $.ajax({
       method: 'POST',
-      url: encodeURI(`sets_service/sets/${set.id}/relationships/materials`),
+      url: encodeURI(`${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
       accept: 'application/vnd.api+json',
       contentType: 'application/vnd.api+json',
       data: JSON.stringify(
@@ -180,7 +183,7 @@ export const deleteMaterialFromSet = function(material, set) {
   return function(dispatch) {
     return $.ajax({
       method: 'DELETE',
-      url: encodeURI(`sets_service/sets/${set.id}/relationships/materials`),
+      url: encodeURI(`${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
       accept: 'application/vnd.api+json',
       contentType: 'application/vnd.api+json',
       data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
@@ -231,7 +234,7 @@ export const fetchAllStamps = () => {
 
     return $.ajax({
       method: 'GET',
-      url: "/stamps_service/stamps",
+      url: `/${STAMPS_SERVICE_API}/stamps`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json"
     }).then((response) => {
@@ -444,7 +447,7 @@ export const PERFORM_SET_FILTER_SEARCH = "PERFORM_SET_FILTER_SEARCH"
 export const performSetFilterSearch = (filter) => {
   return (dispatch, getState) => {
     const setQuery = `filter[name]=${filter.value}`
-    const url = `/sets_service/sets?include=materials&${setQuery}`
+    const url = `/${SETS_SERVICE_API}/sets?include=materials&${setQuery}`
 
     return $.ajax({
       method: 'GET',
@@ -477,7 +480,7 @@ export const performStampFilterSearch = (filter) => {
   return (dispatch, getState) => {
     let permissionType = filter.name.replace(/Permission/,'');
     const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
-    const url = `/stamps_service/materials?${stampQuery}`;
+    const url = `/${STAMPS_SERVICE_API}/materials?${stampQuery}`;
 
     return $.ajax({
       method: 'GET',
@@ -540,7 +543,7 @@ export const createSetOnly = (setName) => {
     const body = Object.assign({}, data);
     return $.ajax({
       method: 'POST',
-      url: "/sets_service/sets",
+      url: `/${SETS_SERVICE_API}/sets`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       data: JSON.stringify(body),
@@ -570,7 +573,7 @@ export const getAllSets = () => {
     const userEmail = getState().userEmail;
     return $.ajax({
       method: 'GET',
-      url: `/sets_service/sets/?filter[owner_id]=${userEmail}`,
+      url: `/${SETS_SERVICE_API}/sets/?filter[owner_id]=${userEmail}`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       jsonp: false
@@ -691,7 +694,7 @@ export const addMaterialsToSet = (items, setId) => {
     const body = Object.assign({}, {data: uuids});
     return $.ajax({
       method: 'POST',
-      url: `/sets_service/sets/${setId}/relationships/materials`,
+      url: `/${SETS_SERVICE_API}/sets/${setId}/relationships/materials`,
       accept: "application/vnd.api+json",
       contentType: "application/vnd.api+json",
       data: JSON.stringify(body)
@@ -709,7 +712,7 @@ export const removeMaterialsFromSet = (items, setId) => {
     const body = Object.assign({}, {data: uuids});
     return $.ajax({
       method: 'DELETE',
-      url: `/sets_service/sets/${setId}/relationships/materials`,
+      url: `/${SETS_SERVICE_API}/sets/${setId}/relationships/materials`,
       contentType: "application/vnd.api+json",
       processData: false,
       data: JSON.stringify(body)
@@ -742,7 +745,7 @@ const _apply_generation = (nameOperation) => {
         let uuids = items.map((item)=>{ return item._id });
         return $.ajax({
           method: 'POST',
-          url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
+          url: `/${STAMPS_SERVICE_API}/stamps/${stampId}/${nameOperation}`,
           accept: "application/vnd.api+json",
           contentType: "application/vnd.api+json",
           data: JSON.stringify({data: {materials: uuids}}),
