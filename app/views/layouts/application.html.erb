@@ -28,8 +28,8 @@
         <div class="collapse navbar-collapse" id="navBar">
           <ul class="nav navbar-nav">
             <% puts params %>
-            <li><%= link_to 'Simple', root_url, id: ('current_page' if params[:action] == 'index') %></li>
-            <li><%= link_to 'Advanced', search_url, id: ('current_page' if params[:action] == 'search') %></li>
+            <li><%= link_to 'Simple', root_path, id: ('current_page' if params[:action] == 'index') %></li>
+            <li><%= link_to 'Advanced', search_path, id: ('current_page' if params[:action] == 'search') %></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><p class="navbar-text">Logged in as <%= current_user.email.split('@')[0] %></p></li>
