@@ -4,7 +4,7 @@ import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 
-export const SET_SERVICE_API = 'sets_service/api/v1'
+export const SETS_SERVICE_API = 'sets_service/api/v1'
 export const STAMPS_SERVICE_API = 'stamps_service/api/v1'
 
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
