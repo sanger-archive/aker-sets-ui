@@ -9,7 +9,7 @@ import App from './layouts/set_shaper.es6';
 
 import { selectEntity, storeItems, fetchSetAndMaterials, setUserEmail } from './actions';
 import { readEndpoint } from 'redux-json-api';
-import { getSelectedTop, getSelectedBottom, getUserSets } from './selectors';
+import { getSelectedTop, getSelectedBottom, getSelectedTopPage, getSelectedBottomPage, getUserSets } from './selectors';
 import store from './store.es6';
 
 // Don't want to cache any of our requests
@@ -21,11 +21,21 @@ store.dispatch(readEndpoint('sets'));
 store.dispatch(setUserEmail(Aker.userEmail));
 
 setInterval(() => {
-  let selected = store.getState().selected;
+  let state = store.getState();
+  let selected = state.selected;
 
+  /*
   for (let position in selected) {
-    if (selected[position]) store.dispatch(fetchSetAndMaterials(selected[position]));
+    if (selected[position]) store.dispatch(fetchFirstPageSetAndMaterials(selected[position]));
+  }*/
+  if (selected['top']) {
+    store.dispatch(fetchSetAndMaterials(selected['top'], getSelectedTopPage(state), 25));
   }
+  if (selected['bottom']) {
+    store.dispatch(fetchSetAndMaterials(selected['bottom'], getSelectedBottomPage(state), 25));
+  }
+
+  
 }, 10000)
 
 const mapStateToProps = (state) => {

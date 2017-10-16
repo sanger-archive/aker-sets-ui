@@ -39,14 +39,13 @@ describe('<BiomaterialTable />', () => {
   context('when rendering the table', () => {
     it('renders a row for each material', () => {
       const biomaterials = [{id: 1, gender: 'unknown'}, {id: 2, gender: 'unknown'}];
-      let wrapper = shallow(<BiomaterialTable biomaterials={biomaterials} materials={[]} />)
+      let wrapper = shallow(<BiomaterialTable biomaterials={biomaterials} />)
       expect(wrapper.find('BiomaterialTableRow')).to.have.length(biomaterials.length);
     });
     context('when providing a hash of materials information', () => {
-      it('gives priority of using the information from the materials information hash', () => {
-        const biomaterials = [{id: 1, gender: 'unknown'}, {id: 2, gender: 'unknown'}, {id: 3, gender: 'unknown'}];
-        const materials = {1: {gender: 'female'}, 2: {gender: 'male'}};
-        let wrapper = shallow(<BiomaterialTable biomaterials={biomaterials} materials={materials} />)
+      it('displays the materials information provided', () => {
+        const biomaterials = [{id: 1, gender: 'female'}, {id: 2, gender: 'male'}, {id: 3, gender: 'unknown'}];
+        let wrapper = shallow(<BiomaterialTable biomaterials={biomaterials} />)
         expect(wrapper.find('BiomaterialTableRow').at(0).props().biomaterial.gender).to.equal('female');
         expect(wrapper.find('BiomaterialTableRow').at(1).props().biomaterial.gender).to.equal('male');
         expect(wrapper.find('BiomaterialTableRow').at(2).props().biomaterial.gender).to.equal('unknown');

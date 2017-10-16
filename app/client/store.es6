@@ -50,7 +50,7 @@ let initialState = {
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
-store.dispatch(setEndpointHost('/sets_service'));
+store.dispatch(setEndpointHost('/sets_service/api/v1'));
 store.dispatch(setEndpointPath(''));
 store.dispatch(setHeaders({
   'Content-Type': 'application/vnd.api+json',

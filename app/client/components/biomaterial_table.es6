@@ -59,12 +59,11 @@ export const BiomaterialTable = React.createClass({
 
   render() {
     const { decorators, biomaterials, materials, ...rest } = this.props;
-
     const tableClass = classNames({
       table: true,
       'table-striped': true
     });
-
+    const instances = Object.values(biomaterials || {});
     return (
       <table className={tableClass}>
         <thead>
@@ -77,13 +76,14 @@ export const BiomaterialTable = React.createClass({
           </tr>
         </thead>
           <tbody>
-            { biomaterials.map((biomaterial, index) => {
-              if (biomaterial.id in materials) {
-                biomaterial = materials[biomaterial.id]
-              }
-
-              return <decorators.row key={index} index={index} biomaterial={biomaterial} {...rest} />;
-            })}
+            { 
+              instances.map((biomaterial, index) => {
+                //if (biomaterial.id in Object.values(instances)) {
+                  //biomaterial = materials[biomaterial.id]
+                  return <decorators.row key={index} index={index} biomaterial={biomaterial} {...rest} />;
+                //}
+              })
+            }
           </tbody>
       </table>
     )

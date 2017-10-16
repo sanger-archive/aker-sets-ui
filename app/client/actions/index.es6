@@ -4,6 +4,9 @@ import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 
+export const SETS_SERVICE_API = 'sets_service/api/v1'
+export const STAMPS_SERVICE_API = 'stamps_service/api/v1'
+
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
   return {
@@ -69,47 +72,131 @@ export const shiftSelectItems = (key) => {
 }
 
 export const RECEIVE_MATERIALS = "RECEIVE_MATERIALS";
-export const receiveMaterials = (materials) => {
+export const receiveMaterials = (materials, links, setId, page, url) => {
   return {
     type: RECEIVE_MATERIALS,
-    materials
+    materials,
+    links,
+    setId,
+    page,
+    url
   }
 }
 
-const BATCH_SIZE = 25;
 export const FETCH_MATERIALS = "FETCH_MATERIALS";
-export const fetchMaterials = (materials) => {
-  return function(dispatch) {
+export const fetchMaterials = (json, setId, numPage, pageUrl) => {
+  const materials = json.data;
+  const links = json.links;
+  return function(dispatch, getState) {
     if (!materials) return false;
-
-    // We need to fetch materials in batches, otherwise the url params get too long
-    if (materials.length > BATCH_SIZE) {
-      dispatch(fetchMaterials(materials.splice(BATCH_SIZE)))
-    }
-
     const ids = materials.map((material) => material.id);
+    const url = "/materials_service/materials/search";
 
-    const params = encodeURIComponent(`{"_id" : { "$in": ["${ids.join('","')}"] } }`);
-    const url    = `/materials_service/materials?where=${params}`;
-
-    $.ajax({
-      url,
-      contentType: "application/json",
+    return $.ajax({
+      method: 'POST',
+      url: url,
+      contentType: "application/json; charset=utf-8",
       accept: "application/json",
-      jsonp: false })
-      .then(function(response) {
-        dispatch(receiveMaterials(response._items))
-      }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
+      data: JSON.stringify({
+        where:  {"_id" : { "$in": ids } },
+        /*max_results: BATCH_SIZE,
+        page: 1*/
+      }),
+      cache: false
+    }).then((response) => {
+      return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) }, 
+    (error) => {
+      return dispatch(handleMaterialsServiceErrors(error))
+    });
   }
+}
+
+
+/*export const FETCH_MATERIALS_FOR_SET = "FETCH_MATERIALS_FOR_SET";
+export const fetchMaterialsForSet = function(setId, page, count) {
+  return function(dispatch) {
+    return dispatch(fetchTokenIfNeeded())
+      .then(() => { return dispatch(readEndpoint(`sets/${setId}/materials?page[number]=1&page[size]=20`)) });
+  }
+}*/
+
+const urlForMaterialsFromSet = function(setId, pageNumber, pageSize) {
+  return encodeURI(`sets/${setId}/materials?page[number]=${pageNumber}&page[size]=${pageSize}`);  
+}
+
+export const FETCH_MATERIALS_FROM_SET_BY_URL = "FETCH_MATERIALS_FROM_SET_BY_URL";
+export const fetchMaterialsFromSetByUrl = function(url) {
+  const setId = url.match(/sets\/([^/]*)/)[1]
+  const pageNumber = url.match(new RegExp(encodeURI("page[number]") + "=(\\d*)"))[1]
+  const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d*)"))[1]
+
+  return function(dispatch) {
+    return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)))
+    .then((json) => { return dispatch(fetchMaterials(json, setId, pageNumber, url)) });
+  };
 }
 
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
-export const fetchSetAndMaterials = function(setId) {
+export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
   return function(dispatch) {
-    dispatch(readEndpoint(`sets/${setId}?include=materials`))
-      .then((json) => { return dispatch(fetchMaterials(json.included)) });
+    return dispatch(fetchMaterialsFromSetByUrl(urlForMaterialsFromSet(setId, pageNumber, sizeNumber)));
   }
 }
+
+export const FETCH_FIRST_PAGE_SET_AND_MATERIALS = "FETCH_FIRST_PAGE_SET_AND_MATERIALS";
+export const fetchFirstPageSetAndMaterials = function(setId) {
+  return function(dispatch) {
+    return dispatch(fetchSetAndMaterials(setId, 1, 25));
+  }
+}
+
+export const APPEND_MATERIALS_TO_SET = "APPEND_MATERIALS_TO_SET";
+export const appendMaterialsToSet = function(materials, set) {
+  return function(dispatch) {
+    return $.ajax({
+      method: 'POST',
+      url: encodeURI(`${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
+      accept: 'application/vnd.api+json',
+      contentType: 'application/vnd.api+json',
+      data: JSON.stringify(
+        {
+          data: materials.map(
+            (material) => {
+              return { id: material.id, type: 'materials'};
+            }
+          )
+        }
+      )
+    }
+    ).then(() => {
+      return dispatch(readEndpoint(`sets/${set.id}`))
+    }, (error) => {
+      if (error.status == 403) {
+        return dispatch(userMessage('You do not have permission to append materials to this set', 'danger'));
+      }
+    });
+  }
+}
+
+export const DELETE_MATERIAL_FROM_SET = "DELETE_MATERIAL_FROM_SET";
+export const deleteMaterialFromSet = function(material, set) {
+  return function(dispatch) {
+    return $.ajax({
+      method: 'DELETE',
+      url: encodeURI(`${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
+      accept: 'application/vnd.api+json',
+      contentType: 'application/vnd.api+json',
+      data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
+    }).then(() => {dispatch(readEndpoint(`sets/${set.id}`))});
+  }
+}
+/*  return function(dispatch) {
+    dispatch(fetchTokenIfNeeded())
+      .then(() => { return dispatch(fetchMaterialsForSet(setId, 1, 25)); })
+      //.then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)); })
+      .then((json) => { return dispatch(fetchMaterials(json, setId)) });
+  }
+}*/
 
 export const FETCH_MATERIAL_SCHEMA = "FETCH_MATERIAL_SCHEMA";
 export const fetchMaterialSchema = () => {
@@ -147,7 +234,7 @@ export const fetchAllStamps = () => {
 
     return $.ajax({
       method: 'GET',
-      url: "/stamps_service/stamps",
+      url: `/${STAMPS_SERVICE_API}/stamps`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json"
     }).then((response) => {
@@ -360,7 +447,7 @@ export const PERFORM_SET_FILTER_SEARCH = "PERFORM_SET_FILTER_SEARCH"
 export const performSetFilterSearch = (filter) => {
   return (dispatch, getState) => {
     const setQuery = `filter[name]=${filter.value}`
-    const url = `/sets_service/sets?include=materials&${setQuery}`
+    const url = `/${SETS_SERVICE_API}/sets?include=materials&${setQuery}`
 
     return $.ajax({
       method: 'GET',
@@ -393,7 +480,7 @@ export const performStampFilterSearch = (filter) => {
   return (dispatch, getState) => {
     let permissionType = filter.name.replace(/Permission/,'');
     const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
-    const url = `/stamps_service/materials?${stampQuery}`;
+    const url = `/${STAMPS_SERVICE_API}/materials?${stampQuery}`;
 
     return $.ajax({
       method: 'GET',
@@ -456,7 +543,7 @@ export const createSetOnly = (setName) => {
     const body = Object.assign({}, data);
     return $.ajax({
       method: 'POST',
-      url: "/sets_service/sets",
+      url: `/${SETS_SERVICE_API}/sets`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       data: JSON.stringify(body),
@@ -486,7 +573,7 @@ export const getAllSets = () => {
     const userEmail = getState().userEmail;
     return $.ajax({
       method: 'GET',
-      url: `/sets_service/sets/?filter[owner_id]=${userEmail}`,
+      url: `/${SETS_SERVICE_API}/sets/?filter[owner_id]=${userEmail}`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       jsonp: false
@@ -607,7 +694,7 @@ export const addMaterialsToSet = (items, setId) => {
     const body = Object.assign({}, {data: uuids});
     return $.ajax({
       method: 'POST',
-      url: `/sets_service/sets/${setId}/relationships/materials`,
+      url: `/${SETS_SERVICE_API}/sets/${setId}/relationships/materials`,
       accept: "application/vnd.api+json",
       contentType: "application/vnd.api+json",
       data: JSON.stringify(body)
@@ -625,7 +712,7 @@ export const removeMaterialsFromSet = (items, setId) => {
     const body = Object.assign({}, {data: uuids});
     return $.ajax({
       method: 'DELETE',
-      url: `/sets_service/sets/${setId}/relationships/materials`,
+      url: `/${SETS_SERVICE_API}/sets/${setId}/relationships/materials`,
       contentType: "application/vnd.api+json",
       processData: false,
       data: JSON.stringify(body)
@@ -658,7 +745,7 @@ const _apply_generation = (nameOperation) => {
         let uuids = items.map((item)=>{ return item._id });
         return $.ajax({
           method: 'POST',
-          url: `/stamps_service/stamps/${stampId}/${nameOperation}`,
+          url: `/${STAMPS_SERVICE_API}/stamps/${stampId}/${nameOperation}`,
           accept: "application/vnd.api+json",
           contentType: "application/vnd.api+json",
           data: JSON.stringify({data: {materials: uuids}}),
