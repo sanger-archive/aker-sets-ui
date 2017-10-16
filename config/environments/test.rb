@@ -47,8 +47,8 @@ Rails.application.configure do
   config.fake_ldap=true
 
   config.materials_root = 'http://materials.root'
-  config.studies_root = 'http://studies.root/api/v1'
   config.sets_root = 'http://sets.root/api/v1'
+  config.stamps_root = 'http://stamps.root/api/v1'
 
   config.jwt_secret_key = 'test'
   config.jwt_exp_time = 2 * 60

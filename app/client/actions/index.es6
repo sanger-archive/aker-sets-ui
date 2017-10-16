@@ -4,8 +4,8 @@ import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 
-export const SETS_SERVICE_API = 'sets_service/api/v1'
-export const STAMPS_SERVICE_API = 'stamps_service/api/v1'
+export const SETS_SERVICE_API = 'sets_service'
+export const STAMPS_SERVICE_API = 'stamps_service'
 
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
@@ -172,7 +172,7 @@ export const appendMaterialsToSet = function(materials, set) {
       return dispatch(readEndpoint(`sets/${set.id}`))
     }, (error) => {
       if (error.status == 403) {
-        return dispatch(userMessage('You do not have permission to append materials to this set', 'danger'));
+        return dispatch(userMessage('You do not have permission to add materials to this set', 'danger'));
       }
     });
   }
@@ -757,7 +757,7 @@ const _apply_generation = (nameOperation) => {
         return dispatch(userMessage(message, 'info'));
       }, (error)=> {
         if (error.status === 403) {
-          return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+          return dispatch(userMessage('You cannot alter permissions on materials that you do not own', 'danger'));
         } else {
           return dispatch(handleStampsServiceErrors(error));
         }
