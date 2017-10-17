@@ -42381,8 +42381,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.unapplyStamp = exports.UNAPPLY_STAMP = exports.applyStamp = exports.APPLY_STAMP = exports.selectStamp = exports.SELECT_STAMP = exports.removeMaterialsFromSet = undefined;
-	exports.REMOVE_MATERIALS_FROM_SET = exports.addMaterialsToSet = exports.ADD_MATERIALS_TO_SET = exports.removeMaterialsFromSetFromSearch = exports.REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = exports.addMaterialsToSetFromSearch = exports.ADD_MATERIALS_TO_SET_FROM_SEARCH = exports.createSetFromSearch = exports.CREATE_SET_FROM_SEARCH = exports.bySearchPage = exports.BY_SEARCH_PAGE = exports.receiveAllSets = exports.RECEIVE_ALL_SETS = exports.getAllSets = exports.GET_ALL_SETS = exports.receiveSet = exports.RECEIVE_SET = exports.createSetOnly = exports.CREATE_SET_ONLY = exports.createNewSet = exports.CREATE_NEW_SET = exports.receiveStampsFromFilter = exports.RECEIVE_STAMPS_FROM_FILTER = exports.receiveSetsFromFilter = exports.RECEIVE_SETS_FROM_FILTER = exports.performStampFilterSearch = exports.PERFORM_STAMP_FILTER_SEARCH = exports.performSetFilterSearch = exports.PERFORM_SET_FILTER_SEARCH = exports.receiveSearchResults = exports.RECEIVE_SEARCH_RESULTS = exports.performSearch = exports.PERFORM_SEARCH = exports.paginateTo = exports.PAGINATE_TO = exports.performSearchWithUrl = exports.PERFORM_SEARCH_WITH_URL = exports.fetchPageForSearch = exports.FETCH_PAGE_FOR_SEARCH = exports.performSearchToPage = exports.PERFORM_SEARCH_TO_PAGE = exports.fetchStampsIfNeeded = exports.FETCH_STAMPS_IF_NEEDED = exports.fetchSetMaterialsIfNeeded = exports.FETCH_SET_MATERIALS_IF_NEEDED = exports.setCurrentSearch = exports.SET_CURRENT_SEARCH = exports.addFilter = exports.ADD_FILTER = exports.removeFilter = exports.REMOVE_FILTER = exports.updateFilterValue = exports.UPDATE_FILTER_VALUE = exports.updateFilterComparator = exports.UPDATE_FILTER_COMPARATOR = exports.updateFilterName = exports.UPDATE_FILTER_NAME = exports.receiveAllStamps = exports.RECEIVE_EMPTY_STAMPS = exports.RECEIVE_EMPTY_RESULTS = exports.RECEIVE_ALL_STAMPS = exports.fetchAllStamps = exports.FETCH_ALL_STAMPS = exports.STAMPS_INITIALIZATION = exports.userMessage = exports.USER_MESSAGE = exports.receiveMaterialSchema = exports.RECEIVE_MATERIAL_SCHEMA = exports.fetchMaterialSchema = exports.FETCH_MATERIAL_SCHEMA = exports.deleteMaterialFromSet = exports.DELETE_MATERIAL_FROM_SET = exports.appendMaterialsToSet = exports.APPEND_MATERIALS_TO_SET = exports.fetchFirstPageSetAndMaterials = exports.FETCH_FIRST_PAGE_SET_AND_MATERIALS = exports.fetchSetAndMaterials = exports.FETCH_SET_AND_MATERIALS = exports.fetchMaterialsFromSetByUrl = exports.FETCH_MATERIALS_FROM_SET_BY_URL = exports.fetchMaterials = exports.FETCH_MATERIALS = exports.receiveMaterials = exports.RECEIVE_MATERIALS = exports.shiftSelectItems = exports.SHIFT_SELECT_ITEMS = exports.toggleItem = exports.TOGGLE_ITEM = exports.clearSelection = exports.CLEAR_SELECTION = exports.selectItem = exports.SELECT_ITEM = exports.storeItems = exports.STORE_ITEMS = exports.selectEntity = exports.SELECT_ENTITY = exports.select = exports.SELECT = exports.setUserEmail = exports.SET_USER_EMAIL = undefined;
+	exports.unapplyStamp = exports.UNAPPLY_STAMP = exports.applyStamp = exports.APPLY_STAMP = exports.selectStamp = exports.SELECT_STAMP = exports.removeMaterialsFromSet = exports.REMOVE_MATERIALS_FROM_SET = exports.addMaterialsToSet = undefined;
+	exports.ADD_MATERIALS_TO_SET = exports.removeMaterialsFromSetFromSearch = exports.REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = exports.addMaterialsToSetFromSearch = exports.ADD_MATERIALS_TO_SET_FROM_SEARCH = exports.createSetFromSearch = exports.CREATE_SET_FROM_SEARCH = exports.bySearchPage = exports.BY_SEARCH_PAGE = exports.receiveAllSets = exports.RECEIVE_ALL_SETS = exports.getAllSets = exports.GET_ALL_SETS = exports.receiveSet = exports.RECEIVE_SET = exports.createSetOnly = exports.CREATE_SET_ONLY = exports.createNewSet = exports.CREATE_NEW_SET = exports.receiveStampsFromFilter = exports.RECEIVE_STAMPS_FROM_FILTER = exports.receiveSetsFromFilter = exports.RECEIVE_SETS_FROM_FILTER = exports.performStampFilterSearch = exports.PERFORM_STAMP_FILTER_SEARCH = exports.performSetFilterSearch = exports.PERFORM_SET_FILTER_SEARCH = exports.receiveSearchResults = exports.RECEIVE_SEARCH_RESULTS = exports.performSearch = exports.PERFORM_SEARCH = exports.paginateTo = exports.PAGINATE_TO = exports.performSearchWithUrl = exports.PERFORM_SEARCH_WITH_URL = exports.fetchPageForSearch = exports.FETCH_PAGE_FOR_SEARCH = exports.performSearchToPage = exports.PERFORM_SEARCH_TO_PAGE = exports.fetchStampsIfNeeded = exports.FETCH_STAMPS_IF_NEEDED = exports.fetchSetMaterialsIfNeeded = exports.FETCH_SET_MATERIALS_IF_NEEDED = exports.setCurrentSearch = exports.SET_CURRENT_SEARCH = exports.addFilter = exports.ADD_FILTER = exports.removeFilter = exports.REMOVE_FILTER = exports.updateFilterValue = exports.UPDATE_FILTER_VALUE = exports.updateFilterComparator = exports.UPDATE_FILTER_COMPARATOR = exports.updateFilterName = exports.UPDATE_FILTER_NAME = exports.receiveAllStamps = exports.RECEIVE_EMPTY_STAMPS = exports.RECEIVE_EMPTY_RESULTS = exports.RECEIVE_ALL_STAMPS = exports.fetchAllStamps = exports.FETCH_ALL_STAMPS = exports.STAMPS_INITIALIZATION = exports.userMessage = exports.USER_MESSAGE = exports.receiveMaterialSchema = exports.RECEIVE_MATERIAL_SCHEMA = exports.fetchMaterialSchema = exports.FETCH_MATERIAL_SCHEMA = exports.deleteMaterialFromSet = exports.DELETE_MATERIAL_FROM_SET = exports.appendMaterialsToSet = exports.APPEND_MATERIALS_TO_SET = exports.fetchFirstPageSetAndMaterials = exports.FETCH_FIRST_PAGE_SET_AND_MATERIALS = exports.fetchSetAndMaterials = exports.FETCH_SET_AND_MATERIALS = exports.fetchMaterialsFromSetByUrl = exports.FETCH_MATERIALS_FROM_SET_BY_URL = exports.fetchMaterials = exports.FETCH_MATERIALS = exports.receiveMaterials = exports.RECEIVE_MATERIALS = exports.shiftSelectItems = exports.SHIFT_SELECT_ITEMS = exports.toggleItem = exports.TOGGLE_ITEM = exports.clearSelection = exports.CLEAR_SELECTION = exports.selectItem = exports.SELECT_ITEM = exports.storeItems = exports.STORE_ITEMS = exports.selectEntity = exports.SELECT_ENTITY = exports.select = exports.SELECT = exports.setUserEmail = exports.SET_USER_EMAIL = exports.STAMPS_SERVICE_API = exports.SETS_SERVICE_API = undefined;
 
 	var _jwtDecode = __webpack_require__(516);
 
@@ -42399,6 +42399,9 @@
 	var _loading = __webpack_require__(650);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SETS_SERVICE_API = exports.SETS_SERVICE_API = 'sets_service';
+	var STAMPS_SERVICE_API = exports.STAMPS_SERVICE_API = 'stamps_service';
 
 	var SET_USER_EMAIL = exports.SET_USER_EMAIL = 'SET_USER_EMAIL';
 	var setUserEmail = exports.setUserEmail = function setUserEmail(userEmail) {
@@ -42550,7 +42553,7 @@
 	  return function (dispatch) {
 	    return $.ajax({
 	      method: 'POST',
-	      url: encodeURI("sets_service/sets/" + set.id + "/relationships/materials"),
+	      url: encodeURI(SETS_SERVICE_API + "/sets/" + set.id + "/relationships/materials"),
 	      accept: 'application/vnd.api+json',
 	      contentType: 'application/vnd.api+json',
 	      data: JSON.stringify({
@@ -42560,6 +42563,10 @@
 	      })
 	    }).then(function () {
 	      return dispatch((0, _reduxJsonApi.readEndpoint)("sets/" + set.id));
+	    }, function (error) {
+	      if (error.status == 403) {
+	        return dispatch(userMessage('You do not have permission to add materials to this set', 'danger'));
+	      }
 	    });
 	  };
 	};
@@ -42569,7 +42576,7 @@
 	  return function (dispatch) {
 	    return $.ajax({
 	      method: 'DELETE',
-	      url: encodeURI("sets_service/sets/" + set.id + "/relationships/materials"),
+	      url: encodeURI(SETS_SERVICE_API + "/sets/" + set.id + "/relationships/materials"),
 	      accept: 'application/vnd.api+json',
 	      contentType: 'application/vnd.api+json',
 	      data: JSON.stringify({ data: [{ id: material.id, type: 'materials' }] })
@@ -42622,7 +42629,7 @@
 
 	    return $.ajax({
 	      method: 'GET',
-	      url: "/stamps_service/stamps",
+	      url: "/" + STAMPS_SERVICE_API + "/stamps",
 	      contentType: "application/vnd.api+json",
 	      accept: "application/vnd.api+json"
 	    }).then(function (response) {
@@ -42833,7 +42840,7 @@
 	var performSetFilterSearch = exports.performSetFilterSearch = function performSetFilterSearch(filter) {
 	  return function (dispatch, getState) {
 	    var setQuery = "filter[name]=" + filter.value;
-	    var url = "/sets_service/sets?include=materials&" + setQuery;
+	    var url = "/" + SETS_SERVICE_API + "/sets?include=materials&" + setQuery;
 
 	    return $.ajax({
 	      method: 'GET',
@@ -42867,7 +42874,7 @@
 	  return function (dispatch, getState) {
 	    var permissionType = filter.name.replace(/Permission/, '');
 	    var stampQuery = "filter[permitted]=" + filter.value + "&filter[permission_type]=" + permissionType;
-	    var url = "/stamps_service/materials?" + stampQuery;
+	    var url = "/" + STAMPS_SERVICE_API + "/materials?" + stampQuery;
 
 	    return $.ajax({
 	      method: 'GET',
@@ -42929,7 +42936,7 @@
 	    var body = Object.assign({}, data);
 	    return $.ajax({
 	      method: 'POST',
-	      url: "/sets_service/sets",
+	      url: "/" + SETS_SERVICE_API + "/sets",
 	      contentType: "application/vnd.api+json",
 	      accept: "application/vnd.api+json",
 	      data: JSON.stringify(body),
@@ -42958,7 +42965,7 @@
 	    var userEmail = getState().userEmail;
 	    return $.ajax({
 	      method: 'GET',
-	      url: "/sets_service/sets/?filter[owner_id]=" + userEmail,
+	      url: "/" + SETS_SERVICE_API + "/sets/?filter[owner_id]=" + userEmail,
 	      contentType: "application/vnd.api+json",
 	      accept: "application/vnd.api+json",
 	      jsonp: false
@@ -43070,7 +43077,7 @@
 	    var body = Object.assign({}, { data: uuids });
 	    return $.ajax({
 	      method: 'POST',
-	      url: "/sets_service/sets/" + setId + "/relationships/materials",
+	      url: "/" + SETS_SERVICE_API + "/sets/" + setId + "/relationships/materials",
 	      accept: "application/vnd.api+json",
 	      contentType: "application/vnd.api+json",
 	      data: JSON.stringify(body)
@@ -43090,7 +43097,7 @@
 	    var body = Object.assign({}, { data: uuids });
 	    return $.ajax({
 	      method: 'DELETE',
-	      url: "/sets_service/sets/" + setId + "/relationships/materials",
+	      url: "/" + SETS_SERVICE_API + "/sets/" + setId + "/relationships/materials",
 	      contentType: "application/vnd.api+json",
 	      processData: false,
 	      data: JSON.stringify(body)
@@ -43125,7 +43132,7 @@
 	        });
 	        return $.ajax({
 	          method: 'POST',
-	          url: "/stamps_service/stamps/" + stampId + "/" + nameOperation,
+	          url: "/" + STAMPS_SERVICE_API + "/stamps/" + stampId + "/" + nameOperation,
 	          accept: "application/vnd.api+json",
 	          contentType: "application/vnd.api+json",
 	          data: JSON.stringify({ data: { materials: uuids } }),
@@ -43136,7 +43143,7 @@
 	        return dispatch(userMessage(message, 'info'));
 	      }, function (error) {
 	        if (error.status === 403) {
-	          return dispatch(userMessage('You cannot stamp/unstamp permissions on all result materials that you do not own', 'danger'));
+	          return dispatch(userMessage('You cannot alter permissions on materials that you do not own', 'danger'));
 	        } else {
 	          return dispatch((0, _service_errors.handleStampsServiceErrors)(error));
 	        }
@@ -49645,7 +49652,7 @@
 	    key: 'handleClickCreateNewSet',
 	    value: function handleClickCreateNewSet(event) {
 	      event.preventDefault();
-	      this.props.createNewSet(this.state.newSetName);
+	      this.props.createNewSet(this.state.newSetName.trim());
 	    }
 	  }, {
 	    key: 'handleChangeAddRemoveMaterialsFromSet',
@@ -50455,6 +50462,7 @@
 	          return filter;
 	        }
 	        filter.value = action.value;
+
 	        return filter;
 	      });
 	      return Object.assign({}, state, { filters: newState });
@@ -50473,6 +50481,9 @@
 	      var filteredFilters = state.filters.reduce(function (memo, filter) {
 	        var value = filter.value.trim();
 
+	        if (filter.type == 'string') {
+	          filter.value = filter.value.trim();
+	        }
 	        if (value.length === 0) {
 	          return memo;
 	        }
@@ -50480,6 +50491,7 @@
 	          var owner = value.toLowerCase();
 	          filter.value = owner + '@sanger.ac.uk';
 	        }
+
 	        memo.push(filter);
 	        return memo;
 	      }, []);
