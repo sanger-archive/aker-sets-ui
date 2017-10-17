@@ -27,7 +27,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navBar">
           <ul class="nav navbar-nav">
-            <% puts params %>
             <li><%= link_to 'Simple', root_path, id: ('current_page' if params[:action] == 'index') %></li>
             <li><%= link_to 'Advanced', search_path, id: ('current_page' if params[:action] == 'search') %></li>
           </ul>
