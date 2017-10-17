@@ -63,7 +63,7 @@ Rails.application.configure do
   config.fake_ldap = true
 
   config.materials_root = 'http://localhost:5000'
-  config.stamps_root = 'http://localhost:7000/api/v1/'
+  config.stamps_root = 'http://localhost:7000/api/v1'
   config.sets_root = 'http://localhost:3000/api/v1'
 
   config.jwt_secret_key = 'development'

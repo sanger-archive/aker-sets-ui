@@ -52,10 +52,14 @@ private
     return nil unless auth_session
     jwt = get_cached_jwt(auth_session)
     return jwt if jwt
-    conn = Faraday.new(url: Rails.configuration.auth_service_url)
-    auth_response = conn.post do |req|
-      req.url '/renew_jwt'
-      req.headers['Cookie'] = "aker_auth_session=#{auth_session}"
+    begin
+      conn = Faraday.new(url: Rails.configuration.auth_service_url)
+      auth_response = conn.post do |req|
+        req.url '/renew_jwt'
+        req.headers['Cookie'] = "aker_auth_session=#{auth_session}"
+      end
+    rescue
+      return nil
     end
     return nil unless auth_response.status==200
     jwt = auth_response.body
