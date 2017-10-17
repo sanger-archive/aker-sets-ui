@@ -122,6 +122,7 @@ const search = (state = {}, action) => {
           return filter;
         }
         filter.value = action.value;
+
         return filter
       });
       return Object.assign({}, state, { filters: newState });
@@ -140,6 +141,9 @@ const search = (state = {}, action) => {
       let filteredFilters = state.filters.reduce((memo, filter)=>{
         const value = filter.value.trim();
 
+        if (filter.type == 'string') {
+          filter.value = filter.value.trim();
+        }        
         if (value.length===0){
           return memo;
         }
@@ -147,6 +151,7 @@ const search = (state = {}, action) => {
           const owner = value.toLowerCase();
           filter.value = `${owner}@sanger.ac.uk`;
         }
+
         memo.push(filter);
         return memo;
       }, []);
