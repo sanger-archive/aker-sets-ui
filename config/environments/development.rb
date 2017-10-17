@@ -71,6 +71,7 @@ Rails.application.configure do
   config.jwt_nbf_time = 1 * 60
 
   config.default_jwt_user = { email: ENV.fetch('USER', 'user')+'@sanger.ac.uk', groups: ['world'] }
+  config.generate_default_jwt = true
 
   config.auth_service_url = 'http://localhost:9010'
   config.login_url = config.auth_service_url+'/login'

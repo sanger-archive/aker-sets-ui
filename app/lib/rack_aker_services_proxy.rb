@@ -48,6 +48,10 @@ private
   # It caches users' jwts and auth session, and will reuse the jwt if
   #  it sees the same auth session within 50 minutes.
   def get_jwt(request)
+    if Rails.configuration.respond_to? :default_jwt_user
+      return @default_jwt ||= make_default_jwt
+    end
+
     auth_session = request.cookies["aker_auth_session"]
     return nil unless auth_session
     jwt = get_cached_jwt(auth_session)
@@ -65,5 +69,14 @@ private
     jwt = auth_response.body
     cache_jwt(auth_session, jwt)
     return jwt
+  end
+
+  def make_default_jwt
+    require 'jwt'
+    user = Rails.configuration.default_jwt_user
+    data = { email: user[:email], groups: user[:groups] }
+    iat = Time.now.to_i
+    payload = { data: data, iat: iat }
+    JWT.encode payload, Rails.application.config.jwt_secret_key, 'HS256'
   end
 end
