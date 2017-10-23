@@ -23,7 +23,7 @@ class ButtonsPanelContainer extends React.Component {
 
   handleClickCreateNewSet(event) {
     event.preventDefault();
-    this.props.createNewSet(this.state.newSetName);
+    this.props.createNewSet(this.state.newSetName.trim());
   }
 
   handleChangeAddRemoveMaterialsFromSet(event) {
