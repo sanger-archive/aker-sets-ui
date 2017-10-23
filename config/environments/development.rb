@@ -78,4 +78,10 @@ Rails.application.configure do
   config.logout_url = config.auth_service_url+'/logout'
 
   config.middleware.insert(0, RackAkerServicesProxy, {ssl_verify_none: true})
+
+  config.urls = { submission: "",
+                  permissions: "",
+                  sets: "",
+                  projects: "",
+                  work_orders: "" }
 end

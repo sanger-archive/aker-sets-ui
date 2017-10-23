@@ -53,4 +53,10 @@ Rails.application.configure do
   config.jwt_secret_key = 'test'
   config.jwt_exp_time = 2 * 60
   config.jwt_nbf_time = 1 * 60
+
+  config.urls = { submission: "",
+                  permissions: "",
+                  sets: "",
+                  projects: "",
+                  work_orders: "" }
 end
