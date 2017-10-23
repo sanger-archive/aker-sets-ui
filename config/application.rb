@@ -42,7 +42,7 @@ module Aker
                       sets: "https://dev.psd.sanger.ac.uk:9001/set-shaper",
                       projects: "https://dev.psd.sanger.ac.uk:9003/study",
                       work_orders: "https://dev.psd.sanger.ac.uk:9004/work-orders" }
-    elsif Rails.env.development?
+    elsif Rails.env.development? || Rails.env.test?
       config.urls = { submission: "",
                       permissions: "",
                       sets: "",
