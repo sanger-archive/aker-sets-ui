@@ -1,13 +1,42 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import {Panel, Heading, Body} from './panel.es6';
 import LockedSelectedSet from '../containers/locked_selected_set.es6';
 import DroppableSelectedSet from '../containers/droppable_selected_set.es6';
 import PaginationContainer from '../containers/pagination_container.es6';
-import { getSelectedTopLinks, getSelectedTopUrl, getSelectedTopPage } from '../selectors/index.es6';
+import { getSelectedTop, getSelectedTopLinks, getSelectedTopUrl, getSelectedTopPage } from '../selectors/index.es6';
+import FontAwesome from '../components/font_awesome.es6';
+import { select, fetchFirstPageSetAndMaterials } from '../actions/index.es6';
 
-const SetPanel = (props) => {
+class SetPanel extends Component {
+
+  componentDidMount() {
+    this.props.dispatch(select(this.props.match.params.set_uuid, 'top'))
+    this.props.dispatch(fetchFirstPageSetAndMaterials(this.props.match.params.set_uuid))
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.set_uuid != prevProps.match.params.set_uuid) {
+      this.props.dispatch(select(this.props.match.params.set_uuid, 'top'))
+      this.props.dispatch(fetchFirstPageSetAndMaterials(this.props.match.params.set_uuid))
+    }
+  }
+
+  render() {
+    return <SetPanelComponent {...this.props} />
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    set: getSelectedTop(state)
+  };
+};
+
+export const SetPanelComponent = (props) => {
   let set = props.set;
-  let title = props.title;
+
   if (!set || !set.id) {
     return (
       <Panel key='set-'>
@@ -15,10 +44,19 @@ const SetPanel = (props) => {
       </Panel>
     );
   }
+
+  let setName = set.attributes.name;
+
+  let icon = <FontAwesome icon="lock" style={{"color": "#e61c1c"}} />;
+
+  if (set.attributes.locked) {
+    setName = <span>{setName} {icon}</span>;
+  }
+
   return (
       <Panel key={`set-${set.id}`}>
-        <Heading title={title}></Heading>
-        
+        <Heading title={setName}></Heading>
+
         <Body style={{height: '334px', overflowY: 'scroll'}}>
           { set.attributes.locked ? <LockedSelectedSet set={set} /> : <DroppableSelectedSet set={set} /> }
         </Body>
@@ -27,4 +65,4 @@ const SetPanel = (props) => {
   );
 };
 
-export default SetPanel;
+export default withRouter(connect(mapStateToProps)(SetPanel));

@@ -24,10 +24,6 @@ setInterval(() => {
   let state = store.getState();
   let selected = state.selected;
 
-  /*
-  for (let position in selected) {
-    if (selected[position]) store.dispatch(fetchFirstPageSetAndMaterials(selected[position]));
-  }*/
   if (selected['top']) {
     store.dispatch(fetchSetAndMaterials(selected['top'], getSelectedTopPage(state), 25));
   }
@@ -35,7 +31,7 @@ setInterval(() => {
     store.dispatch(fetchSetAndMaterials(selected['bottom'], getSelectedBottomPage(state), 25));
   }
 
-  
+
 }, 10000)
 
 const mapStateToProps = (state) => {
