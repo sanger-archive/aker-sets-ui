@@ -104,24 +104,15 @@ export const fetchMaterials = (json, setId, numPage, pageUrl) => {
       }),
       cache: false
     }).then((response) => {
-      return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) }, 
+      return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) },
     (error) => {
       return dispatch(handleMaterialsServiceErrors(error))
     });
   }
 }
 
-
-/*export const FETCH_MATERIALS_FOR_SET = "FETCH_MATERIALS_FOR_SET";
-export const fetchMaterialsForSet = function(setId, page, count) {
-  return function(dispatch) {
-    return dispatch(fetchTokenIfNeeded())
-      .then(() => { return dispatch(readEndpoint(`sets/${setId}/materials?page[number]=1&page[size]=20`)) });
-  }
-}*/
-
 const urlForMaterialsFromSet = function(setId, pageNumber, pageSize) {
-  return encodeURI(`sets/${setId}/materials?page[number]=${pageNumber}&page[size]=${pageSize}`);  
+  return encodeURI(`/sets/${setId}/materials?page[number]=${pageNumber}&page[size]=${pageSize}`);
 }
 
 export const FETCH_MATERIALS_FROM_SET_BY_URL = "FETCH_MATERIALS_FROM_SET_BY_URL";
@@ -155,7 +146,7 @@ export const appendMaterialsToSet = function(materials, set) {
   return function(dispatch) {
     return $.ajax({
       method: 'POST',
-      url: encodeURI(`${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
+      url: encodeURI(`/${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
       accept: 'application/vnd.api+json',
       contentType: 'application/vnd.api+json',
       data: JSON.stringify(
@@ -183,20 +174,13 @@ export const deleteMaterialFromSet = function(material, set) {
   return function(dispatch) {
     return $.ajax({
       method: 'DELETE',
-      url: encodeURI(`${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
+      url: encodeURI(`/${SETS_SERVICE_API}/sets/${set.id}/relationships/materials`),
       accept: 'application/vnd.api+json',
       contentType: 'application/vnd.api+json',
       data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
     }).then(() => {dispatch(readEndpoint(`sets/${set.id}`))});
   }
 }
-/*  return function(dispatch) {
-    dispatch(fetchTokenIfNeeded())
-      .then(() => { return dispatch(fetchMaterialsForSet(setId, 1, 25)); })
-      //.then(() => { return dispatch(readEndpoint(`sets/${setId}?include=materials`)); })
-      .then((json) => { return dispatch(fetchMaterials(json, setId)) });
-  }
-}*/
 
 export const FETCH_MATERIAL_SCHEMA = "FETCH_MATERIAL_SCHEMA";
 export const fetchMaterialSchema = () => {
