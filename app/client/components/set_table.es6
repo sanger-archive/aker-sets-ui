@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import FontAwesome from './font_awesome.es6';
 
-const SetTable = ({ sets, selected_set, onSetClick, hideOwner }) => {
+const SetTable = ({ sets, selected_set, onSetClick, hideOwner, addLink }) => {
   return (
     <table className="table table-striped table-hover">
       <thead>
@@ -15,7 +16,7 @@ const SetTable = ({ sets, selected_set, onSetClick, hideOwner }) => {
       </thead>
       <tbody>
         { sets.map((set, index) => {
-          return <SetRow set={set} selected={(set.id == selected_set)} onClick={onSetClick} key={index} hideOwner={hideOwner} />;
+          return <SetRow set={set} selected={(set.id == selected_set)} onClick={onSetClick} key={index} hideOwner={hideOwner} addLink={addLink} />;
         })}
       </tbody>
     </table>
@@ -23,12 +24,13 @@ const SetTable = ({ sets, selected_set, onSetClick, hideOwner }) => {
 };
 
 SetTable.defaultProps = {
-  selected_set: undefined
+  selected_set: undefined,
+  addLink: false
 }
 
 export default SetTable;
 
-const SetRow = ({ set, selected, onClick, hideOwner }) => {
+const SetRow = ({ set, selected, onClick, hideOwner, addLink }) => {
   const trClass = classNames({
     info: selected
   })
@@ -42,9 +44,16 @@ const SetRow = ({ set, selected, onClick, hideOwner }) => {
     }
   }
 
+  let setNameLink = set.attributes.name;
+  if (addLink) {
+    setNameLink = <Link to={ `/sets/${set.id}` }>{ setNameLink }</Link>
+  } else {
+    setNameLink = <a href='#' onClick={ (e) => { e.preventDefault(); onClick(set.id) }}>{ setNameLink }</a>
+  }
+
   return (
-    <tr className={ trClass } style={{cursor: 'pointer'}} onClick={ () => onClick(set.id) }>
-      <td>{ set.attributes.name } { set.attributes.locked && <FontAwesome icon="lock" style={{"color": "#e61c1c"}} /> }</td>
+    <tr className={ trClass }>
+      <td>{ setNameLink } { set.attributes.locked && <FontAwesome icon="lock" style={{"color": "#e61c1c"}} /> }</td>
       <td>{ new Date(set.attributes.created_at).toDateString() }</td>
       <td>{ set.meta.size }</td>
       { !hideOwner && ownerCell }
