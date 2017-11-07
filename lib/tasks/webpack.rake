@@ -6,7 +6,7 @@ namespace :webpack do
 
     stats = JSON.parse(output)
 
-    File.open('./public/set-shaper/assets/webpack-asset-manifest.json', 'w') do |f|
+    File.open('./public/assets/webpack-asset-manifest.json', 'w') do |f|
       f.write stats['assetsByChunkName'].to_json
     end
   end

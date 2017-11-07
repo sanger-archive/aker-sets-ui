@@ -5,7 +5,7 @@ const config = require('./webpack.common.js');
 module.exports = Object.assign({}, config, {
 
   output: {
-    path: __dirname + '/public/set-shaper/assets',
+    path: __dirname + '/public/assets',
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[id]-[chunkhash].js',
     publicPath: 'http://localhost:8080/'
