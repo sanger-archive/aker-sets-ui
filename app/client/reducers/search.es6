@@ -147,9 +147,9 @@ const search = (state = {}, action) => {
         if (value.length===0){
           return memo;
         }
-        if (['owner_id', 'consumePermission', 'editPermission'].includes(filter.name) && !value.includes("@")){
-          const user = value.toLowerCase();
-          filter.value = `${user}@sanger.ac.uk`;
+        if (filter.name == 'owner_id' && !value.includes("@")){
+          const owner = value.toLowerCase();
+          filter.value = `${owner}@sanger.ac.uk`;
         }
 
         memo.push(filter);
