@@ -322,7 +322,7 @@ DEPENDENCIES
   rack-proxy (~> 0.6.2)
   rails (~> 5.0.0)
   rspec-rails (~> 3.4)
-  rubocop
+  rubocop (~> 0.5)
   rubycritic
   sass-rails (~> 5.0)
   simplecov
