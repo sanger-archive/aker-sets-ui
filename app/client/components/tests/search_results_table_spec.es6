@@ -11,7 +11,7 @@ describe('<SearchResultsTable />', () => {
       const context = {
         store,
       };
-      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={[]} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
+      const wrapper = shallow(<SearchResultsTable current={[]} fields={[{name: 'field1', show_on_set_results: true, friendly_name: 'Field 1'}, {name: 'field2', show_on_set_results: true, friendly_name: 'Field 2'}]} items={[]} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
       expect(wrapper.dive().find('th').length).to.equals(2);
     });
   });
@@ -22,14 +22,14 @@ describe('<SearchResultsTable />', () => {
     };
 
     it('displays the results table with items in the rows', () => {
-      const items = [{heading1: 'result1', heading2: 'result2'}];
-      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={items} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
+      const items = [{field1: 'result1', field2: 'result2'}];
+      const wrapper = shallow(<SearchResultsTable current={[]} fields={[{name: 'field1', show_on_set_results: true, friendly_name: 'Field 1'}, {name: 'field2', show_on_set_results: true, friendly_name: 'Field 2'}]} items={items} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
       expect(wrapper.dive().find('tr').length).to.equals(1);
     });
 
     it('displays the buttons panel', () => {
       const items = [{heading1: 'result1', heading2: 'result2'}];
-      const wrapper = shallow(<SearchResultsTable current={[]} headings={['heading1', 'heading2']} items={items} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
+      const wrapper = shallow(<SearchResultsTable current={[]} fields={[{name: 'field1', show_on_set_results: true, friendly_name: 'Field 1'}, {name: 'field2', show_on_set_results: true, friendly_name: 'Field 2'}]} items={items} links={[]} sets={[]} meta={{}}></SearchResultsTable>, { context });
       expect(wrapper.dive().find(ButtonsPanel).length).to.equals(1);
     });
   })
