@@ -37,7 +37,7 @@ gem 'font-awesome-sass'
 # So we can run the webpack-dev-server and rails server at the same time
 gem 'foreman'
 
-gem 'rubocop', '~> 0.41.2', require: false
+gem 'rubocop', '~> 0.5', require: false
 
 gem 'pg'
 gem 'rack-proxy', '~> 0.6.2', require: true

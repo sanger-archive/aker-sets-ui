@@ -42,6 +42,14 @@ const search = (state = {}, action) => {
 
         let field = memo[name] = {};
 
+        if (property.hasOwnProperty('friendly_name')) {
+          field['friendly_name'] = property['friendly_name']
+        }
+
+        if (property.hasOwnProperty('show_on_set_results')) {
+          field['show_on_set_results'] = property['show_on_set_results']
+        }
+
         // String can actually be a date or list
         if (type == 'string') {
 
@@ -60,14 +68,20 @@ const search = (state = {}, action) => {
           } else if (name == 'setMembership') {
             field['type'] = 'string';
             field['comparators'] = comparators['containment'];
+            field['friendly_name'] = 'Set Membership';
+            field['visible'] = false;
 
           // Extra permission filter
           } else if (name == 'consumePermission') {
             field['type'] = 'string';
             field['comparators'] = comparators['privilege'];
+            field['friendly_name'] = 'Consume Permission';
+            field['visible'] = false;
           } else if (name == 'editPermission') {
             field['type'] = 'string';
             field['comparators'] = comparators['privilege'];
+            field['friendly_name'] = 'Edit Permission';
+            field['visible'] = false;
 
           // Just a regular type string
           } else {
@@ -82,7 +96,12 @@ const search = (state = {}, action) => {
 
         return memo;
 
-      }, { "_id": { "type": "string", "comparators": comparators['string'] }});
+      }, { "_id": { "type": "string",
+                    "comparators": comparators['string'],
+                    'friendly_name': 'ID',
+                    'show_on_set_results': true
+                  }
+                });
       return Object.assign({}, state, { fields: fields });
 
     case UPDATE_FILTER_NAME:

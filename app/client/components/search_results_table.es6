@@ -4,13 +4,10 @@ import { Panel, Heading, Body } from './panel.es6';
 import { paginateTo } from '../actions/index.es6'
 import ButtonsPanel from '../components/buttons_panel.es6';
 
-// Use this object to control the "friendly_name" and visibility of the fields
-import FIELD_NAMES from '../lib/field_names.es6';
-
 class SearchResultsTable extends React.Component {
 
   render() {
-    const { headings, current, items, links, sets, dispatch, meta, loading } = this.props;
+    const { fields, headings, current, items, links, sets, dispatch, meta, loading } = this.props;
     const hasResults = items.length != 0;
 
     const handleClick = (pageNumber) => dispatch(paginateTo(pageNumber));
@@ -39,28 +36,20 @@ class SearchResultsTable extends React.Component {
                   { // Use the "display" property to toggle displaying the heading
                     // and the "friendly_name" to show a "friendly" version of
                     // the field
-                    headings.map((heading, index) => {
-                      if (FIELD_NAMES.hasOwnProperty(heading.toString())) {
-                        if (FIELD_NAMES[heading.toString()].display) {
+                    Object.keys(fields).map((name, index) => {
+                      if (fields[name].friendly_name && fields[name].show_on_set_results) {
                           return (
                             <th key={index}>
-                              {FIELD_NAMES[heading.toString()].friendly_name}
+                              {fields[name].friendly_name}
                             </th>
                           )
                         }
-                      } else {
-                        return (
-                          <th key={index}>
-                            {heading.toString()}
-                          </th>
-                        )
-                      }
                     })
                   }
                 </tr>
               </thead>
               <tbody>
-                { items.map((item, index) => { return <SearchResultsRow headings={headings} item={item} key={index} />; }) }
+                { items.map((item, index) => { return <SearchResultsRow headings={Object.keys(fields)} fields={fields} item={item} key={index} />; }) }
               </tbody>
             </table>
           </Body>
@@ -75,20 +64,20 @@ SearchResultsTable = connect()(SearchResultsTable);
 export default SearchResultsTable;
 
 const SearchResultsRow = (props) => {
-  const { headings, item } = props;
+  const { fields, item } = props;
+  console.log(fields)
   return (
     <tr>
-      { headings.map((heading, index) => {
-          if (FIELD_NAMES.hasOwnProperty(heading.toString())
-                  && FIELD_NAMES[heading.toString()].display) {
+      { Object.keys(fields).map((name, index) => {
+          if (fields[name].friendly_name && fields[name].show_on_set_results) {
 
-            const hasValue = item.hasOwnProperty(heading) && item[heading] != null;
+            const hasValue = item.hasOwnProperty(name) && item[name] != null;
             const spanStyle = hasValue ? {} : { color: '#ddd' };
 
             return (
               <td key={index} >
                 <span style={spanStyle}>
-                  { (hasValue && item[heading].toString()) || '<blank>' }
+                  { (hasValue && item[name].toString()) || '<blank>' }
                 </span>
               </td>
             );
@@ -118,10 +107,10 @@ export const PaginationLinks = (props) => {
       <div className="col-md-12">
         <div className="col-md-2 pull-left">
          <span className="badge badge-secondary">
-         {props.page ? 'Page '+props.page : '' } 
+         {props.page ? 'Page '+props.page : '' }
          </span></div>
         <nav aria-label="Page navigation" className="pull-right">
-          
+
 
           <ul className="pagination">
             {displayLinks}
