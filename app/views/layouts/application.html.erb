@@ -60,7 +60,11 @@
     <%= webpack_include_tag 'common' %>
 
     <%= yield :js if content_for? :js %>
-
+    <footer style="text-align:center">
+      <% if Projects::Application::VERSION.present? %>
+        <%= 'Version: ' + Projects::Application::VERSION[0..6] %>
+      <% end %>
+    </footer>
   </body>
 
 </html>
