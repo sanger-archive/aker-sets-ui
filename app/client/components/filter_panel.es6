@@ -78,7 +78,7 @@ export class FilterRow extends React.Component {
           <ContextualComparator filter={filter} fields={fields} onChange={onComparatorChange} />
         </div>
         <div className="col-md-4">
-          <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
+          <ContextualValue filter={filter} fields={fields} onChange={onValueChange} />
         </div>
         <div className="col-md-1">
           <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row pull-right">
@@ -108,7 +108,7 @@ export class ContextualValue extends React.Component {
     const field = fields[filter.name];
 
     if (!field) {
-      return <InputTextField value={filter.value} onChange={onChange} />;
+      return <InputTextField value={filter.value} onChange={onChange} disabled={true} />;
     }
 
     const dateOnChange = (utcDateTime) => {
@@ -129,8 +129,8 @@ export class ContextualValue extends React.Component {
   }
 }
 
-const InputTextField = ({value, onChange}) => {
-  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder="Enter a value" />
+const InputTextField = ({value, onChange, disabled = false}) => {
+  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder={ !disabled ? "Enter a value" : "" } disabled={disabled} />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
