@@ -42,7 +42,6 @@ class FilterPanel extends React.Component {
         </OverlayTrigger></Heading>
         <Body>
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
-            { filterPanelHeadings }
             { filter_rows }
           </CSSTransitionGroup>
           <button onClick={this.performSearch} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Search</button>
@@ -162,12 +161,4 @@ const popoverHover = (
       Trying to perform operations on long lists will take a long time with the current version of the software.
       </p>
   </Popover>
-);
-
-const filterPanelHeadings = (
-  <div className="row hidden-sm hidden-xs">
-    <div className="col-md-4">Property</div>
-    <div className="col-md-3">Comparator</div>
-    <div className="col-md-4">Value</div>
-  </div>
 );
