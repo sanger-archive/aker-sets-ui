@@ -70,6 +70,7 @@ export class FilterRow extends React.Component {
       <div className="row" style={{'marginBottom': '10px'}}>
         <div className="col-md-4">
           <select value={filter.name} className="form-control change-field-name" onChange={onNameChange}>
+            <option value='' key='emptyOption' disabled>Select a Property</option>
             { options }
           </select>
         </div>
@@ -129,7 +130,7 @@ export class ContextualValue extends React.Component {
 }
 
 const InputTextField = ({value, onChange}) => {
-  return <input type="text" className="form-control" onChange={onChange} value={value} />
+  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder="Enter a value" />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
