@@ -42,7 +42,6 @@ class FilterPanel extends React.Component {
         </OverlayTrigger></Heading>
         <Body>
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
-            { filterPanelHeadings }
             { filter_rows }
           </CSSTransitionGroup>
           <button onClick={this.performSearch} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Search</button>
@@ -71,6 +70,7 @@ export class FilterRow extends React.Component {
       <div className="row" style={{'marginBottom': '10px'}}>
         <div className="col-md-4">
           <select value={filter.name} className="form-control change-field-name" onChange={onNameChange}>
+            <option value='' key='emptyOption' disabled>Select a Property</option>
             { options }
           </select>
         </div>
@@ -78,7 +78,7 @@ export class FilterRow extends React.Component {
           <ContextualComparator filter={filter} fields={fields} onChange={onComparatorChange} />
         </div>
         <div className="col-md-4">
-          <ContextualValue filter={filter} fields={fields} onChange={onValueChange}/>
+          <ContextualValue filter={filter} fields={fields} onChange={onValueChange} />
         </div>
         <div className="col-md-1">
           <button onClick={onRemove} type="submit" className="btn btn-link remove-filter-row pull-right">
@@ -108,7 +108,7 @@ export class ContextualValue extends React.Component {
     const field = fields[filter.name];
 
     if (!field) {
-      return <InputTextField value={filter.value} onChange={onChange} />;
+      return <InputTextField value={filter.value} onChange={onChange} disabled={true} />;
     }
 
     const dateOnChange = (utcDateTime) => {
@@ -129,8 +129,8 @@ export class ContextualValue extends React.Component {
   }
 }
 
-const InputTextField = ({value, onChange}) => {
-  return <input type="text" className="form-control" onChange={onChange} value={value} />
+const InputTextField = ({value, onChange, disabled = false}) => {
+  return <input type="text" className="form-control" onChange={onChange} value={value} placeholder={ !disabled ? "Enter a value" : "" } disabled={disabled} />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
@@ -145,7 +145,7 @@ const ListField = ({value, options, onChange, includeEmptyRow}) => {
   }
 
   return (
-    <select value={value} className="form-control" onChange={onChange}>
+    <select value={value} className="form-control" onChange={onChange} disabled={options.length == 0}>
       { emptyOption }
       { optionTags }
     </select>
@@ -162,12 +162,4 @@ const popoverHover = (
       Trying to perform operations on long lists will take a long time with the current version of the software.
       </p>
   </Popover>
-);
-
-const filterPanelHeadings = (
-  <div className="row hidden-sm hidden-xs">
-    <div className="col-md-4">Property</div>
-    <div className="col-md-3">Comparator</div>
-    <div className="col-md-4">Value</div>
-  </div>
 );
