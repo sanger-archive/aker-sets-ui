@@ -145,7 +145,7 @@ const ListField = ({value, options, onChange, includeEmptyRow}) => {
   }
 
   return (
-    <select value={value} className="form-control" onChange={onChange}>
+    <select value={value} className="form-control" onChange={onChange} disabled={options.length == 0}>
       { emptyOption }
       { optionTags }
     </select>
