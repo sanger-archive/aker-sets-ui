@@ -67,21 +67,19 @@ Rails.application.configure do
   config.sets_root = 'http://localhost:3000/api/v1'
 
   config.jwt_secret_key = 'development'
-  config.jwt_exp_time = 2 * 60
-  config.jwt_nbf_time = 1 * 60
 
-  config.default_jwt_user = { email: ENV.fetch('USER', 'user')+'@sanger.ac.uk', groups: ['world'] }
+  config.default_jwt_user = { email: ENV.fetch('USER', 'user') + '@sanger.ac.uk', groups: ['world'] }
   config.generate_default_jwt = true
 
   config.auth_service_url = 'http://localhost:9010'
-  config.login_url = config.auth_service_url+'/login'
-  config.logout_url = config.auth_service_url+'/logout'
+  config.login_url = config.auth_service_url + '/login'
+  config.logout_url = config.auth_service_url + '/logout'
 
-  config.middleware.insert(0, RackAkerServicesProxy, {ssl_verify_none: true})
+  config.middleware.insert(0, RackAkerServicesProxy, { ssl_verify_none: true })
 
-  config.urls = { submission: "",
-                  permissions: "",
-                  sets: "",
-                  projects: "",
-                  work_orders: "" }
+  config.urls = { submission: '',
+                  permissions: '',
+                  sets: '',
+                  projects: '',
+                  work_orders: '' }
 end

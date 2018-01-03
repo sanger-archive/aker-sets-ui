@@ -44,19 +44,17 @@ Rails.application.configure do
 
   config.webpack[:use_manifest] = false
 
-  config.fake_ldap=true
+  config.fake_ldap = true
 
   config.materials_root = 'http://materials.root'
   config.sets_root = 'http://sets.root/api/v1'
   config.stamps_root = 'http://stamps.root/api/v1'
 
   config.jwt_secret_key = 'test'
-  config.jwt_exp_time = 2 * 60
-  config.jwt_nbf_time = 1 * 60
 
-  config.urls = { submission: "",
-                  permissions: "",
-                  sets: "",
-                  projects: "",
-                  work_orders: "" }
+  config.urls = { submission: '',
+                  permissions: '',
+                  sets: '',
+                  projects: '',
+                  work_orders: '' }
 end
