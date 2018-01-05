@@ -158,6 +158,8 @@ GEM
     public_suffix (3.0.1)
     puma (3.10.0)
     rack (2.0.3)
+    rack-mini-profiler (0.10.7)
+      rack (>= 1.2.0)
     rack-proxy (0.6.2)
       rack
     rack-test (0.6.3)
@@ -319,6 +321,7 @@ DEPENDENCIES
   pg
   poltergeist
   puma (~> 3.0)
+  rack-mini-profiler
   rack-proxy (~> 0.6.2)
   rails (~> 5.0.0)
   rspec-rails (~> 3.4)
