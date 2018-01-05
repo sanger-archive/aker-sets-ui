@@ -6,8 +6,4 @@ class ApplicationController < ActionController::Base
   helper_method :jwt_provided?
   helper_method :current_user
 
-  before_action do
-    # Enable profiling
-    Rack::MiniProfiler.authorize_request
-  end
 end
