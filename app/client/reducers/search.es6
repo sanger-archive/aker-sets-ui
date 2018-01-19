@@ -13,7 +13,7 @@ const search = (state = {}, action) => {
         string: ['is', 'is not'],
         boolean: ['equals'],
         containment: ['in', 'not in'],
-        privilege: ['granted to', 'not granted to']
+        privilege: ['granted to user', 'not granted to user', 'granted to group', 'not granted to group']
       };
       const allowedTypes = ['string', 'boolean'];
       const properties = action.schema.properties;
@@ -64,24 +64,19 @@ const search = (state = {}, action) => {
             field['type'] = 'date';
             field['comparators'] = comparators['date'];
 
-          // Extra set name filter
+          // Add special fields - these aren't generated from the material schema
           } else if (name == 'setMembership') {
             field['type'] = 'string';
             field['comparators'] = comparators['containment'];
             field['friendly_name'] = 'Set Membership';
-            field['visible'] = false;
-
-          // Extra permission filter
           } else if (name == 'consumePermission') {
             field['type'] = 'string';
             field['comparators'] = comparators['privilege'];
             field['friendly_name'] = 'Consume Permission';
-            field['visible'] = false;
           } else if (name == 'editPermission') {
             field['type'] = 'string';
             field['comparators'] = comparators['privilege'];
             field['friendly_name'] = 'Edit Permission';
-            field['visible'] = false;
 
           // Just a regular type string
           } else {
