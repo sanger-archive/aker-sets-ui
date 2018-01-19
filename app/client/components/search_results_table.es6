@@ -65,7 +65,6 @@ export default SearchResultsTable;
 
 const SearchResultsRow = (props) => {
   const { fields, item } = props;
-  console.log(fields)
   return (
     <tr>
       { Object.keys(fields).map((name, index) => {

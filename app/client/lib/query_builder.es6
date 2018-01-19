@@ -36,7 +36,7 @@ export const reduceFilterList = (filterList) => {
       throw new Error('Incorrect format for filter object');
     }
     let key = keys[0];
-    if (key==='in' || key==='granted to') {
+    if (key==='in' || key==='granted to user'|| key==='granted to group') {
       if (ins===null) {
         ins = elem[key];
       } else {
