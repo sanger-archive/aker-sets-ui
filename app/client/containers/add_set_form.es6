@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { createEntity } from 'redux-json-api';
 import { createSetOnly } from '../actions/index.es6';
 
 let AddSetForm = ({ dispatch }) => {
@@ -11,14 +10,7 @@ let AddSetForm = ({ dispatch }) => {
 
         e.preventDefault();
         if (!input.value) return;
-
-        // const set = {
-        //   type: 'sets',
-        //   attributes: {
-        //     name: input.value.trim()
-        //   }
-        // };
-
+    
         dispatch(createSetOnly(input.value.trim()));
         input.value = '';
 
