@@ -3,6 +3,7 @@ import { setHeader, readEndpoint } from "redux-json-api"
 import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
+import { createEntity } from 'redux-json-api';
 
 export const SETS_SERVICE_API = 'sets_service'
 export const STAMPS_SERVICE_API = 'stamps_service'
@@ -526,22 +527,20 @@ export const createNewSet = (items, setName) => {
 export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
 export const createSetOnly = (setName) => {
   return function(dispatch, getState) {
-    const data = {data: { type: 'sets', attributes: {name: setName}}};
+    var state = getState();
+    const data = { type: 'sets', attributes: {name: setName}};
     const body = Object.assign({}, data);
-    return $.ajax({
-      method: 'POST',
-      url: `/${SETS_SERVICE_API}/sets`,
-      contentType: "application/vnd.api+json",
-      accept: "application/vnd.api+json",
-      data: JSON.stringify(body),
-      jsonp: false
-    }).fail((error) => {
-      const detail = _getErrorDetails(error);
-      return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
-    })
-    .then((response)=>{
-      dispatch(receiveSet(response))
+    return dispatch(createEntity(data)).then((response)=>{
+      dispatch(receiveSet(response)).then(dispatch(userMessage(`Created a new set ${setName}`, 'info')))
       return response;
+    }, (error) => {
+      // The original error message is not provided directly as an attribute by createEntity, but through
+      // a json promise...
+      // Source: https://github.com/stonecircle/redux-json-api/issues/112
+      return error.response.json().then((responseError) => {
+        const detail = _getErrorDetails({responseJSON: responseError});
+        return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
+      });
     })
   }
 }
@@ -635,7 +634,7 @@ export const createSetFromSearch = (setName) => {
       .then(() => {
         return dispatch(userMessage("Successfully created set", 'info'));
       })
-      .always(() => {
+      .finally(() => {
         dispatch(stopCreateSet())
       });
   }
