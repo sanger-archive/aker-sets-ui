@@ -44,17 +44,19 @@ Note that if any changes are made in the `app/client` or `app/assets` directorie
 
 This creates the minified js files and also creates a manifest file that Rails can use to serve these files. THESE MUST BE COMMITTED. You may want to do all this automatically as a git pre-commit hook e.g.
 
-    #!/bin/sh
+```shell
+#!/bin/sh
 
-    files=`git diff --cached --name-only`
-    re="app\/client|app\/assets"
-    if [[ $files =~ $re ]]
-    then
-        echo "Files have been modified in app/client or app/assets. Pre-compiling..."
-        rm -r public/assets
-        RAILS_ENV=production bundle exec rake webpack:compile
-        git add -A
-    fi
+files=`git diff --cached --name-only`
+re="app\/client|app\/assets"
+if [[ $files =~ $re ]]
+then
+    echo "Files have been modified in app/client or app/assets. Pre-compiling..."
+    rm -r public/assets
+    RAILS_ENV=production bundle exec rake webpack:compile
+    git add -A
+fi
+```
 
 (You would put this in `.git/hooks/pre-commit` and make the file executable.)
 
