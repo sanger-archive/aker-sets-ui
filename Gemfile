@@ -39,7 +39,7 @@ gem 'foreman'
 
 gem 'rubocop', '~> 0.5', require: false
 
-gem 'pg'
+gem 'pg', '~> 0.18'
 gem 'rack-proxy', '~> 0.6.2', require: true
 
 gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
