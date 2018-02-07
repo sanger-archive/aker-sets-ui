@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const SetPanelComponent = ({ set, user_email, dispatch }) => {
+export const SetPanelComponent = ({ set, user_email }) => {
   if (!set || !set.id) {
     return (
       <Panel key='set-'>
