@@ -45,9 +45,7 @@ class DeleteSetButton extends Component {
         <Modal.Footer>
           <Button onClick={this.hideModal}>Close</Button>
           {/* We don't want to stay on this Set's URL, let's go Home */}
-          <Link to="/" replace>
-            <Button onClick={this.deleteSet} bsStyle="primary">Confirm</Button>
-          </Link>
+          <Link onClick={this.deleteSet} className="btn btn-primary" to="/" replace>Confirm</Link>
         </Modal.Footer>
       </Modal.Dialog>
     );
