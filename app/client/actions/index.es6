@@ -525,13 +525,16 @@ export const createNewSet = (items, setName) => {
 }
 
 export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
-export const createSetOnly = (setName) => {
+export const createSetOnly = (setName, showMessage = true) => {
   return function(dispatch, getState) {
     var state = getState();
     const data = { type: 'sets', attributes: {name: setName}};
     const body = Object.assign({}, data);
     return dispatch(createEntity(data)).then((response)=>{
-      dispatch(receiveSet(response)).then(dispatch(userMessage(`Created a new set ${setName}`, 'info')))
+      dispatch(receiveSet(response));
+      if (showMessage) {
+        dispatch(userMessage(`Successfully created set: ${setName}`, 'info'));
+      }
       return response;
     }, (error) => {
       // The original error message is not provided directly as an attribute by createEntity, but through
@@ -625,14 +628,14 @@ export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
 export const createSetFromSearch = (setName) => {
   return (dispatch, getState) => {
     dispatch(startCreateSet())
-    return dispatch(createSetOnly(setName))
+    return dispatch(createSetOnly(setName, false))
       .then((response) => {
         return dispatch(bySearchPage(getState().search, (items) => {
           return dispatch(addMaterialsToSet(items, response.data.id))
         }));
       })
       .then(() => {
-        return dispatch(userMessage("Successfully created set", 'info'));
+        return dispatch(userMessage(`Successfully created set: ${setName} & added materials`, 'info'));
       })
       .finally(() => {
         dispatch(stopCreateSet())
