@@ -15,8 +15,10 @@ import store from './store.es6';
 // Don't want to cache any of our requests
 $.ajaxSetup({ cache: false })
 
-// Load the sets up front
-store.dispatch(readEndpoint('sets'));
+// Load the sets up front and sadly Materials as well due to a bug in redux-json-api
+// Since we're loading every single Set from the Set Service,
+// it's actually going to load every single Material now too
+store.dispatch(readEndpoint('sets?include=materials'));
 
 store.dispatch(setUserEmail(Aker.userEmail));
 

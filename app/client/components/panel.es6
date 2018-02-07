@@ -17,8 +17,14 @@ export const Heading = (props) => {
 
   return (
     <div className="panel-heading">
-      {panel_title}
-      {props.children}
+      <div className="row">
+        <div className="col-md-6">
+          {panel_title}
+        </div>
+        <div className="col-md-6">
+          {props.children}
+        </div>
+      </div>
     </div>
   );
 };
