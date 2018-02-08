@@ -25,6 +25,13 @@ export const select = (id, selectionType) => {
   }
 }
 
+export const CLEAR_SELECTED = "CLEAR_SELECTED";
+export const clearSelected = () => {
+  return {
+    type: CLEAR_SELECTED
+  }
+}
+
 export const SELECT_ENTITY = "SELECT_ENTITY";
 export const selectEntity = (id, entityType) => {
   return {
@@ -100,8 +107,6 @@ export const fetchMaterials = (json, setId, numPage, pageUrl) => {
       accept: "application/json",
       data: JSON.stringify({
         where:  {"_id" : { "$in": ids } },
-        /*max_results: BATCH_SIZE,
-        page: 1*/
       }),
       cache: false
     }).then((response) => {
@@ -531,7 +536,7 @@ export const createSetOnly = (setName, showMessage = true) => {
     const data = { type: 'sets', attributes: {name: setName}};
     const body = Object.assign({}, data);
     return dispatch(createEntity(data)).then((response)=>{
-      dispatch(receiveSet(response));
+      dispatch(receiveSet(response))
       if (showMessage) {
         dispatch(userMessage(`Successfully created set: ${setName}`, 'info'));
       }
@@ -545,6 +550,9 @@ export const createSetOnly = (setName, showMessage = true) => {
         return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
       });
     })
+    // Sadly this has to be done because of a bug in redux-json-api
+    // https://github.com/redux-json-api/redux-json-api/issues/115
+    .then((response) => dispatch(readEndpoint(`sets/${response.data.id}?include=materials`)))
   }
 }
 
