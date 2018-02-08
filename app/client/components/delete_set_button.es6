@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { deleteEntity } from 'redux-json-api';
+import { deleteResource } from 'redux-json-api';
 import { clearSelected, userMessage } from '../actions/index.es6';
 import { Link } from 'react-router-dom'
 
@@ -19,7 +19,7 @@ class DeleteSetButton extends Component {
 
   deleteSet() {
     const { set, dispatch } = this.props;
-    dispatch(deleteEntity(set));
+    dispatch(deleteResource(set));
 
     // Doing this just so we don't continue to try and fetch materials for a Set that no longer exists
     dispatch(clearSelected());

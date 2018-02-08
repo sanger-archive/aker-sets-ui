@@ -86,7 +86,7 @@ export const getSelectedBottom = createSelector(
 // selected{Resource}Biomaterials Selectors
 export const getSelectedTopSetMaterials = createSelector(
   (state) => {  return state.materials; },
-  getSelectedTop, 
+  getSelectedTop,
   (materials, set) => {
     if (set && (set.id in materials)) {
       return materials[set.id];
@@ -97,7 +97,7 @@ export const getSelectedTopSetMaterials = createSelector(
 
 export const getSelectedBottomSetMaterials = createSelector(
   (state) => {  return state.materials; },
-  getSelectedBottom, 
+  getSelectedBottom,
   (materials, set) => {
     if (set && (set.id in materials)) {
       return materials[set.id];
