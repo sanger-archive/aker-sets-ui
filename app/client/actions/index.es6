@@ -542,13 +542,8 @@ export const createSetOnly = (setName, showMessage = true) => {
       }
       return response;
     }, (error) => {
-      // The original error message is not provided directly as an attribute by createResource, but through
-      // a json promise...
-      // Source: https://github.com/stonecircle/redux-json-api/issues/112
-      return error.response.json().then((responseError) => {
-        const detail = _getErrorDetails({responseJSON: responseError});
-        return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
-      });
+      const detail = _getErrorDetails({responseJSON: error.response.data});
+      return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
     })
   }
 }
