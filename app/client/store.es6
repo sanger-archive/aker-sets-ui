@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk';
-import { setEndpointHost, setEndpointPath, setHeaders } from 'redux-json-api';
+import { setAxiosConfig, setHeaders } from 'redux-json-api';
 import reducers from './reducers/index.es6';
 
 import { STAMPS_INITIALIZATION, setUserEmail } from './actions/index.es6'
@@ -50,11 +50,13 @@ let initialState = {
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
-store.dispatch(setEndpointHost('/sets_service'));
-store.dispatch(setEndpointPath(''));
-store.dispatch(setHeaders({
-  'Content-Type': 'application/vnd.api+json',
-  Accept: 'application/vnd.api+json'
+store.dispatch(setAxiosConfig({
+  baseURL: '/sets_service',
+  headers: {
+    'Content-Type': 'application/vnd.api+json',
+    Accept: 'application/vnd.api+json',
+    'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=-1,private'
+  }
 }));
 
 export default store;

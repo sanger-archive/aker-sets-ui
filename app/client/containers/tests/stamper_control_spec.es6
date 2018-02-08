@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createEntity } from 'redux-json-api';
+import { createResource } from 'redux-json-api';
 import {shallow, mount} from 'enzyme';
 import { createMockStore } from 'redux-test-utils';
 import StamperControl from '../stamper_control.es6';

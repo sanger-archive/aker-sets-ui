@@ -30,8 +30,6 @@ setInterval(() => {
   if (selected['bottom']) {
     store.dispatch(fetchSetAndMaterials(selected['bottom'], getSelectedBottomPage(state), 25));
   }
-
-
 }, 10000)
 
 const mapStateToProps = (state) => {
