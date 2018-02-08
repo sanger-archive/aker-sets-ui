@@ -15,7 +15,7 @@ import store from './store.es6';
 // Don't want to cache any of our requests
 $.ajaxSetup({ cache: false })
 
-// Load the sets up front
+// Load the sets up front. At some point we need to not load *all* sets (maybe most recent ones)
 store.dispatch(readEndpoint('sets'));
 
 store.dispatch(setUserEmail(Aker.userEmail));

@@ -39,7 +39,6 @@ const setTarget = {
       id: set.id,
       relationships: {
         materials: {
-          //data: [...current_biomaterials, ...new_biomaterials]
           data: [...new_biomaterials]
         }
       }
@@ -60,8 +59,6 @@ function dropCollect(connect, monitor) {
 
 DroppableBiomaterialTable = DropTarget(ItemTypes.BIOMATERIAL, setTarget, dropCollect)(DroppableBiomaterialTable);
 
-//DroppableBiomaterialTable = connect()(DroppableBiomaterialTable)
-
 const mapStateToProps = (state) => {
   return {
     biomaterials: getSelectedTopMaterials(state),
@@ -74,7 +71,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     dispatch,
     onRemove(biomaterial) {
-      const { set } = ownProps;      
+      const { set } = ownProps;
       return dispatch(deleteMaterialFromSet(biomaterial, set)).then(()=>{
         return dispatch(fetchFirstPageSetAndMaterials(set.id));
       });
