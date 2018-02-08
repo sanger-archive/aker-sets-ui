@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
 import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions/index.es6';
@@ -48,10 +48,17 @@ const mapStateToProps = (state) => {
   };
 }
 
-let Wrapper = onClickOutside(React.createClass({
+class Wrapper extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.onClick = this.onClick.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
 
   onClick(biomaterial, index, evt) {
-    const key = index; //biomaterial.id;
+    const key = index;
     const {dispatch, biomaterials} = this.props;
 
     dispatch(storeItems(biomaterials));
@@ -63,12 +70,12 @@ let Wrapper = onClickOutside(React.createClass({
     } else {
       dispatch(selectItem(key));
     }
-  },
+  }
 
   handleClickOutside() {
     const {dispatch} = this.props;
     dispatch(clearSelection());
-  },
+  }
 
   render() {
     const {dispatch, ...rest} = this.props;
@@ -77,9 +84,9 @@ let Wrapper = onClickOutside(React.createClass({
       <BiomaterialTable onClick={this.onClick} {...rest} />
     )
   }
-}));
+}
 
 
 export default connect(
   mapStateToProps
-)(Wrapper);
+)(onClickOutside(Wrapper));

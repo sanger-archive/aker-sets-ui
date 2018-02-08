@@ -1,23 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import FontAwesome from './font_awesome.es6';
 
-export const BiomaterialTableRow = React.createClass({
-  getDefaultProps() {
-    return {
-      onClick: () => {},
-      removeable: false,
-      selected: [],
-      biomaterial: {
-        id: '',
-        scientific_name: '',
-        gender: '',
-        phenotype: '',
-        supplier_name: '',
-        donor_id: ''
-      }
-    }
-  },
+export class BiomaterialTableRow extends Component {
 
   render() {
     const { biomaterial, onClick, removeable, onRemove, index, selected } = this.props;
@@ -45,17 +30,23 @@ export const BiomaterialTableRow = React.createClass({
       </tr>
     )
   }
-});
+}
 
-export const BiomaterialTable = React.createClass({
+BiomaterialTableRow.defaultProps = {
+  onClick: () => {},
+  removeable: false,
+  selected: [],
+  biomaterial: {
+    id: '',
+    scientific_name: '',
+    gender: '',
+    phenotype: '',
+    supplier_name: '',
+    donor_id: ''
+  }
+}
 
-  getDefaultProps() {
-    return {
-      decorators: {
-        row: BiomaterialTableRow
-      }
-    }
-  },
+export class BiomaterialTable extends Component {
 
   render() {
     const { decorators, biomaterials, materials, ...rest } = this.props;
@@ -87,4 +78,10 @@ export const BiomaterialTable = React.createClass({
       </table>
     )
   }
-});
+}
+
+BiomaterialTable.defaultProps = {
+  decorators: {
+    row: BiomaterialTableRow
+  }
+}
