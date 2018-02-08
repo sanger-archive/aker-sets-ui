@@ -166,7 +166,7 @@ export const appendMaterialsToSet = function(materials, set) {
       )
     }
     ).then(() => {
-      return dispatch(readEndpoint(`sets/${set.id}`))
+      return dispatch(readEndpoint(`sets/${set.id}?include=materials`))
     }, (error) => {
       if (error.status == 403) {
         return dispatch(userMessage('You do not have permission to add materials to this set', 'danger'));
@@ -184,7 +184,7 @@ export const deleteMaterialFromSet = function(material, set) {
       accept: 'application/vnd.api+json',
       contentType: 'application/vnd.api+json',
       data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
-    }).then(() => {dispatch(readEndpoint(`sets/${set.id}`))});
+    }).then(() => {dispatch(readEndpoint(`sets/${set.id}?include=materials`))});
   }
 }
 
