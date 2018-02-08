@@ -73,15 +73,14 @@ export const BiomaterialTable = React.createClass({
             <th>Phenotype</th>
             <th>Supplier Name</th>
             <th>Donor ID</th>
+            {/* If the materials are removeable have a blank table header for the extra column */}
+            { rest['removeable'] && <th></th>}
           </tr>
         </thead>
           <tbody>
-            { 
+            {
               instances.map((biomaterial, index) => {
-                //if (biomaterial.id in Object.values(instances)) {
-                  //biomaterial = materials[biomaterial.id]
-                  return <decorators.row key={index} index={index} biomaterial={biomaterial} {...rest} />;
-                //}
+                return <decorators.row key={index} index={index} biomaterial={biomaterial} {...rest} />;
               })
             }
           </tbody>
