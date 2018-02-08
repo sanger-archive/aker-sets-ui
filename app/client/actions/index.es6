@@ -3,7 +3,7 @@ import { setHeader, readEndpoint } from "redux-json-api"
 import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
-import { createEntity } from 'redux-json-api';
+import { createResource } from 'redux-json-api';
 
 export const SETS_SERVICE_API = 'sets_service'
 export const STAMPS_SERVICE_API = 'stamps_service'
@@ -129,7 +129,7 @@ export const fetchMaterialsFromSetByUrl = function(url) {
 
   return function(dispatch) {
     return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)))
-    .then((json) => { return dispatch(fetchMaterials(json, setId, pageNumber, url)) });
+      .then((json) => { return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
   };
 }
 
@@ -166,7 +166,7 @@ export const appendMaterialsToSet = function(materials, set) {
       )
     }
     ).then(() => {
-      return dispatch(readEndpoint(`sets/${set.id}?include=materials`))
+      return dispatch(readEndpoint(`sets/${set.id}`))
     }, (error) => {
       if (error.status == 403) {
         return dispatch(userMessage('You do not have permission to add materials to this set', 'danger'));
@@ -184,7 +184,7 @@ export const deleteMaterialFromSet = function(material, set) {
       accept: 'application/vnd.api+json',
       contentType: 'application/vnd.api+json',
       data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
-    }).then(() => {dispatch(readEndpoint(`sets/${set.id}?include=materials`))});
+    }).then(() => {dispatch(readEndpoint(`sets/${set.id}`))});
   }
 }
 
@@ -535,14 +535,14 @@ export const createSetOnly = (setName, showMessage = true) => {
     var state = getState();
     const data = { type: 'sets', attributes: {name: setName}};
     const body = Object.assign({}, data);
-    return dispatch(createEntity(data)).then((response)=>{
+    return dispatch(createResource(data)).then((response)=>{
       dispatch(receiveSet(response))
       if (showMessage) {
         dispatch(userMessage(`Successfully created set: ${setName}`, 'info'));
       }
       return response;
     }, (error) => {
-      // The original error message is not provided directly as an attribute by createEntity, but through
+      // The original error message is not provided directly as an attribute by createResource, but through
       // a json promise...
       // Source: https://github.com/stonecircle/redux-json-api/issues/112
       return error.response.json().then((responseError) => {
@@ -550,9 +550,6 @@ export const createSetOnly = (setName, showMessage = true) => {
         return dispatch(userMessage(`Failed to create set. ${detail}`, 'danger'));
       });
     })
-    // Sadly this has to be done because of a bug in redux-json-api
-    // https://github.com/redux-json-api/redux-json-api/issues/115
-    .then((response) => dispatch(readEndpoint(`sets/${response.data.id}?include=materials`)))
   }
 }
 

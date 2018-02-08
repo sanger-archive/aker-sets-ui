@@ -4,7 +4,7 @@ import { DropTarget } from 'react-dnd';
 import { BiomaterialTable } from '../components/biomaterial_table.es6';
 import droppable from '../hocs/droppable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
-import { updateEntity, readEndpoint } from 'redux-json-api';
+import { readEndpoint } from 'redux-json-api';
 import { clearSelection, storeItems, fetchFirstPageSetAndMaterials, deleteMaterialFromSet, appendMaterialsToSet } from '../actions/index.es6';
 import { getSelectedTopMaterials } from '../selectors/index.es6';
 
