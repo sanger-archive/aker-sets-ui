@@ -74,7 +74,8 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     'after': '$gte'
   }
 
-  let specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
+  const specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
+  const emailAppend    = ['owner_id', 'submitter_id'];
 
   var results = filters.reduce((memo, filter) => {
     var filterValue = filter.value.trim();
@@ -103,6 +104,10 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     if (filter.type == 'boolean') {
       filterValue = (filter.value == "true");
     }
+    if (emailAppend.includes(filter.name) && !filter.value.includes('@')) {
+      filterValue += '@sanger.ac.uk';
+    }
+
     const fieldPredicate = {};
     const predicate = {};
     predicate[comp] = filterValue;
