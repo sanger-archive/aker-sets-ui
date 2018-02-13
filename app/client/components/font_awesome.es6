@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class FontAwesome extends React.Component {
@@ -21,11 +22,11 @@ export default class FontAwesome extends React.Component {
 }
 
 FontAwesome.propTypes = {
-  icon: React.PropTypes.string,
-  size: React.PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
-  fw:   React.PropTypes.bool,
-  onClick: React.PropTypes.func,
-  style: React.PropTypes.object
+  icon: PropTypes.string,
+  size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
+  fw:   PropTypes.bool,
+  onClick: PropTypes.func,
+  style: PropTypes.object
 }
 
 FontAwesome.defaultProps = {

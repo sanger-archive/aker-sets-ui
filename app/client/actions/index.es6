@@ -469,10 +469,12 @@ export const PERFORM_STAMP_FILTER_SEARCH = "PERFORM_STAMP_FILTER_SEARCH"
 export const performStampFilterSearch = (filter) => {
   return (dispatch, getState) => {
     let permissionType = filter.name.replace(/Permission/,'');
+    let filterValue = filter.value;
+
     if (filter.comparator.includes("user") && !filter.value.includes("@")) {
-      filter.value += "@sanger.ac.uk"
+      filterValue += "@sanger.ac.uk"
     }
-    const stampQuery = `filter[permitted]=${filter.value}&filter[permission_type]=${permissionType}`;
+    const stampQuery = `filter[permitted]=${filterValue}&filter[permission_type]=${permissionType}`;
     const url = `/${STAMPS_SERVICE_API}/materials?${stampQuery}`;
 
     return $.ajax({

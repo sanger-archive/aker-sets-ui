@@ -1,9 +1,10 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 
 export default (WrappedComponent) => {
-  return React.createClass({
+  return createReactClass({
     render() {
       const { connectDropTarget, isOver, ...rest } = this.props;
       return (

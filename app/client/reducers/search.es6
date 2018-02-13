@@ -162,8 +162,7 @@ const search = (state = {}, action) => {
           return memo;
         }
         if (filter.name == 'owner_id' && !value.includes("@")){
-          const owner = value.toLowerCase();
-          filter.value = `${owner}@sanger.ac.uk`;
+          filter.value = value.toLowerCase();
         }
 
         memo.push(filter);
