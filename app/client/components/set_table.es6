@@ -3,33 +3,46 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import FontAwesome from './font_awesome.es6';
 
-const SetTable = ({ sets, selected_set, onSetClick, hideOwner, addLink }) => {
-  if (sets.length !== 0) {
-    return (
-      <table className="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Size</th>
-            { !hideOwner && <th>Owner</th>}
-          </tr>
-        </thead>
-        <tbody>
-          { sets.map((set, index) => {
-            return <SetRow set={set} selected={(set.id == selected_set)} onClick={onSetClick} key={index} hideOwner={hideOwner} addLink={addLink} />;
-          })}
-        </tbody>
-      </table>
-    )} else {
-      return (
-        <p className="text-center">No sets found.</p>
-      )
-    }
+const SetTable = ({ sets, selectedSet, onSetClick, hideOwner, addLink, fetching }) => {
+  if (sets.length == 0) {
+    return <p className="text-center">No sets found.</p>
+  }
+
+  let rows = sets.map((set, index) => {
+    return <SetRow set={set} selected={(set.id == selectedSet)} onClick={onSetClick} key={index} hideOwner={hideOwner} addLink={addLink} />;
+  });
+
+  // Show a spinning icon if more Sets are being fetched
+  if (fetching) {
+    rows.push(
+      <tr key="loading">
+        <td colSpan={ hideOwner ? 3 : 4}>
+          <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome>
+        </td>
+      </tr>
+    )
+  }
+
+  return (
+    <table className="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Size</th>
+          { !hideOwner && <th>Owner</th>}
+        </tr>
+      </thead>
+      <tbody>
+        { rows }
+      </tbody>
+    </table>
+  )
 };
 
 SetTable.defaultProps = {
-  selected_set: undefined,
+  sets: [],
+  selectedSet: undefined,
   addLink: false
 }
 
