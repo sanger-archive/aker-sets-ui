@@ -1,44 +1,62 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk';
-import { setEndpointHost, setEndpointPath, setHeaders } from 'redux-json-api';
-import reducers from './reducers';
+import { setAxiosConfig, setHeaders } from 'redux-json-api';
+import reducers from './reducers/index.es6';
+
+import { STAMPS_INITIALIZATION, setUserEmail } from './actions/index.es6'
 
 let initialState = {
   api: {
-    biomaterial_sets: { data: [] },
-    biomaterials:     { data: [] },
-    collections:      { data: [] },
-    products:         { data: [] },
-    programs:         { data: [] },
-    proposals:        { data: [] },
-    product_options:  { data: [] },
-    product_option_values: { data: [] }
+    sets:        { data: [] },
+    materials:   { data: [] },
   },
+  stampsInfo: { stamps: [], status: STAMPS_INITIALIZATION, selectedStamp: null },
+  materials: {},
   selected: {
-    biomaterial_set_id: undefined,
-    biomaterial_set:    null,
-    collection_id:      undefined,
-    collection:         null,
-    entity:             { type: null, id: null },
-    entity_obj:         null,
-    product_id:         undefined,
-    product:            null,
+    top: null,
+    bottom: null
   },
   browser: {
+    userMessage: null,
     items: [],
     selected: [],
     last_selected: null,
     last_shift_selected: []
+  },
+  userEmail: null,
+  search: {
+    pageNumber: 1,
+    maxResults: 50,
+    batchGroup: 1000,
+    fields: {},
+    filters: [
+      { id: 1, name: '', comparator: '', value: '' }
+    ],
+    current: [],
+    results: [],
+    links: {},
+    sets: [],
+    setMaterials: [],
+    stampMaterials: [],
+    meta: {}
+  },
+  loading: {
+    creatingSet: false,
+    addMaterialsToSet: false,
+    removeMaterialsFromSet: false,
+    stamping: false
   }
 }
 
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
-store.dispatch(setEndpointHost(''));
-store.dispatch(setEndpointPath('/api/v1'));
-store.dispatch(setHeaders({
-  'Content-Type': 'application/vnd.api+json',
-  Accept: 'application/vnd.api+json'
+store.dispatch(setAxiosConfig({
+  baseURL: '/sets_service',
+  headers: {
+    'Content-Type': 'application/vnd.api+json',
+    Accept: 'application/vnd.api+json',
+    'Cache-Control': 'no-cache,no-store,must-revalidate,max-age=-1,private'
+  }
 }));
 
 export default store;

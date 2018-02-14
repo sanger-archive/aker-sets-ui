@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
-import { selectItem, toggleItem, shiftSelectItems, clearSelection } from '../actions';
+import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions/index.es6';
 import onClickOutside from 'react-onclickoutside';
 
 import draggable from '../hocs/draggable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
-import { getSelectedResourceBiomaterials } from '../selectors';
+import { getSelectedBottomMaterials } from '../selectors/index.es6';
 
 import { BiomaterialTable, BiomaterialTableRow } from '../components/biomaterial_table.es6';
 import FontAwesome from '../components/font_awesome.es6';
@@ -41,30 +41,41 @@ draggableBiomaterialTableRow = DragSource(ItemTypes.BIOMATERIAL, biomaterialSour
 
 const mapStateToProps = (state) => {
   return {
-    biomaterials: getSelectedResourceBiomaterials(state),
+    biomaterials: getSelectedBottomMaterials(state),
+    materials: state.materials,
     decorators: { row: draggableBiomaterialTableRow },
     selected: state.browser.selected
   };
 }
 
-let Wrapper = onClickOutside(React.createClass({
+class Wrapper extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.onClick = this.onClick.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
 
   onClick(biomaterial, index, evt) {
-    const {dispatch} = this.props;
+    const key = index;
+    const {dispatch, biomaterials} = this.props;
+
+    dispatch(storeItems(biomaterials));
 
     if (evt.metaKey) {
-      dispatch(toggleItem(index));
+      dispatch(toggleItem(key));
     } else if (evt.shiftKey) {
-      dispatch(shiftSelectItems(index))
+      dispatch(shiftSelectItems(key))
     } else {
-      dispatch(selectItem(index));
+      dispatch(selectItem(key));
     }
-  },
+  }
 
   handleClickOutside() {
     const {dispatch} = this.props;
     dispatch(clearSelection());
-  },
+  }
 
   render() {
     const {dispatch, ...rest} = this.props;
@@ -73,9 +84,9 @@ let Wrapper = onClickOutside(React.createClass({
       <BiomaterialTable onClick={this.onClick} {...rest} />
     )
   }
-}));
+}
 
 
 export default connect(
   mapStateToProps
-)(Wrapper);
+)(onClickOutside(Wrapper));

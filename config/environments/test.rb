@@ -43,4 +43,18 @@ Rails.application.configure do
   config.webpack_dev_server_host = 'http://localhost:8080'
 
   config.webpack[:use_manifest] = false
+
+  config.fake_ldap = true
+
+  config.materials_root = 'http://materials.root'
+  config.sets_root = 'http://sets.root/api/v1'
+  config.stamps_root = 'http://stamps.root/api/v1'
+
+  config.jwt_secret_key = 'test'
+
+  config.urls = { submission: '',
+                  permissions: '',
+                  sets: '',
+                  projects: '',
+                  work_orders: '' }
 end

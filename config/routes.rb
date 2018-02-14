@@ -1,46 +1,10 @@
 Rails.application.routes.draw do
 
-  root 'collections#index'
+  root to: redirect('simple')
 
-  get 'collections/index'
-  get 'sets/index'
-
-  resources :work_orders, only: [:new]
-
-  namespace :api do
-    namespace :v1 do
-
-      jsonapi_resources :products
-
-      jsonapi_resources :collections do
-        jsonapi_relationships
-      end
-
-      jsonapi_resources :biomaterial_sets do
-        jsonapi_relationships
-      end
-
-      jsonapi_resources :biomaterials do
-        jsonapi_relationships
-      end
-
-      jsonapi_resources :programs do
-        jsonapi_relationships
-      end
-
-      jsonapi_resources :projects do
-        jsonapi_relationships
-      end
-
-      jsonapi_resources :aims do
-        jsonapi_relationships
-      end
-
-      jsonapi_resources :proposals do
-        jsonapi_relationships
-      end
-
-    end
-  end
+  get 'simple', to: 'sets#index'
+  get 'simple/*unused', to: 'sets#index'
+  get 'advanced', to: 'sets#search'
+  get 'advanced/*unused', to: 'sets#search'
 
 end

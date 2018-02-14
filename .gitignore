@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+npm-debug.log
 
 # Ignore Byebug command history file.
 .byebug_history
@@ -23,8 +24,8 @@
 # Ignore javascript modules installed through npm
 /node_modules
 
-# Ignore everything in app/assets/javascripts except application.js
-/app/assets/javascripts
-!/app/assets/javascripts/application.js
-
 /public/dev-assets/*
+/app/assets/javascripts/common.js
+/app/assets/javascripts/search.js
+/app/assets/javascripts/set-shaper.js
+coverage

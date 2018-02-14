@@ -1,22 +1,22 @@
 import { createSelector } from 'reselect';
+import jwt_decode from "jwt-decode"
 
 const nullResource = { id: '', type: '', attributes: {}, links: {}, relationships: {} };
 
 // API
 const getApi = (state) => state.api;
 
-const getApiData  = (type) => { return (state) => state.api[type].data };
-const getBiomaterialSets     = getApiData('biomaterial_sets');
-const getBiomaterials        = getApiData('biomaterials');
-const getProducts            = getApiData('products');
-const getProductOptions      = getApiData('product_options');
-const getProductOptionValues = getApiData('product_option_values');
+const getApiData  = (type) => { return (state) => { return state.api[type].data } };
+const getSets                = getApiData('sets');
+const getBiomaterials        = getApiData('materials');
+
+const getUserEmail           = (state) => state.userEmail;
 
 // Selected
-const getSelected = (key)  => { return (state) => state.selected[key] };
-const getSelectedBiomaterialSetId   = getSelected('biomaterial_set_id');
-const getSelectedProductId          = getSelected('product_id');
-const getSelectedResourceIdentifier = getSelected('entity');
+const getSelectedId = (key)  => { return (state) => state.selected[key] };
+const getSelectedMaterials = (key, state) => { return (state) => state.materials[key] }
+const getSelectedTopId    = getSelectedId('top');
+const getSelectedBottomId = getSelectedId('bottom');
 
 /*******************************************************************************
   Factories
@@ -26,7 +26,6 @@ const getSelectedResourceIdentifier = getSelected('entity');
 // that will find all the relations for a resource (or collection of resources)
 const findResourceRelationshipFactory = (relationshipType) => {
   return (resources, relatedResources) => {
-
     // If we don't have a resource, just return an array
     if (!resources) {
       return [];
@@ -74,38 +73,67 @@ const findResourceFactory = () => {
 *******************************************************************************/
 
 // getSelected Selectors
-export const getSelectedSet = createSelector(
-  getSelectedBiomaterialSetId, getBiomaterialSets,
+export const getSelectedTop = createSelector(
+  getSelectedTopId, getSets,
   findResourceByIdFactory()
 )
 
-export const getSelectedProduct = createSelector(
-  getSelectedProductId, getProducts,
+export const getSelectedBottom = createSelector(
+  getSelectedBottomId, getSets,
   findResourceByIdFactory()
-)
-
-export const getSelectedResource = createSelector(
-  getSelectedResourceIdentifier, getApi,
-  findResourceFactory()
 )
 
 // selected{Resource}Biomaterials Selectors
-export const getSelectedSetBiomaterials = createSelector(
-  getSelectedSet, getBiomaterials,
-  findResourceRelationshipFactory('biomaterials')
+export const getSelectedTopSetMaterials = createSelector(
+  (state) => {  return state.materials; },
+  getSelectedTop,
+  (materials, set) => {
+    if (set && (set.id in materials)) {
+      return materials[set.id];
+    }
+    return {};
+  }
 )
 
-export const getSelectedResourceBiomaterials = createSelector(
-  getSelectedResource, getBiomaterials,
-  findResourceRelationshipFactory('biomaterials')
+export const getSelectedBottomSetMaterials = createSelector(
+  (state) => {  return state.materials; },
+  getSelectedBottom,
+  (materials, set) => {
+    if (set && (set.id in materials)) {
+      return materials[set.id];
+    }
+    return {};
+  }
 )
 
-export const getSelectedProductOptions = createSelector(
-  getSelectedProduct, getProductOptions,
-  findResourceRelationshipFactory('product_options')
+export const getSelectedTopMaterials = (state) => getSelectedTopSetMaterials(state).instances;
+export const getSelectedBottomMaterials = (state) => getSelectedBottomSetMaterials(state).instances;
+export const getSelectedTopLinks = (state) => getSelectedTopSetMaterials(state).links;
+export const getSelectedBottomLinks = (state) => getSelectedBottomSetMaterials(state).links;
+export const getSelectedTopPage = (state) => getSelectedTopSetMaterials(state).page;
+export const getSelectedBottomPage = (state) => getSelectedBottomSetMaterials(state).page;
+export const getSelectedTopUrl = (state) => getSelectedTopSetMaterials(state).url;
+export const getSelectedBottomUrl = (state) => getSelectedBottomSetMaterials(state).url;
+
+
+export const OLDgetSelectedTopMaterials = createSelector(
+  getSelectedTop, getBiomaterials,
+  findResourceRelationshipFactory('materials')
 )
 
-export const getSelectedProductOptionValues = createSelector(
-  getSelectedProductOptions, getProductOptionValues,
-  findResourceRelationshipFactory('product_option_values')
+export const OLDgetSelectedBottomMaterials = createSelector(
+  getSelectedBottom, getBiomaterials,
+  findResourceRelationshipFactory('materials')
+)
+
+export const getUserSets = createSelector(
+  getUserEmail,
+  getSets,
+  (email, sets) => {
+    return sets.reduce((memo, set)  => {
+      if (set.attributes.owner_id === null) { return memo; }
+      if (set.attributes.owner_id === email) memo.push(set.id);
+      return memo;
+    }, []);
+  }
 )

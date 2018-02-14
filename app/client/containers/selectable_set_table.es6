@@ -1,31 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { selectEntity, storeItems } from '../actions';
-import { readEndpoint } from 'redux-json-api';
+import { select, fetchFirstPageSetAndMaterials, storeItems } from '../actions/index.es6';
 import SetTable from '../components/set_table.es6';
 
-const mapStateToProps = ({ api, selected }) => {
-  let props = {
-    sets: api.biomaterial_sets.data.sort((a, b) => a.id - b.id),
-    selected_set: null
+const mapStateToProps = ({ api, selected }, { setIdList, selectionType }) => {
+  let sets = api.sets.data;
+  if (Array.isArray(setIdList)) {
+    sets = sets.filter((s) => setIdList.includes(s.id));
+  } else {
+    sets = sets.slice();
   }
+  sets.sort((a, b) => a.attributes.created_at.localeCompare(b.attributes.created_at));
 
-  if (selected.entity.type == 'biomaterial_sets') {
-    props.selected_set = selected.entity.id;
+  return {
+    sets: sets,
+    selected_set: selected[selectionType]
   }
-
-  return props;
 }
 
-const mapDispatchToProps = (dispatch, { selectable }) => {
+const mapDispatchToProps = (dispatch, { selectionType }) => {
   return {
-    onSetClick: (id) => {
-      dispatch(selectEntity(id, 'biomaterial_sets'));
-
-      dispatch(readEndpoint(`biomaterial_sets/${id}?include=biomaterials`))
-        .then((json) => {
-          dispatch(storeItems(json.included));
-        })
+    onSetClick: (setId) => {
+      dispatch(select(setId, selectionType));
+      dispatch(fetchFirstPageSetAndMaterials(setId));
     }
   }
 }

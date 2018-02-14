@@ -35,7 +35,7 @@ Rails.application.configure do
   config.active_support.deprecation = :log
 
   # Raise an error on page load if there are pending migrations.
-  config.active_record.migration_error = :page_load
+  # config.active_record.migration_error = :page_load
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
@@ -59,4 +59,27 @@ Rails.application.configure do
   config.webpack_dev_server_host = 'http://localhost:8080'
 
   config.webpack[:use_manifest] = false
+
+  config.fake_ldap = true
+
+  config.materials_root = 'http://localhost:5000'
+  config.stamps_root = 'http://localhost:7000/api/v1'
+  config.sets_root = 'http://localhost:3000/api/v1'
+
+  config.jwt_secret_key = 'development'
+
+  config.default_jwt_user = { email: ENV.fetch('USER', 'user') + '@sanger.ac.uk', groups: ['world'] }
+  config.generate_default_jwt = true
+
+  config.auth_service_url = 'http://localhost:9010'
+  config.login_url = config.auth_service_url + '/login'
+  config.logout_url = config.auth_service_url + '/logout'
+
+  config.middleware.insert(0, RackAkerServicesProxy, { ssl_verify_none: true })
+
+  config.urls = { submission: '',
+                  permissions: '',
+                  sets: '',
+                  projects: '',
+                  work_orders: '' }
 end

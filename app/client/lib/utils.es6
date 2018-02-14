@@ -12,3 +12,10 @@ export const debounce = (func, wait, immediate) => {
     if (callNow) func.apply(context, args);
   };
 };
+
+export const currentSearchQueryBuilder = (currentFilters) => {
+ let filters = currentFilters.filter((filter) => {
+    return (filter.name && !(filter.type == 'date' && filter.comparator && !filter.value));
+  });
+ return filters;
+}

@@ -37,9 +37,16 @@ gem 'font-awesome-sass'
 # So we can run the webpack-dev-server and rails server at the same time
 gem 'foreman'
 
-gem 'rubocop', '~> 0.41.2', require: false
+gem 'rubocop', '~> 0.5', require: false
 
-gem 'pg'
+gem 'pg', '~> 0.18'
+gem 'rack-proxy', '~> 0.6.2', require: true
+
+gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
+gem 'faraday'
+
+gem 'bootstrap_form'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -68,3 +75,7 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'simplecov', :require => false, :group => :test
+gem 'simplecov-rcov', :group => :test
+gem 'rubycritic', :group => :test

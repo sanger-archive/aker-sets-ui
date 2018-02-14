@@ -27,7 +27,8 @@ module.exports = Object.assign({}, config, {
     }),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"'
+      'process.env.NODE_ENV': '"production"',
+      'RELATIVE_URL_ROOT': '"/set-shaper"'
     })
   ]
 });

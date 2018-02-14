@@ -4,15 +4,14 @@ import { DropTarget } from 'react-dnd';
 import { BiomaterialTable } from '../components/biomaterial_table.es6';
 import droppable from '../hocs/droppable.es6';
 import { ItemTypes } from '../lib/item_types.es6';
-import { updateEntity, readEndpoint } from 'redux-json-api';
-import { clearSelection, storeItems } from '../actions';
-import { getSelectedSetBiomaterials } from '../selectors';
+import { readEndpoint } from 'redux-json-api';
+import { clearSelection, storeItems, fetchFirstPageSetAndMaterials, deleteMaterialFromSet, appendMaterialsToSet } from '../actions/index.es6';
+import { getSelectedTopMaterials } from '../selectors/index.es6';
 
 let DroppableBiomaterialTable = droppable(BiomaterialTable);
-
 const setTarget = {
   drop(props, monitor, component) {
-    const { dispatch, set } = props;
+    const { dispatch, set, materials } = props;
     const { biomaterial, selected } = monitor.getItem();
 
     if (!set.id ) return;
@@ -20,10 +19,10 @@ const setTarget = {
     let current_biomaterials = [];
     let new_biomaterials     = [];
 
-    const bm_mapper = (bm) => { return { type: bm.type, id: bm.id }};
+    const bm_mapper = (bm) => { return { type: 'materials', id: bm.id }};
 
-    if (set.relationships.biomaterials.data) {
-      current_biomaterials = set.relationships.biomaterials.data.map(bm_mapper)
+    if (materials[set.id].instances) {
+      current_biomaterials = Object.values(materials[set.id].instances).map(bm_mapper);
     }
 
     // If there are selected biomaterials, add them
@@ -39,18 +38,15 @@ const setTarget = {
       type: set.type,
       id: set.id,
       relationships: {
-        biomaterials: {
-          data: [...current_biomaterials, ...new_biomaterials]
+        materials: {
+          data: [...new_biomaterials]
         }
       }
     };
-
-    dispatch(updateEntity(entity))
-      .then(() => {
-        dispatch(clearSelection());
-        return dispatch(readEndpoint(`${set.type}/${set.id}?include=biomaterials`))
-      });
-
+    dispatch(appendMaterialsToSet(new_biomaterials, set))
+      .then(() => { return dispatch(clearSelection()) })
+      .then(() => { return dispatch(fetchFirstPageSetAndMaterials(set.id)) });
+    return;
   }
 }
 
@@ -63,32 +59,22 @@ function dropCollect(connect, monitor) {
 
 DroppableBiomaterialTable = DropTarget(ItemTypes.BIOMATERIAL, setTarget, dropCollect)(DroppableBiomaterialTable);
 
-DroppableBiomaterialTable = connect()(DroppableBiomaterialTable)
-
 const mapStateToProps = (state) => {
-  return { biomaterials: getSelectedSetBiomaterials(state), removeable: true };
+  return {
+    biomaterials: getSelectedTopMaterials(state),
+    materials: state.materials,
+    removeable: true
+  };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    dispatch,
     onRemove(biomaterial) {
       const { set } = ownProps;
-
-      const bm_filter = (bm) => bm.id != biomaterial.id;
-
-      const entity = {
-        type: set.type,
-        id: set.id,
-        relationships: {
-          biomaterials: {
-            data: set.relationships.biomaterials.data.filter(bm_filter)
-          }
-        }
-      };
-
-      dispatch(updateEntity(entity))
-        .then(() => dispatch(readEndpoint(`${set.type}/${set.id}?include=biomaterials`)))
-        .then((json) => dispatch(storeItems(json.included)) );
+      return dispatch(deleteMaterialFromSet(biomaterial, set)).then(()=>{
+        return dispatch(fetchFirstPageSetAndMaterials(set.id));
+      });
     }
   }
 }

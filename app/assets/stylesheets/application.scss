@@ -1,7 +1,13 @@
 @import "bootstrap-sprockets";
+@import "variables";
 @import "bootstrap";
+@import "paper";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+
+.navbar {
+  border-radius: 0px;
+}
 
 .nav-list {
   padding-right: 15px;
@@ -16,4 +22,243 @@
 .content-enter.content-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in;
+}
+
+.content-leave {
+  opacity: 0.01;
+}
+
+.content-leave.content-leave-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-enter {
+    opacity: 0;
+    transform:   translate(-250px,0);
+    transform: translate3d(-250px,0,0);
+}
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease;
+  transform:   translate(0,0);
+  transform: translate3d(0,0,0);
+  transition-property: transform, opacity;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
+}
+.example-leave {
+  opacity: 1;
+  transform:   translate(0,0,0);
+  transform: translate3d(0,0,0);
+  transition-property: transform, opacity;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
+}
+.example-leave.example-leave-active {
+  opacity: 0;
+  transform:   translate(250px,0);
+  transform: translate3d(250px,0,0);
+}
+
+body#login {
+  background-color: #e0ebeb;
+}
+
+.container {
+  &#login_box, &#search {
+    margin-top: 20px;
+    padding-bottom: 10px;
+    background-color: white;
+  }
+  &#login {
+    margin-bottom: 20px;
+  }
+}
+
+/* Disable text-wrapping on the advanced set-shaper table to save vertical space*/
+.container-fluid#materials {
+  white-space: nowrap;
+}
+
+/* Replace purple with blue */
+.bg-info, .alert-info {
+  background-color: #d9edf7;
+}
+
+/* Change alert-info font colour from white to grey */
+.alert-info {
+  color: #444;
+}
+
+ul.pagination {
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Positioning for set creation buttons*/
+.set-btn {
+  margin-top: 8px;
+  margin-right: 5px;
+}
+
+.remove-filter-row {
+  padding: 5px;
+  margin-top: 2px;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 40px;
+}
+
+.popover {
+  margin-top: 20px;
+  max-width: 600px;
+}
+
+.navbar-text {
+  color: #b2dbfb !important;
+}
+
+/* Double thickness of the line under a textbox to improve clarity */
+textarea, textarea.form-control, input.form-control, input[type=text],
+input[type=password], input[type=email], input[type=number], [type=text].form-control,
+[type=password].form-control,[type=email].form-control, [type=tel].form-control,
+[contenteditable].form-control {
+    -webkit-box-shadow: inset 0 -2px 0 #ddd;
+    box-shadow: inset 0 -2px 0 #ddd;
+}
+
+/* Replace purple highlights with blue */
+.table > thead > tr > td.info,
+.table > thead > tr > th.info,
+.table > thead > tr.info > td,
+.table > thead > tr.info > th,
+.table > tbody > tr > td.info,
+.table > tbody > tr > th.info,
+.table > tbody > tr.info > td,
+.table > tbody > tr.info > th,
+.table > tfoot > tr > td.info,
+.table > tfoot > tr > th.info,
+.table > tfoot > tr.info > td,
+.table > tfoot > tr.info > th {
+  background-color: #d9edf7;
+}
+.table-hover > tbody > tr > td.info:hover,
+.table-hover > tbody > tr > th.info:hover,
+.table-hover > tbody > tr.info:hover > td,
+.table-hover > tbody > tr:hover > .info,
+.table-hover > tbody > tr.info:hover > th {
+  background-color: #bfe7fc;
+}
+
+// Align dropdown menu with "Aker" button when on desktop
+@media only screen and (min-width: 769px)  {
+  .dropdown-menu {
+    margin-left: -14px;
+  }
+}
+
+// Mobile optimisations
+@media only screen and (max-width: 768px)  {
+  .navbar-text {
+    // Add margin to Aker button so it isn't touch the edge of the display on mobile
+    margin: 10px 15px;
+  }
+  .nav {
+    margin: 0px;
+  }
+  .navbar-toggle {
+    margin: 10px 10px 0px;
+  }
+  .navbar-brand {
+    padding: 20px 15px 0px !important;
+  }
+  .btn {
+    margin-bottom: 5px;
+    margin-right: 0px !important;
+  }
+}
+
+// Make navbar text white
+.navbar-text, .navbar-inverse .navbar-nav > li > a {
+  color: white !important;
+}
+
+
+// LOCAL DEVELOPMENT environment
+$development: #441f84;
+// Set colour for Aker button background
+#development.navbar-inverse .navbar-nav > .open > a {
+  background-color: darken($development, 12.5%);
+  &:hover, &:focus {
+    background-color: darken($development, 12.5%);
+  }
+}
+// Navigation bar background colour
+#development {
+  background-color: $development;
+}
+#current-page-development {
+  background-color: darken($development, 12.5%);
+  font-weight: bold;
+}
+
+
+// STAGING environment
+$dev: #1f7a30;
+// Set colour for Aker button background
+#dev.navbar-inverse .navbar-nav > .open > a {
+  background-color: darken($dev, 12.5%);
+  &:hover, &:focus {
+    background-color: darken($dev, 12.5%);
+  }
+}
+// Navigation bar background colour
+#dev {
+  background-color: $dev;
+}
+#current-page-dev {
+  background-color: darken($dev, 12.5%);
+  font-weight: bold;
+}
+
+
+// UAT environment
+$uat: #2196F3;
+// Set colour for Aker button background
+#uat.navbar-inverse .navbar-nav > .open > a {
+  background-color: darken($uat, 12.5%);
+  &:hover, &:focus {
+    background-color: darken($uat, 12.5%);
+  }
+}
+// Navigation bar background colour
+#uat {
+  background-color: $uat;
+}
+#current-page-uat {
+  background-color: darken($uat, 12.5%);
+  font-weight: bold;
+}
+
+
+// PRODUCTION environment
+$production: #2196F3;
+// Set colour for Aker button background
+#production.navbar-inverse .navbar-nav > .open > a {
+  background-color: darken($production, 12.5%);
+  &:hover, &:focus {
+    background-color: darken($production, 12.5%);
+  }
+}
+// Navigation bar background colour
+#production {
+  background-color: $production;
+}
+#current-page-production {
+  background-color: darken($production, 12.5%);
+  font-weight: bold;
 }

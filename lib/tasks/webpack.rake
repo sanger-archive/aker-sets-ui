@@ -1,5 +1,5 @@
 namespace :webpack do
-  desc 'compile bundles using webpack'
+  desc 'compiles js assets using webpack'
   task :compile do
     cmd = './node_modules/.bin/webpack --config webpack.prod.config.js --json'
     output = `#{cmd}`
@@ -11,5 +11,3 @@ namespace :webpack do
     end
   end
 end
-
-Rake::Task['assets:precompile'].enhance(['webpack:compile'])
