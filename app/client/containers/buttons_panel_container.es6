@@ -53,7 +53,7 @@ class ButtonsPanelContainer extends React.Component {
             <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} type="submit" className="btn btn-primary set-btn">Create</button>
             { loading.creatingSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
-          <form className="form col-md-4" id="add-remove-materials-from-set">
+          <form className="form col-md-offset-3 col-md-5" id="add-remove-materials-from-set">
             <label>
               Select a set:
             </label>
@@ -65,7 +65,7 @@ class ButtonsPanelContainer extends React.Component {
             { loading.removeMaterialsFromSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
             </div>
           </form>
-          <StamperControl></StamperControl>
+          {/* <StamperControl></StamperControl> */}
         </Body>
     );
   }

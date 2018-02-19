@@ -27,11 +27,13 @@ describe('<ButtonsPanelContainer />', () => {
     expect(wrapper.dive().find('form')).to.have.length(2);
   });
 
-  it('should render the <StamperControl>', () => {
-    const ConnectedComponent = connect(mapStateToProps, undefined)(ButtonsPanelContainer)
-    const wrapper = shallowWithStore(<ConnectedComponent />, store);
-    expect(wrapper.dive().contains(<StamperControl></StamperControl>)).to.equal(true);
-  });
+  // Test is disabled because Stamps are being hidden, will potentially be
+  // re-enabled in future
+  // it('should render the <StamperControl>', () => {
+  //   const ConnectedComponent = connect(mapStateToProps, undefined)(ButtonsPanelContainer)
+  //   const wrapper = shallowWithStore(<ConnectedComponent />, store);
+  //   expect(wrapper.dive().contains(<StamperControl></StamperControl>)).to.equal(true);
+  // });
 
   it('should handle creation of a new set by calling handleClickCreateNewSet', () => {
     const createNewSetSpy = sinon.spy();
