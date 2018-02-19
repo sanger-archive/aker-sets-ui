@@ -22,10 +22,11 @@ const search = (state = {}, action) => {
       const setData =  { required: true, type: "string", searchable: true };
       properties['setMembership'] = Object.assign({}, setData)
 
+      // [Hidden] Stamp filter setup - may be brought back in future
       // add filter by permission to searchable fields from stamps service
-      const stampData =  { required: true, type: "string", searchable: true };
-      properties['consumePermission'] = Object.assign({}, stampData)
-      properties['editPermission'] = Object.assign({}, stampData)
+      // const stampData =  { required: true, type: "string", searchable: true };
+      // properties['consumePermission'] = Object.assign({}, stampData)
+      // properties['editPermission'] = Object.assign({}, stampData)
 
       let fields = Object.keys(properties).reduce((memo, name) => {
 
@@ -69,14 +70,16 @@ const search = (state = {}, action) => {
             field['type'] = 'string';
             field['comparators'] = comparators['containment'];
             field['friendly_name'] = 'Set Membership';
-          } else if (name == 'consumePermission') {
-            field['type'] = 'string';
-            field['comparators'] = comparators['privilege'];
-            field['friendly_name'] = 'Consume Permission';
-          } else if (name == 'editPermission') {
-            field['type'] = 'string';
-            field['comparators'] = comparators['privilege'];
-            field['friendly_name'] = 'Edit Permission';
+
+          // [Hidden] Stamps filters, that may be brought back in the future
+          // } else if (name == 'consumePermission') {
+          //   field['type'] = 'string';
+          //   field['comparators'] = comparators['privilege'];
+          //   field['friendly_name'] = 'Consume Permission';
+          // } else if (name == 'editPermission') {
+          //   field['type'] = 'string';
+          //   field['comparators'] = comparators['privilege'];
+          //   field['friendly_name'] = 'Edit Permission';
 
           // Just a regular type string
           } else {
