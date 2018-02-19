@@ -15,7 +15,7 @@ const SetTable = ({ sets, selected_set, onSetClick, hideOwner, addLink }) => {
         </tr>
       </thead>
       <tbody>
-        { sets.map((set, index) => {
+        { sets.reverse().map((set, index) => {
           return <SetRow set={set} selected={(set.id == selected_set)} onClick={onSetClick} key={index} hideOwner={hideOwner} addLink={addLink} />;
         })}
       </tbody>
