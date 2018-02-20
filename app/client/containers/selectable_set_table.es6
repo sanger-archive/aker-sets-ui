@@ -10,7 +10,7 @@ const mapStateToProps = ({ api, selected }, { setIdList, selectionType }) => {
   } else {
     sets = sets.slice();
   }
-  sets.sort((a, b) => a.attributes.created_at.localeCompare(b.attributes.created_at));
+  sets.sort((a, b) => b.attributes.created_at.localeCompare(a.attributes.created_at));
 
   return {
     sets: sets,
