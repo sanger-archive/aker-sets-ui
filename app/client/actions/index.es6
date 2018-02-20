@@ -564,7 +564,7 @@ export const getAllSets = () => {
     const userEmail = getState().userEmail;
     return $.ajax({
       method: 'GET',
-      url: `/${SETS_SERVICE_API}/sets/?filter[owner_id]=${userEmail}`,
+      url: `/${SETS_SERVICE_API}/sets/?filter[owner_id]=${userEmail}&filter[locked]=false`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       jsonp: false
