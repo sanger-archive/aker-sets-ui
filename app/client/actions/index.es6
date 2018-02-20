@@ -124,20 +124,21 @@ const urlForMaterialsFromSet = function(setId, pageNumber, pageSize) {
 export const FETCH_MATERIALS_FROM_SET_BY_URL = "FETCH_MATERIALS_FROM_SET_BY_URL";
 export const fetchMaterialsFromSetByUrl = function(url) {
   const setId = url.match(/sets\/([^/]*)/)[1]
-  const pageNumber = url.match(new RegExp(encodeURI("page[number]") + "=(\\d*)"))[1]
-  const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d*)"))[1]
+  const pageNumber = url.match(new RegExp(encodeURI("page[number]") + "=(\\d+)"))[1]
+  const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d+)"))[1]
 
   return function(dispatch) {
-    return dispatch(readEndpoint(urlForMaterialsFromSet(setId, pageNumber, pageSize)))
-      .then((json) => { return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
-  };
+    return fetchSetAndMaterials(setId, pageNumber, pageSize);
+  }
 }
 
 export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
 export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
+  const url = urlForMaterialsFromSet(setId, pageNumber, sizeNumber);
   return function(dispatch) {
-    return dispatch(fetchMaterialsFromSetByUrl(urlForMaterialsFromSet(setId, pageNumber, sizeNumber)));
-  }
+    return dispatch(readEndpoint(url))
+       .then((json) => { return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
+  };
 }
 
 export const FETCH_FIRST_PAGE_SET_AND_MATERIALS = "FETCH_FIRST_PAGE_SET_AND_MATERIALS";
