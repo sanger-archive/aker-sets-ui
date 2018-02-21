@@ -25,10 +25,16 @@ setInterval(() => {
   let selected = state.selected;
 
   if (selected['top']) {
-    store.dispatch(fetchSetAndMaterials(selected['top'], getSelectedTopPage(state), 25));
+    let pageNumber = getSelectedTopPage(state);
+    if (pageNumber) {
+      store.dispatch(fetchSetAndMaterials(selected['top'], pageNumber, 25));
+    }
   }
   if (selected['bottom']) {
-    store.dispatch(fetchSetAndMaterials(selected['bottom'], getSelectedBottomPage(state), 25));
+    let pageNumber = getSelectedBottomPage(state);
+    if (pageNumber) {
+      store.dispatch(fetchSetAndMaterials(selected['bottom'], pageNumber, 25));
+    }
   }
 }, 10000)
 
