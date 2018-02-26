@@ -72,7 +72,7 @@ class SetShaper extends React.Component {
     const { scrollTop, clientHeight, scrollHeight } = e.target;
 
     // Once we get (pretty much) to the bottom of the div
-    if (scrollTop + clientHeight >= scrollHeight - 10) {
+    if (scrollTop + clientHeight >= scrollHeight - 25) {
       // Either fetch a page of User Sets or All Sets depending on which tab is in which location
       this.state[`${location}TabNumber`] == 0 ? this.fetchNextUserSets() : this.fetchNextSets();
     }
@@ -108,7 +108,7 @@ class SetShaper extends React.Component {
               <Panel>
                 <Heading title="Sets" />
 
-                <Body onScroll={debounce((e) => this.onScroll(e, 'top'), 10, true)} style={{height: '280px', overflowY: 'scroll'}}>
+                <Body onScroll={debounce((e) => this.onScroll(e, 'top'), true)} style={{height: '280px', overflowY: 'scroll'}}>
                   <ul className="nav nav-tabs" role="tablist">
                     <li role="presentation" className="active">
                       <a onClick={ (e) => this.setTabNumber('top', 0) } href="#mySets" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a>
@@ -159,7 +159,7 @@ class SetShaper extends React.Component {
 
               <Panel>
 
-                <Body onScroll={debounce((e) => this.onScroll(e, 'bottom'), 10, true)} style={{height: '320px', overflowY: 'scroll'}}>
+                <Body onScroll={debounce((e) => this.onScroll(e, 'bottom'), true)} style={{height: '320px', overflowY: 'scroll'}}>
                   <ul className="nav nav-tabs" role="tablist">
                     <li role="presentation" className="active">
                       <a onClick={ (e) => this.setTabNumber('bottom', 0) } href="#mySetsBottom" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a>

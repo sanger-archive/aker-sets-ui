@@ -110,6 +110,7 @@ export const fetchMaterials = (json, setId, numPage, pageUrl) => {
       }),
       cache: false
     }).then((response) => {
+      console.log(response)
       return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) },
     (error) => {
       return dispatch(handleMaterialsServiceErrors(error))
@@ -128,7 +129,7 @@ export const fetchMaterialsFromSetByUrl = function(url) {
   const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d+)"))[1]
 
   return function(dispatch) {
-    return fetchSetAndMaterials(setId, pageNumber, pageSize);
+    return dispatch(fetchSetAndMaterials(setId, pageNumber, pageSize));
   }
 }
 
@@ -137,7 +138,8 @@ export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
   const url = urlForMaterialsFromSet(setId, pageNumber, sizeNumber);
   return function(dispatch) {
     return dispatch(readEndpoint(url))
-       .then((json) => { return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
+       .then((json) => {
+        return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
   };
 }
 
