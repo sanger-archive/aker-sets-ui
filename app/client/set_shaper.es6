@@ -8,15 +8,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import App from './layouts/set_shaper.es6';
 
 import { selectEntity, storeItems, fetchSetAndMaterials, setUserEmail } from './actions';
-import { readEndpoint } from 'redux-json-api';
 import { getSelectedTop, getSelectedBottom, getSelectedTopPage, getSelectedBottomPage, getUserSets } from './selectors';
 import store from './store.es6';
-
-// Don't want to cache any of our requests
-$.ajaxSetup({ cache: false })
-
-// Load the sets up front. At some point we need to not load *all* sets (maybe most recent ones)
-store.dispatch(readEndpoint('sets'));
 
 store.dispatch(setUserEmail(Aker.userEmail));
 
@@ -40,9 +33,11 @@ setInterval(() => {
 
 const mapStateToProps = (state) => {
   return {
-    set: getSelectedTop(state),
-    resource: getSelectedBottom(state),
-    user_set_ids: getUserSets(state)
+    selectedTopSet: getSelectedTop(state),
+    selectedBottomSet: getSelectedBottom(state),
+    userEmail: state.userEmail,
+    sets: state.api.sets.data,
+    userSets: getUserSets(state)
   };
 };
 

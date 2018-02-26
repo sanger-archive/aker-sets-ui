@@ -1,20 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchFirstPageSetAndMaterials, storeItems } from '../actions/index.es6';
+import { select, fetchFirstPageSetAndMaterials } from '../actions/index.es6';
 import SetTable from '../components/set_table.es6';
 
-const mapStateToProps = ({ api, selected }, { setIdList, selectionType }) => {
-  let sets = api.sets.data;
-  if (Array.isArray(setIdList)) {
-    sets = sets.filter((s) => setIdList.includes(s.id));
-  } else {
-    sets = sets.slice();
-  }
-  sets.sort((a, b) => b.attributes.created_at.localeCompare(a.attributes.created_at));
+const mapStateToProps = (state, { sets, selectionType }) => {
+  // Make a copy so we don't mutate the store
+  let setsCopy = sets.slice();
+
+  // Sort by created_at DESC
+  setsCopy.sort((a, b) => b.attributes.created_at.localeCompare(a.attributes.created_at));
 
   return {
-    sets: sets,
-    selected_set: selected[selectionType]
+    sets: setsCopy,
+    selectedSet: state.selected[selectionType]
   }
 }
 
