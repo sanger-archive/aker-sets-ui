@@ -110,7 +110,6 @@ export const fetchMaterials = (json, setId, numPage, pageUrl) => {
       }),
       cache: false
     }).then((response) => {
-      console.log(response)
       return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) },
     (error) => {
       return dispatch(handleMaterialsServiceErrors(error))
