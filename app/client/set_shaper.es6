@@ -13,23 +13,23 @@ import store from './store.es6';
 
 store.dispatch(setUserEmail(Aker.userEmail));
 
-// setInterval(() => {
-//   let state = store.getState();
-//   let selected = state.selected;
+setInterval(() => {
+  let state = store.getState();
+  let selected = state.selected;
 
-//   if (selected['top']) {
-//     let pageNumber = getSelectedTopPage(state);
-//     if (pageNumber) {
-//       store.dispatch(fetchSetAndMaterials(selected['top'], pageNumber, 25));
-//     }
-//   }
-//   if (selected['bottom']) {
-//     let pageNumber = getSelectedBottomPage(state);
-//     if (pageNumber) {
-//       store.dispatch(fetchSetAndMaterials(selected['bottom'], pageNumber, 25));
-//     }
-//   }
-// }, 10000)
+  if (selected['top']) {
+    let pageNumber = getSelectedTopPage(state);
+    if (pageNumber) {
+      store.dispatch(fetchSetAndMaterials(selected['top'], pageNumber, 25));
+    }
+  }
+  if (selected['bottom']) {
+    let pageNumber = getSelectedBottomPage(state);
+    if (pageNumber) {
+      store.dispatch(fetchSetAndMaterials(selected['bottom'], pageNumber, 25));
+    }
+  }
+}, 10000)
 
 const mapStateToProps = (state) => {
   return {
