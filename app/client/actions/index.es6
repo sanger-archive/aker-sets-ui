@@ -128,7 +128,7 @@ export const fetchMaterialsFromSetByUrl = function(url) {
   const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d+)"))[1]
 
   return function(dispatch) {
-    return fetchSetAndMaterials(setId, pageNumber, pageSize);
+    return dispatch(fetchSetAndMaterials(setId, pageNumber, pageSize));
   }
 }
 
@@ -137,7 +137,8 @@ export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
   const url = urlForMaterialsFromSet(setId, pageNumber, sizeNumber);
   return function(dispatch) {
     return dispatch(readEndpoint(url))
-       .then((json) => { return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
+       .then((json) => {
+        return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
   };
 }
 
@@ -565,7 +566,7 @@ export const getAllSets = () => {
     const userEmail = getState().userEmail;
     return $.ajax({
       method: 'GET',
-      url: `/${SETS_SERVICE_API}/sets/?filter[owner_id]=${userEmail}`,
+      url: `/${SETS_SERVICE_API}/sets/?filter[owner_id]=${userEmail}&filter[locked]=false`,
       contentType: "application/vnd.api+json",
       accept: "application/vnd.api+json",
       jsonp: false
