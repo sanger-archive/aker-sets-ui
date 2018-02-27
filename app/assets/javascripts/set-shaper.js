@@ -2,7 +2,7 @@ webpackJsonp([2],[
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+	'use strict';
 
 	var _react = __webpack_require__(330);
 
@@ -24,8 +24,6 @@ webpackJsonp([2],[
 
 	var _actions = __webpack_require__(545);
 
-	var _reduxJsonApi = __webpack_require__(549);
-
 	var _selectors = __webpack_require__(1135);
 
 	var _store = __webpack_require__(915);
@@ -34,12 +32,6 @@ webpackJsonp([2],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// Don't want to cache any of our requests
-	$.ajaxSetup({ cache: false });
-
-	// Load the sets up front. At some point we need to not load *all* sets (maybe most recent ones)
-	_store2.default.dispatch((0, _reduxJsonApi.readEndpoint)('sets'));
-
 	_store2.default.dispatch((0, _actions.setUserEmail)(Aker.userEmail));
 
 	setInterval(function () {
@@ -47,18 +39,26 @@ webpackJsonp([2],[
 	  var selected = state.selected;
 
 	  if (selected['top']) {
-	    _store2.default.dispatch((0, _actions.fetchSetAndMaterials)(selected['top'], (0, _selectors.getSelectedTopPage)(state), 25));
+	    var pageNumber = (0, _selectors.getSelectedTopPage)(state);
+	    if (pageNumber) {
+	      _store2.default.dispatch((0, _actions.fetchSetAndMaterials)(selected['top'], pageNumber, 25));
+	    }
 	  }
 	  if (selected['bottom']) {
-	    _store2.default.dispatch((0, _actions.fetchSetAndMaterials)(selected['bottom'], (0, _selectors.getSelectedBottomPage)(state), 25));
+	    var _pageNumber = (0, _selectors.getSelectedBottomPage)(state);
+	    if (_pageNumber) {
+	      _store2.default.dispatch((0, _actions.fetchSetAndMaterials)(selected['bottom'], _pageNumber, 25));
+	    }
 	  }
 	}, 10000);
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    set: (0, _selectors.getSelectedTop)(state),
-	    resource: (0, _selectors.getSelectedBottom)(state),
-	    user_set_ids: (0, _selectors.getUserSets)(state)
+	    selectedTopSet: (0, _selectors.getSelectedTop)(state),
+	    selectedBottomSet: (0, _selectors.getSelectedBottom)(state),
+	    userEmail: state.userEmail,
+	    sets: state.api.sets.data,
+	    userSets: (0, _selectors.getUserSets)(state)
 	  };
 	};
 
@@ -74,7 +74,6 @@ webpackJsonp([2],[
 	  { store: _store2.default },
 	  _react2.default.createElement(SetShaperApp, null)
 	), document.getElementById('application'));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(327)))
 
 /***/ }),
 /* 1 */,
@@ -9233,6 +9232,8 @@ webpackJsonp([2],[
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(330);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -9251,13 +9252,9 @@ webpackJsonp([2],[
 
 	var _droppable_selected_set2 = _interopRequireDefault(_droppable_selected_set);
 
-	var _locked_selected_set = __webpack_require__(1137);
-
-	var _locked_selected_set2 = _interopRequireDefault(_locked_selected_set);
-
 	var _panel = __webpack_require__(798);
 
-	var _set_panel = __webpack_require__(1138);
+	var _set_panel = __webpack_require__(1137);
 
 	var _set_panel2 = _interopRequireDefault(_set_panel);
 
@@ -9277,189 +9274,329 @@ webpackJsonp([2],[
 
 	var _user_message2 = _interopRequireDefault(_user_message);
 
+	var _reduxJsonApi = __webpack_require__(549);
+
+	var _utils = __webpack_require__(908);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var SetShaper = function SetShaper(_ref) {
-	  var set = _ref.set,
-	      resource = _ref.resource,
-	      user_set_ids = _ref.user_set_ids;
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	  var basename = '/simple';
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	  if (typeof RELATIVE_URL_ROOT != 'undefined') {
-	    basename = RELATIVE_URL_ROOT + basename;
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SetShaper = function (_React$Component) {
+	  _inherits(SetShaper, _React$Component);
+
+	  function SetShaper(props) {
+	    _classCallCheck(this, SetShaper);
+
+	    var _this = _possibleConstructorReturn(this, (SetShaper.__proto__ || Object.getPrototypeOf(SetShaper)).call(this, props));
+
+	    _this.state = {
+	      topTabNumber: 0, // Which tab is open at the top
+	      bottomTabNumber: 0, // Which tab is open at the bottom
+	      userSetsPageNumber: 1, // Which page to fetch next for a User's Sets
+	      setsPageNumber: 1, // Which page to fetch next for all Sets
+	      fetching: false // Are we fetching?
+	    };
+
+	    _this.fetchNextUserSets = _this.fetchNextUserSets.bind(_this);
+	    _this.fetchNextSets = _this.fetchNextSets.bind(_this);
+	    _this.onScroll = _this.onScroll.bind(_this);
+	    _this.setTabNumber = _this.setTabNumber.bind(_this);
+	    return _this;
 	  }
 
-	  var resourceName = resource.attributes.name;
-	  var icon = _react2.default.createElement(_font_awesome2.default, { icon: 'lock', style: { "color": "#e61c1c" } });
+	  _createClass(SetShaper, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.fetchNextUserSets();
+	      this.fetchNextSets();
+	    }
+	  }, {
+	    key: 'fetchNextUserSets',
+	    value: function fetchNextUserSets() {
+	      this.fetchNextPage({
+	        pageAttr: 'userSetsPageNumber',
+	        action: (0, _reduxJsonApi.readEndpoint)('/sets?sort=-created_at&page[number]=' + this.state.userSetsPageNumber + '&filter[owner_id]=' + this.props.userEmail)
+	      });
+	    }
+	  }, {
+	    key: 'fetchNextSets',
+	    value: function fetchNextSets() {
+	      this.fetchNextPage({
+	        pageAttr: 'setsPageNumber',
+	        action: (0, _reduxJsonApi.readEndpoint)('/sets?sort=-created_at&page[number]=' + this.state.setsPageNumber)
+	      });
+	    }
 
-	  if (resource.attributes.locked) {
-	    resourceName = _react2.default.createElement(
-	      'span',
-	      null,
-	      resourceName,
-	      ' ',
-	      icon
-	    );
-	  }
+	    // { pageAttr: 'String', action: ReduxAction }
 
-	  return _react2.default.createElement(
-	    _reactRouterDom.BrowserRouter,
-	    { basename: basename },
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'container-fluid' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
+	  }, {
+	    key: 'fetchNextPage',
+	    value: function fetchNextPage(_ref) {
+	      var _this2 = this;
+
+	      var pageAttr = _ref.pageAttr,
+	          action = _ref.action;
+
+	      // Page number is null when there's no next page so just ignore
+	      if (this.state[pageAttr] == null || this.state.fetching) return;
+
+	      this.setState({ fetching: true });
+
+	      return this.props.dispatch(action).then(function (res) {
+	        _this2.setState(function (prevState) {
+	          var _ref2;
+
+	          return _ref2 = {}, _defineProperty(_ref2, pageAttr, !!res.body.links.next ? prevState[pageAttr] + 1 : null), _defineProperty(_ref2, 'fetching', false), _ref2;
+	        });
+	      });
+	    }
+
+	    // The "Infinite" scroll
+
+	  }, {
+	    key: 'onScroll',
+	    value: function onScroll(e, location) {
+	      // Get the necessary attributes of the target element (Body)
+	      var _e$target = e.target,
+	          scrollTop = _e$target.scrollTop,
+	          clientHeight = _e$target.clientHeight,
+	          scrollHeight = _e$target.scrollHeight;
+
+	      // Once we get (pretty much) to the bottom of the div
+
+	      if (scrollTop + clientHeight >= scrollHeight - 25) {
+	        // Either fetch a page of User Sets or All Sets depending on which tab is in which location
+	        this.state[location + 'TabNumber'] == 0 ? this.fetchNextUserSets() : this.fetchNextSets();
+	      }
+	    }
+	  }, {
+	    key: 'setTabNumber',
+	    value: function setTabNumber(location, number) {
+	      this.setState(_defineProperty({}, location + 'TabNumber', number));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+
+	      var _props = this.props,
+	          selectedTopSet = _props.selectedTopSet,
+	          selectedBottomSet = _props.selectedBottomSet,
+	          sets = _props.sets,
+	          userSets = _props.userSets;
+
+
+	      var basename = '/simple';
+
+	      if (typeof RELATIVE_URL_ROOT != 'undefined') {
+	        basename = RELATIVE_URL_ROOT + basename;
+	      }
+
+	      return _react2.default.createElement(
+	        _reactRouterDom.BrowserRouter,
+	        { basename: basename },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-12' },
+	          { className: 'container-fluid' },
 	          _react2.default.createElement(
-	            'h1',
-	            null,
-	            "Set Browser"
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(_user_message2.default, null),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-3' },
-	          _react2.default.createElement(
-	            _panel.Panel,
-	            null,
-	            _react2.default.createElement(_panel.Heading, { title: 'Sets' }),
+	            'div',
+	            { className: 'row' },
 	            _react2.default.createElement(
-	              _panel.Body,
-	              { style: { height: '280px', overflowY: 'scroll' } },
+	              'div',
+	              { className: 'col-md-12' },
 	              _react2.default.createElement(
-	                'ul',
-	                { className: 'nav nav-tabs', role: 'tablist' },
+	                'h1',
+	                null,
+	                'Set Browser'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(_user_message2.default, null),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-3' },
+	              _react2.default.createElement(
+	                _panel.Panel,
+	                null,
+	                _react2.default.createElement(_panel.Heading, { title: 'Sets' }),
 	                _react2.default.createElement(
-	                  'li',
-	                  { role: 'presentation', className: 'active' },
+	                  _panel.Body,
+	                  { onScroll: (0, _utils.debounce)(function (e) {
+	                      return _this3.onScroll(e, 'top');
+	                    }, true), style: { height: '280px', overflowY: 'scroll' } },
 	                  _react2.default.createElement(
-	                    'a',
-	                    { href: '#mySets', 'aria-controls': 'mySets', role: 'tab', 'data-toggle': 'tab' },
-	                    'My Sets'
+	                    'ul',
+	                    { className: 'nav nav-tabs', role: 'tablist' },
+	                    _react2.default.createElement(
+	                      'li',
+	                      { role: 'presentation', className: 'active' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { onClick: function onClick(e) {
+	                            return _this3.setTabNumber('top', 0);
+	                          }, href: '#mySets', 'aria-controls': 'mySets', role: 'tab', 'data-toggle': 'tab' },
+	                        'My Sets'
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      'li',
+	                      { role: 'presentation' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { onClick: function onClick(e) {
+	                            return _this3.setTabNumber('top', 1);
+	                          }, href: '#allSets', 'aria-controls': 'allSets', role: 'tab', 'data-toggle': 'tab' },
+	                        'All Sets'
+	                      )
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'tab-content' },
+	                    _react2.default.createElement(
+	                      'div',
+	                      { role: 'tabpanel', className: 'tab-pane active', id: 'mySets' },
+	                      _react2.default.createElement(_selectable_set_table2.default, {
+	                        sets: userSets,
+	                        selectionType: 'top',
+	                        hideOwner: true,
+	                        addLink: true,
+	                        fetching: this.state.fetching
+	                      })
+	                    ),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { role: 'tabpanel', className: 'tab-pane', id: 'allSets' },
+	                      _react2.default.createElement(_selectable_set_table2.default, {
+	                        sets: sets,
+	                        selectionType: 'top',
+	                        addLink: true,
+	                        fetching: this.state.fetching
+	                      })
+	                    )
 	                  )
 	                ),
 	                _react2.default.createElement(
-	                  'li',
-	                  { role: 'presentation' },
-	                  _react2.default.createElement(
-	                    'a',
-	                    { href: '#allSets', 'aria-controls': 'allSets', role: 'tab', 'data-toggle': 'tab' },
-	                    'All Sets'
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'tab-content' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { role: 'tabpanel', className: 'tab-pane active', id: 'mySets' },
-	                  _react2.default.createElement(_selectable_set_table2.default, { selectionType: 'top', setIdList: user_set_ids, hideOwner: true, addLink: true })
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { role: 'tabpanel', className: 'tab-pane', id: 'allSets' },
-	                  _react2.default.createElement(_selectable_set_table2.default, { selectionType: 'top', addLink: true })
+	                  _panel.Footer,
+	                  null,
+	                  _react2.default.createElement(_add_set_form2.default, null)
 	                )
 	              )
 	            ),
 	            _react2.default.createElement(
-	              _panel.Footer,
-	              null,
-	              _react2.default.createElement(_add_set_form2.default, null)
+	              'div',
+	              { className: 'col-md-9' },
+	              _react2.default.createElement(
+	                _reactRouterDom.Switch,
+	                null,
+	                _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/sets/:set_uuid', component: _set_panel2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { component: _set_panel.SetPanelComponent })
+	              )
 	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-9' },
+	          ),
 	          _react2.default.createElement(
-	            _reactRouterDom.Switch,
-	            null,
-	            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/sets/:set_uuid', component: _set_panel2.default }),
-	            _react2.default.createElement(_reactRouterDom.Route, { component: _set_panel.SetPanelComponent })
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-3' },
-	          _react2.default.createElement(
-	            _panel.Panel,
-	            null,
+	            'div',
+	            { className: 'row' },
 	            _react2.default.createElement(
-	              _panel.Body,
-	              { style: { height: '320px', overflowY: 'scroll' } },
+	              'div',
+	              { className: 'col-md-3' },
 	              _react2.default.createElement(
-	                'ul',
-	                { className: 'nav nav-tabs', role: 'tablist' },
+	                _panel.Panel,
+	                null,
 	                _react2.default.createElement(
-	                  'li',
-	                  { role: 'presentation', className: 'active' },
+	                  _panel.Body,
+	                  { onScroll: (0, _utils.debounce)(function (e) {
+	                      return _this3.onScroll(e, 'bottom');
+	                    }, true), style: { height: '320px', overflowY: 'scroll' } },
 	                  _react2.default.createElement(
-	                    'a',
-	                    { href: '#mySetsBottom', 'aria-controls': 'mySets', role: 'tab', 'data-toggle': 'tab' },
-	                    'My Sets'
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'li',
-	                  { role: 'presentation' },
+	                    'ul',
+	                    { className: 'nav nav-tabs', role: 'tablist' },
+	                    _react2.default.createElement(
+	                      'li',
+	                      { role: 'presentation', className: 'active' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { onClick: function onClick(e) {
+	                            return _this3.setTabNumber('bottom', 0);
+	                          }, href: '#mySetsBottom', 'aria-controls': 'mySets', role: 'tab', 'data-toggle': 'tab' },
+	                        'My Sets'
+	                      )
+	                    ),
+	                    _react2.default.createElement(
+	                      'li',
+	                      { role: 'presentation' },
+	                      _react2.default.createElement(
+	                        'a',
+	                        { onClick: function onClick(e) {
+	                            return _this3.setTabNumber('bottom', 1);
+	                          }, href: '#sets', 'aria-controls': 'sets', role: 'tab', 'data-toggle': 'tab' },
+	                        'All Sets'
+	                      )
+	                    )
+	                  ),
 	                  _react2.default.createElement(
-	                    'a',
-	                    { href: '#sets', 'aria-controls': 'sets', role: 'tab', 'data-toggle': 'tab' },
-	                    'All Sets'
+	                    'div',
+	                    { className: 'tab-content' },
+	                    _react2.default.createElement(
+	                      'div',
+	                      { role: 'tabpanel', className: 'tab-pane active', id: 'mySetsBottom' },
+	                      _react2.default.createElement(_selectable_set_table2.default, {
+	                        sets: userSets,
+	                        selectionType: 'bottom',
+	                        hideOwner: true,
+	                        addLink: false,
+	                        fetching: this.state.fetching
+	                      })
+	                    ),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { role: 'tabpanel', className: 'tab-pane', id: 'sets' },
+	                      _react2.default.createElement(_selectable_set_table2.default, {
+	                        sets: sets,
+	                        selectionType: 'bottom',
+	                        addLink: false,
+	                        fetching: this.state.fetching
+	                      })
+	                    )
 	                  )
 	                )
-	              ),
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-9' },
 	              _react2.default.createElement(
-	                'div',
-	                { className: 'tab-content' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { role: 'tabpanel', className: 'tab-pane active', id: 'mySetsBottom' },
-	                  _react2.default.createElement(_selectable_set_table2.default, { selectionType: 'bottom', setIdList: user_set_ids, hideOwner: true })
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { role: 'tabpanel', className: 'tab-pane', id: 'sets' },
-	                  _react2.default.createElement(_selectable_set_table2.default, { selectionType: 'bottom' })
-	                )
+	                _ReactCSSTransitionGroup2.default,
+	                { transitionName: 'content', transitionEnterTimeout: 500, transitionLeave: false },
+	                _react2.default.createElement(_bottom_set_panel2.default, { set: selectedBottomSet })
 	              )
 	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-9' },
-	          _react2.default.createElement(
-	            _ReactCSSTransitionGroup2.default,
-	            { transitionName: 'content', transitionEnterTimeout: 500, transitionLeave: false },
-	            _react2.default.createElement(_bottom_set_panel2.default, { resource: resource, title: resourceName })
-	          )
 	        )
-	      )
-	    )
-	  );
-	};
+	      );
+	    }
+	  }]);
+
+	  return SetShaper;
+	}(_react2.default.Component);
+
+	;
 
 	SetShaper.defaultProps = {
-	  set: { attributes: { name: '' } },
-	  resource: { attributes: { name: '' } }
+	  selectedTopSet: { attributes: { name: '' } },
+	  selectedBottomSet: { attributes: { name: '' } },
+	  sets: [],
+	  userSets: []
 	};
 
 	exports.default = SetShaper;
@@ -15069,32 +15206,26 @@ webpackJsonp([2],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
-	  var api = _ref.api,
-	      selected = _ref.selected;
-	  var setIdList = _ref2.setIdList,
-	      selectionType = _ref2.selectionType;
+	var mapStateToProps = function mapStateToProps(state, _ref) {
+	  var sets = _ref.sets,
+	      selectionType = _ref.selectionType;
 
-	  var sets = api.sets.data;
-	  if (Array.isArray(setIdList)) {
-	    sets = sets.filter(function (s) {
-	      return setIdList.includes(s.id);
-	    });
-	  } else {
-	    sets = sets.slice();
-	  }
-	  sets.sort(function (a, b) {
+	  // Make a copy so we don't mutate the store
+	  var setsCopy = sets.slice();
+
+	  // Sort by created_at DESC
+	  setsCopy.sort(function (a, b) {
 	    return b.attributes.created_at.localeCompare(a.attributes.created_at);
 	  });
 
 	  return {
-	    sets: sets,
-	    selected_set: selected[selectionType]
+	    sets: setsCopy,
+	    selectedSet: state.selected[selectionType]
 	  };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref3) {
-	  var selectionType = _ref3.selectionType;
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref2) {
+	  var selectionType = _ref2.selectionType;
 
 	  return {
 	    onSetClick: function onSetClick(setId) {
@@ -15134,62 +15265,79 @@ webpackJsonp([2],[
 
 	var SetTable = function SetTable(_ref) {
 	  var sets = _ref.sets,
-	      selected_set = _ref.selected_set,
+	      selectedSet = _ref.selectedSet,
 	      onSetClick = _ref.onSetClick,
 	      hideOwner = _ref.hideOwner,
-	      addLink = _ref.addLink;
+	      addLink = _ref.addLink,
+	      fetching = _ref.fetching;
 
-	  if (sets.length !== 0) {
-	    return _react2.default.createElement(
-	      'table',
-	      { className: 'table table-striped table-hover' },
-	      _react2.default.createElement(
-	        'thead',
-	        null,
-	        _react2.default.createElement(
-	          'tr',
-	          null,
-	          _react2.default.createElement(
-	            'th',
-	            null,
-	            'Name'
-	          ),
-	          _react2.default.createElement(
-	            'th',
-	            null,
-	            'Created'
-	          ),
-	          _react2.default.createElement(
-	            'th',
-	            null,
-	            'Size'
-	          ),
-	          !hideOwner && _react2.default.createElement(
-	            'th',
-	            null,
-	            'Owner'
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'tbody',
-	        null,
-	        sets.map(function (set, index) {
-	          return _react2.default.createElement(SetRow, { set: set, selected: set.id == selected_set, onClick: onSetClick, key: index, hideOwner: hideOwner, addLink: addLink });
-	        })
-	      )
-	    );
-	  } else {
+	  if (sets.length == 0) {
 	    return _react2.default.createElement(
 	      'p',
 	      { className: 'text-center' },
 	      'No sets found.'
 	    );
 	  }
+
+	  var rows = sets.map(function (set, index) {
+	    return _react2.default.createElement(SetRow, { set: set, selected: set.id == selectedSet, onClick: onSetClick, key: index, hideOwner: hideOwner, addLink: addLink });
+	  });
+
+	  // Show a spinning icon if more Sets are being fetched
+	  if (fetching) {
+	    rows.push(_react2.default.createElement(
+	      'tr',
+	      { key: 'loading' },
+	      _react2.default.createElement(
+	        'td',
+	        { colSpan: hideOwner ? 3 : 4 },
+	        _react2.default.createElement(_font_awesome2.default, { icon: 'spinner fa-spin', size: 'lg' })
+	      )
+	    ));
+	  }
+
+	  return _react2.default.createElement(
+	    'table',
+	    { className: 'table table-striped table-hover' },
+	    _react2.default.createElement(
+	      'thead',
+	      null,
+	      _react2.default.createElement(
+	        'tr',
+	        null,
+	        _react2.default.createElement(
+	          'th',
+	          null,
+	          'Name'
+	        ),
+	        _react2.default.createElement(
+	          'th',
+	          null,
+	          'Created'
+	        ),
+	        _react2.default.createElement(
+	          'th',
+	          null,
+	          'Size'
+	        ),
+	        !hideOwner && _react2.default.createElement(
+	          'th',
+	          null,
+	          'Owner'
+	        )
+	      )
+	    ),
+	    _react2.default.createElement(
+	      'tbody',
+	      null,
+	      rows
+	    )
+	  );
 	};
 
 	SetTable.defaultProps = {
-	  selected_set: undefined,
+	  sets: [],
+	  selectedSet: undefined,
 	  addLink: false
 	};
 
@@ -15670,7 +15818,7 @@ webpackJsonp([2],[
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getUserSets = exports.OLDgetSelectedBottomMaterials = exports.OLDgetSelectedTopMaterials = exports.getSelectedBottomUrl = exports.getSelectedTopUrl = exports.getSelectedBottomPage = exports.getSelectedTopPage = exports.getSelectedBottomLinks = exports.getSelectedTopLinks = exports.getSelectedBottomMaterials = exports.getSelectedTopMaterials = exports.getSelectedBottomSetMaterials = exports.getSelectedTopSetMaterials = exports.getSelectedBottom = exports.getSelectedTop = undefined;
+	exports.getUserSets = exports.getSelectedBottomUrl = exports.getSelectedTopUrl = exports.getSelectedBottomPage = exports.getSelectedTopPage = exports.getSelectedBottomLinks = exports.getSelectedTopLinks = exports.getSelectedBottomMaterials = exports.getSelectedTopMaterials = exports.getSelectedBottomSetMaterials = exports.getSelectedTopSetMaterials = exports.getSelectedBottom = exports.getSelectedTop = undefined;
 
 	var _reselect = __webpack_require__(1136);
 
@@ -15824,16 +15972,13 @@ webpackJsonp([2],[
 	  return getSelectedBottomSetMaterials(state).url;
 	};
 
-	var OLDgetSelectedTopMaterials = exports.OLDgetSelectedTopMaterials = (0, _reselect.createSelector)(getSelectedTop, getBiomaterials, findResourceRelationshipFactory('materials'));
-
-	var OLDgetSelectedBottomMaterials = exports.OLDgetSelectedBottomMaterials = (0, _reselect.createSelector)(getSelectedBottom, getBiomaterials, findResourceRelationshipFactory('materials'));
-
+	// All the loaded sets that belong to the currently logged in user
 	var getUserSets = exports.getUserSets = (0, _reselect.createSelector)(getUserEmail, getSets, function (email, sets) {
 	  return sets.reduce(function (memo, set) {
 	    if (set.attributes.owner_id === null) {
 	      return memo;
 	    }
-	    if (set.attributes.owner_id === email) memo.push(set.id);
+	    if (set.attributes.owner_id === email) memo.push(set);
 	    return memo;
 	  }, []);
 	});
@@ -15963,38 +16108,6 @@ webpackJsonp([2],[
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _react = __webpack_require__(330);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(513);
-
-	var _biomaterial_table = __webpack_require__(1132);
-
-	var _index = __webpack_require__(1135);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    biomaterials: (0, _index.getSelectedTopMaterials)(state),
-	    materials: state.materials,
-	    removeable: false
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_biomaterial_table.BiomaterialTable);
-
-/***/ }),
-/* 1138 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	exports.SetPanelComponent = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16005,11 +16118,11 @@ webpackJsonp([2],[
 
 	var _reactRedux = __webpack_require__(513);
 
-	var _reactRouter = __webpack_require__(1139);
+	var _reactRouter = __webpack_require__(1138);
 
 	var _panel = __webpack_require__(798);
 
-	var _locked_selected_set = __webpack_require__(1137);
+	var _locked_selected_set = __webpack_require__(1139);
 
 	var _locked_selected_set2 = _interopRequireDefault(_locked_selected_set);
 
@@ -16130,7 +16243,7 @@ webpackJsonp([2],[
 	exports.default = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(mapStateToProps)(SetPanel));
 
 /***/ }),
-/* 1139 */
+/* 1138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16185,6 +16298,38 @@ webpackJsonp([2],[
 	exports.Switch = _Switch3.default;
 	exports.matchPath = _matchPath3.default;
 	exports.withRouter = _withRouter3.default;
+
+/***/ }),
+/* 1139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(513);
+
+	var _biomaterial_table = __webpack_require__(1132);
+
+	var _index = __webpack_require__(1135);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    biomaterials: (0, _index.getSelectedTopMaterials)(state),
+	    materials: state.materials,
+	    removeable: false
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_biomaterial_table.BiomaterialTable);
 
 /***/ }),
 /* 1140 */
@@ -16255,7 +16400,7 @@ webpackJsonp([2],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(800);
+	var _reactBootstrap = __webpack_require__(799);
 
 	var _reactRedux = __webpack_require__(513);
 
@@ -16387,6 +16532,10 @@ webpackJsonp([2],[
 
 	var _panel = __webpack_require__(798);
 
+	var _font_awesome = __webpack_require__(797);
+
+	var _font_awesome2 = _interopRequireDefault(_font_awesome);
+
 	var _draggable_selected_collection = __webpack_require__(1143);
 
 	var _draggable_selected_collection2 = _interopRequireDefault(_draggable_selected_collection);
@@ -16399,20 +16548,33 @@ webpackJsonp([2],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var BottomSetPanel = function BottomSetPanel(props) {
-	  var resource = props.resource;
-	  var title = props.title;
-	  if (!resource || !resource.id) {
+	var BottomSetPanel = function BottomSetPanel(_ref) {
+	  var set = _ref.set;
+
+	  if (!set || !set.id) {
 	    return _react2.default.createElement(
 	      _panel.Panel,
-	      { key: 'collection-' },
+	      { key: 'bottom-set-' },
 	      _react2.default.createElement(_panel.Heading, { title: 'No set selected' })
+	    );
+	  }
+
+	  var title = set.attributes.name;
+	  var icon = _react2.default.createElement(_font_awesome2.default, { icon: 'lock', style: { "color": "#e61c1c" } });
+
+	  if (set.attributes.locked) {
+	    title = _react2.default.createElement(
+	      'span',
+	      null,
+	      title,
+	      ' ',
+	      icon
 	    );
 	  }
 
 	  return _react2.default.createElement(
 	    _panel.Panel,
-	    { key: 'collection-' + resource.id },
+	    { key: 'bottom-set-' + set.id },
 	    _react2.default.createElement(_panel.Heading, { title: title }),
 	    _react2.default.createElement(
 	      _panel.Body,
