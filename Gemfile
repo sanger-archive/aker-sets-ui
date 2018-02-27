@@ -22,6 +22,8 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'aker_shared_navbar', github: 'sanger/aker-shared-navbar'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

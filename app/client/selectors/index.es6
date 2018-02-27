@@ -115,24 +115,14 @@ export const getSelectedBottomPage = (state) => getSelectedBottomSetMaterials(st
 export const getSelectedTopUrl = (state) => getSelectedTopSetMaterials(state).url;
 export const getSelectedBottomUrl = (state) => getSelectedBottomSetMaterials(state).url;
 
-
-export const OLDgetSelectedTopMaterials = createSelector(
-  getSelectedTop, getBiomaterials,
-  findResourceRelationshipFactory('materials')
-)
-
-export const OLDgetSelectedBottomMaterials = createSelector(
-  getSelectedBottom, getBiomaterials,
-  findResourceRelationshipFactory('materials')
-)
-
+// All the loaded sets that belong to the currently logged in user
 export const getUserSets = createSelector(
   getUserEmail,
   getSets,
   (email, sets) => {
     return sets.reduce((memo, set)  => {
       if (set.attributes.owner_id === null) { return memo; }
-      if (set.attributes.owner_id === email) memo.push(set.id);
+      if (set.attributes.owner_id === email) memo.push(set);
       return memo;
     }, []);
   }
