@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import { shallowWithStore} from 'enzyme-redux'
 import sinon from 'sinon';
 import store from '../../store.es6'
-import SetSelector from '../set_selector.es6'
+import {SetSelector, SelectDisablingSurroundingButtons} from '../set_selector.es6'
 import fetch from 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
 
@@ -19,6 +19,13 @@ function simulateKeyPresses(characters) {
     input.simulate('change')
   }
 }
+
+describe('<SelectDisablingSurroundingButtons />', () => {
+  it('displays a SelectDisablingSurroundingButtons inside', () => {
+    const wrapper = mount(<SelectDisablingSurroundingButtons />);
+    expect(wrapper.find('SetSelector').length).to.eq(1)
+  });
+})
 
 describe('<SetSelector />', () => {
   it('displays a Select inside', () => {
@@ -40,7 +47,7 @@ describe('<SetSelector />', () => {
 
       simulateKeyPresses.call(wrapper, 'abc')
       expect(mockupMethod).to.have.been.called
-    })      
+    })
   })
 
   context('convertOpts()', () => {
