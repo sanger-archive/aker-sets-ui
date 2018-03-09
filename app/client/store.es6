@@ -44,6 +44,7 @@ let initialState = {
     creatingSet: false,
     addMaterialsToSet: false,
     removeMaterialsFromSet: false,
+    selectedOptionForModifyMaterials: null,
     stamping: false
   }
 }
