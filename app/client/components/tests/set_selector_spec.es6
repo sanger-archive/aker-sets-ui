@@ -6,6 +6,7 @@ import store from '../../store.es6'
 import {SetSelector, SelectDisablingSurroundingButtons} from '../set_selector.es6'
 import fetch from 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
+import { createMockStore } from 'redux-test-utils';
 
 function simulateKeyPresses(characters) {
   let input = this.find('input')
@@ -20,10 +21,21 @@ function simulateKeyPresses(characters) {
   }
 }
 
+function getContext() {
+  return {
+    context: {
+      store: createMockStore(
+        {
+          userEmail: 'test@sanger.ac.uk'
+        })
+    }
+  }
+}
+
 describe('<SelectDisablingSurroundingButtons />', () => {
   it('displays a SelectDisablingSurroundingButtons inside', () => {
-    const wrapper = mount(<SelectDisablingSurroundingButtons />);
-    expect(wrapper.find('SetSelector').length).to.eq(1)
+    const wrapper = shallow(<SelectDisablingSurroundingButtons />, getContext());
+    expect(wrapper.dive().find('SetSelector').length).to.eq(1)
   });
 })
 
@@ -62,7 +74,7 @@ describe('<SetSelector />', () => {
       const wrapper = mount(<SetSelector onChange={mockupMethod}></SetSelector>)
       wrapper.instance().setState({selectedOption: 'some option'})
       expect(wrapper.instance().convertOpts({})[0]).to.equal('some option')
-    })    
+    })
     it('returns an empty list when no options is obtained', () => {
       function mockupMethod() {}
       const wrapper = mount(<SetSelector onChange={mockupMethod}></SetSelector>);

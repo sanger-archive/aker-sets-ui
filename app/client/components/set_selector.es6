@@ -1,9 +1,15 @@
 import React from 'react';
 import Select from 'react-select';
+import { connect } from 'react-redux';
 import { Async } from 'react-select';
 
-class SetSelector extends React.Component {
+const mapStateToProps = (state) => {
+  return {
+    userEmail: state.userEmail
+  }
+}
 
+class SetSelector extends React.Component {
   state = {
     selectedOption: null
   }
@@ -37,7 +43,7 @@ class SetSelector extends React.Component {
   }
 
   getOptions(value) {
-    return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false`)
+    return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
       .then((response) => {
         return response.json()
       }).then((json) => {
@@ -65,7 +71,7 @@ class SetSelector extends React.Component {
 class SelectDisablingSurroundingButtons extends React.Component {
   constructor(props) {
     super()
-    this.props=props
+    this.props = props
   }
   onCloseOptions(e) {
     setTimeout(function() { $('#add-remove-materials-from-set button').attr('disabled', false) }, 100)
@@ -82,6 +88,6 @@ class SelectDisablingSurroundingButtons extends React.Component {
   }
 }
 
-export { SelectDisablingSurroundingButtons, SetSelector }
+SelectDisablingSurroundingButtons = connect(mapStateToProps)(SelectDisablingSurroundingButtons)
 
-export default SetSelector;
+export { SetSelector, SelectDisablingSurroundingButtons }
