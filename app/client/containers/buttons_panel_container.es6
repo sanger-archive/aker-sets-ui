@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Heading, Body } from '../components/panel.es6';
 import FontAwesome from '../components/font_awesome.es6';
-
+import {SelectDisablingSurroundingButtons} from '../components/set_selector.es6';
 import StamperControl from '../containers/stamper_control.es6'
 
 class ButtonsPanelContainer extends React.Component {
@@ -26,8 +26,9 @@ class ButtonsPanelContainer extends React.Component {
     this.props.createNewSet(this.state.newSetName.trim());
   }
 
-  handleChangeAddRemoveMaterialsFromSet(event) {
-    this.setState({addRemoveMaterialsToSetId: event.target.value});
+  handleChangeAddRemoveMaterialsFromSet(optionSelected) {
+    const value = optionSelected ? optionSelected.value : null
+    this.setState({addRemoveMaterialsToSetId: value, selectedOptionForModifyMaterials: optionSelected});
   }
 
   handleClickAddMaterialsToSet(event) {
@@ -57,7 +58,7 @@ class ButtonsPanelContainer extends React.Component {
             <label>
               Select a set:
             </label>
-            <ListSets sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} />
+            <SelectDisablingSurroundingButtons sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} selectedOption={this.state.selectedOptionForModifyMaterials} />
             <div className="btn-toolbar">
             <button id="add-button" onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} type="submit" className="btn btn-primary set-btn">Add Materials To Set</button>
             { loading.addMaterialsToSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
