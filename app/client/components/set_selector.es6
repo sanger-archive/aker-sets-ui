@@ -22,7 +22,7 @@ class SetSelector extends React.Component {
     if (!json.data) {
       return [selectedOption]
     }
-    return json.data.map((o)=>{ 
+    return json.data.map((o)=>{
       const label = o.attributes.name
       const value = o.id
       return {
@@ -37,7 +37,7 @@ class SetSelector extends React.Component {
   }
 
   getOptions(value) {
-    return fetch(`/sets_service/sets?filter[search_by_name]=${value}`)
+    return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false`)
       .then((response) => {
         return response.json()
       }).then((json) => {
@@ -51,7 +51,7 @@ class SetSelector extends React.Component {
     const options = selectedOption ? [selectedOption] : []
 
     return(
-      <Async 
+      <Async
         value={value}
         options={options}
         onBlurResetsInput={false}
