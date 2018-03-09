@@ -29,7 +29,7 @@ class SearchResultsTable extends React.Component {
           </Heading>
           <PaginationLinks links={links} handleClick={handleClick} />
 
-          <Body style={{overflow: 'scroll', paddingBottom: '0', paddingTop: '0'}}>
+          <Body style={{overflowX: 'scroll', paddingBottom: '0', paddingTop: '0'}}>
             <table className="table table-striped table-hover search-results-table">
               <thead>
                 <tr>
