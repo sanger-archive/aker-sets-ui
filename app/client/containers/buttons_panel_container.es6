@@ -58,6 +58,7 @@ class ButtonsPanelContainer extends React.Component {
             <label>
               Select a set:
             </label>
+            <span className="text-muted pull-right">Must be unlocked and have been created by you</span>
             <SelectDisablingSurroundingButtons sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} selectedOption={this.state.selectedOptionForModifyMaterials} />
             <div className="btn-toolbar">
             <button id="add-button" onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} type="submit" className="btn btn-primary set-btn">Add Materials To Set</button>
