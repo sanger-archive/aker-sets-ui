@@ -61,7 +61,7 @@ class SetSelector extends React.Component {
   }
 
   getOptionsWithDelay(delay, value) {
-    if (typeof this.mySearch !== null) {
+    if (this.mySearch !== null) {
       clearTimeout(this.mySearch)
       
     }
