@@ -4,16 +4,16 @@ import { shallow, mount } from 'enzyme';
 import BottomSetPanel from '../bottom_set_panel.es6'
 
 describe('<BottomSetPanel />', () => {
-  context('when no resource is provided', () => {
+  context('when no set is provided', () => {
     it('renders an empty panel', () => {
       let wrapper = shallow(<BottomSetPanel />);
       expect(wrapper.find('Body')).to.have.length(0);
     });
   });
-  context('when a resource is provided', () => {
+  context('when a set is provided', () => {
     it('renders a panel with a body', () => {
-      const resource = {id: 'my_id'};
-      let wrapper = shallow(<BottomSetPanel resource={resource} />);
+      const set = {id: 'my_id', attributes: { name: 'My Set' }};
+      let wrapper = shallow(<BottomSetPanel set={set} />);
       expect(wrapper.find('Body')).to.have.length(1);
     });
   })

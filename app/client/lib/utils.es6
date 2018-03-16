@@ -1,4 +1,4 @@
-export const debounce = (func, wait, immediate) => {
+export const debounce = (func, immediate) => {
   var timeout;
   return function() {
     var context = this, args = arguments;
@@ -6,10 +6,9 @@ export const debounce = (func, wait, immediate) => {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
+    if (timeout) window.cancelAnimationFrame(timeout);
+    timeout = window.requestAnimationFrame(later);
+    if (immediate) func.apply(context, args);
   };
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Heading, Body } from '../components/panel.es6';
 import FontAwesome from '../components/font_awesome.es6';
-
+import {SelectDisablingSurroundingButtons} from '../components/set_selector.es6';
 import StamperControl from '../containers/stamper_control.es6'
 
 class ButtonsPanelContainer extends React.Component {
@@ -26,8 +26,9 @@ class ButtonsPanelContainer extends React.Component {
     this.props.createNewSet(this.state.newSetName.trim());
   }
 
-  handleChangeAddRemoveMaterialsFromSet(event) {
-    this.setState({addRemoveMaterialsToSetId: event.target.value});
+  handleChangeAddRemoveMaterialsFromSet(optionSelected) {
+    const value = optionSelected ? optionSelected.value : null
+    this.setState({addRemoveMaterialsToSetId: value, selectedOptionForModifyMaterials: optionSelected});
   }
 
   handleClickAddMaterialsToSet(event) {
@@ -53,11 +54,12 @@ class ButtonsPanelContainer extends React.Component {
             <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} type="submit" className="btn btn-primary set-btn">Create</button>
             { loading.creatingSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
-          <form className="form col-md-4" id="add-remove-materials-from-set">
+          <form className="form col-md-offset-3 col-md-5" id="add-remove-materials-from-set">
             <label>
               Select a set:
             </label>
-            <ListSets sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} />
+            <span className="text-muted pull-right">Must be unlocked and have been created by you</span>
+            <SelectDisablingSurroundingButtons sets={sets} onChange={this.handleChangeAddRemoveMaterialsFromSet} selectedOption={this.state.selectedOptionForModifyMaterials} />
             <div className="btn-toolbar">
             <button id="add-button" onClick={this.handleClickAddMaterialsToSet} disabled={loading.addMaterialsToSet} type="submit" className="btn btn-primary set-btn">Add Materials To Set</button>
             { loading.addMaterialsToSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
@@ -65,7 +67,7 @@ class ButtonsPanelContainer extends React.Component {
             { loading.removeMaterialsFromSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
             </div>
           </form>
-          <StamperControl></StamperControl>
+          {/* <StamperControl></StamperControl> */}
         </Body>
     );
   }

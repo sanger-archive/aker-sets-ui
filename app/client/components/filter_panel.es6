@@ -5,7 +5,6 @@ import FontAwesome from './font_awesome.es6';
 import { Panel, Heading, Body } from './panel.es6'
 import { connect } from 'react-redux';
 import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index.es6';
-import { debounce } from '../lib/utils.es6';
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 class FilterPanel extends React.Component {
@@ -23,7 +22,6 @@ class FilterPanel extends React.Component {
   render() {
 
     const { filters, fields, dispatch} = this.props;
-
     const filter_rows = filters.map((filter, index) => {
       return <FilterRow
                 fields={fields}
@@ -62,9 +60,24 @@ export default FilterPanel;
 export class FilterRow extends React.Component {
 
   render() {
-
     let {fields, filter, onNameChange, onComparatorChange, onValueChange, onRemove} = this.props;
-    const options = Object.keys(fields).map((name, index) => {
+
+    // We want to sort the list of filters based on their friendly names
+    let field_names = Object.keys(fields)
+    field_names.sort(function(element1, element2) {
+      var first = fields[element1].friendly_name.toLowerCase()
+      var second = fields[element2].friendly_name.toLowerCase()
+
+      if (first < second) {
+        return -1;
+      }
+      if (first > second) {
+        return 1;
+      }
+      return 0;
+    });
+
+    const options = field_names.map((name, index) => {
       return (<option value={name} key={index}>{fields[name] && fields[name].friendly_name || name}</option>);
     });
 
@@ -137,7 +150,6 @@ const InputTextField = ({value, onChange, disabled = false}) => {
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
   let emptyOption = '';
-
   const optionTags = options.map((option, index) => {
     return <option value={option} key={index}>{option}</option>
   });
