@@ -3,6 +3,10 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { Async } from 'react-select';
 
+
+// Number of milliseconds to wait before sending an ajax request to the set service
+const DELAY_FOR_SELECT = 500
+
 const mapStateToProps = (state) => {
   return {
     userEmail: state.userEmail
@@ -16,6 +20,7 @@ class SetSelector extends React.Component {
 
   constructor(props) {
     super()
+    this.mySearch = null
     this.onOpenOptions = props.onOpenOptions
     this.onCloseOptions = props.onCloseOptions
     this.onChange = props.onChange
@@ -43,12 +48,34 @@ class SetSelector extends React.Component {
   }
 
   getOptions(value) {
-    return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
-      .then((response) => {
-        return response.json()
-      }).then((json) => {
-        return { options: this.convertOpts(json) }
-      })
+    if (value.length > 0) {
+      return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
+        .then((response) => {
+          return response.json()
+        }).then((json) => {
+          return { options: this.convertOpts(json) }
+        })
+    } else {
+      return new $.Deferred().resolve()
+    }
+  }
+
+  getOptionsWithDelay(delay, value) {
+    if (this.mySearch !== null) {
+      clearTimeout(this.mySearch)
+      
+    }
+    this.promiseMySearch = new $.Deferred()
+    this.mySearch = setTimeout(
+      $.proxy(function() {
+        this.getOptions(value).then($.proxy(function(obj) {
+          clearTimeout(this.mySearch)
+          this.mySearch = null;
+          return this.promiseMySearch.resolve(obj)
+        }, this))
+      }, this), delay)
+
+    return this.promiseMySearch
   }
 
   render() {
@@ -63,7 +90,7 @@ class SetSelector extends React.Component {
         onBlurResetsInput={false}
         onOpen={this.onOpenOptions}
         onClose={this.onCloseOptions}
-        loadOptions={this.getOptions} onChange={this.onChangeOption} />
+        loadOptions={$.proxy(this.getOptionsWithDelay, this, DELAY_FOR_SELECT)} onChange={this.onChangeOption} />
     )
   }
 }
