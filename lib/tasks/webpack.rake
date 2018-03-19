@@ -1,6 +1,8 @@
 namespace :webpack do
   desc 'compiles js assets using webpack'
   task :compile do
+    Rake::Task["assets:precompile"].invoke
+    
     cmd = './node_modules/.bin/webpack --config webpack.prod.config.js --json'
     output = `#{cmd}`
 
