@@ -9,7 +9,7 @@ class ButtonsPanelContainer extends React.Component {
   constructor(props) {
     super(props);
     const firstSetId = props.sets.length!=0 && props.sets[0].id;
-    this.state = {newSetName: '', addRemoveMaterialsToSetId: firstSetId};
+    this.state = {newSetName: ''};
     this.handleChangeCreateNewSet = this.handleChangeCreateNewSet.bind(this);
     this.handleClickCreateNewSet = this.handleClickCreateNewSet.bind(this);
     this.handleChangeAddRemoveMaterialsFromSet = this.handleChangeAddRemoveMaterialsFromSet.bind(this);
