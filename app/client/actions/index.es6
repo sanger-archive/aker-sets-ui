@@ -695,13 +695,18 @@ export const addMaterialsToSetTransaction = (items, setTransaction) => {
   }  
 }
 
-export const createSetTransaction = (setId, operationName) => {
+export const createSetTransaction = (param, operationName) => {
   return (dispatch, getState) => {
-    const body = {
+    let body = {
         data: { 
           type: 'set_transactions', 
-          attributes: { aker_set_id: setId, operation: operationName, batch_size: getState().search.batchTransactionSize } 
+          attributes: { operation: operationName, batch_size: getState().search.batchTransactionSize } 
         }
+    }
+    if (operationName == 'create') {
+      body.data.attributes.set_name = param
+    } else {
+      body.data.attributes.aker_set_id = param
     }
     return $.ajax({
       method: 'POST',
@@ -720,17 +725,13 @@ export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
 export const createSetFromSearch = (setName) => {
   return (dispatch, getState) => {
     dispatch(startCreateSet())
-    return dispatch(createSetOnly(setName, false))
-      .then((response) => {
-        const setId = response.data.id
-        return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setId, 'add'))
-      })
-      .then(() => {
-        return dispatch(userMessage(`Successfully created set: ${setName} & added materials`, 'info'));
-      })
-      .finally(() => {
-        dispatch(stopCreateSet())
-      });
+    return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setName, 'create'))
+    .then(() => {
+      return dispatch(userMessage(`Successfully created set: ${setName} & added materials`, 'info'));
+    })
+    .always(() => {
+      dispatch(stopCreateSet())
+    });
   }
 };
 
