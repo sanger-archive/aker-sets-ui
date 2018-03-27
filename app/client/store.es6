@@ -25,6 +25,7 @@ let initialState = {
   },
   userEmail: null,
   search: {
+    batchTransactionSize: 10000,
     pageNumber: 1,
     maxResults: 50,
     batchGroup: 1000,

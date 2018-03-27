@@ -628,22 +628,110 @@ const batchAction = (items, action, batchSize) => {
   return batcher(items);
 }
 
+export const PERFORM_SET_TRANSACTION_OPERATION_WITH_MATERIALS_FROM_SEARCH = "PERFORM_SET_TRANSACTION_OPERATION_WITH_MATERIALS_FROM_SEARCH"
+export const performSetTransactionOperationWithMaterialsFromSearch = (setId, operation) => {
+  return (dispatch, getState) => {
+    return dispatch(createSetTransaction(setId, operation))
+    .then((setTransaction) => {
+      return dispatch(bySearchPage(getState().search, (items) => {
+        return dispatch(addMaterialsToSetTransaction(items, setTransaction))
+      })).then(() => {
+        return dispatch(commitSetTransaction(setTransaction))
+      })
+    })
+  }
+}
+
+export const commitSetTransaction = (setTransaction) => {
+  const setTransactionId = setTransaction.data.id
+
+  return (dispatch, getState) => {
+    const body = {
+      data: { 
+        id: setTransactionId,
+        type: 'set_transactions', 
+        attributes: { status: 'done' }
+      }
+    }
+    return $.ajax({
+      method: 'PUT',
+      url: `/${SETS_SERVICE_API}/set-transactions/${setTransactionId}`,
+      accept: "application/vnd.api+json",
+      contentType: "application/vnd.api+json",
+      data: JSON.stringify(body)
+    }).fail((error) => {
+      const detail = _getErrorDetails(error);
+      return dispatch(userMessage(`Failed to commit transaction for set. No changes will be applied. ${detail}`, 'danger'));
+    }).then(() => {
+      return setTransaction
+    });
+  }
+}
+
+export const addMaterialsToSetTransaction = (items, setTransaction) => {
+  const setTransactionId = setTransaction.data.id
+
+  return (dispatch, getState) => {
+    const body = {
+        data: items.map((item) => {
+          return { 
+            type: 'materials', 
+            id: item['_id']
+          }
+        })
+    }
+    return $.ajax({
+      method: 'POST',
+      url: `/${SETS_SERVICE_API}/set-transactions/${setTransactionId}/relationships/materials`,
+      accept: "application/vnd.api+json",
+      contentType: "application/vnd.api+json",
+      data: JSON.stringify(body)
+    }).fail((error) => {
+      const detail = _getErrorDetails(error);
+      return dispatch(userMessage(`Failed to add materials to set transaction. No changes will be applied. ${detail}`, 'danger'));
+    }).then(() => {
+      return setTransaction
+    });
+  }  
+}
+
+export const createSetTransaction = (param, operationName) => {
+  return (dispatch, getState) => {
+    let body = {
+        data: { 
+          type: 'set_transactions', 
+          attributes: { operation: operationName, batch_size: getState().search.batchTransactionSize } 
+        }
+    }
+    if (operationName == 'create') {
+      body.data.attributes.set_name = param
+    } else {
+      body.data.attributes.aker_set_id = param
+    }
+    return $.ajax({
+      method: 'POST',
+      url: `/${SETS_SERVICE_API}/set-transactions`,
+      accept: "application/vnd.api+json",
+      contentType: "application/vnd.api+json",
+      data: JSON.stringify(body)
+    }).fail((error) => {
+      const detail = _getErrorDetails(error);
+      return dispatch(userMessage(`Failed to create transaction for set. ${detail}`, 'danger'));
+    });
+  }
+}
+
 export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
 export const createSetFromSearch = (setName) => {
   return (dispatch, getState) => {
     dispatch(startCreateSet())
-    return dispatch(createSetOnly(setName, false))
-      .then((response) => {
-        return dispatch(bySearchPage(getState().search, (items) => {
-          return dispatch(addMaterialsToSet(items, response.data.id))
-        }));
-      })
-      .then(() => {
-        return dispatch(userMessage(`Successfully created set: ${setName} & added materials`, 'info'));
-      })
-      .finally(() => {
-        dispatch(stopCreateSet())
-      });
+    return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setName, 'create'))
+    .then(() => {
+      return dispatch(userMessage(`Successfully created set: ${setName} & added materials`, 'info'));
+    })
+    .always(() => {
+      dispatch(stopCreateSet())
+    });
   }
 };
 
@@ -651,9 +739,7 @@ export const ADD_MATERIALS_TO_SET_FROM_SEARCH = "ADD_MATERIALS_TO_SET_FROM_SEARC
 export const addMaterialsToSetFromSearch = (setId) =>{
   return (dispatch, getState) => {
     dispatch(startAddMaterialsToSet())
-    return dispatch(bySearchPage(getState().search, (items) => {
-      return dispatch(addMaterialsToSet(items, setId))
-    }))
+    return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setId, 'add'))
     .then(() => {
       return dispatch(userMessage("Successfully added materials into set", 'info'));
     })
@@ -667,9 +753,7 @@ export const REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = "REMOVE_MATERIALS_FROM_SET_
 export const removeMaterialsFromSetFromSearch = (setId) => {
   return (dispatch, getState) => {
     dispatch(startRemoveMaterialsFromSet())
-    return dispatch(bySearchPage(getState().search, (items) => {
-      return dispatch(removeMaterialsFromSet(items, setId))
-    }))
+    return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setId, 'remove'))
     .then(() => {
       return dispatch(userMessage("Successfully removed materials from set", 'info'));
     })
@@ -763,14 +847,19 @@ const _apply_generation = (nameOperation) => {
 }
 
 const _getErrorDetails = (error) => {
-  let detail = [];
-  if (error.responseJSON.errors) {
-    detail = error.responseJSON.errors.reduce((memo, e) => {
-      memo.push(e.detail);
-      return memo;
-    }, []);
+  try {
+    let detail = [];
+    if (error.responseJSON.errors) {
+      detail = error.responseJSON.errors.reduce((memo, e) => {
+        memo.push(e.detail);
+        return memo;
+      }, []);
+    }
+    return detail;
+  } catch(e) {
+    return 'Unknown error'
   }
-  return detail;
+  
 }
 
 export const APPLY_STAMP = "APPLY_STAMP";
