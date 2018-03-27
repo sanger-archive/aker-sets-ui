@@ -16,7 +16,7 @@ describe('<ButtonsPanelContainer />', () => {
     mapStateToProps = (state) => {
       return {
         sets: state.search.sets,
-        loading: state.loading
+        loading: state.loading,
       }
     }
   })
@@ -40,15 +40,16 @@ describe('<ButtonsPanelContainer />', () => {
 
     const mapDispatchToProps = (dispatch) => {
       return {
-        createNewSet: createNewSetSpy
+        createNewSet: createNewSetSpy,
+        loading: { creatingSet: false }
       }
     }
 
     const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ButtonsPanelContainer)
     const wrapper = shallowWithStore(<ConnectedComponent />, store);
 
-    wrapper.dive().find("#create-set input").simulate('change', {target: {value: 'The Set'}});
-    wrapper.dive().find("#create-set button").simulate('click', { preventDefault() {} });
+    wrapper.dive().find("#create-set input").simulate('change', { target: {value: 'The Set'}});
+    wrapper.dive().find("#create-set button.set-btn").simulate('click', { preventDefault() {} });
 
     expect(createNewSetSpy.calledOnce).to.equal(true);
   });
