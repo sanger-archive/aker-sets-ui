@@ -49,7 +49,7 @@ describe('<ButtonsPanelContainer />', () => {
     const wrapper = shallowWithStore(<ConnectedComponent />, store);
 
     wrapper.dive().find("#create-set input").simulate('change', { target: {value: 'The Set'}});
-    wrapper.dive().find("#create-set").simulate('submit', { preventDefault() {} });
+    wrapper.dive().find("#create-set bubub").simulate('submit', { preventDefault() {} });
 
     expect(createNewSetSpy.calledOnce).to.equal(true);
   });
