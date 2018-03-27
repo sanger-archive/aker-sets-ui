@@ -22,12 +22,11 @@ describe('<SelectableSetTable />', () => {
       removeable: false
      };
     //selectionType="top" setIdList={user_set_ids}
-    const wrapper = mount(<SelectableSetTable selectionType="top"></SelectableSetTable>, getContext(status));
+    const wrapper = mount(<SelectableSetTable sets={[]} selectionType="top"></SelectableSetTable>, getContext(status));
 
     expect(wrapper.find(SetTable).length).to.equal(1);
   });
-  it('should sort the set list by created_at', () => {
-
+  it('should reverse sort the set list by created_at', () => {
     let createdAt = (i) => {
       return {
         value: () => {
@@ -49,10 +48,10 @@ describe('<SelectableSetTable />', () => {
       removeable: false
      };
 
-    const wrapper = mount(<SelectableSetTable selectionType="top"></SelectableSetTable>, getContext(status));
+    const wrapper = mount(<SelectableSetTable sets={status.api.sets.data} selectionType="top"></SelectableSetTable>, getContext(status));
     let sets = wrapper.find(SetTable).props().sets;
     sets.forEach((set, i) =>  {
-      expect(set.id).to.equal(i+1);
+      expect(set.id).to.equal(sets.length - i);
     });
   });
 

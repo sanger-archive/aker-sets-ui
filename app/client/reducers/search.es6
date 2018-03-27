@@ -75,11 +75,11 @@ const search = (state = {}, action) => {
           // } else if (name == 'consumePermission') {
           //   field['type'] = 'string';
           //   field['comparators'] = comparators['privilege'];
-          //   field['friendly_name'] = 'Consume Permission';
+          //   field['friendly_name'] = 'Stamped Consume Permission';
           // } else if (name == 'editPermission') {
           //   field['type'] = 'string';
           //   field['comparators'] = comparators['privilege'];
-          //   field['friendly_name'] = 'Edit Permission';
+          //   field['friendly_name'] = 'Stamped Edit Permission';
 
           // Just a regular type string
           } else {

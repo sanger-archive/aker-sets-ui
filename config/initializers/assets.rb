@@ -11,4 +11,5 @@ Rails.application.config.assets.version = '1.0'
 # Rails.application.config.assets.precompile += %w( search.js )
 
 # Webpack bundled modules
+Rails.application.config.assets.paths << Rails.root.join('node_modules') 
 Rails.application.config.assets.precompile += %w( inbox.js common.js babel-polyfill.js )
