@@ -46,12 +46,13 @@ class ButtonsPanelContainer extends React.Component {
 
     return (
         <Body>
-          <form className="form col-md-4" id="create-set">
+          <form className="form col-md-4" id="create-set" onSubmit={this.handleClickCreateNewSet}>
             <label>
               Create new set:
             </label>
-              <input type="text" className="form-control" placeholder="Set name" onChange={this.handleChangeCreateNewSet} />
-            <button onClick={this.handleClickCreateNewSet} disabled={loading.creatingSet} type="submit" className="btn btn-primary set-btn">Create</button>
+              <input type="text" className="form-control" placeholder="Set name" pattern="[A-Za-z0-9:_ '-]*"
+              title="Set names may contain letters, numbers, spaces, and the following symbols: ' _ -" onChange={this.handleChangeCreateNewSet} />
+            <button disabled={loading.creatingSet} type="submit" className="btn btn-primary set-btn">Create</button>
             { loading.creatingSet && <FontAwesome icon="spinner fa-spin" size="lg"></FontAwesome> }
           </form>
           <form className="form col-md-offset-3 col-md-5" id="add-remove-materials-from-set">
