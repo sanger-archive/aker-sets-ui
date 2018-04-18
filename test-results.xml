@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2018-03-23T15:58:46" id="0" hostname="mib111151i.internal.sanger.ac.uk" make_target="undefined" tests="95" errors="0" failures="0" time="0.588">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1"/>
+    </properties>
+    <testcase name="renders the row" time="0.029" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BiomaterialTableRow /&gt;|when rendering the row"/>
+    <testcase name="should render an icon clickable to allow you remove the material if removable is set to true" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BiomaterialTableRow /&gt;|when rendering the row"/>
+    <testcase name="adds the info CSS class to the material if its id is inside the selected list " time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BiomaterialTableRow /&gt;|when rendering the row|when receiving a list of selected materials"/>
+    <testcase name="does not add the info CSS class to the material if its id is not inside the selected list " time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BiomaterialTableRow /&gt;|when rendering the row|when receiving a list of selected materials"/>
+    <testcase name="renders a row for each material" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BiomaterialTable /&gt;|when rendering the table"/>
+    <testcase name="displays the materials information provided" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BiomaterialTable /&gt;|when rendering the table|when providing a hash of materials information"/>
+    <testcase name="renders an empty panel" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BottomSetPanel /&gt;|when no set is provided"/>
+    <testcase name="renders a panel with a body" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;BottomSetPanel /&gt;|when a set is provided"/>
+    <testcase name="renders a buttons panel container" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;ButtonsPanel /&gt;|when rendering the buttons panel"/>
+    <testcase name="displays an empty message" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;CurrentSearch /&gt;|when no filters has been provided"/>
+    <testcase name="displays the filter" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;CurrentSearch /&gt;|when one filter has been provided"/>
+    <testcase name="displays the filters" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;CurrentSearch /&gt;|when multiple filters have been provided"/>
+    <testcase name="does not display the filters row" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when there are no filters defined"/>
+    <testcase name="displays the filter row" time="0.016" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when there are filters defined"/>
+    <testcase name="creates a new row when we click on the button to add new filter row" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when interacting with filter panel"/>
+    <testcase name="removes a row when we click on the button to remove a filter row" time="0.033" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when interacting with filter panel"/>
+    <testcase name="updates the stored current filters to the list of filters when we click on update search" time="0.051" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when interacting with filter panel"/>
+    <testcase name="updates the comparator list when a field name is selected" time="0.026" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when interacting with filter panel"/>
+    <testcase name="updates the value type when a comparator is selected" time="0.009" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when interacting with filter panel"/>
+    <testcase name="updates the filter state when a filter value is selected" time="0.011" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FilterPanel /&gt;|when interacting with filter panel"/>
+    <testcase name="has the fa class" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when using the default params"/>
+    <testcase name="has the fa-fw class" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when using the default params"/>
+    <testcase name="has the fa class" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when icon is passed in props"/>
+    <testcase name="has the fa-${icon} class" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when icon is passed in props"/>
+    <testcase name="has the fa class" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when size is passed in props"/>
+    <testcase name="has the class fa-${size}" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when size is passed in props"/>
+    <testcase name="does not have the fa-fw class" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|when fw is false"/>
+    <testcase name="triggers the onClick prop function" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;FontAwesome /&gt;|onClick|when the icon is clicked"/>
+    <testcase name="renders the panel" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;Panel /&gt;|when rendering"/>
+    <testcase name="renders the heading" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;Heading /&gt;|when rendering"/>
+    <testcase name="renders the title" time="0.004" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;Heading /&gt;|when rendering|when a title is provided"/>
+    <testcase name="renders the body" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;Body /&gt;|when rendering"/>
+    <testcase name="renders the footer" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;Footer /&gt;|when rendering"/>
+    <testcase name="displays the results table with only the headers" time="0.004" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SearchResultsTable /&gt;|when there are no items defined"/>
+    <testcase name="displays the results table with items in the rows" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SearchResultsTable /&gt;|when there are items defined"/>
+    <testcase name="displays the buttons panel" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SearchResultsTable /&gt;|when there are items defined"/>
+    <testcase name="does not display a body" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetPanelComponent /&gt;|when no set is selected"/>
+    <testcase name="displays the body for the set" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetPanelComponent /&gt;|when a set is selected"/>
+    <testcase name="displays a locked set" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetPanelComponent /&gt;|when a set is selected|when the set is locked"/>
+    <testcase name="displays a not locked set" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetPanelComponent /&gt;|when a set is selected|when the set is not locked"/>
+    <testcase name="displays a SelectDisablingSurroundingButtons inside" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SelectDisablingSurroundingButtons /&gt;"/>
+    <testcase name="displays a Select inside" time="0.026" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetSelector /&gt;"/>
+    <testcase name="performs an ajax call" time="0.018" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetSelector /&gt;|when writing some characters"/>
+    <testcase name="returns null when no json is passed as argument and there is no selected option" time="0.01" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetSelector /&gt;|convertOpts()"/>
+    <testcase name="returns selected option when no json is passed as argument" time="0.017" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetSelector /&gt;|convertOpts()"/>
+    <testcase name="returns an empty list when no options is obtained" time="0.017" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetSelector /&gt;|convertOpts()"/>
+    <testcase name="returns the right options from a json" time="0.005" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetSelector /&gt;|convertOpts()"/>
+    <testcase name="creates an empty table" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetTable /&gt;|when using the default params"/>
+    <testcase name="creates a table for a set" time="0.007" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetTable /&gt;|when using the default params"/>
+    <testcase name="shows the owner if hideOwner is set to false" time="0.004" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetTable /&gt;|when hideOwner is passed in props"/>
+    <testcase name="shows the owner if hideOwner is not set" time="0.004" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetTable /&gt;|when hideOwner is passed in props"/>
+    <testcase name="does not show the owner if hideOwner is set to true" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetTable /&gt;|when hideOwner is passed in props"/>
+    <testcase name="does not show the owner if hideOwner is explicitly set to true" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SetTable /&gt;|when hideOwner is passed in props"/>
+    <testcase name="displays an initialization message" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|at init time"/>
+    <testcase name="displays a fetching message" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when starts fetching the stamps from server"/>
+    <testcase name="displays an empty div" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets an empty list of results"/>
+    <testcase name="displays an empty div" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets an empty list of stamps"/>
+    <testcase name="displays all the stamps inside a select" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets a list of stamps and it has some results to apply stamps"/>
+    <testcase name="selects the first stamp" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets a list of stamps and it has some results to apply stamps|when selectedStamp is not provided"/>
+    <testcase name="selects the stamp provided as selectedStamp" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets a list of stamps and it has some results to apply stamps|when selectedStamp is provided"/>
+    <testcase name="calls apply handler when clicking apply button" time="0.018" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets a list of stamps and it has some results to apply stamps|when interacting with the component"/>
+    <testcase name="calls unapply handler when clicking unapply button" time="0.009" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets a list of stamps and it has some results to apply stamps|when interacting with the component"/>
+    <testcase name="calls on change handler when changing the select option" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperPanel /&gt;|when actually fetchs the stamps from the server|when it gets a list of stamps and it has some results to apply stamps|when interacting with the component"/>
+    <testcase name="shows the text" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;UserMessage /&gt;|when receiving a message"/>
+    <testcase name="uses the right css class" time="0.006" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;UserMessage /&gt;|when receiving a message"/>
+    <testcase name="remains hidden" time="0.006" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;UserMessage /&gt;|when not receiving a message"/>
+    <testcase name="shows the form" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;AddSetForm /&gt;|when displaying it"/>
+    <testcase name="should render at least one form" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;ButtonsPanelContainer /&gt;"/>
+    <testcase name="should handle creation of a new set by calling handleClickCreateNewSet" time="0.006" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;ButtonsPanelContainer /&gt;"/>
+    <testcase name="should handle adding materials into a set by calling handleClickAddMaterialsToSet" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;ButtonsPanelContainer /&gt;"/>
+    <testcase name="should handle removing materials from a set by calling handleClickRemoveMaterialsFromSet" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;ButtonsPanelContainer /&gt;"/>
+    <testcase name="should render the element" time="0.007" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;DraggableSelectedCollection /&gt;"/>
+    <testcase name="should render the element" time="0.008" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;DroppableSelectedSet /&gt;"/>
+    <testcase name="should render the element" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;LockedSelectedSet /&gt;"/>
+    <testcase name="should render the element" time="0.002" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SelectableSetTable /&gt;"/>
+    <testcase name="should reverse sort the set list by created_at" time="0.027" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;SelectableSetTable /&gt;"/>
+    <testcase name="should render the element" time="0.004" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="&lt;StamperControl /&gt;"/>
+    <testcase name="converts a list of filters into a query for type string" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder"/>
+    <testcase name="converts a list of filters into a query for type date" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder"/>
+    <testcase name="converts a list of filters into a query for type list" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder"/>
+    <testcase name="converts a list of filters into a query for type boolean" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder"/>
+    <testcase name="returns query for an empty list if none of the elements are the same in both lists" time="0.003" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder|when receiving a filtering list with different comparators|with a list of uuids with operations in an object of inclusion and exclusion uuids"/>
+    <testcase name="returns a query filtering with the common elements if some elements are the same in both lists" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder|when receiving a filtering list with different comparators|with a list of uuids with operations in an object of inclusion and exclusion uuids"/>
+    <testcase name="returns query with all the elements of both lists if the lists have shared elements but their comparators are different" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder|when receiving a filtering list with different comparators|with a list of uuids with operations in an object of inclusion and exclusion uuids"/>
+    <testcase name="returns a query with the shared elements for each comparator when using different comparators" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder|when receiving a filtering list with different comparators|with a list of uuids with operations in an object of inclusion and exclusion uuids"/>
+    <testcase name="should fail with an exception if more than one comparator is included in one of the filter objects of the list" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="lib/query_builder|#queryBuilder|when receiving a filtering list with different comparators|with a list of uuids with operations in an object of inclusion and exclusion uuids"/>
+    <testcase name="only calls the debounced function once every n milliseconds" time="0.105" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="Utils|#debounce"/>
+    <testcase name="filters out any filter that does not match the criteria" time="0.007" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="Utils|#currentSearchQueryBuilder"/>
+    <testcase name="returns an object with items" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/browser|Store Items"/>
+    <testcase name="Updates the name at the correct index" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/search|Update filters"/>
+    <testcase name="Updates the comparator at the correct index" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/search|Update filters"/>
+    <testcase name="Updates the value at the correct index" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/search|Update filters"/>
+    <testcase name="Removes the filter at the correct index" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/search|Update filters"/>
+    <testcase name="Adds another filter" time="0" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/search|Update filters"/>
+    <testcase name="Updates the state to have current search" time="0.001" classname="." package="PhantomJS 2.1.1 (Mac OS X 0.0.0)" parentSuites="reducers/search|Set current search"/>
+    <system-out><![CDATA[PhantomJS 2.1.1 (Mac OS X 0.0.0) WARN: 'Warning: ReactTestUtils has been moved to react-dom/test-utils. Update references to remove this warning.'
+,PhantomJS 2.1.1 (Mac OS X 0.0.0) WARN: 'Warning: Accessing PropTypes via the main React package is deprecated, and will be removed in  React v16.0. Use the latest available v15.* prop-types package from npm instead. For info on usage, compatibility, migration and more, see https://fb.me/prop-types-docs'
+,PhantomJS 2.1.1 (Mac OS X 0.0.0) ERROR: 'Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of `FilterPanel`. See https://fb.me/react-warning-keys for more information.
+    in FilterRow (created by FilterPanel)
+    in FilterPanel (created by Connect(FilterPanel))
+    in Connect(FilterPanel) (created by WrapperComponent)
+    in WrapperComponent'
+
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>
