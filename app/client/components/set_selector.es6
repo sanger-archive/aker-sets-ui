@@ -49,7 +49,7 @@ class SetSelector extends React.Component {
 
   getOptions(value) {
     if (value.length > 0) {
-      return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
+      return fetch(`/set_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
         .then((response) => {
           return response.json()
         }).then((json) => {
@@ -63,7 +63,7 @@ class SetSelector extends React.Component {
   getOptionsWithDelay(delay, value) {
     if (this.mySearch !== null) {
       clearTimeout(this.mySearch)
-      
+
     }
     this.promiseMySearch = new $.Deferred()
     this.mySearch = setTimeout(
