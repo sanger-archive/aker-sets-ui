@@ -5,8 +5,8 @@ import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServ
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 import { createResource } from 'redux-json-api';
 
-export const SETS_SERVICE_API = 'set_service'
-export const STAMPS_SERVICE_API = 'permission_service'
+export const SETS_SERVICE_API = 'set_service/api/v1'
+export const STAMPS_SERVICE_API = 'permission_service/api/v1'
 
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
