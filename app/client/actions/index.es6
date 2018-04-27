@@ -5,8 +5,8 @@ import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServ
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 import { createResource } from 'redux-json-api';
 
-export const SETS_SERVICE_API = 'sets_service'
-export const STAMPS_SERVICE_API = 'stamps_service'
+export const SETS_SERVICE_API = 'set_service'
+export const STAMPS_SERVICE_API = 'permission_service'
 
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
@@ -98,7 +98,7 @@ export const fetchMaterials = (json, setId, numPage, pageUrl) => {
   return function(dispatch, getState) {
     if (!materials) return false;
     const ids = materials.map((material) => material.id);
-    const url = "/materials_service/materials/search";
+    const url = "/material_service/materials/search";
 
     return $.ajax({
       method: 'POST',
@@ -195,7 +195,7 @@ export const fetchMaterialSchema = () => {
   return (dispatch, getState) => {
     return $.ajax({
       method: 'GET',
-      url: "/materials_service/materials/schema",
+      url: "/material_service/materials/schema",
       accept: "application/json",
     })
 
@@ -373,7 +373,7 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
         // search.current contains only complete filter rows
 
         const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
-        const url = "/materials_service/materials/search";
+        const url = "/material_service/materials/search";
 
         return $.ajax({
           method: 'POST',
@@ -397,7 +397,7 @@ export const performSearchWithUrl = (url) => {
     return dispatch(fetchSetMaterialsIfNeeded())
       .then(() => {
         return $.ajax({
-          url: `/materials_service/${url}`,
+          url: `/material_service/${url}`,
           method: 'GET',
           accept: "application/json",
           cache: false
@@ -647,9 +647,9 @@ export const commitSetTransaction = (setTransaction) => {
 
   return (dispatch, getState) => {
     const body = {
-      data: { 
+      data: {
         id: setTransactionId,
-        type: 'set_transactions', 
+        type: 'set_transactions',
         attributes: { status: 'done' }
       }
     }
@@ -674,8 +674,8 @@ export const addMaterialsToSetTransaction = (items, setTransaction) => {
   return (dispatch, getState) => {
     const body = {
         data: items.map((item) => {
-          return { 
-            type: 'materials', 
+          return {
+            type: 'materials',
             id: item['_id']
           }
         })
@@ -692,15 +692,15 @@ export const addMaterialsToSetTransaction = (items, setTransaction) => {
     }).then(() => {
       return setTransaction
     });
-  }  
+  }
 }
 
 export const createSetTransaction = (param, operationName) => {
   return (dispatch, getState) => {
     let body = {
-        data: { 
-          type: 'set_transactions', 
-          attributes: { operation: operationName, batch_size: getState().search.batchTransactionSize } 
+        data: {
+          type: 'set_transactions',
+          attributes: { operation: operationName, batch_size: getState().search.batchTransactionSize }
         }
     }
     if (operationName == 'create') {
@@ -859,7 +859,7 @@ const _getErrorDetails = (error) => {
   } catch(e) {
     return 'Unknown error'
   }
-  
+
 }
 
 export const APPLY_STAMP = "APPLY_STAMP";
