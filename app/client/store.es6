@@ -53,7 +53,7 @@ let initialState = {
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
 store.dispatch(setAxiosConfig({
-  baseURL: '/set_service',
+  baseURL: '/set_service/api/v1',
   headers: {
     'Content-Type': 'application/vnd.api+json',
     Accept: 'application/vnd.api+json',
