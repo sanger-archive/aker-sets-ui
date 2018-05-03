@@ -4,6 +4,7 @@ import queryMaterialBuilder from '../lib/query_builder.es6'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors.es6';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading.es6';
 import { createResource } from 'redux-json-api';
+import { validateNewSetName } from '../lib/utils.es6';
 
 export const SETS_SERVICE_API = 'sets_service'
 export const STAMPS_SERVICE_API = 'stamps_service'
@@ -536,6 +537,10 @@ export const createNewSet = (items, setName) => {
 export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
 export const createSetOnly = (setName, showMessage = true) => {
   return function(dispatch, getState) {
+    var validationError = validateNewSetName(setName);
+    if (validationError) {
+      return dispatch(userMessage(validationError, "danger"));
+    }
     var state = getState();
     const data = { type: 'sets', attributes: {name: setName}};
     const body = Object.assign({}, data);
@@ -724,6 +729,10 @@ export const createSetTransaction = (param, operationName) => {
 export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
 export const createSetFromSearch = (setName) => {
   return (dispatch, getState) => {
+    var validationError = validateNewSetName(setName);
+    if (validationError) {
+      return dispatch(userMessage(validationError, "danger"));
+    }
     dispatch(startCreateSet())
     return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setName, 'create'))
     .then(() => {
