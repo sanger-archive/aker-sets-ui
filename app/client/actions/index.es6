@@ -727,7 +727,7 @@ export const createSetFromSearch = (setName) => {
     dispatch(startCreateSet())
     return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setName, 'create'))
     .then(() => {
-      return dispatch(userMessage(`Successfully created set: ${setName} & added materials`, 'info'));
+      return dispatch(userMessage(`Successfully created set "${setName}" and added materials`, 'info'));
     })
     .always(() => {
       dispatch(stopCreateSet())
