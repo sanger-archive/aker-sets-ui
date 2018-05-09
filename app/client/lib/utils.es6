@@ -18,3 +18,13 @@ export const currentSearchQueryBuilder = (currentFilters) => {
   });
  return filters;
 }
+
+export const validateNewSetName = (setName) => {
+  if (setName.match(/^\s*submission\s/i)) {
+    return "Set names of the form \"Submission ...\" are reserved for use by Aker.";
+  }
+  if (setName.match(/^\s*work\s+order\s/i)) {
+    return "Set names of the form \"Work order ...\" are reserved for use by Aker.";
+  }
+  return null;
+}
