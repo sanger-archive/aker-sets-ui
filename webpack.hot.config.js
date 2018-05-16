@@ -24,12 +24,12 @@ module.exports = Object.assign({}, config, { entry: entry });
 
 module.exports.plugins.push(
   new webpack.DefinePlugin({
-    'process.env.SETS_SERVICE_API': '"sets_service"'
+    'process.env.SETS_SERVICE_API': '"set_service/api/v1"'
   }),
   new webpack.DefinePlugin({
-    'process.env.STAMPS_SERVICE_API': '"stamps_service"'
+    'process.env.STAMPS_SERVICE_API': '"permission_service/api/v1"'
   }),
   new webpack.DefinePlugin({
-    'process.env.MATERIAL_SERVICE': '"materials_service"'
+    'process.env.MATERIAL_SERVICE': '"material_service"'
   })
 )

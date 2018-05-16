@@ -4,15 +4,15 @@ class RackAkerServicesProxy < Rack::Proxy
 
   def perform_request(env)
     request = Rack::Request.new(env)
-    if request.path =~ /^\/sets_service\/(.*)$/
+    if request.path =~ /^\/set_service\/api\/v1\/(.*)$/
       uri = URI.parse(Rails.configuration.sets_root)
       set_env(env, uri, request, $1)
       super(env)
-    elsif request.path =~ /^\/stamps_service\/(.*)$/
+    elsif request.path =~ /^\/permission_service\/api\/v1\/(.*)$/
       uri = URI.parse(Rails.configuration.stamps_root)
       set_env(env, uri, request, $1)
       super(env)
-    elsif request.path =~ /^\/materials_service\/(.*)$/
+    elsif request.path =~ /^\/material_service\/(.*)$/
       uri = URI.parse(Rails.configuration.materials_root)
       set_env(env, uri, request, $1)
       super(env)
