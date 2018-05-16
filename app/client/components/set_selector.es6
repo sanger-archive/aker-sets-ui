@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { Async } from 'react-select';
 
+export const SETS_SERVICE_API = process.env.SETS_SERVICE_API
 
 // Number of milliseconds to wait before sending an ajax request to the set service
 const DELAY_FOR_SELECT = 500
@@ -49,7 +50,7 @@ class SetSelector extends React.Component {
 
   getOptions(value) {
     if (value.length > 0) {
-      return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
+      return fetch(`/${SETS_SERVICE_API}/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
         .then((response) => {
           return response.json()
         }).then((json) => {
@@ -63,7 +64,7 @@ class SetSelector extends React.Component {
   getOptionsWithDelay(delay, value) {
     if (this.mySearch !== null) {
       clearTimeout(this.mySearch)
-      
+
     }
     this.promiseMySearch = new $.Deferred()
     this.mySearch = setTimeout(

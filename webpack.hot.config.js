@@ -21,3 +21,15 @@ let entry = Object.keys(config.entry)
               }, {})
 
 module.exports = Object.assign({}, config, { entry: entry });
+
+module.exports.plugins.push(
+  new webpack.DefinePlugin({
+    'process.env.SETS_SERVICE_API': '"sets_service"'
+  }),
+  new webpack.DefinePlugin({
+    'process.env.STAMPS_SERVICE_API': '"stamps_service"'
+  }),
+  new webpack.DefinePlugin({
+    'process.env.MATERIAL_SERVICE': '"materials_service"'
+  })
+)
