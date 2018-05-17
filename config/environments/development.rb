@@ -66,6 +66,10 @@ Rails.application.configure do
   config.stamps_root = 'http://localhost:7000/api/v1'
   config.sets_root = 'http://localhost:3000/api/v1'
 
+  config.set_service_path = 'set_service/api/v1'
+  config.permission_service_path = 'permission_service/api/v1'
+  config.material_service_path = 'material_service'
+
   config.jwt_secret_key = 'development'
 
   config.default_jwt_user = { email: ENV.fetch('USER', 'user') + '@sanger.ac.uk', groups: ['world'] }
