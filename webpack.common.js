@@ -36,20 +36,11 @@ module.exports = {
       jQuery: 'jquery'
     }),
     new webpack.NoErrorsPlugin(), // Pauses execution on error
-    new webpack.optimize.CommonsChunkPlugin('common', 'common.js') // Builds a common.js of code shared between entry points
+    new webpack.optimize.CommonsChunkPlugin('common', 'common.js'), // Builds a common.js of code shared between entry points
+    new webpack.DefinePlugin({
+      'process.env.SETS_SERVICE_API': '"set_service/api/v1"',
+      'process.env.STAMPS_SERVICE_API': '"permission_service/api/v1"',
+      'process.env.MATERIAL_SERVICE': '"material_service"'
+    })
   ]
-
 }
-
-
-module.exports.plugins.push(
-  new webpack.DefinePlugin({
-    'process.env.SETS_SERVICE_API': '"set_service/api/v1"'
-  }),
-  new webpack.DefinePlugin({
-    'process.env.STAMPS_SERVICE_API': '"permission_service/api/v1"'
-  }),
-  new webpack.DefinePlugin({
-    'process.env.MATERIAL_SERVICE': '"material_service"'
-  })
-)
