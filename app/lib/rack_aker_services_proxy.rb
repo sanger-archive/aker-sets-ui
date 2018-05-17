@@ -4,15 +4,15 @@ class RackAkerServicesProxy < Rack::Proxy
   # This file is only used when running the application locally.
   def perform_request(env)
     request = Rack::Request.new(env)
-    if request.path =~ /^\/#{Rails.configuration.set_service_local_path}\/(.*)$/
+    if request.path =~ /^\/#{Rails.configuration.set_service_local_proxy_path}\/(.*)$/
       uri = URI.parse(Rails.configuration.set_service_local_root)
       set_env(env, uri, request, $1)
       super(env)
-    elsif request.path =~ /^\/#{Rails.configuration.permission_service_local_path}\/(.*)$/
+    elsif request.path =~ /^\/#{Rails.configuration.permission_service_local_proxy_path}\/(.*)$/
       uri = URI.parse(Rails.configuration.permission_service_local_root)
       set_env(env, uri, request, $1)
       super(env)
-    elsif request.path =~ /^\/#{Rails.configuration.material_service_local_path}\/(.*)$/
+    elsif request.path =~ /^\/#{Rails.configuration.material_service_local_proxy_path}\/(.*)$/
       uri = URI.parse(Rails.configuration.material_service_local_root)
       set_env(env, uri, request, $1)
       super(env)
