@@ -28,7 +28,10 @@ module.exports = Object.assign({}, config, {
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"',
-      'RELATIVE_URL_ROOT': '"/set"'
+      'RELATIVE_URL_ROOT': '"/set"',
+      'process.env.SETS_SERVICE_API': '"set_service/api/v1"',
+      'process.env.STAMPS_SERVICE_API': '"permission_service/api/v1"',
+      'process.env.MATERIAL_SERVICE': '"material_service"'
     })
   ]
 });
