@@ -62,13 +62,13 @@ Rails.application.configure do
 
   config.fake_ldap = true
 
-  config.materials_root = 'http://localhost:5000'
-  config.stamps_root = 'http://localhost:7000/api/v1'
-  config.sets_root = 'http://localhost:3000/api/v1'
-
-  config.set_service_path = 'set_service/api/v1'
-  config.permission_service_path = 'permission_service/api/v1'
-  config.material_service_path = 'material_service'
+  # This config is only used for local proxying stuff. Don't include it in live environment configs.
+  config.material_service_local_root = 'http://localhost:5000'
+  config.material_service_local_path = 'material_service'
+  config.permission_service_local_root = 'http://localhost:7000/api/v1'
+  config.permission_service_local_path = 'permission_service'
+  config.set_service_local_root = 'http://localhost:3000/api/v1'
+  config.set_service_local_path = 'set_service'
 
   config.jwt_secret_key = 'development'
 
