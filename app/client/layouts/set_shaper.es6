@@ -106,7 +106,7 @@ class SetShaper extends React.Component {
           <div className="row">
             <div className="col-md-3">
               <Panel>
-                <Heading title="Sets" />
+                <Heading title="Target set" />
 
                 <Body onScroll={debounce((e) => this.onScroll(e, 'top'), true)} style={{height: '280px', overflowY: 'scroll'}}>
                   <ul className="nav nav-tabs" role="tablist">
@@ -158,7 +158,7 @@ class SetShaper extends React.Component {
             <div className="col-md-3">
 
               <Panel>
-
+                <Heading title="Source set" />
                 <Body onScroll={debounce((e) => this.onScroll(e, 'bottom'), true)} style={{height: '320px', overflowY: 'scroll'}}>
                   <ul className="nav nav-tabs" role="tablist">
                     <li role="presentation" className="active">
