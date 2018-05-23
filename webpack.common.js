@@ -38,5 +38,4 @@ module.exports = {
     new webpack.NoErrorsPlugin(), // Pauses execution on error
     new webpack.optimize.CommonsChunkPlugin('common', 'common.js') // Builds a common.js of code shared between entry points
   ]
-
 }

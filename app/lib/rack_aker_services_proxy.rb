@@ -1,19 +1,19 @@
 require 'faraday'
 
 class RackAkerServicesProxy < Rack::Proxy
-
+  # This file is only used when running the application locally.
   def perform_request(env)
     request = Rack::Request.new(env)
-    if request.path =~ /^\/sets_service\/(.*)$/
-      uri = URI.parse(Rails.configuration.sets_root)
+    if request.path =~ /^\/#{Rails.configuration.set_service_local_proxy_path}\/(.*)$/
+      uri = URI.parse(Rails.configuration.set_service_local_root)
       set_env(env, uri, request, $1)
       super(env)
-    elsif request.path =~ /^\/stamps_service\/(.*)$/
-      uri = URI.parse(Rails.configuration.stamps_root)
+    elsif request.path =~ /^\/#{Rails.configuration.permission_service_local_proxy_path}\/(.*)$/
+      uri = URI.parse(Rails.configuration.permission_service_local_root)
       set_env(env, uri, request, $1)
       super(env)
-    elsif request.path =~ /^\/materials_service\/(.*)$/
-      uri = URI.parse(Rails.configuration.materials_root)
+    elsif request.path =~ /^\/#{Rails.configuration.material_service_local_proxy_path}\/(.*)$/
+      uri = URI.parse(Rails.configuration.material_service_local_root)
       set_env(env, uri, request, $1)
       super(env)
     else
