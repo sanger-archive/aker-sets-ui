@@ -6,8 +6,9 @@ import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterials
 import { createResource } from 'redux-json-api';
 import { validateNewSetName } from '../lib/utils.es6';
 
-export const SETS_SERVICE_API = 'set_service/api/v1'
-export const STAMPS_SERVICE_API = 'permission_service/api/v1'
+export const SETS_SERVICE_API = process.env.SETS_SERVICE_API
+export const STAMPS_SERVICE_API = process.env.STAMPS_SERVICE_API
+export const MATERIAL_SERVICE = process.env.MATERIAL_SERVICE
 
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
@@ -99,7 +100,7 @@ export const fetchMaterials = (json, setId, numPage, pageUrl) => {
   return function(dispatch, getState) {
     if (!materials) return false;
     const ids = materials.map((material) => material.id);
-    const url = "/material_service/materials/search";
+    const url = `/${MATERIAL_SERVICE}/materials/search`;
 
     return $.ajax({
       method: 'POST',
@@ -196,7 +197,7 @@ export const fetchMaterialSchema = () => {
   return (dispatch, getState) => {
     return $.ajax({
       method: 'GET',
-      url: "/material_service/materials/schema",
+      url: `/${MATERIAL_SERVICE}/materials/schema`,
       accept: "application/json",
     })
 
@@ -374,7 +375,7 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
         // search.current contains only complete filter rows
 
         const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
-        const url = "/material_service/materials/search";
+        const url = `/${MATERIAL_SERVICE}/materials/search`;
 
         return $.ajax({
           method: 'POST',
@@ -398,7 +399,7 @@ export const performSearchWithUrl = (url) => {
     return dispatch(fetchSetMaterialsIfNeeded())
       .then(() => {
         return $.ajax({
-          url: `/material_service/${url}`,
+          url: `/${MATERIAL_SERVICE}/${url}`,
           method: 'GET',
           accept: "application/json",
           cache: false

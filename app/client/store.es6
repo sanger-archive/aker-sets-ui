@@ -5,6 +5,8 @@ import reducers from './reducers/index.es6';
 
 import { STAMPS_INITIALIZATION, setUserEmail } from './actions/index.es6'
 
+export const SETS_SERVICE_API = process.env.SETS_SERVICE_API
+
 let initialState = {
   api: {
     sets:        { data: [] },
@@ -53,7 +55,7 @@ let initialState = {
 let store = createStore(reducers, initialState, applyMiddleware(thunk));
 
 store.dispatch(setAxiosConfig({
-  baseURL: '/set_service/api/v1',
+  baseURL: `/${SETS_SERVICE_API}`,
   headers: {
     'Content-Type': 'application/vnd.api+json',
     Accept: 'application/vnd.api+json',
