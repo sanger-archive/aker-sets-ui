@@ -10,6 +10,8 @@
     <%= csrf_meta_tags %>
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'manifest' %>
+    <%= javascript_pack_tag 'vendor' %>
   </head>
 
   <body>
@@ -18,12 +20,9 @@
 
     <div id="application"><%= yield %></div>
 
-
     <script type="text/javascript">
       var Aker = { userEmail: '<%= current_user.email %>' }
     </script>
-    <%= webpack_manifest_script %>
-    <%= webpack_include_tag 'common' %>
 
     <%= yield :js if content_for? :js %>
     <footer style="text-align:center">

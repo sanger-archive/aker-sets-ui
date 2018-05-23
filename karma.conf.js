@@ -16,20 +16,18 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      // Because PhantomJS's JS is not so up to date (e.g. no Map)
       'node_modules/babel-polyfill/dist/polyfill.js',
       'spec/js/test_loader.js'
     ],
-
 
     // list of files to exclude
     exclude: [
     ],
 
-
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'app/client/**/*.es6': ['webpack', 'sourcemap'],
       'spec/js/test_loader.js': ['webpack', 'sourcemap']
     },
 
@@ -41,22 +39,11 @@ module.exports = function(config) {
         ],
         loaders: [
           {
-            test: /[\.es6, \.js]$/,
+            test: /\.js$/,
             loaders: ['babel-loader'],
             exclude: /node_modules/
-          },
-          {
-            test: /\.json$/,
-            loader: 'json',
           }
         ]
-      },
-      // This is allow enzyme to work
-      // https://github.com/airbnb/enzyme/blob/master/docs/guides/webpack.md
-      externals: {
-        'react/addons': true,
-        'react/lib/ExecutionEnvironment': true,
-        'react/lib/ReactContext': true
       },
       plugins: [
         new webpack.ProvidePlugin({ $: "jquery", jQuery: "jquery" })

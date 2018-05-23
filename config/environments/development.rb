@@ -1,4 +1,6 @@
 Rails.application.configure do
+  # Verifies that versions and hashed value of the package contents in the project's package.json
+  config.webpacker.check_yarn_integrity = true
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -19,7 +21,7 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control' => 'public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -41,11 +43,11 @@ Rails.application.configure do
   config.assets.debug = true
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  config.assets.quiet = false
 
   # Use a different URL for serving assets in development mode, and pass all requests to Sprockets
   # http://guides.rubyonrails.org/asset_pipeline.html#local-precompilation
-  config.assets.prefix = "/dev-assets"
+  # config.assets.prefix = "/assets"
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -53,10 +55,6 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
-  config.webpack_dev_server_host = 'http://localhost:8080'
-
-  config.webpack[:use_manifest] = false
 
   config.fake_ldap = true
 
