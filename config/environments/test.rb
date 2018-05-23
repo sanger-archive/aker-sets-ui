@@ -52,9 +52,10 @@ Rails.application.configure do
 
   config.jwt_secret_key = 'test'
 
-  config.urls = { submission: '',
+  config.urls = { reception: '',
                   permissions: '',
                   sets: '',
                   projects: '',
-                  work_orders: '' }
+                  work: '' }
+                  
 end
