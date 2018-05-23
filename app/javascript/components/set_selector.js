@@ -51,7 +51,7 @@ class SetSelector extends React.Component {
     if (value.length > 0) {
       return fetch(`/sets_service/sets?filter[search_by_name]=${value}&filter[locked]=false&filter[owner_id]=${this.props.userEmail}`)
         .then((response) => {
-          return responseon()
+          return response.json()
         }).then((json) => {
           return { options: this.convertOpts(json) }
         })
