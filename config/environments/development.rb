@@ -81,9 +81,10 @@ Rails.application.configure do
 
   config.middleware.insert(0, RackAkerServicesProxy, { ssl_verify_none: true })
 
-  config.urls = { submission: '',
+  config.urls = { reception: '',
                   permissions: '',
                   sets: '',
                   projects: '',
-                  work_orders: '' }
+                  work: '' }
+                  
 end
