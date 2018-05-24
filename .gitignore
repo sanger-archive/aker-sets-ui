@@ -26,6 +26,7 @@ npm-debug.log
 
 /public/dev-assets/*
 coverage
+/public/assets
 /public/packs
 /public/packs-test
 yarn-debug.log*
