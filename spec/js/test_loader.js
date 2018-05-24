@@ -12,5 +12,5 @@ global.sinon = sinon;
 global.expect = chai.expect;
 global.should = chai.should();
 
-const testsContext = require.context('../../app/javascript/components/tests', true, /_spec\.js$/);
+const testsContext = require.context('../../app/javascript', true, /_spec\.js$/);
 testsContext.keys().forEach(testsContext);

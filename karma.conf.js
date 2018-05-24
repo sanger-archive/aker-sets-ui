@@ -1,6 +1,7 @@
 // Karma configuration
 // Generated on Tue Aug 09 2016 10:44:30 GMT+0100 (BST)
 var webpack = require('webpack');
+var environment = require('./config/webpack/environment');
 
 module.exports = function(config) {
   config.set({
@@ -46,7 +47,8 @@ module.exports = function(config) {
         ]
       },
       plugins: [
-        new webpack.ProvidePlugin({ $: "jquery", jQuery: "jquery" })
+        new webpack.ProvidePlugin({ $: "jquery", jQuery: "jquery" }),
+        new webpack.DefinePlugin(environment.service_api_urls)
       ],
       resolve: { alias: { sinon: 'sinon/pkg/sinon.js' } }
     },
