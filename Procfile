@@ -1,2 +1,2 @@
-web: WEBPACK_DEV_SERVER=true rails server -p 3002
-js: npm start
+web: rails server -p 3002
+js: ./bin/webpack-dev-server

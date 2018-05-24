@@ -25,7 +25,12 @@ npm-debug.log
 /node_modules
 
 /public/dev-assets/*
-/app/assets/javascripts/common.js
-/app/assets/javascripts/search.js
-/app/assets/javascripts/set-shaper.js
 coverage
+/public/assets
+/public/packs
+/public/packs-test
+yarn-debug.log*
+.yarn-integrity
+yarn-error.log
+
+.DS_Store

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.2.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -27,9 +27,6 @@ gem 'aker_shared_navbar', github: 'sanger/aker-shared-navbar'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# JSON API
-gem 'jsonapi-resources', '~> 0.7.1.beta2'
-
 # For those styles
 gem 'bootstrap-sass', '~> 3.3.6'
 
@@ -39,8 +36,6 @@ gem 'font-awesome-sass'
 # So we can run the webpack-dev-server and rails server at the same time
 gem 'foreman'
 
-gem 'rubocop', '~> 0.5', require: false
-
 gem 'pg', '~> 0.18'
 gem 'rack-proxy', '~> 0.6.2', require: true
 
@@ -48,7 +43,8 @@ gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
 gem 'faraday'
 
 gem 'bootstrap_form'
-
+gem 'bootsnap', require: false
+gem 'webpacker', '~> 3.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -77,7 +73,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem 'simplecov', :require => false, :group => :test
-gem 'simplecov-rcov', :group => :test
-gem 'rubycritic', :group => :test
