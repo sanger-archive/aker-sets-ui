@@ -138,6 +138,8 @@ export class ContextualValue extends React.Component {
         return <DatePicker value={filter.value} onChange={dateOnChange} />
       case 'string':
         return <InputTextField value={filter.value} onChange={onChange} />
+      case 'float':
+        return <InputNumField value={filter.value} onChange={onChange} step="0.01"/>
       default:
         return <InputTextField value={filter.value} onChange={onChange} />
     }
@@ -146,6 +148,10 @@ export class ContextualValue extends React.Component {
 
 const InputTextField = ({value, onChange, disabled = false}) => {
   return <input type="text" className="form-control" onChange={onChange} value={value} placeholder={ !disabled ? "Enter a value" : "" } disabled={disabled} />
+};
+
+const InputNumField = ({value, onChange, step, disabled = false}) => {
+  return <input type="number" step={step} className="form-control" onChange={onChange} value={value} placeholder={ !disabled ? "Enter a value" : "" } disabled={disabled} />
 };
 
 const ListField = ({value, options, onChange, includeEmptyRow}) => {
