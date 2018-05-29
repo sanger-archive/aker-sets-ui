@@ -13,9 +13,10 @@ const search = (state = {}, action) => {
         string: ['is', 'is not'],
         boolean: ['equals'],
         containment: ['in', 'not in'],
-        privilege: ['granted to user', 'not granted to user', 'granted to group', 'not granted to group']
+        privilege: ['granted to user', 'not granted to user', 'granted to group', 'not granted to group'],
+        quantity: ['no more than', 'no less than', 'equals', 'less than', 'more than'],
       };
-      const allowedTypes = ['string', 'boolean'];
+      const allowedTypes = ['string', 'boolean', 'float'];
       const properties = action.schema.properties;
 
       // add filter by set name to searchable fields from materials service
@@ -90,6 +91,9 @@ const search = (state = {}, action) => {
           field['type'] = 'boolean';
           field['comparators'] = comparators['boolean'];
           field['allowed'] = ['true', 'false'];
+        } else if (type == 'float') {
+          field['type'] = 'float';
+          field['comparators'] = comparators['quantity'];
         }
 
         return memo;
