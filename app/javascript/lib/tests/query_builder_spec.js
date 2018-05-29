@@ -60,6 +60,21 @@ describe("lib/query_builder", () => {
       );
     });
 
+    it("converts a list of filters into a query for type float", () => {
+      const filters = [
+        { name: "concentration", comparator: "no less than", value: "2.5", type: "float"},
+        { name: "concentration", comparator: "no more than", value: "4.5", type: "float"},
+        { name: "volume", comparator: "less than", value: "55", type: "float"},
+        { name: "concentration", comparator: "more than", value: "82", type: "float"},
+        { name: "volume", comparator: "equals", value: "108.3", type: "float"},
+      ]
+
+      const result = JSON.stringify(queryBuilder(filters));
+      expect(result).to.equal(
+        `{"$and":[{"concentration":{"$gte":2.5}},{"concentration":{"$lte":4.5}},{"volume":{"$lt":55}},{"concentration":{"$gt":82}},{"volume":{"$eq":108.3}}]}`
+      );
+    });
+
     context("when receiving a filtering list with different comparators", () => {
 
       context("with a list of uuids with operations in an object of inclusion and exclusion uuids", () => {
@@ -140,4 +155,3 @@ describe("lib/query_builder", () => {
   })
 
 })
-
