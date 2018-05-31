@@ -20,8 +20,8 @@ export const currentSearchQueryBuilder = (currentFilters) => {
 }
 
 export const validateNewSetName = (setName) => {
-  if (setName.match(/^\s*submission\s/i)) {
-    return "Set names of the form \"Submission ...\" are reserved for use by Aker.";
+  if (setName.match(/^\s*manifest\s/i)) {
+    return "Set names of the form \"Manifest ...\" are reserved for use by Aker.";
   }
   if (setName.match(/^\s*work\s+order\s/i)) {
     return "Set names of the form \"Work order ...\" are reserved for use by Aker.";
