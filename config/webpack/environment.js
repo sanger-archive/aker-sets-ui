@@ -33,9 +33,9 @@ environment.plugins.prepend(
 environment.plugins.append('NoEmitOnErrors', new webpack.NoEmitOnErrorsPlugin())
 
 environment.service_api_urls = {
-  'SET_SERVICE_API': JSON.stringify('/set_service/api/v1'),
-  'STAMP_SERVICE_API': JSON.stringify('/permission_service/api/v1'),
-  'MATERIAL_SERVICE': JSON.stringify('/material_service')
+  'SET_SERVICE_API': JSON.stringify('/sets_service'),
+  'STAMP_SERVICE_API': JSON.stringify('/stamps_service'),
+  'MATERIAL_SERVICE': JSON.stringify('/materials_service')
 }
 
 module.exports = environment
