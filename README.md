@@ -3,18 +3,15 @@
 Getting Started
 ---
 
-The project relies on Bundler and npm for ruby and javascript dependencies.
+The project relies on Bundler and yarn for ruby and javascript dependencies.
 
-    bundle install && npm install
+    bundle install # Installs ruby dependencies specified in Gemfile with bundler
+    bundle exec rake yarn:install # Installs javascript dependencies specified in package.json with yarn
 
 Running the test suites
 ---
 
-RSpec is used for the server tests. All the tests sit in the `spec` directory.
-
-    bundle exec rake spec
-
-Karma is the test runner for the javascript tests. All the tests sit in the `spec/js` directory.
+Karma is the test runner for the javascript tests. Tests sit in the same directory as the javascript i.e. `app/javascript`.
 
     npm test
 
@@ -22,42 +19,20 @@ or
 
     bundle exec rake test:js
 
-To run both the RSpec tests and the Karma tests:
-
-    bundle exec rake test:all
-
 Development
 ---
 
-The javascript is written in ES6 and relies on webpack to transform and bundle it into ES5. It is located in the `app/client` directory. You can enable webpack-dev-server to watch and incrementally rebuild your javascript on save by running:
+The javascript is written in ES6 and relies on webpack (managed by the rails [webpacker](https://github.com/rails/webpacker) gem) to transform and bundle it into ES5. It is located in the `app/javascript` directory.
 
-    npm start
+The app generally uses the default configuration as provided by webpacker, which can be found in `config/webpacker.yml`.
+
+Webpacker will automatically compile the javascript when `rails server` is run. There are also 2 binstubs available: `./bin/webpack` and `./bin/webpack-dev-server`. If you run `./bin/webpack-dev-server` it will watch and incrementally rebuild your javascript on save (which is a lot quicker).
 
 There is also a Procfile used by foreman for when you wish to have your Rails server and webpack-dev-server running side by side:
 
     foreman start
 
-Note that if any changes are made in the `app/client` or `app/assets` directories, any files in the `public/assets` directory must be removed, and webpack must be run with the `webpack.prod.conf.js` configuration file:
+Old Versions
+---
 
-    rm -r public/assets
-    RAILS_ENV=production bundle exec rake webpack:compile
-
-This creates the minified js files and also creates a manifest file that Rails can use to serve these files. THESE MUST BE COMMITTED. You may want to do all this automatically as a git pre-commit hook e.g.
-
-```shell
-#!/bin/sh
-
-files=`git diff --cached --name-only`
-re="app\/client|app\/assets"
-if [[ $files =~ $re ]]
-then
-    echo "Files have been modified in app/client or app/assets. Pre-compiling..."
-    rm -r public/assets
-    RAILS_ENV=production bundle exec rake webpack:compile
-    git add -A
-fi
-```
-
-(You would put this in `.git/hooks/pre-commit` and make the file executable.)
-
-There is some Rack middleware that is inserted in the development environment file. This is to proxy any requests to external services e.g. set service, materials service and avoid CORS issues.
+Before the `webpacker` gem was introduced, it used to be the case that javascript assets would have to be precompiled before pushing your work to Github. **This is no longer necessary** 🙌
