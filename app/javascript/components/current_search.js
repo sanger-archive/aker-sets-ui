@@ -26,6 +26,10 @@ class CurrentSearch extends React.Component {
         let value = filter.value;
         if (filter.type=='date') {
           value = new Date(value).toDateString();
+        } else if (filter.name=='concentration') {
+          value += "ng/\u03bcL"
+        } else if (filter.name=='volume') {
+          value += "\u03bcL"
         }
 
         return (

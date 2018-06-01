@@ -71,7 +71,11 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     'not in': '$nin',
     'on': '$on',
     'before': '$lt',
-    'after': '$gte'
+    'after': '$gte',
+    'more than': '$gt',
+    'less than': '$lt',
+    'no more than': '$lte',
+    'no less than': '$gte'
   }
 
   const specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
@@ -106,6 +110,9 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     }
     if (emailAppend.includes(filter.name) && !filter.value.includes('@')) {
       filterValue += '@sanger.ac.uk';
+    }
+    if (filter.type == 'float') {
+      filterValue = parseFloat(filter.value);
     }
 
     const fieldPredicate = {};
