@@ -54,5 +54,6 @@ group :test do
   gem 'factory_bot_rails'
   gem 'launchy'
   gem 'poltergeist'
+  gem 'rake'
   gem 'rspec-rails', '~> 3.4'
 end
