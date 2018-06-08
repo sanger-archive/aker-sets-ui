@@ -1,5 +1,7 @@
 # Aker Set Shaper
 
+[![Build Status](https://travis-ci.org/sanger/aker-sets-ui.svg?branch=devel)](https://travis-ci.org/sanger/aker-sets-ui)
+
 Getting Started
 ---
 
