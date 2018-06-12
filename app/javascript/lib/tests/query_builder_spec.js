@@ -20,7 +20,7 @@ describe("lib/query_builder", () => {
 
     it("converts a list of filters into a query for type date", () => {
       const filters = [
-        { name: "date_of_receipt", comparator: "before", value: "2015-01-01", type: "date" },
+        { name: "date_of_receipt", comparator: "before", value: "2076-01-01", type: "date" },
         { name: "date_of_receipt", comparator: "after", value: "2015-02-01", type: "date" },
         { name: "date_of_receipt", comparator: "on", value: "2015-03-01", type: "date" },
       ]
@@ -37,9 +37,9 @@ describe("lib/query_builder", () => {
     it("converts a list of filters into a query for type list", () => {
       const filters = [
         { name: "material_type", comparator: "is", value: "dna", type: "list"},
-        { name: "material_type", comparator: "is not", value: "blood", type: "list"},
+        { name: "material_type", comparator: "is not", value: "face", type: "list"},
         { name: "gender", comparator: "is not", value: "male", type: "list" },
-        { name: "scientific_name", comparator: "is not", value: "Homo sapiens", type: "list" },
+        { name: "scientific_name", comparator: "is not", value: "Homer sapiens", type: "list" },
       ]
 
       const result = JSON.stringify(queryBuilder(filters));
