@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import FontAwesome from './font_awesome';
 
-const SetTable = ({ sets, selectedSet, onSetClick, hideOwner, addLink, fetching }) => {
+const SetTable = ({ sets, selectedSet, onSetClick, hideOwner, addLink, fetching, showLocked }) => {
   if (sets.length == 0) {
     return <p className="text-center">No sets found.</p>
   }
 
   let rows = sets.map((set, index) => {
-    return <SetRow set={set} selected={(set.id == selectedSet)} onClick={onSetClick} key={index} hideOwner={hideOwner} addLink={addLink} />;
+    if (!set.attributes.locked || (showLocked && set.attributes.locked)) {
+      return <SetRow set={set} selected={(set.id == selectedSet)} onClick={onSetClick} key={index} hideOwner={hideOwner} addLink={addLink} />;
+    }
   });
 
   // Show a spinning icon if more Sets are being fetched
@@ -43,7 +45,8 @@ const SetTable = ({ sets, selectedSet, onSetClick, hideOwner, addLink, fetching 
 SetTable.defaultProps = {
   sets: [],
   selectedSet: undefined,
-  addLink: false
+  addLink: false,
+  showLocked: true
 }
 
 export default SetTable;

@@ -6,7 +6,6 @@ export class BiomaterialTableRow extends Component {
 
   render() {
     const { biomaterial, onClick, removeable, onRemove, index, selected } = this.props;
-
     let removeableTd;
 
     if (removeable) {
@@ -21,11 +20,14 @@ export class BiomaterialTableRow extends Component {
 
     return (
       <tr className={trClass} style={style} onClick={(e) => onClick(biomaterial, index, e) }>
+        <td>{biomaterial.id}</td>
         <td>{biomaterial.scientific_name}</td>
         <td>{biomaterial.gender}</td>
         <td>{biomaterial.phenotype}</td>
         <td>{biomaterial.supplier_name}</td>
         <td>{biomaterial.donor_id}</td>
+        <td>{biomaterial.tissue_type}</td>
+        <td>{biomaterial.owner_id}</td>
         {removeableTd}
       </tr>
     )
@@ -42,7 +44,9 @@ BiomaterialTableRow.defaultProps = {
     gender: '',
     phenotype: '',
     supplier_name: '',
-    donor_id: ''
+    donor_id: '',
+    tissue_type: '',
+    owner_id: ''
   }
 }
 
@@ -59,13 +63,16 @@ export class BiomaterialTable extends Component {
       <table className={tableClass}>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Scientific Name</th>
             <th>Gender</th>
             <th>Phenotype</th>
             <th>Supplier Name</th>
             <th>Donor ID</th>
+            <th>Tissue Type</th>
+            <th>Sample Guardian</th>
             {/* If the materials are removeable have a blank table header for the extra column */}
-            { rest['removeable'] && <th></th>}
+            { rest['removeable'] && <th>Remove?</th>}
           </tr>
         </thead>
           <tbody>
