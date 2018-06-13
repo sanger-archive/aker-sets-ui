@@ -98,13 +98,20 @@ class SetShaper extends React.Component {
           <UserMessage></UserMessage>
           <div className="row">
           <div className="col-md-12">
-            <p>Find the set you wish to edit using the "My Created Sets" box. The materials in your selected
-              set will be listed in the box to the right. Alternatively, you can create a new empty set using the text box.<br />
-              A locked set (marked by <FontAwesome icon="lock" style={{"color": "#e61c1c"}} />)
-              cannot be changed in any way, and exists to provide a record of work.<br />Materials that are <span className="text-muted">greyed out</span> are unavailable, either because they are
-              part of an active work order, or because they have not yet been received by Sample Management. However, this has no impact on your ability to manipulate those materials within sets.<br />
-              Use <FontAwesome icon="times" /> to remove materials from a set.<br />
-              When browsing materials within a set, use the "First", "Previous", "Next" and "Last" buttons to move through pages of 25 materials.</p>
+            <p>Find the set you wish to edit using the "My Created Sets" box.
+            The materials in your selected set will be listed in the box to the
+            right. Alternatively, you can create a new empty set using the text
+            box.<br />A locked set (marked by
+            <FontAwesome icon="lock" style={{"color": "#e61c1c"}} />)
+            cannot be changed in any way, and exists to provide a record of
+            work.<br />Materials that are <span className="text-muted">greyed
+            out</span> are unavailable, either because they are part of an
+            active work order, or because they have not yet been received by
+            Sample Management. However, this has no impact on your ability to
+            manipulate those materials within sets.<br />Use
+            <FontAwesome icon="times" /> to remove materials from a set.<br />
+            When browsing materials within a set, use the "First", "Previous",
+            "Next" and "Last" buttons to move through pages of 25 materials.</p>
           </div>
             <div className="col-md-3">
               <Panel>
@@ -137,7 +144,7 @@ class SetShaper extends React.Component {
 
           <div className="row">
             <div className="col-md-12">
-              <p>Here you can find materials that you wish to add to the set you have selected above. You can look through your own sets - including those which are locked - or all of the sets within Aker (using the "All Sets" tab).<br />Once you've found the materials you're interested in, drag them into your chosen set in the top window to add the material to that set. Use the 'CMD' or 'CTRL' key to select multiple materials.<br /><strong>Sets cannot be changed</strong> in the below section, so any materials you drag into an above set will also remain in their original set.</p>
+              <p>Here you can find materials that you wish to add to the set you have selected above. You can look through your own sets - including those which are locked - or all of the sets within Aker (using the "All Sets" tab).<br />Once you've found the materials you're interested in, drag them into your chosen set in the top window to add the material to that set. Use 'CMD' or 'CTRL' and click to select multiple materials, or select one material, then 'SHIFT' and click another to select all materials between (inclusive).<br /><strong>Sets cannot be changed</strong> in the below section, so any materials you drag into an above set will also remain in their original set.</p>
             </div>
             <div className="col-md-3">
               <Panel>
