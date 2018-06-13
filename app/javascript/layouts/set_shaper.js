@@ -94,50 +94,31 @@ class SetShaper extends React.Component {
     return (
       <Router basename={ basename }>
         <div className="container-fluid">
-
-          <div className="row">
-            <div className="col-md-12">
-              <h1>Set Browser</h1>
-            </div>
-          </div>
-
+          <h1>Simple Sets Interface</h1>
           <UserMessage></UserMessage>
-
           <div className="row">
+          <div className="col-md-12">
+            <p>Find the set you wish to edit using the "My Created Sets" box. The materials in your selected
+              set will be listed in the box to the right. Alternatively, you can create a new empty set using the text box.<br />
+              A locked set (marked by <FontAwesome icon="lock" style={{"color": "#e61c1c"}} />)
+              cannot be changed in any way, and exists to provide a record of work.<br />Materials that are <span className="text-muted">greyed out</span> are unavailable, either because they are
+              part of an active work order, or because they have not yet been received by Sample Management. However, this has no impact on your ability to manipulate those materials within sets.<br />
+              Use <FontAwesome icon="times" /> to remove materials from a set.<br />
+              When browsing materials within a set, use the "First", "Previous", "Next" and "Last" buttons to move through pages of 25 materials.</p>
+          </div>
             <div className="col-md-3">
               <Panel>
-                <Heading title="Target set" />
+                <Heading title="My Created Sets" />
 
                 <Body onScroll={debounce((e) => this.onScroll(e, 'top'), true)} style={{height: '280px', overflowY: 'scroll'}}>
-                  <ul className="nav nav-tabs" role="tablist">
-                    <li role="presentation" className="active">
-                      <a onClick={ (e) => this.setTabNumber('top', 0) } href="#mySets" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a>
-                    </li>
-                    <li role="presentation">
-                      <a onClick={ (e) => this.setTabNumber('top', 1) } href="#allSets" aria-controls="allSets" role="tab" data-toggle="tab">All Sets</a>
-                    </li>
-                  </ul>
-
-                  <div className="tab-content">
-                    <div role="tabpanel" className="tab-pane active" id="mySets">
-                      <SelectableSetTable
-                        sets={ userSets }
-                        selectionType="top"
-                        hideOwner={ true }
-                        addLink={ true }
-                        fetching={ this.state.fetching }
-                      />
-                    </div>
-                    <div role="tabpanel" className="tab-pane" id="allSets">
-                      <SelectableSetTable
-                        sets={ sets }
-                        selectionType="top"
-                        addLink={ true }
-                        fetching={ this.state.fetching }
-                      />
-                    </div>
-                  </div>
-
+                  <SelectableSetTable
+                    sets={ userSets }
+                    selectionType="top"
+                    hideOwner={ true }
+                    addLink={ true }
+                    showLocked={ false }
+                    fetching={ this.state.fetching }
+                  />
                 </Body>
 
                 <Footer>
@@ -155,10 +136,12 @@ class SetShaper extends React.Component {
           </div>
 
           <div className="row">
+            <div className="col-md-12">
+              <p>Here you can find materials that you wish to add to the set you have selected above. You can look through your own sets - including those which are locked - or all of the sets within Aker (using the "All Sets" tab).<br />Once you've found the materials you're interested in, drag them into your chosen set in the top window to add the material to that set. Use the 'CMD' or 'CTRL' key to select multiple materials.<br /><strong>Sets cannot be changed</strong> in the below section, so any materials you drag into an above set will also remain in their original set.</p>
+            </div>
             <div className="col-md-3">
-
               <Panel>
-                <Heading title="Source set" />
+                <Heading title="Set Browser" />
                 <Body onScroll={debounce((e) => this.onScroll(e, 'bottom'), true)} style={{height: '320px', overflowY: 'scroll'}}>
                   <ul className="nav nav-tabs" role="tablist">
                     <li role="presentation" className="active">
