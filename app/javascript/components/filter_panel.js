@@ -37,7 +37,7 @@ class FilterPanel extends React.Component {
       <Panel>
         <Heading title='Add Filter'>
           <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverHover}>
-            <span style={{ color: '#367FD2', float: 'right' }}>What&#39;s this?</span>
+            <span style={{ color: '#367FD2', float: 'right' }}><FontAwesome icon="question" style={{"color": "#2196F3"}} /></span>
           </OverlayTrigger>
         </Heading>
         <Body>
