@@ -9,9 +9,9 @@ import DroppableSelectedSet from '../../containers/droppable_selected_set';
 
 describe('<SetPanelComponent />', () => {
   context('when no set is selected', () => {
-    it('does not display a body', () => {
+    it('displays a body', () => {
       const wrapper = shallow(<SetPanelComponent></SetPanelComponent>);
-      expect(wrapper.dive().find(Body).length).not.to.equals(1);
+      expect(wrapper.dive().find(Body).length).to.equals(1);
     });
   });
   context('when a set is selected', () => {
