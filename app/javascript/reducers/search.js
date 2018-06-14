@@ -69,8 +69,8 @@ const search = (state = {}, action) => {
           // Add special fields - these aren't generated from the material schema
           } else if (name == 'setMembership') {
             field['type'] = 'string';
-            field['comparators'] = comparators['containment'];
-            field['friendly_name'] = 'Set Membership';
+            field['comparators'] = comparators['string'];
+            field['friendly_name'] = 'Set';
 
           // [Hidden] Stamps filters, that may be brought back in the future
           // } else if (name == 'consumePermission') {
