@@ -11,6 +11,7 @@ const BottomSetPanel = ({ set }) => {
     return (
       <Panel key='bottom-set-'>
         <Heading title='No set selected'/>
+        <Body>Please select a set you wish to view from either the "My Sets" or "All Sets" tabs</Body>
       </Panel>
     );
   }

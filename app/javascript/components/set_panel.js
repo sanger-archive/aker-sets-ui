@@ -41,6 +41,7 @@ export const SetPanelComponent = ({ set, user_email }) => {
     return (
       <Panel key='set-'>
         <Heading title='No set selected'/>
+        <Body>Please select a set you wish to manage from the "My Created Sets" tab</Body>
       </Panel>
     );
   }
