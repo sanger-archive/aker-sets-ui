@@ -67,8 +67,6 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     'equals': '$eq',
     'is': '$eq',
     'is not': '$ne',
-    'in': '$in',
-    'not in': '$nin',
     'on': '$on',
     'before': '$lt',
     'after': '$gte',
