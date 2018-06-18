@@ -80,10 +80,10 @@ describe("lib/query_builder", () => {
       context("with a list of uuids with operations in an object of inclusion and exclusion uuids", () => {
         it("returns query for an empty list if none of the elements are the same in both lists", () => {
           const filters = [
-            {name: "setMembership", comparator: "in", value: "a name", type: "string"},
-            {name: "setMembership", comparator: "in", value: "another name", type: "string"}
+            {name: "setMembership", comparator: "is", value: "a name", type: "string"},
+            {name: "setMembership", comparator: "is", value: "another name", type: "string"}
           ];
-          const filteringList = [{"in": ["a1", "a2", "a3"]}, {"in": ["b1", "b2", "b3"]}];
+          const filteringList = [{"is": ["a1", "a2", "a3"]}, {"is": ["b1", "b2", "b3"]}];
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
@@ -93,11 +93,11 @@ describe("lib/query_builder", () => {
 
         it("returns a query filtering with the common elements if some elements are the same in both lists", () => {
           const filters = [
-            {name: "setMembership", comparator: "in", value: "a name", type: "string"},
-            {name: "setMembership", comparator: "in", value: "another name", type: "string"}
+            {name: "setMembership", comparator: "is", value: "a name", type: "string"},
+            {name: "setMembership", comparator: "is", value: "another name", type: "string"}
           ];
 
-          const filteringList = [{"in": ["a1", "c1", "a3", "d1"]}, {"in": ["b1", "c1", "b3", "d1"]}];
+          const filteringList = [{"is": ["a1", "c1", "a3", "d1"]}, {"is": ["b1", "c1", "b3", "d1"]}];
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
@@ -108,11 +108,11 @@ describe("lib/query_builder", () => {
 
         it("returns query with all the elements of both lists if the lists have shared elements but their comparators are different", () => {
           const filters = [
-            {name: "setMembership", comparator: "in", value: "a name", type: "string"},
-            {name: "setMembership", comparator: "not in", value: "another name", type: "string"}
+            {name: "setMembership", comparator: "is", value: "a name", type: "string"},
+            {name: "setMembership", comparator: "is not", value: "another name", type: "string"}
           ];
 
-          const filteringList = [{"in": ["a1", "c1", "a3", "d1"]}, {"not_in": ["b1", "c1", "b3", "d1"]}];
+          const filteringList = [{"is": ["a1", "c1", "a3", "d1"]}, {"is_not": ["b1", "c1", "b3", "d1"]}];
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
@@ -122,13 +122,13 @@ describe("lib/query_builder", () => {
 
         it("returns a query with the shared elements for each comparator when using different comparators", () => {
           const filters = [
-            {name: "setMembership", comparator: "in", value: "a name", type: "string"},
-            {name: "setMembership", comparator: "not in", value: "another name", type: "string"}
+            {name: "setMembership", comparator: "is", value: "a name", type: "string"},
+            {name: "setMembership", comparator: "is not", value: "another name", type: "string"}
           ];
 
           const filteringList = [
-                    {"in": ["a1", "c1", "a3", "d1"]}, {"not_in": ["a1", "b1"] },
-                    {"in": ["b1", "c1", "b3", "d1"]}, {"not_in": ["b1", "c1"]}];
+                    {"is": ["a1", "c1", "a3", "d1"]}, {"is_not": ["a1", "b1"] },
+                    {"is": ["b1", "c1", "b3", "d1"]}, {"is_not": ["b1", "c1"]}];
 
           const result = JSON.stringify(queryBuilder(filters, filteringList));
           expect(result).to.equal(
@@ -139,7 +139,7 @@ describe("lib/query_builder", () => {
         it("should fail with an exception if more than one comparator is included in one of the filter objects of the list", () => {
           const filters = [
             {name: "setMembership", comparator: "in", value: "a name", type: "string"},
-            {name: "setMembership", comparator: "not in", value: "another name", type: "string"}
+            {name: "setMembership", comparator: "is not", value: "another name", type: "string"}
           ];
 
           const filteringList = [

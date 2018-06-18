@@ -12,8 +12,8 @@ const search = (state = {}, action) => {
         date: ['before', 'after', 'on'],
         string: ['is', 'is not'],
         boolean: ['equals'],
-        containment: ['in', 'not in'],
-        privilege: ['granted to user', 'not granted to user', 'granted to group', 'not granted to group'],
+        // privilege comparators only needed if permission stamps are enabled
+        // privilege: ['granted to user', 'not granted to user', 'granted to group', 'not granted to group'],
         quantity: ['no more than', 'no less than', 'equals', 'less than', 'more than'],
       };
       const allowedTypes = ['string', 'boolean', 'float'];
@@ -69,8 +69,8 @@ const search = (state = {}, action) => {
           // Add special fields - these aren't generated from the material schema
           } else if (name == 'setMembership') {
             field['type'] = 'string';
-            field['comparators'] = comparators['containment'];
-            field['friendly_name'] = 'Set Membership';
+            field['comparators'] = comparators['string'];
+            field['friendly_name'] = 'Set';
 
           // [Hidden] Stamps filters, that may be brought back in the future
           // } else if (name == 'consumePermission') {
