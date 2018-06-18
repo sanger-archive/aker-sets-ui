@@ -36,7 +36,7 @@ export const reduceFilterList = (filterList) => {
       throw new Error('Incorrect format for filter object');
     }
     let key = keys[0];
-    if (key==='in' || key==='granted to user'|| key==='granted to group') {
+    if (key==='is' || key==='granted to user'|| key==='granted to group') {
       if (ins===null) {
         ins = elem[key];
       } else {
@@ -67,8 +67,6 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     'equals': '$eq',
     'is': '$eq',
     'is not': '$ne',
-    'in': '$in',
-    'not in': '$nin',
     'on': '$on',
     'before': '$lt',
     'after': '$gte',

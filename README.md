@@ -1,4 +1,8 @@
-# Aker Set Shaper
+# Aker - Sets UI
+
+[![Build Status](https://travis-ci.org/sanger/aker-sets-ui.svg?branch=devel)](https://travis-ci.org/sanger/aker-sets-ui)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e8292513bf0c61d22acf/maintainability)](https://codeclimate.com/github/sanger/aker-sets-ui/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e8292513bf0c61d22acf/test_coverage)](https://codeclimate.com/github/sanger/aker-sets-ui/test_coverage)
 
 Getting Started
 ---

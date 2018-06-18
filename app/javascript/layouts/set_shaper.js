@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SelectableSetTable from '../containers/selectable_set_table';
 import DroppableSelectedSet from '../containers/droppable_selected_set';
-import { Panel, Heading, Body, Footer } from '../components/panel';
+import { Heading, Body, Footer } from '../components/panel';
+import Panel from 'react-bootstrap/lib/Panel'
 import SetPanel, { SetPanelComponent } from '../components/set_panel';
 import BottomSetPanel from '../components/bottom_set_panel';
 import SetForm from '../containers/add_set_form';
@@ -94,56 +95,44 @@ class SetShaper extends React.Component {
     return (
       <Router basename={ basename }>
         <div className="container-fluid">
-
-          <div className="row">
-            <div className="col-md-12">
-              <h1>Set Browser</h1>
-            </div>
-          </div>
-
           <UserMessage></UserMessage>
-
-          <div className="row">
+          <div className="row" style={{"margin-bottom": "20px"}}>
             <div className="col-md-3">
-              <Panel>
-                <Heading title="Target set" />
+              <ul className="nav nav-tabs">
+                <li className="active"><a data-toggle="tab" href="#home">My Created Sets</a></li>
+                <li><a data-toggle="tab" href="#top-help">Help<FontAwesome icon="question" style={{"color": "#2196F3"}} /></a></li>
+              </ul>
 
-                <Body onScroll={debounce((e) => this.onScroll(e, 'top'), true)} style={{height: '280px', overflowY: 'scroll'}}>
-                  <ul className="nav nav-tabs" role="tablist">
-                    <li role="presentation" className="active">
-                      <a onClick={ (e) => this.setTabNumber('top', 0) } href="#mySets" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a>
-                    </li>
-                    <li role="presentation">
-                      <a onClick={ (e) => this.setTabNumber('top', 1) } href="#allSets" aria-controls="allSets" role="tab" data-toggle="tab">All Sets</a>
-                    </li>
-                  </ul>
-
-                  <div className="tab-content">
-                    <div role="tabpanel" className="tab-pane active" id="mySets">
-                      <SelectableSetTable
-                        sets={ userSets }
-                        selectionType="top"
-                        hideOwner={ true }
-                        addLink={ true }
-                        fetching={ this.state.fetching }
-                      />
-                    </div>
-                    <div role="tabpanel" className="tab-pane" id="allSets">
-                      <SelectableSetTable
-                        sets={ sets }
-                        selectionType="top"
-                        addLink={ true }
-                        fetching={ this.state.fetching }
-                      />
-                    </div>
+              <div className="tab-content">
+                <div id="home" className="tab-pane fade in active">
+                  <div onScroll={debounce((e) => this.onScroll(e, 'top'), true)} style={{height: '280px', overflowY: 'scroll'}}>
+                    <SelectableSetTable
+                      sets={ userSets }
+                      selectionType="top"
+                      hideOwner={ true }
+                      addLink={ true }
+                      showLocked={ false }
+                      fetching={ this.state.fetching }
+                    />
                   </div>
-
-                </Body>
-
-                <Footer>
                   <SetForm />
-                </Footer>
-              </Panel>
+                </div>
+                <div id="top-help" className="tab-pane fade" style={{"padding": "5px"}}>
+                  <div>
+                  <p>Find the set you wish to edit using the "My Created Sets" tab.
+                  The materials in your selected set will be listed in the box to the
+                  right. Alternatively, you can create a new empty set using the text
+                  box.</p><p>Materials that are <span className="text-muted">greyed
+                  out</span> are unavailable, either because they are part of an
+                  active work order, or because they have not yet been received by
+                  Sample Management. However, this has no impact on your ability to
+                  manipulate those materials within sets.</p><p>Use
+                  <FontAwesome icon="times" /> to remove materials from a set.</p>
+                  <p>When browsing materials within a set, use the "First", "Previous",
+                  "Next" and "Last" buttons to move through pages of 25 materials.</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="col-md-9">
@@ -156,43 +145,52 @@ class SetShaper extends React.Component {
 
           <div className="row">
             <div className="col-md-3">
+              <ul className="nav nav-tabs" role="tablist">
+                <li role="presentation" className="active">
+                  <a onClick={ (e) => this.setTabNumber('bottom', 0) } href="#mySetsBottom" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a>
+                </li>
+                <li role="presentation">
+                  <a onClick={ (e) => this.setTabNumber('bottom', 1) } href="#sets" aria-controls="sets" role="tab" data-toggle="tab">All Sets</a>
+                </li>
+                <li><a data-toggle="tab" href="#bottom-help">Help<FontAwesome icon="question" style={{"color": "#2196F3"}} /></a></li>
+              </ul>
 
-              <Panel>
-                <Heading title="Source set" />
-                <Body onScroll={debounce((e) => this.onScroll(e, 'bottom'), true)} style={{height: '320px', overflowY: 'scroll'}}>
-                  <ul className="nav nav-tabs" role="tablist">
-                    <li role="presentation" className="active">
-                      <a onClick={ (e) => this.setTabNumber('bottom', 0) } href="#mySetsBottom" aria-controls="mySets" role="tab" data-toggle="tab">My Sets</a>
-                    </li>
-                    <li role="presentation">
-                      <a onClick={ (e) => this.setTabNumber('bottom', 1) } href="#sets" aria-controls="sets" role="tab" data-toggle="tab">All Sets</a>
-                    </li>
-                  </ul>
-
-                  <div className="tab-content">
-                    <div role="tabpanel" className="tab-pane active" id="mySetsBottom">
-                      <SelectableSetTable
-                        sets={ userSets }
-                        selectionType="bottom"
-                        hideOwner={ true }
-                        addLink={ false }
-                        fetching={ this.state.fetching }
-                      />
-                    </div>
-                    <div role="tabpanel" className="tab-pane" id="sets">
-                      <SelectableSetTable
-                        sets={ sets }
-                        selectionType="bottom"
-                        addLink={ false }
-                        fetching={ this.state.fetching }
-                      />
-                    </div>
-                  </div>
-
-                </Body>
-
-              </Panel>
-
+              <div className="tab-content">
+                <div role="tabpanel" className="tab-pane active" id="mySetsBottom" style={{height: '340px', overflowY: 'scroll'}}>
+                  <SelectableSetTable
+                    sets={ userSets }
+                    selectionType="bottom"
+                    hideOwner={ true }
+                    addLink={ false }
+                    fetching={ this.state.fetching }
+                  />
+                </div>
+                <div role="tabpanel" className="tab-pane" id="sets" style={{height: '340px', overflowY: 'scroll'}}>
+                  <SelectableSetTable
+                    sets={ sets }
+                    selectionType="bottom"
+                    addLink={ false }
+                    fetching={ this.state.fetching }
+                  />
+                </div>
+                <div role="tabpanel" className="tab-pane" id="bottom-help" style={{"padding": "5px"}}>
+                <p>Here you can find materials that you wish to add to the set
+                you have selected above. You can look through your own sets -
+                including those which are locked - or all of the sets within
+                Aker (using the "All Sets" tab).</p><p>Once
+                you've found the materials you're interested in, drag them into
+                your chosen set in the top window to add the material to that
+                set. Use 'CMD' or 'CTRL' and click to select multiple materials,
+                or select one material, then 'SHIFT' and click another to select
+                all materials between (inclusive).</p><p><strong>Sets cannot be
+                changed</strong> in this section, so any materials you drag
+                into an above set will also remain in their original set.</p>
+                <p>A locked set (marked by
+                 <FontAwesome icon="lock" style={{"color": "#e61c1c"}} />)
+                cannot be changed in any way, as it exists to provide a record of
+                work.</p>
+                </div>
+              </div>
             </div>
 
             <div className="col-md-9">
