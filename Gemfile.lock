@@ -100,6 +100,8 @@ GEM
       thor (~> 0.19.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    health_check (3.0.0)
+      railties (>= 5.0)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -265,6 +267,7 @@ DEPENDENCIES
   faraday
   font-awesome-sass
   foreman
+  health_check
   jbuilder (~> 2.5)
   jquery-rails
   launchy
