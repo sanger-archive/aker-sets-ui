@@ -26,6 +26,7 @@ gem 'therubyracer', platforms: :ruby # See https://github.com/rails/execjs#readm
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0' # Use Uglifier as compressor for JavaScript assets
 gem 'webpacker', '~> 3.5'
+gem 'health_check'
 
 ###
 # Sanger gems
