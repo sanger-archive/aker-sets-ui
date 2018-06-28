@@ -1,7 +1,7 @@
 import { PAGINATE_TO, RECEIVE_SET, RECEIVE_MATERIAL_SCHEMA, UPDATE_FILTER_NAME,
   UPDATE_FILTER_COMPARATOR, UPDATE_FILTER_VALUE, REMOVE_FILTER, ADD_FILTER,
   SET_CURRENT_SEARCH, RECEIVE_SEARCH_RESULTS, RECEIVE_ALL_SETS, RECEIVE_SETS_FROM_FILTER,
-  RECEIVE_STAMPS_FROM_FILTER } from '../actions/index';
+  RECEIVE_STAMPS_FROM_FILTER, UPDATE_SORT_BY, UPDATE_SORT_ORDER } from '../actions/index';
 
 const search = (state = {}, action) => {
   let newState;
@@ -136,6 +136,12 @@ const search = (state = {}, action) => {
         return filter
       });
       return Object.assign({}, state, { filters: newState });
+
+    case UPDATE_SORT_ORDER:
+      return Object.assign({}, state, { sortOrder: action.value });
+
+    case UPDATE_SORT_BY:
+      return Object.assign({}, state, { sortBy: action.value });
 
     case UPDATE_FILTER_VALUE:
       newState = state.filters.map((filter, index) => {

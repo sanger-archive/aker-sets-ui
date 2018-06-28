@@ -4,7 +4,7 @@ import DatePicker from 'react-bootstrap-date-picker';
 import FontAwesome from './font_awesome';
 import { Panel, Heading, Body } from './panel'
 import { connect } from 'react-redux';
-import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch} from '../actions/index';
+import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch, updateSortBy, updateSortOrder} from '../actions/index';
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 class FilterPanel extends React.Component {
@@ -21,7 +21,7 @@ class FilterPanel extends React.Component {
 
   render() {
 
-    const { filters, fields, dispatch} = this.props;
+    const { filters, fields, dispatch, sortBy, sortOrder} = this.props;
     const filter_rows = filters.map((filter, index) => {
       return <FilterRow
                 fields={fields}
@@ -44,10 +44,16 @@ class FilterPanel extends React.Component {
           <CSSTransitionGroup transitionName="example" transitionEnterTimeout={1000} transitionLeaveTimeout={300}>
             { filter_rows }
           </CSSTransitionGroup>
-          <button onClick={this.performSearch} style={{float: 'right'}} type="submit" className="btn btn-primary set-current-search">Search</button>
-          <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px'}} type="submit" className="btn btn-success add-filter-row">
+          <button onClick={this.performSearch} style={{float: 'right', marginTop: '20px'}} type="submit" className="btn btn-primary set-current-search">Search</button>
+          <button onClick={() => dispatch(addFilter())} style={{float: 'right', marginRight: '10px', marginTop: '20px'}} type="submit" className="btn btn-success add-filter-row">
             <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
           </button>
+          <SortRow sortBy={sortBy}
+                    sortOrder={sortOrder}
+                    fields={fields}
+                    onSortByChange={(e) => dispatch(updateSortBy(e.target.value))}
+                    onSortOrderChange={(e) => dispatch(updateSortOrder(parseInt(e.target.value)))}
+                    />
         </Body>
       </Panel>
     )
@@ -149,6 +155,36 @@ export class ContextualValue extends React.Component {
 const InputTextField = ({value, onChange, disabled = false}) => {
   return <input type="text" className="form-control" onChange={onChange} value={value} placeholder={ !disabled ? "Enter a value" : "" } disabled={disabled} />
 };
+
+class SortRow extends React.Component {
+  render() {
+    const searchableFields = Object.keys(this.props.fields).filter(field => this.props.fields[field]['show_on_set_results'] == true)
+    const optionTags = searchableFields.map((field, index) => {
+      return <option value={field} key={index}>{this.props.fields[field]['friendly_name']}</option>
+    });
+    return (
+      <div className="row">
+        <div className="col-md-3">
+          <label>
+            Sort By:
+            <select value={this.props.sortBy} onChange={this.props.onSortByChange} className="form-control">
+              { optionTags }
+            </select>
+          </label>
+        </div>
+        <div className="col-md-3">
+          <label>
+            Order:
+            <select value={this.props.sortOrder} onChange={this.props.onSortOrderChange} className="form-control">
+              <option value='1'>Ascending</option>
+              <option value='-1'>Descending</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    );
+  }
+}
 
 const InputNumField = ({value, onChange, step, disabled = false}) => {
   return <input type="number" step={step} className="form-control" onChange={onChange} value={value} placeholder={ !disabled ? "Enter a value" : "" } disabled={disabled} />
