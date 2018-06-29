@@ -164,7 +164,7 @@ class SortRow extends React.Component {
     });
     return (
       <div className="row">
-        <div className="col-md-3">
+        <div className="col-md-4 col-xs-4">
           <label>
             Sort By:
             <select value={this.props.sortBy} onChange={this.props.onSortByChange} className="form-control">
@@ -172,7 +172,7 @@ class SortRow extends React.Component {
             </select>
           </label>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-3 col-xs-4">
           <label>
             Order:
             <select value={this.props.sortOrder} onChange={this.props.onSortOrderChange} className="form-control">
