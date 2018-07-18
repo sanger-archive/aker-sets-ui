@@ -259,6 +259,21 @@ export const receiveAllStamps = (response) => {
   }
 }
 
+export const UPDATE_SORT_BY = "UPDATE_SORT_BY"
+export const updateSortBy = (value) => {
+  return {
+    type: UPDATE_SORT_BY,
+    value
+  }
+}
+
+export const UPDATE_SORT_ORDER = "UPDATE_SORT_ORDER"
+export const updateSortOrder = (value) => {
+  return {
+    type: UPDATE_SORT_ORDER,
+    value
+  }
+}
 
 export const UPDATE_FILTER_NAME = "UPDATE_FILTER_NAME";
 export const updateFilterName = (index, value) => {
@@ -347,11 +362,11 @@ export const fetchStampsIfNeeded = () => {
 }
 
 export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
-export const performSearchToPage = (pageNumber, maxResults) => {
+export const performSearchToPage = (pageNumber, maxResults, sortBy, sortOrder) => {
   return (dispatch, getState) => {
     // remove user messages if there are any showing
     dispatch(userMessage(''));
-    return dispatch(fetchPageForSearch(pageNumber, maxResults)).then((response) => {
+    return dispatch(fetchPageForSearch(pageNumber, maxResults, sortBy, sortOrder)).then((response) => {
         return dispatch(receiveSearchResults(response));
       }, (error) => {
         return dispatch(handleMaterialsServiceErrors(error));
@@ -360,7 +375,7 @@ export const performSearchToPage = (pageNumber, maxResults) => {
 };
 
 export const FETCH_PAGE_FOR_SEARCH = "FETCH_PAGE_FOR_SEARCH"
-export const fetchPageForSearch = (pageNumber, maxResults) => {
+export const fetchPageForSearch = (pageNumber, maxResults, sortBy, sortOrder) => {
   return (dispatch, getState) => {
     return $.when(dispatch(fetchSetMaterialsIfNeeded()), dispatch(fetchStampsIfNeeded()))
       .then(() => {
@@ -381,7 +396,9 @@ export const fetchPageForSearch = (pageNumber, maxResults) => {
           data: JSON.stringify({
             where: searchQuery,
             max_results: maxResults,
-            page: pageNumber
+            page: pageNumber,
+            sort_by: sortBy,
+            sort_order: sortOrder
           }),
           cache: false
         });
@@ -407,14 +424,14 @@ export const performSearchWithUrl = (url) => {
 export const PAGINATE_TO = "PAGINATE_TO";
 export const paginateTo = (numPage) => {
   return (dispatch, getState) => {
-    return dispatch(performSearchToPage(numPage, getState().search.maxResults));
+    return dispatch(performSearchToPage(numPage, getState().search.maxResults, getState().search.sortBy, getState().search.sortOrder));
   };
 };
 
 export const PERFORM_SEARCH = "PERFORM_SEARCH"
 export const performSearch = () => {
   return (dispatch, getState) => {
-    return dispatch(performSearchToPage(getState().search.pageNumber, getState().search.maxResults));
+    return dispatch(performSearchToPage(getState().search.pageNumber, getState().search.maxResults, getState().search.sortBy, getState().search.sortOrder));
   };
 };
 

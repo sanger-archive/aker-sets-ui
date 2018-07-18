@@ -39,7 +39,9 @@ let initialState = {
     sets: [],
     setMaterials: [],
     stampMaterials: [],
-    meta: {}
+    meta: {},
+    sortBy: '_id',
+    sortOrder: 1
   },
   loading: {
     creatingSet: false,

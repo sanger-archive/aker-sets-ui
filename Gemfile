@@ -17,7 +17,6 @@ gem 'faraday'
 gem 'font-awesome-sass'
 gem 'jbuilder', '~> 2.5' # Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'
-gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0' # Use Puma as the app server
 gem 'rack-proxy', '~> 0.6.2', require: true
 gem 'rails', '~> 5.2.0'
@@ -26,6 +25,7 @@ gem 'therubyracer', platforms: :ruby # See https://github.com/rails/execjs#readm
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0' # Use Uglifier as compressor for JavaScript assets
 gem 'webpacker', '~> 3.5'
+gem 'health_check'
 
 ###
 # Sanger gems

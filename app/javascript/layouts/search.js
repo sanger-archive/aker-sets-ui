@@ -21,7 +21,11 @@ const Search = ({ search, loading }) => {
 
         <div className="row">
           <div className="col-md-7">
-            <FilterPanel filters={search.filters} fields={search.fields} />
+            <FilterPanel
+              filters={search.filters}
+              fields={search.fields}
+              sortBy={search.sortBy}
+              sortOrder={search.sortOrder} />
           </div>
 
           <div className="col-md-5">

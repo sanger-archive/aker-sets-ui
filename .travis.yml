@@ -1,4 +1,13 @@
 language: ruby
+git:
+  depth: false
+  submodules: false
+branches:
+  only:
+    - devel
+    - wip
+    - uat
+    - master
 cache:
   bundler: true
   yarn: true
@@ -18,13 +27,4 @@ script:
   - yarn test
   - bundle exec rspec
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-git:
-  depth: false
-  submodules: false
-branches:
-  only:
-    - devel
-    - wip
-    - uat
-    - master
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
