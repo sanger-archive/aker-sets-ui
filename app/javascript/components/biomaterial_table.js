@@ -47,7 +47,7 @@ BiomaterialTableRow.defaultProps = {
 export class BiomaterialTable extends Component {
 
   render() {
-    const { decorators, biomaterials, materials, ...rest } = this.props;
+    const { decorators, biomaterials, ...rest } = this.props;
     const tableClass = classNames({
       table: true,
       'table-striped': true
