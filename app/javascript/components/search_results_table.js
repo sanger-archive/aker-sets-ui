@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel';
 import { paginateTo } from '../actions/index'
 import ButtonsPanel from '../components/buttons_panel';
+import { Link } from 'react-router-dom'
+import qs from 'qs';
 
 class SearchResultsTable extends React.Component {
 
   render() {
-    const { fields, headings, current, items, links, sets, dispatch, meta, loading } = this.props;
+    const { fields, headings, items, links, sets, dispatch, meta, loading } = this.props;
     const hasResults = items.length != 0;
 
-    const handleClick = (pageNumber) => dispatch(paginateTo(pageNumber));
+    const handleClick = (page) => dispatch(paginateTo(page));
 
     let title = 'Results'
     if (meta.total) {
@@ -27,7 +29,7 @@ class SearchResultsTable extends React.Component {
           </div>
           <Heading title={title}>
           </Heading>
-          <PaginationLinks links={links} handleClick={handleClick} />
+          <PaginationLinks links={links} onClick={handleClick} />
 
           <Body style={{overflowX: 'scroll', paddingBottom: '0', paddingTop: '0'}}>
             <table className="table table-striped table-hover search-results-table">
@@ -53,7 +55,7 @@ class SearchResultsTable extends React.Component {
               </tbody>
             </table>
           </Body>
-          <PaginationLinks links={links} handleClick={handleClick} />
+          <PaginationLinks links={links} meta={meta} onClick={handleClick} />
         </Panel>
       </div>
     );
@@ -88,31 +90,33 @@ const SearchResultsRow = (props) => {
 }
 
 export const PaginationLinks = (props) => {
-  const { links, handleClick } = props;
+  const { links, meta, match, location, onClick } = props;
 
-  if (!links || Object.keys(links).length == 0){
-    return null
+  let paginationLinks = [];
+
+  // TODO: A better way of doing this?
+  if (match && location) {
+    paginationLinks.push(<PaginationLink link={links.first} match={match} location={location} title='First' key='First' />)
+    paginationLinks.push(<PaginationLink link={links.prev} match={match} location={location} title='Previous' key='Previous' />)
+    paginationLinks.push(<PaginationLink link={links.next} match={match} location={location} title='Next' key='Next' />)
+    paginationLinks.push(<PaginationLink link={links.last} match={match} location={location} title='Last' key='Last' />)
+  } else {
+    paginationLinks.push(<PaginationAnchor link={links.first} onClick={onClick} title='First' key='First' />)
+    paginationLinks.push(<PaginationAnchor link={links.prev} onClick={onClick} title='Previous' key='Previous' />)
+    paginationLinks.push(<PaginationAnchor link={links.next} onClick={onClick} title='Next' key='Next' />)
+    paginationLinks.push(<PaginationAnchor link={links.last} onClick={onClick} title='Last' key='Last' />)
   }
-
-  let displayLinks = [];
-
-  displayLinks.push(<PaginationLink link={links.first} label='First' title='First' onClick={handleClick} key='First' />)
-  displayLinks.push(<PaginationLink link={links.prev} label='Previous' title='Previous' onClick={handleClick} key='Previous' />)
-  displayLinks.push(<PaginationLink link={links.next} label='Next' title='Next' onClick={handleClick} key='Next' />)
-  displayLinks.push(<PaginationLink link={links.last} label='Last' title='Last' onClick={handleClick} key='Last' />)
 
   return (
     <div className="row">
       <div className="col-md-12">
         <div className="col-md-2 pull-left">
          <span className="badge badge-secondary">
-         {props.page ? 'Page '+props.page : '' }
+           { meta && meta.page && `Page ${meta.page}` }
          </span></div>
         <nav aria-label="Page navigation" className="pull-right">
-
-
           <ul className="pagination">
-            {displayLinks}
+            { paginationLinks }
           </ul>
         </nav>
       </div>
@@ -120,29 +124,32 @@ export const PaginationLinks = (props) => {
   );
 }
 
-class PaginationLink extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
+const PaginationLink = ({ link, match, location, title }) => {
+  const pathname = location.pathname;
+  let search = '';
+
+  if (link) {
+    // TODO: a better way of doing this?
+    search = qs.stringify(Object.assign({}, qs.parse(location.search, { ignoreQueryPrefix: true }), { page: link.page }), { addQueryPrefix: true });
   }
 
-  handleClick(e) {
-    e.preventDefault();
+  const to = { pathname, search };
 
-    if (this.props.link && this.props.link.page) {
-      this.props.onClick(this.props.link.page);
-    }
-  }
+  return (
+    <li className={!link ? 'disabled' : undefined } >
+      <Link to={ to } aria-label={title}>
+        <span aria-hidden="true">{title}</span>
+      </Link>
+    </li>
+  );
+}
 
-  render() {
-    const { link, label, title, onClick } = this.props;
-
-    return (
-      <li className={!link ? 'disabled' : undefined } >
-        <a href='#' aria-label={label} onClick={this.handleClick} >
-          <span aria-hidden="true">{title}</span>
-        </a>
-      </li>
-    );
-  }
+const PaginationAnchor = ({ link, title, onClick }) => {
+  return (
+    <li className={!link ? 'disabled' : undefined } >
+      <a href='#' aria-label={title} onClick={ (e) => { e.preventDefault(); onClick(link.page); } }>
+        <span aria-hidden="true">{title}</span>
+      </a>
+    </li>
+  );
 }

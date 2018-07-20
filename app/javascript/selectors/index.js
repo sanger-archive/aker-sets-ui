@@ -8,13 +8,11 @@ const getApi = (state) => state.api;
 
 const getApiData  = (type) => { return (state) => { return state.api[type].data } };
 const getSets                = getApiData('sets');
-const getBiomaterials        = getApiData('materials');
 
 const getUserEmail           = (state) => state.userEmail;
 
 // Selected
 const getSelectedId = (key)  => { return (state) => state.selected[key] };
-const getSelectedMaterials = (key, state) => { return (state) => state.materials[key] }
 const getSelectedTopId    = getSelectedId('top');
 const getSelectedBottomId = getSelectedId('bottom');
 
@@ -82,38 +80,6 @@ export const getSelectedBottom = createSelector(
   getSelectedBottomId, getSets,
   findResourceByIdFactory()
 )
-
-// selected{Resource}Biomaterials Selectors
-export const getSelectedTopSetMaterials = createSelector(
-  (state) => {  return state.materials; },
-  getSelectedTop,
-  (materials, set) => {
-    if (set && (set.id in materials)) {
-      return materials[set.id];
-    }
-    return {};
-  }
-)
-
-export const getSelectedBottomSetMaterials = createSelector(
-  (state) => {  return state.materials; },
-  getSelectedBottom,
-  (materials, set) => {
-    if (set && (set.id in materials)) {
-      return materials[set.id];
-    }
-    return {};
-  }
-)
-
-export const getSelectedTopMaterials = (state) => getSelectedTopSetMaterials(state).instances;
-export const getSelectedBottomMaterials = (state) => getSelectedBottomSetMaterials(state).instances;
-export const getSelectedTopLinks = (state) => getSelectedTopSetMaterials(state).links;
-export const getSelectedBottomLinks = (state) => getSelectedBottomSetMaterials(state).links;
-export const getSelectedTopPage = (state) => getSelectedTopSetMaterials(state).page;
-export const getSelectedBottomPage = (state) => getSelectedBottomSetMaterials(state).page;
-export const getSelectedTopUrl = (state) => getSelectedTopSetMaterials(state).url;
-export const getSelectedBottomUrl = (state) => getSelectedBottomSetMaterials(state).url;
 
 // All the loaded sets that belong to the currently logged in user
 export const getUserSets = createSelector(

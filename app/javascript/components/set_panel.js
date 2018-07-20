@@ -2,25 +2,26 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {Panel, Heading, Body} from './panel';
-import LockedSelectedSet from '../containers/locked_selected_set';
-import DroppableSelectedSet from '../containers/droppable_selected_set';
-import PaginationContainer from '../containers/pagination_container';
-import { getSelectedTop, getSelectedTopLinks, getSelectedTopUrl, getSelectedTopPage } from '../selectors/index';
+import { MaterialTable } from './material_table';
+import DroppableMaterialTable from '../components/droppable_material_table';
+import { PaginationLinks } from '../components/search_results_table';
+import { getSelectedTop } from '../selectors/index';
 import FontAwesome from '../components/font_awesome';
-import { select, fetchFirstPageSetAndMaterials } from '../actions/index';
+import { select } from '../actions/browser';
+import { fetchPageForTop, removeMaterialsFromSet, appendMaterialsToSet } from '../actions/index';
+import { clearSelection } from '../actions/browser';
+import { readEndpoint } from 'redux-json-api';
 import DeleteSetButton from './delete_set_button';
 
 class SetPanel extends Component {
 
   componentDidMount() {
-    this.props.dispatch(select(this.props.match.params.set_uuid, 'top'))
-    this.props.dispatch(fetchFirstPageSetAndMaterials(this.props.match.params.set_uuid))
+    this.props.fetchPage();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.set_uuid != prevProps.match.params.set_uuid) {
-      this.props.dispatch(select(this.props.match.params.set_uuid, 'top'))
-      this.props.dispatch(fetchFirstPageSetAndMaterials(this.props.match.params.set_uuid))
+    if (this.props.match.params.set_uuid != prevProps.match.params.set_uuid || this.props.location.search != prevProps.location.search) {
+      this.props.fetchPage();
     }
   }
 
@@ -32,11 +33,33 @@ class SetPanel extends Component {
 const mapStateToProps = (state) => {
   return {
     set: getSelectedTop(state),
+    materials: state.materials['top'],
     user_email: state.userEmail
   };
 };
 
-export const SetPanelComponent = ({ set, user_email }) => {
+const mapDispatchToProps = (dispatch, { match, location }) => {
+  return {
+    fetchPage() {
+      dispatch(select(match.params.set_uuid, 'top'));
+      return dispatch(fetchPageForTop({ setId: match.params.set_uuid, search: location.search }));
+    },
+    onRemove(material) {
+      const set_id = match.params.set_uuid;
+      return dispatch(removeMaterialsFromSet(material, { id: set_id }))
+        .then(() => { return dispatch(readEndpoint(`sets/${set_id}`))})
+        .then(() => { return dispatch(fetchPageForTop({ setId: set_id, search: location.search })) });
+    },
+    onAdd(materials) {
+      const set_id = match.params.set_uuid
+      return dispatch(appendMaterialsToSet(materials, { id: set_id }))
+        .then(() => { return dispatch(clearSelection()) })
+        .then(() => { return dispatch(fetchPageForTop({ setId: set_id, search: location.search })) });
+    }
+  }
+}
+
+export const SetPanelComponent = ({ set, user_email, materials, match, location, onAdd, onRemove }) => {
   if (!set || !set.id) {
     return (
       <Panel key='set-'>
@@ -64,11 +87,24 @@ export const SetPanelComponent = ({ set, user_email }) => {
         </Heading>
 
         <Body style={{height: '334px', overflowY: 'scroll'}}>
-          { set.attributes.locked ? <LockedSelectedSet set={set} /> : <DroppableSelectedSet set={set} /> }
+          { set.attributes.locked ?
+            <MaterialTable removeable={false} set={set} materials={materials.items} /> :
+            <DroppableMaterialTable
+              removeable={true}
+              set={set}
+              materials={materials.items}
+              onAdd={onAdd}
+              onRemove={onRemove} /> }
         </Body>
-        <PaginationContainer getLinks={ getSelectedTopLinks } getUrl={getSelectedTopUrl} getPage={getSelectedTopPage}></PaginationContainer>
+        <PaginationLinks
+          links={materials.links}
+          meta={materials.meta}
+          match={match}
+          location={location}
+          handleClick={() => {}}
+        />
       </Panel>
   );
 };
 
-export default withRouter(connect(mapStateToProps)(SetPanel));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SetPanel));

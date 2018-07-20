@@ -1,4 +1,5 @@
-import {USER_MESSAGE, STORE_ITEMS, SELECT_ITEM, TOGGLE_ITEM, CLEAR_SELECTION, SHIFT_SELECT_ITEMS, selectItem} from '../actions/index';
+import { STORE_ITEMS, SELECT_ITEM, TOGGLE_ITEM, CLEAR_SELECTION, SHIFT_SELECT_ITEMS, selectItem } from '../actions/browser';
+import { USER_MESSAGE } from '../actions/index';
 
 const browser = (state = {}, action) => {
   switch (action.type) {
@@ -50,10 +51,10 @@ const browser = (state = {}, action) => {
         selected = new_shift_selected
           .reduce((memo, value) => {
 
-            let biomaterial = state.items[value];
+            let material = state.items[value];
 
-            if (!memo.find( (bm) => bm.id == biomaterial.id)) {
-              memo.push(biomaterial);
+            if (!memo.find( (bm) => bm._id == material._id)) {
+              memo.push(material);
             }
 
             return memo;
