@@ -27,7 +27,7 @@ const BottomSetPanel = ({ set }) => {
     <Panel key={`bottom-set-${set.id}`}>
       <Heading title={title}></Heading>
 
-      <Body style={{height: '231px', overflowY: 'scroll'}}>
+      <Body style={{height: '334px', overflowY: 'scroll'}}>
         <DraggableSelectedCollection />
       </Body>
       <PaginationContainer getLinks={getSelectedBottomLinks} getUrl={getSelectedBottomUrl} getPage={getSelectedBottomPage}></PaginationContainer>

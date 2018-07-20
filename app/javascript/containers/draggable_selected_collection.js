@@ -42,7 +42,6 @@ draggableBiomaterialTableRow = DragSource(ItemTypes.BIOMATERIAL, biomaterialSour
 const mapStateToProps = (state) => {
   return {
     biomaterials: getSelectedBottomMaterials(state),
-    materials: state.materials,
     decorators: { row: draggableBiomaterialTableRow },
     selected: state.browser.selected
   };

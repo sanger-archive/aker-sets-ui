@@ -96,7 +96,7 @@ class SetShaper extends React.Component {
       <Router basename={ basename }>
         <div className="container-fluid">
           <UserMessage></UserMessage>
-          <div className="row" style={{"margin-bottom": "20px"}}>
+          <div className="row" style={{"marginBottom": "20px"}}>
             <div className="col-md-3">
               <ul className="nav nav-tabs">
                 <li className="active"><a data-toggle="tab" href="#home">My Created Sets</a></li>
