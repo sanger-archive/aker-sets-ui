@@ -11,8 +11,8 @@ import userEmail from './user_email';
 const reducers = combineReducers({
   api,
   selected,
-  browser,
   materials,
+  browser,
   search,
   stampsInfo,
   loading,

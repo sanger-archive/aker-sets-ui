@@ -1,5 +1,6 @@
 import search from '../search'
-import { updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch, receiveSearchResults } from '../../actions/index'
+import { updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter,
+  setCurrentSearch, receiveSearchResults } from '../../actions/search'
 
 describe('reducers/search', () => {
   describe('Update filters', () => {

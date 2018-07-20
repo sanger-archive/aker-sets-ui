@@ -25,7 +25,7 @@ const Search = ({ search, loading }) => {
               filters={search.filters}
               fields={search.fields}
               sortBy={search.sortBy}
-              sortOrder={search.sortOrder} />
+              order={search.order} />
           </div>
 
           <div className="col-md-5">

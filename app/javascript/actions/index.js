@@ -2,9 +2,12 @@ import jwt_decode from "jwt-decode"
 import { setHeader, readEndpoint } from "redux-json-api"
 import queryMaterialBuilder from '../lib/query_builder'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors';
-import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet, startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading';
+import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet,
+  startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading';
+import { receiveMaterialSchema, receiveSearchResults } from './search';
 import { createResource } from 'redux-json-api';
 import { validateNewSetName } from '../lib/utils';
+import qs from 'qs';
 
 export const SET_USER_EMAIL = 'SET_USER_EMAIL';
 export const setUserEmail = (userEmail) => {
@@ -14,140 +17,6 @@ export const setUserEmail = (userEmail) => {
   }
 }
 
-export const SELECT = "SELECT";
-export const select = (id, selectionType) => {
-  return {
-    type: SELECT,
-    id,
-    selectionType
-  }
-}
-
-export const CLEAR_SELECTED = "CLEAR_SELECTED";
-export const clearSelected = () => {
-  return {
-    type: CLEAR_SELECTED
-  }
-}
-
-export const SELECT_ENTITY = "SELECT_ENTITY";
-export const selectEntity = (id, entityType) => {
-  return {
-    type: SELECT_ENTITY,
-    entity: { id, type: entityType }
-  }
-}
-
-export const STORE_ITEMS = "STORE_ITEMS";
-export const storeItems = (items) => {
-  return {
-    type: STORE_ITEMS,
-    items
-  }
-}
-
-export const SELECT_ITEM = "SELECT_ITEM";
-export const selectItem = (key) => {
-  return {
-    type: SELECT_ITEM,
-    key
-  }
-}
-
-export const CLEAR_SELECTION = "CLEAR_SELECTION";
-export const clearSelection = () => {
-  return {
-    type: CLEAR_SELECTION
-  }
-}
-
-export const TOGGLE_ITEM = "TOGGLE_ITEM";
-export const toggleItem = (key) => {
-  return {
-    type: TOGGLE_ITEM,
-    key
-  }
-}
-
-export const SHIFT_SELECT_ITEMS = "SHIFT_SELECT_ITEMS";
-export const shiftSelectItems = (key) => {
-  return {
-    type: SHIFT_SELECT_ITEMS,
-    key
-  }
-}
-
-export const RECEIVE_MATERIALS = "RECEIVE_MATERIALS";
-export const receiveMaterials = (materials, links, setId, page, url) => {
-  return {
-    type: RECEIVE_MATERIALS,
-    materials,
-    links,
-    setId,
-    page,
-    url
-  }
-}
-
-export const FETCH_MATERIALS = "FETCH_MATERIALS";
-export const fetchMaterials = (json, setId, numPage, pageUrl) => {
-  const materials = json.data;
-  const links = json.links;
-  return function(dispatch, getState) {
-    if (!materials) return false;
-    const ids = materials.map((material) => material.id);
-    const url = `${MATERIAL_SERVICE}/materials/search`;
-
-    return $.ajax({
-      method: 'POST',
-      url: url,
-      contentType: "application/json; charset=utf-8",
-      accept: "application/json",
-      data: JSON.stringify({
-        where:  {"_id" : { "$in": ids } },
-      }),
-      cache: false
-    }).then((response) => {
-      return dispatch(receiveMaterials(response._items, links, setId, numPage, pageUrl)) },
-    (error) => {
-      return dispatch(handleMaterialsServiceErrors(error))
-    });
-  }
-}
-
-const urlForMaterialsFromSet = function(setId, pageNumber, pageSize) {
-  return encodeURI(`/sets/${setId}/materials?page[number]=${pageNumber}&page[size]=${pageSize}`);
-}
-
-export const FETCH_MATERIALS_FROM_SET_BY_URL = "FETCH_MATERIALS_FROM_SET_BY_URL";
-export const fetchMaterialsFromSetByUrl = function(url) {
-  const setId = url.match(/sets\/([^/]*)/)[1]
-  const pageNumber = url.match(new RegExp(encodeURI("page[number]") + "=(\\d+)"))[1]
-  const pageSize = url.match(new RegExp(encodeURI("page[size]") + "=(\\d+)"))[1]
-
-  return function(dispatch) {
-    return dispatch(fetchSetAndMaterials(setId, pageNumber, pageSize));
-  }
-}
-
-export const FETCH_SET_AND_MATERIALS = "FETCH_SET_AND_MATERIALS";
-export const fetchSetAndMaterials = function(setId, pageNumber, sizeNumber) {
-  const url = urlForMaterialsFromSet(setId, pageNumber, sizeNumber);
-  return function(dispatch) {
-    return dispatch(readEndpoint(url))
-       .then((json) => {
-        return dispatch(fetchMaterials(json.body, setId, pageNumber, url)) });
-  };
-}
-
-export const FETCH_FIRST_PAGE_SET_AND_MATERIALS = "FETCH_FIRST_PAGE_SET_AND_MATERIALS";
-export const fetchFirstPageSetAndMaterials = function(setId) {
-  return function(dispatch) {
-    return dispatch(fetchSetAndMaterials(setId, 1, 25));
-  }
-}
-
-export const APPEND_MATERIALS_TO_SET = "APPEND_MATERIALS_TO_SET";
 export const appendMaterialsToSet = function(materials, set) {
   return function(dispatch) {
     return $.ajax({
@@ -159,7 +28,7 @@ export const appendMaterialsToSet = function(materials, set) {
         {
           data: materials.map(
             (material) => {
-              return { id: material.id, type: 'materials'};
+              return { id: material._id, type: 'materials'};
             }
           )
         }
@@ -175,20 +44,6 @@ export const appendMaterialsToSet = function(materials, set) {
   }
 }
 
-export const DELETE_MATERIAL_FROM_SET = "DELETE_MATERIAL_FROM_SET";
-export const deleteMaterialFromSet = function(material, set) {
-  return function(dispatch) {
-    return $.ajax({
-      method: 'DELETE',
-      url: encodeURI(`${SET_SERVICE_API}/sets/${set.id}/relationships/materials`),
-      accept: 'application/vnd.api+json',
-      contentType: 'application/vnd.api+json',
-      data: JSON.stringify({data: [{ id: material.id, type: 'materials'}] })
-    }).then(() => {dispatch(readEndpoint(`sets/${set.id}`))});
-  }
-}
-
-export const FETCH_MATERIAL_SCHEMA = "FETCH_MATERIAL_SCHEMA";
 export const fetchMaterialSchema = () => {
   return (dispatch, getState) => {
     return $.ajax({
@@ -200,14 +55,6 @@ export const fetchMaterialSchema = () => {
     .then((response) => {
       return dispatch(receiveMaterialSchema(response));
     }, (error) => { return dispatch(handleMaterialsServiceErrors(error))});
-  }
-}
-
-export const RECEIVE_MATERIAL_SCHEMA = "RECEIVE_MATERIAL_SCHEMA";
-export const receiveMaterialSchema = (response) => {
-  return {
-    type: RECEIVE_MATERIAL_SCHEMA,
-    schema: response
   }
 }
 
@@ -259,114 +106,31 @@ export const receiveAllStamps = (response) => {
   }
 }
 
-export const UPDATE_SORT_BY = "UPDATE_SORT_BY"
-export const updateSortBy = (value) => {
-  return {
-    type: UPDATE_SORT_BY,
-    value
-  }
+export const fetchSetMaterialsIfNeeded = (setFilters) => {
+  return filterSearch(setFilters, performSetFilterSearch);
 }
 
-export const UPDATE_SORT_ORDER = "UPDATE_SORT_ORDER"
-export const updateSortOrder = (value) => {
-  return {
-    type: UPDATE_SORT_ORDER,
-    value
-  }
+export const fetchStampsIfNeeded = (stampFilters) => {
+  return filterSearch(stampFilters, performStampFilterSearch)
 }
 
-export const UPDATE_FILTER_NAME = "UPDATE_FILTER_NAME";
-export const updateFilterName = (index, value) => {
-  return {
-    type: UPDATE_FILTER_NAME,
-    index,
-    value
-  }
-}
+// Dispatchs an action on each item in a list of filters
+const filterSearch = (filters, action) => {
+  return (dispatch) => {
+    const filtersDeferred = filters.map((filter) => { return dispatch(action(filter)) });
 
-export const UPDATE_FILTER_COMPARATOR = "UPDATE_FILTER_COMPARATOR"
-export const updateFilterComparator = (index, value) => {
-  return {
-    type: UPDATE_FILTER_COMPARATOR,
-    index,
-    value
-  }
-}
-
-export const UPDATE_FILTER_VALUE = "UPDATE_FILTER_VALUE"
-export const updateFilterValue = (index, value) => {
-  return {
-    type: UPDATE_FILTER_VALUE,
-    index,
-    value
-  }
-}
-
-export const REMOVE_FILTER = "REMOVE_FILTER"
-export const removeFilter = (index) => {
-  return {
-    type: REMOVE_FILTER,
-    index
-  }
-}
-
-export const ADD_FILTER = "ADD_FILTER"
-export const addFilter = () => {
-  return {
-    type: ADD_FILTER
-  }
-}
-
-export const SET_CURRENT_SEARCH = "SET_CURRENT_SEARCH"
-export const setCurrentSearch = () => {
-  return {
-    type: SET_CURRENT_SEARCH
-  }
-}
-
-export const FETCH_SET_MATERIALS_IF_NEEDED = "FETCH_SET_MATERIALS_IF_NEEDED"
-export const fetchSetMaterialsIfNeeded = () => {
-  return (dispatch, getState) => {
-    const filters = getState().search.current;
-    const filterSearches = filters.reduce((memo, filter)=>{
-      if(filter.name == 'setMembership') {
-        memo.push(dispatch(performSetFilterSearch(filter)));
-      }
-      return memo;
-    }, [])
-
-    if (filterSearches.length > 0) {
-      return $.when.apply(null, filterSearches);
+    if (filtersDeferred.length > 0) {
+      return $.when.apply(null, filtersDeferred);
     }
-    return $.Deferred().resolve();
+    return $.Deferred().resolve([]);
   }
 }
 
-export const FETCH_STAMPS_IF_NEEDED = "FETCH_STAMPS_IF_NEEDED"
-export const fetchStampsIfNeeded = () => {
-  return (dispatch, getState) => {
-    const filters = getState().search.current;
-    const filterSearches = filters.reduce((memo, filter) => {
-      if (filter.name == 'consumePermission' || filter.name == 'editPermission') {
-        memo.push(dispatch(performStampFilterSearch(filter)));
-      }
-      return memo;
-    }, [])
-
-    if (filterSearches.length > 0) {
-      return $.when.apply(null, filterSearches);
-    }
-
-    return $.Deferred().resolve();
-  }
-}
-
-export const PERFORM_SEARCH_TO_PAGE = "PERFORM_SEARCH_TO_PAGE"
-export const performSearchToPage = (pageNumber, maxResults, sortBy, sortOrder) => {
+export const performSearchToPage = (page, maxResults, sortBy, order) => {
   return (dispatch, getState) => {
     // remove user messages if there are any showing
     dispatch(userMessage(''));
-    return dispatch(fetchPageForSearch(pageNumber, maxResults, sortBy, sortOrder)).then((response) => {
+    return dispatch(fetchPageForSearch({ page, maxResults, sortBy, order })).then((response) => {
         return dispatch(receiveSearchResults(response));
       }, (error) => {
         return dispatch(handleMaterialsServiceErrors(error));
@@ -374,19 +138,61 @@ export const performSearchToPage = (pageNumber, maxResults, sortBy, sortOrder) =
   }
 };
 
-export const FETCH_PAGE_FOR_SEARCH = "FETCH_PAGE_FOR_SEARCH"
-export const fetchPageForSearch = (pageNumber, maxResults, sortBy, sortOrder) => {
+export const fetchPageForSearch = (params) => {
   return (dispatch, getState) => {
-    return $.when(dispatch(fetchSetMaterialsIfNeeded()), dispatch(fetchStampsIfNeeded()))
-      .then(() => {
-        const setMaterials = getState().search.setMaterials;
-        const stampMaterials = getState().search.stampMaterials;
+    const filters = getState().search.current;
+    const setFilters = filters.filter(filter => filter.name == 'setMembership');
+    const stampFilters = filters.filter(filter => filter.name == 'consumePermission' || filter.name == 'editPermission');
+    return dispatch(fetchMaterials({ ...params, filters, setFilters, stampFilters }));
+  }
+}
 
-        let filters = getState().search.current;
-        // search.current contains only complete filter rows
+export const fetchPageForSimple = (params) => {
+  return (dispatch) => {
+    const filters = [];
+    const setFilters = [{ name: 'setId', type: 'string', comparator: 'is', value: params.setId }];
+    delete params['setId'];
 
-        const searchQuery = queryMaterialBuilder(filters,  setMaterials.concat(stampMaterials))
-        const url = `${MATERIAL_SERVICE}/materials/search`;
+    if (params.search) {
+      params = qs.parse(params.search, { ignoreQueryPrefix: true });
+      delete params['search'];
+    }
+
+    return dispatch(fetchMaterials({ sortBy: 'amount', ...params, setFilters, maxResults: 25 }));
+  }
+}
+
+const fetchPageFor = (key) => {
+  return (params) => {
+    return (dispatch) => {
+      return dispatch(fetchPageForSimple(params))
+        .then((response) => dispatch(receiveMaterials(key, response)))
+    }
+  }
+}
+
+export const fetchPageForTop = fetchPageFor('top');
+export const fetchPageForBottom = fetchPageFor('bottom');
+
+const fetchMaterials = ({
+  page = 1,
+  maxResults = 50,
+  sortBy = '_id',
+  order = 1,
+  filters = [],
+  setFilters = [],  // Necessary cause of our wacky APIs :s
+  stampFilters = []
+  } = {}) => {
+  return (dispatch) => {
+    const url = `${MATERIAL_SERVICE}/materials/search`;
+
+    return $.when(dispatch(fetchSetMaterialsIfNeeded(setFilters)), dispatch(fetchStampsIfNeeded(stampFilters)))
+      .then((setMaterials, stampMaterials) => {
+        // TODO find more stylish way of doing this
+        if (!Array.isArray(setMaterials)) setMaterials = [setMaterials];
+        if (!Array.isArray(stampMaterials)) stampMaterials = [stampMaterials];
+
+        const searchQuery = queryMaterialBuilder(filters,  [...setMaterials, ...stampMaterials])
 
         return $.ajax({
           method: 'POST',
@@ -395,10 +201,10 @@ export const fetchPageForSearch = (pageNumber, maxResults, sortBy, sortOrder) =>
           accept: "application/json",
           data: JSON.stringify({
             where: searchQuery,
+            page: parseInt(page),
             max_results: maxResults,
-            page: pageNumber,
             sort_by: sortBy,
-            sort_order: sortOrder
+            sort_order: parseInt(order)
           }),
           cache: false
         });
@@ -406,55 +212,38 @@ export const fetchPageForSearch = (pageNumber, maxResults, sortBy, sortOrder) =>
   }
 }
 
-export const PERFORM_SEARCH_WITH_URL = "PERFORM_SEARCH_WITH_URL";
-export const performSearchWithUrl = (url) => {
-  return (dispatch, getState) => {
-    return dispatch(fetchSetMaterialsIfNeeded())
-      .then(() => {
-        return $.ajax({
-          url: `${MATERIAL_SERVICE}/${url}`,
-          method: 'GET',
-          accept: "application/json",
-          cache: false
-        })
-      })
-  }
+export const RECEIVE_MATERIALS = 'RECEIVE_MATERIALS';
+export const receiveMaterials = (key, response) => {
+  return {
+    type: RECEIVE_MATERIALS,
+    key,
+    items: response._items,
+    links: response._links,
+    meta: response._meta
+  };
 }
 
-export const PAGINATE_TO = "PAGINATE_TO";
 export const paginateTo = (numPage) => {
   return (dispatch, getState) => {
-    return dispatch(performSearchToPage(numPage, getState().search.maxResults, getState().search.sortBy, getState().search.sortOrder));
+    return dispatch(performSearchToPage(numPage, getState().search.maxResults, getState().search.sortBy, getState().search.order));
   };
 };
 
-export const PERFORM_SEARCH = "PERFORM_SEARCH"
 export const performSearch = () => {
   return (dispatch, getState) => {
-    return dispatch(performSearchToPage(getState().search.pageNumber, getState().search.maxResults, getState().search.sortBy, getState().search.sortOrder));
+    return dispatch(performSearchToPage(getState().search.page, getState().search.maxResults, getState().search.sortBy, getState().search.order));
   };
 };
 
-
-export const RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS"
-export const receiveSearchResults = (response) => {
-  const items = response._items;
-  const links = response._links;
-  const meta = response._meta;
-
-  return {
-    type: RECEIVE_SEARCH_RESULTS,
-    results: items,
-    links: links,
-    meta: meta
-  };
-}
-
-export const PERFORM_SET_FILTER_SEARCH = "PERFORM_SET_FILTER_SEARCH"
 export const performSetFilterSearch = (filter) => {
   return (dispatch, getState) => {
-    const setQuery = `filter[name]=${filter.value}`
-    const url = `${SET_SERVICE_API}/sets?include=materials&${setQuery}`
+    let url;
+
+    if (filter.name == 'setMembership') {
+      url = `${SET_SERVICE_API}/sets?include=materials&filter[name]=${filter.value}`;
+    } else {
+      url = `${SET_SERVICE_API}/sets/${filter.value}?include=materials`;
+    }
 
     return $.ajax({
       method: 'GET',
@@ -468,21 +257,18 @@ export const performSetFilterSearch = (filter) => {
       if (filter.comparator=='not in') {
         comparator = 'not_in'
       }
-      const data = {}
       let material_uuids = [];
       if (response.included) {
-        material_uuids = response.included.map((material)=>{return material.id})
+        material_uuids = response.included.map(material => material.id)
       }
-      data[comparator] = material_uuids
-      const result = Object.assign({}, data)
-      return dispatch(receiveSetsFromFilter(result))
+
+      return { [comparator]: material_uuids };
     }, (error) => {
       return dispatch(handleSetsServiceErrors(error))
     });
   }
 }
 
-export const PERFORM_STAMP_FILTER_SEARCH = "PERFORM_STAMP_FILTER_SEARCH"
 export const performStampFilterSearch = (filter) => {
   return (dispatch, getState) => {
     let permissionType = filter.name.replace(/Permission/,'');
@@ -514,50 +300,29 @@ export const performStampFilterSearch = (filter) => {
           return material.attributes['material-uuid'] });
       }
       data[comparator] = material_uuids;
-      const result = Object.assign({}, data);
 
-      return dispatch(receiveStampsFromFilter(result));
+      return data;
     });
   }
 }
 
-export const RECEIVE_SETS_FROM_FILTER = "RECEIVE_SETS_FROM_FILTER"
-export const receiveSetsFromFilter = (result) => {
-  return {
-    type: RECEIVE_SETS_FROM_FILTER,
-    setMaterials: result
-  }
-}
-
-export const RECEIVE_STAMPS_FROM_FILTER = "RECEIVE_STAMPS_FROM_FILTER"
-export const receiveStampsFromFilter = (result) => {
-  return {
-    type: RECEIVE_STAMPS_FROM_FILTER,
-    stampMaterials: result
-  }
-}
-
-export const CREATE_NEW_SET = "CREATE_NEW_SET"
-export const createNewSet = (items, setName) => {
+export const createNewSet = (materials, setName) => {
   return (dispatch)=> {
     dispatch(createSetOnly(setName))
     .then((response) => {
-      const setId = response.data.id
-      return dispatch(addMaterialsToSet(items, setId))
+      const set = response.data;
+      return dispatch(addMaterialsToSet(materials, set))
     })
   }
 }
 
-export const CREATE_SET_ONLY = "CREATE_SET_ONLY"
 export const createSetOnly = (setName, showMessage = true) => {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     var validationError = validateNewSetName(setName);
     if (validationError) {
       return dispatch(userMessage(validationError, "danger"));
     }
-    var state = getState();
     const data = { type: 'sets', attributes: {name: setName}};
-    const body = Object.assign({}, data);
     return dispatch(createResource(data)).then((response)=>{
       dispatch(receiveSet(response))
       if (showMessage) {
@@ -606,12 +371,11 @@ export const receiveAllSets = (response) => {
   };
 }
 
-export const BY_SEARCH_PAGE = "BY_SEARCH_PAGE"
 export const bySearchPage = (search, action) => {
   return (dispatch, getState) => {
     const batchSize = getState().search.batchGroup;
-    const pager = (pageNumber) => {
-          return dispatch(fetchPageForSearch(pageNumber, 0))
+    const pager = (page) => {
+          return dispatch(fetchPageForSearch({ page, maxResults: 0 }))
             .then((results) => {
               return batchAction(results._items, action, batchSize)
                 .then(() => {
@@ -647,7 +411,6 @@ const batchAction = (items, action, batchSize) => {
   return batcher(items);
 }
 
-export const PERFORM_SET_TRANSACTION_OPERATION_WITH_MATERIALS_FROM_SEARCH = "PERFORM_SET_TRANSACTION_OPERATION_WITH_MATERIALS_FROM_SEARCH"
 export const performSetTransactionOperationWithMaterialsFromSearch = (setId, operation) => {
   return (dispatch, getState) => {
     return dispatch(createSetTransaction(setId, operation))
@@ -740,9 +503,8 @@ export const createSetTransaction = (param, operationName) => {
   }
 }
 
-export const CREATE_SET_FROM_SEARCH = "CREATE_SET_FROM_SEARCH"
 export const createSetFromSearch = (setName) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     var validationError = validateNewSetName(setName);
     if (validationError) {
       return dispatch(userMessage(validationError, "danger"));
@@ -758,9 +520,8 @@ export const createSetFromSearch = (setName) => {
   }
 };
 
-export const ADD_MATERIALS_TO_SET_FROM_SEARCH = "ADD_MATERIALS_TO_SET_FROM_SEARCH"
 export const addMaterialsToSetFromSearch = (setId) =>{
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(startAddMaterialsToSet())
     return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setId, 'add'))
     .then(() => {
@@ -772,9 +533,8 @@ export const addMaterialsToSetFromSearch = (setId) =>{
   }
 }
 
-export const REMOVE_MATERIALS_FROM_SET_FROM_SEARCH = "REMOVE_MATERIALS_FROM_SET_FROM_SEARCH"
 export const removeMaterialsFromSetFromSearch = (setId) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(startRemoveMaterialsFromSet())
     return dispatch(performSetTransactionOperationWithMaterialsFromSearch(setId, 'remove'))
     .then(() => {
@@ -788,16 +548,16 @@ export const removeMaterialsFromSetFromSearch = (setId) => {
 }
 
 export const ADD_MATERIALS_TO_SET = "ADD_MATERIALS_TO_SET"
-export const addMaterialsToSet = (items, setId) => {
-  return (dispatch, getState) => {
-    let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
-    const body = Object.assign({}, {data: uuids});
+export const addMaterialsToSet = (materials, setId) => {
+  return (dispatch) => {
+    let uuids = materials.map((material) => { return { id: material._id, type:'materials' } });
+
     return $.ajax({
       method: 'POST',
       url: `${SET_SERVICE_API}/sets/${setId}/relationships/materials`,
       accept: "application/vnd.api+json",
       contentType: "application/vnd.api+json",
-      data: JSON.stringify(body)
+      data: JSON.stringify({ data: uuids })
     }).fail((error) => {
       const detail = _getErrorDetails(error);
       return dispatch(userMessage(`Failed to add materials to set. ${detail}`, 'danger'));
@@ -806,16 +566,18 @@ export const addMaterialsToSet = (items, setId) => {
 }
 
 export const REMOVE_MATERIALS_FROM_SET = "REMOVE_MATERIALS_FROM_SET"
-export const removeMaterialsFromSet = (items, setId) => {
-  return (dispatch, getState) => {
-    let uuids = items.map((item)=>{ return Object.assign({}, {id: item._id, type:'materials'}) });
-    const body = Object.assign({}, {data: uuids});
+export const removeMaterialsFromSet = (materials, set) => {
+  return (dispatch) => {
+    if (!Array.isArray(materials)) materials = [materials];
+
+    let uuids = materials.map((material)=>{ return { id: material._id, type:'materials'} });
+
     return $.ajax({
       method: 'DELETE',
-      url: `${SET_SERVICE_API}/sets/${setId}/relationships/materials`,
+      url: `${SET_SERVICE_API}/sets/${set.id}/relationships/materials`,
       contentType: "application/vnd.api+json",
       processData: false,
-      data: JSON.stringify(body)
+      data: JSON.stringify({ data: uuids })
     }).fail((error) => {
       const detail = _getErrorDetails(error);
       return dispatch(userMessage(`Failed to remove materials from set. ${detail}`, 'danger'));
