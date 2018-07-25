@@ -15,7 +15,7 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => 'public, max-age=3600'
+    "Cache-Control' => 'public, max-age=#{1.hour.to_i}"
   }
 
   # Show full error reports and disable caching.
@@ -52,9 +52,10 @@ Rails.application.configure do
 
   config.jwt_secret_key = 'test'
 
-  config.urls = { submission: '',
+  config.urls = { reception: '',
                   permissions: '',
                   sets: '',
                   projects: '',
-                  work_orders: '' }
+                  work: '' }
+                  
 end

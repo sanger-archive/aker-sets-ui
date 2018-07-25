@@ -1,4 +1,6 @@
 Rails.application.configure do
+  # Verifies that versions and hashed value of the package contents in the project's package.json
+  config.webpacker.check_yarn_integrity = true
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -13,12 +15,13 @@ Rails.application.configure do
   config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
-  if Rails.root.join('tmp/caching-dev.txt').exist?
+  # Run rails dev:cache to toggle caching.
+  if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => 'public, max-age=172800'
+      "Cache-Control" => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -34,20 +37,17 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Raise an error on page load if there are pending migrations.
-  # config.active_record.migration_error = :page_load
-
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  config.assets.quiet = false
 
   # Use a different URL for serving assets in development mode, and pass all requests to Sprockets
   # http://guides.rubyonrails.org/asset_pipeline.html#local-precompilation
-  config.assets.prefix = "/dev-assets"
+  # config.assets.prefix = "/assets"
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -56,15 +56,15 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.webpack_dev_server_host = 'http://localhost:8080'
-
-  config.webpack[:use_manifest] = false
-
   config.fake_ldap = true
 
-  config.materials_root = 'http://localhost:5000'
-  config.stamps_root = 'http://localhost:7000/api/v1'
-  config.sets_root = 'http://localhost:3000/api/v1'
+  # This config is only used for local proxying stuff. Don't include it in live environment configs.
+  config.material_service_local_root = 'http://localhost:5000'
+  config.material_service_local_proxy_path = 'material_service'
+  config.permission_service_local_root = 'http://localhost:7000'
+  config.permission_service_local_proxy_path = 'permission_service'
+  config.set_service_local_root = 'http://localhost:3000'
+  config.set_service_local_proxy_path = 'set_service'
 
   config.jwt_secret_key = 'development'
 
@@ -77,9 +77,10 @@ Rails.application.configure do
 
   config.middleware.insert(0, RackAkerServicesProxy, { ssl_verify_none: true })
 
-  config.urls = { submission: '',
+  config.urls = { reception: '',
                   permissions: '',
                   sets: '',
                   projects: '',
-                  work_orders: '' }
+                  work: '' }
+                  
 end

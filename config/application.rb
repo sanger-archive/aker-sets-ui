@@ -16,6 +16,8 @@ module Aker
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.load_defaults 5.1
+
     config.generators do |g|
       g.test_framework :rspec,
                        fixtures: true,
@@ -25,7 +27,7 @@ module Aker
                        controller_specs: false,
                        request_specs: true
 
-      g.fixture_replacement :factory_girl, dir: 'spec/factories'
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
 
       g.assets false
     end
