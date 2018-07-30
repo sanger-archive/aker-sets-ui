@@ -18,7 +18,7 @@ class SetsController < ApplicationController
 private
 
   def materials_csv
-    @materials ||= MaterialsCsv.new(materials_params)
+    @materials_csv ||= MaterialsCsv.new(materials_params)
   end
 
   def materials_params
