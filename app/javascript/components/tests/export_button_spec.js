@@ -6,14 +6,14 @@ import FontAwesome from '../font_awesome';
 describe('<ExportButton />', () => {
 
   let props;
-  let exportButton;
+  let wrappedExportButton;
 
-  const shallowExportButton = () => {
-    if (exportButton) {
-      return exportButton;
+  const exportButton = () => {
+    if (wrappedExportButton) {
+      return wrappedExportButton;
     }
-    exportButton = shallow(<ExportButton {...props} />);
-    return exportButton;
+    wrappedExportButton = shallow(<ExportButton {...props} />);
+    return wrappedExportButton;
   };
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('<ExportButton />', () => {
       extension: undefined,
       location: undefined // React Router's location object
     }
-    exportButton = undefined;
+    wrappedExportButton = undefined;
   })
 
   describe('the link', () => {
@@ -32,19 +32,19 @@ describe('<ExportButton />', () => {
     });
 
     it('has a link', () => {
-      const link = shallowExportButton().find('a');
+      const link = exportButton().find('a');
       expect(link).to.have.length(1);
     })
 
     it('links to the Set export URL', () => {
-      const link = shallowExportButton().find('a');
+      const link = exportButton().find('a');
       expect(link.prop('href')).to.include('/sets/abcd-1234-wxyz');
     })
 
     context('when extension is not passed', () => {
 
       it('defaults to .tsv', () => {
-        const link = shallowExportButton().find('a');
+        const link = exportButton().find('a');
         expect(link.prop('href')).to.include('.tsv');
       })
     })
@@ -56,7 +56,7 @@ describe('<ExportButton />', () => {
       })
 
       it('uses that extension', () => {
-        const link = shallowExportButton().find('a');
+        const link = exportButton().find('a');
         expect(link.prop('href')).to.include('.csv');
       })
 
@@ -69,7 +69,7 @@ describe('<ExportButton />', () => {
       })
 
       it('is added to the link', () => {
-        const link = shallowExportButton().find('a');
+        const link = exportButton().find('a');
         expect(link.prop('href')).to.include('?sortBy=amount&order=-1');
       })
     })
