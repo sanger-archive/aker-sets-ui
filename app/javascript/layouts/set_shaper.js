@@ -138,7 +138,10 @@ class SetShaper extends React.Component {
 
             <div className="col-md-9">
               <Switch>
-                <Route exact path='/sets/:set_uuid' component={ SetPanel } />
+                <Route exact path='/sets/:set_uuid' render={({ location, ...rest }) => {
+                  if (location.search == '') location = Object.assign({}, location, { search: '?sortBy=amount' });
+                  return <SetPanel { ...rest } location={ location } />;
+                }} />
                 <Route component={ SetPanelComponent } />
               </Switch>
             </div>

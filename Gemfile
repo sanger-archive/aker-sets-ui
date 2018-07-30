@@ -32,6 +32,9 @@ gem 'health_check'
 ###
 gem 'aker_credentials_gem', github: 'sanger/aker-credentials'
 gem 'aker_shared_navbar', github: 'sanger/aker-shared-navbar'
+gem 'aker-set-client', github: 'sanger/aker-set-client'
+gem 'matcon_client', github: 'sanger/aker-matcon-client'
+gem 'json_api_client', github: 'sanger/json_api_client'
 
 ###
 # Groups

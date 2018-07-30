@@ -9,10 +9,37 @@ GIT
       request_store
 
 GIT
+  remote: https://github.com/sanger/aker-matcon-client.git
+  revision: 2fa1b1b454d61475e8d9e8f957a91c4ae2459661
+  specs:
+    matcon_client (0.2.3)
+      activemodel
+      activesupport
+      faraday
+      faraday_middleware
+
+GIT
+  remote: https://github.com/sanger/aker-set-client.git
+  revision: bd6554b5c5d881ba17e4b7cb337f41ed0b16fb33
+  specs:
+    aker-set-client (0.2.1)
+
+GIT
   remote: https://github.com/sanger/aker-shared-navbar.git
   revision: f67cda0704b8f19665ef2f2642fcd8bd159206d8
   specs:
     aker_shared_navbar (0.1.7)
+
+GIT
+  remote: https://github.com/sanger/json_api_client.git
+  revision: b163f6f4b8ec2db7c5588edcd992f1d2d9c7c4d6
+  specs:
+    json_api_client (1.5.1)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      addressable (~> 2.2)
+      faraday (~> 0.9)
+      faraday_middleware (~> 0.9)
 
 GEM
   remote: https://rubygems.org/
@@ -93,6 +120,8 @@ GEM
       railties (>= 3.0.0)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
     ffi (1.9.25)
     font-awesome-sass (5.0.13)
       sassc (>= 1.11)
@@ -253,6 +282,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aker-set-client!
   aker_credentials_gem!
   aker_shared_navbar!
   bootsnap
@@ -268,8 +298,10 @@ DEPENDENCIES
   health_check
   jbuilder (~> 2.5)
   jquery-rails
+  json_api_client!
   launchy
   listen (~> 3.0.5)
+  matcon_client!
   poltergeist
   puma (~> 3.0)
   rack-proxy (~> 0.6.2)
@@ -285,4 +317,4 @@ DEPENDENCIES
   webpacker (~> 3.5)
 
 BUNDLED WITH
-   1.16.2
+   1.16.3

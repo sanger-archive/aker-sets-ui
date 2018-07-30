@@ -39,7 +39,7 @@ export class BottomSetPanel extends Component {
 
     return (
       <Panel key={`bottom-set-${set.id}`}>
-        <Heading title={title}></Heading>
+        <Heading title={title} />
 
         <Body style={{height: '334px', overflowY: 'scroll'}}>
           <DraggableSelectedSet materials={ materials.items } />
