@@ -158,7 +158,7 @@ export const fetchPageForSimple = (params) => {
       delete params['search'];
     }
 
-    return dispatch(fetchMaterials({ sortBy: 'amount', ...params, setFilters, maxResults: 25 }));
+    return dispatch(fetchMaterials({ ...params, setFilters, maxResults: 25 }));
   }
 }
 

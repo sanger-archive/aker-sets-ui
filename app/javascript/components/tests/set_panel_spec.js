@@ -2,39 +2,72 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {shallow} from 'enzyme';
 import { SetPanelComponent } from '../set_panel'
-import {Panel, Body} from '../panel';
+import { Panel, Body, Heading } from '../panel';
 import { MaterialTable } from '../../components/material_table';
 import DroppableMaterialTable from '../../components/droppable_material_table';
+import ExportButton from '../../components/export_button';
 
 
 describe('<SetPanelComponent />', () => {
+
+  let props;
+  let wrappedSetPanelComponent;
+  const setPanelComponent = () => {
+    if (wrappedSetPanelComponent) {
+      return wrappedSetPanelComponent;
+    }
+    wrappedSetPanelComponent = shallow(<SetPanelComponent {...props} />);
+    return wrappedSetPanelComponent;
+  }
+
+  beforeEach(() => {
+    props = {
+      set: undefined,
+      user_email: undefined,
+      materials: undefined,
+      match: undefined,
+      location: undefined,
+      onAdd: undefined,
+      onRemove: undefined
+    }
+    wrappedSetPanelComponent = undefined
+  })
+
   context('when no set is selected', () => {
     it('displays a body', () => {
-      const wrapper = shallow(<SetPanelComponent></SetPanelComponent>);
-      expect(wrapper.dive().find(Body).length).to.equals(1);
+      expect(setPanelComponent().dive().find(Body).length).to.equal(1);
     });
   });
-  context('when a set is selected', () => {
-    let myset = {};
-    let materials = [];
 
+  context('when a set is selected', () => {
     beforeEach(() => {
-      myset = {id:'my-id', attributes: {locked: false}};
-      materials = [{ items: [], links: {}, meta: {}}];
+      props.set = { id:'my-id', attributes: { locked: false }};
+      props.materials = [{ items: [], links: {}, meta: {}}];
+      props.location = { search: '?searchBy=amount&order=-1' }
     });
 
     it('displays the body for the set', () => {
-      const wrapper = shallow(<SetPanelComponent set={myset} materials={materials}></SetPanelComponent>);
-      expect(wrapper.dive().find(Body).length).to.equals(1);
+      expect(setPanelComponent().dive().find(Body).length).to.equal(1);
+    });
+
+    it('renders an <ExportButton />', () => {
+      const heading = setPanelComponent().dive().find(Heading);
+      expect(heading.find(ExportButton)).to.have.length(1);
+    });
+
+    it('passes location to the <ExportButton />', () => {
+      const exportButton = setPanelComponent().dive().find(Heading).find(ExportButton);
+      expect(exportButton.props().location).to.equal(props.location);
     });
 
     context('when the set is locked', () => {
 
-      beforeEach(()=>{ myset.attributes = {locked: true} });
+      beforeEach(() => {
+        props.set = { id:'my-id', attributes: { locked: true }};
+      });
 
       it('displays a locked set', () => {
-        const wrapper = shallow(<SetPanelComponent set={myset} materials={materials}></SetPanelComponent>);
-        const mt = wrapper.dive().find(MaterialTable);
+        const mt = setPanelComponent().dive().find(MaterialTable);
         expect(mt).to.have.length(1);
         expect(mt.prop('removeable')).to.equal(false)
       });
@@ -43,11 +76,12 @@ describe('<SetPanelComponent />', () => {
 
     context('when the set is not locked', () => {
 
-      beforeEach(()=>{ myset.attributes = {locked: false} });
+      beforeEach(() => {
+        props.set = { id:'my-id', attributes: { locked: false }};
+      });
 
-      it('displays a not locked set', () => {
-        const wrapper = shallow(<SetPanelComponent set={myset} materials={materials}></SetPanelComponent>);
-        const dmt = wrapper.dive().find(DroppableMaterialTable);
+      it('displays an unlocked set', () => {
+        const dmt = setPanelComponent().dive().find(DroppableMaterialTable);
         expect(dmt).to.have.length(1);
         expect(dmt.prop('removeable')).to.equal(true)
       });
