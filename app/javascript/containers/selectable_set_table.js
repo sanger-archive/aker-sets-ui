@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchFirstPageSetAndMaterials } from '../actions/index';
+import { fetchPageForTop, fetchPageForBottom } from '../actions/index';
+import { select } from '../actions/browser';
 import SetTable from '../components/set_table';
 
 const mapStateToProps = (state, { sets, selectionType }) => {
@@ -16,11 +17,11 @@ const mapStateToProps = (state, { sets, selectionType }) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, { selectionType }) => {
+const mapDispatchToProps = (dispatch, { selectionType, onSetClickAction }) => {
   return {
     onSetClick: (setId) => {
       dispatch(select(setId, selectionType));
-      dispatch(fetchFirstPageSetAndMaterials(setId));
+      dispatch(onSetClickAction({ setId }))
     }
   }
 }

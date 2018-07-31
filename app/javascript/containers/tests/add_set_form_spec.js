@@ -1,22 +1,12 @@
 import React from 'react';
-import sinon from 'sinon';
-import {shallow, mount} from 'enzyme';
-import { connect } from 'react-redux';
-import AddSetForm from '../add_set_form';
-import { createMockStore } from 'redux-test-utils';
-
+import { shallow } from 'enzyme';
+import { AddSetForm } from '../add_set_form';
 
 describe('<AddSetForm />', () => {
-  const getContext = (status) => {
-    let store = createMockStore(status);
-    let context = { store };
-    return { context }
-  }
   context('when displaying it', () => {
     it('shows the form', () => {
-      const status = {};
-      const wrapper = shallow(<AddSetForm></AddSetForm>, getContext(status));
-      expect(wrapper.dive().find('form').length).to.equal(1);
+      const wrapper = shallow(<AddSetForm />);
+      expect(wrapper.find('form')).to.have.length(1);
     });
   });
 });

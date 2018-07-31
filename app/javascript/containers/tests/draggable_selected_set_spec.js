@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { createResource } from 'redux-json-api';
 import {shallow, mount} from 'enzyme';
 import { createMockStore } from 'redux-test-utils';
-import DraggableSelectedCollection from '../draggable_selected_collection';
-import { BiomaterialTable } from '../../components/biomaterial_table';
+import DraggableSelectedSet from '../draggable_selected_set';
+import { MaterialTable } from '../../components/material_table';
 import store from '../../store'
 
 const getContext = (status) => {
@@ -13,7 +13,7 @@ const getContext = (status) => {
 }
 
 
-describe('<DraggableSelectedCollection />', () => {
+describe('<DraggableSelectedSet />', () => {
   it('should render the element', () => {
     const status = {
       materials: {},
@@ -27,8 +27,8 @@ describe('<DraggableSelectedCollection />', () => {
       }
      };
     let dispatch = sinon.spy();
-    const wrapper = mount(<DraggableSelectedCollection></DraggableSelectedCollection>, getContext(status));
+    const wrapper = mount(<DraggableSelectedSet></DraggableSelectedSet>, getContext(status));
 
-    expect(wrapper.find(BiomaterialTable).length).to.equal(1);
+    expect(wrapper.find(MaterialTable).length).to.equal(1);
   });
 });

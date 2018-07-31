@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSetOnly } from '../actions/index';
+import { withRouter } from 'react-router'
 
-let AddSetForm = ({ dispatch }) => {
+export const AddSetForm = ({ dispatch, history, location }) => {
   let input;
 
   return (
@@ -11,7 +12,8 @@ let AddSetForm = ({ dispatch }) => {
         e.preventDefault();
         if (!input.value) return;
 
-        dispatch(createSetOnly(input.value.trim()));
+        dispatch(createSetOnly(input.value.trim()))
+          .then((set) => history.push({ pathname: `/sets/${set.data.id}` }));
         input.value = '';
 
       }}>
@@ -27,6 +29,4 @@ let AddSetForm = ({ dispatch }) => {
     );
 };
 
-AddSetForm = connect()(AddSetForm);
-
-export default AddSetForm;
+export default withRouter(connect()(AddSetForm));

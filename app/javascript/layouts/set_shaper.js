@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SelectableSetTable from '../containers/selectable_set_table';
-import DroppableSelectedSet from '../containers/droppable_selected_set';
 import { Heading, Body, Footer } from '../components/panel';
 import Panel from 'react-bootstrap/lib/Panel'
 import SetPanel, { SetPanelComponent } from '../components/set_panel';
@@ -12,6 +11,7 @@ import FontAwesome from '../components/font_awesome';
 import UserMessage from '../components/user_message';
 import { readEndpoint } from 'redux-json-api';
 import { debounce } from '../lib/utils';
+import { fetchPageForTop, fetchPageForBottom } from '../actions/index';
 
 class SetShaper extends React.Component {
 
@@ -21,8 +21,8 @@ class SetShaper extends React.Component {
     this.state = {
       topTabNumber: 0,       // Which tab is open at the top
       bottomTabNumber: 0,    // Which tab is open at the bottom
-      userSetsPageNumber: 1, // Which page to fetch next for a User's Sets
-      setsPageNumber: 1,     // Which page to fetch next for all Sets
+      userSetsPage: 1, // Which page to fetch next for a User's Sets
+      setsPage: 1,     // Which page to fetch next for all Sets
       fetching: false        // Are we fetching?
     };
 
@@ -39,15 +39,15 @@ class SetShaper extends React.Component {
 
   fetchNextUserSets() {
     this.fetchNextPage({
-      pageAttr: 'userSetsPageNumber',
-      action: readEndpoint(`/sets?sort=-created_at&page[number]=${this.state.userSetsPageNumber}&filter[owner_id]=${this.props.userEmail}`)
+      pageAttr: 'userSetsPage',
+      action: readEndpoint(`/sets?sort=-created_at&page[number]=${this.state.userSetsPage}&filter[owner_id]=${this.props.userEmail}`)
     })
   }
 
   fetchNextSets() {
     this.fetchNextPage({
-      pageAttr: 'setsPageNumber',
-      action: readEndpoint(`/sets?sort=-created_at&page[number]=${this.state.setsPageNumber}`)
+      pageAttr: 'setsPage',
+      action: readEndpoint(`/sets?sort=-created_at&page[number]=${this.state.setsPage}`)
     })
   }
 
@@ -84,7 +84,7 @@ class SetShaper extends React.Component {
   }
 
   render() {
-    const { selectedTopSet, selectedBottomSet, sets, userSets } = this.props;
+    const { selectedTopSet, selectedBottomSet, sets, userSets, materials } = this.props;
 
     let basename = '/simple';
 
@@ -96,7 +96,7 @@ class SetShaper extends React.Component {
       <Router basename={ basename }>
         <div className="container-fluid">
           <UserMessage></UserMessage>
-          <div className="row" style={{"margin-bottom": "20px"}}>
+          <div className="row" style={{"marginBottom": "20px"}}>
             <div className="col-md-3">
               <ul className="nav nav-tabs">
                 <li className="active"><a data-toggle="tab" href="#home">My Created Sets</a></li>
@@ -109,6 +109,7 @@ class SetShaper extends React.Component {
                     <SelectableSetTable
                       sets={ userSets }
                       selectionType="top"
+                      onSetClickAction={ fetchPageForTop }
                       hideOwner={ true }
                       addLink={ true }
                       showLocked={ false }
@@ -137,7 +138,13 @@ class SetShaper extends React.Component {
 
             <div className="col-md-9">
               <Switch>
-                <Route exact path='/sets/:set_uuid' component={ SetPanel } />
+                <Route exact path='/sets/:set_uuid' render={({ location, ...rest }) => {
+                  // If there's no queryString (search), set a default sortBy
+                  // This seems to be the best (only?) way to make a default sortBy be passed down to the rest
+                  // of the application
+                  if (location.search == '') location = Object.assign({}, location, { search: '?sortBy=amount' });
+                  return <SetPanel { ...rest } location={ location } />;
+                }} />
                 <Route component={ SetPanelComponent } />
               </Switch>
             </div>
@@ -160,6 +167,7 @@ class SetShaper extends React.Component {
                   <SelectableSetTable
                     sets={ userSets }
                     selectionType="bottom"
+                    onSetClickAction={ fetchPageForBottom }
                     hideOwner={ true }
                     addLink={ false }
                     fetching={ this.state.fetching }
@@ -169,6 +177,7 @@ class SetShaper extends React.Component {
                   <SelectableSetTable
                     sets={ sets }
                     selectionType="bottom"
+                    onSetClickAction={ fetchPageForBottom }
                     addLink={ false }
                     fetching={ this.state.fetching }
                   />
@@ -195,7 +204,7 @@ class SetShaper extends React.Component {
 
             <div className="col-md-9">
               <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
-                <BottomSetPanel set={ selectedBottomSet } />
+                <BottomSetPanel set={ selectedBottomSet } materials={ materials['bottom'] }  />
               </ReactCSSTransitionGroup>
             </div>
           </div>
@@ -210,7 +219,8 @@ SetShaper.defaultProps = {
   selectedTopSet: { attributes: { name: ''}},
   selectedBottomSet: { attributes: { name: ''}},
   sets: [],
-  userSets: []
+  userSets: [],
+  materials: {}
 }
 
 export default SetShaper;
