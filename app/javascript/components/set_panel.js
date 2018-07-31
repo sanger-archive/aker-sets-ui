@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch, { match, location }) => {
   }
 }
 
-export const SetPanelComponent = ({ set, user_email, materials, match, location, onAdd, onRemove }) => {
+export const SetPanelComponent = ({ set, user_email, materials, match, location, history, onAdd, onRemove }) => {
   if (!set || !set.id) {
     return (
       <Panel key='set-'>
@@ -84,7 +84,10 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
       <Panel key={`set-${set.id}`}>
         <Heading title={setName}>
           { deleteable && <DeleteSetButton set={set} style={{ "float": "right" }} /> }
-          <ExportButton set={set} location={location} style={{ float: "right", marginTop: "-1px", marginRight: "3px" }} />
+          <ExportButton
+            set={set}
+            history={history}
+            style={{ float: "right", marginTop: "-1px", marginRight: "3px" }} />
         </Heading>
 
         <Body style={{height: '334px', overflowY: 'scroll'}}>

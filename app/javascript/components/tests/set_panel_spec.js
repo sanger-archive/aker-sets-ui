@@ -55,9 +55,9 @@ describe('<SetPanelComponent />', () => {
       expect(heading.find(ExportButton)).to.have.length(1);
     });
 
-    it('passes location to the <ExportButton />', () => {
+    it('passes history to the <ExportButton />', () => {
       const exportButton = setPanelComponent().dive().find(Heading).find(ExportButton);
-      expect(exportButton.props().location).to.equal(props.location);
+      expect(exportButton.props().history).to.equal(props.history);
     });
 
     it('passes set to the <ExportButton />', () => {

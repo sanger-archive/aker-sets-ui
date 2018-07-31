@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ExportButton from '../export_button';
-import { Link } from 'react-router-dom';
+import { createMemoryHistory as createHistory } from "history";
 
 describe('<ExportButton />', () => {
 
@@ -20,7 +20,7 @@ describe('<ExportButton />', () => {
     props = {
       set: undefined,
       extension: undefined,
-      location: undefined // React Router's location object
+      history: undefined // React Router's history object
     }
     wrappedExportButton = undefined;
   })
@@ -29,23 +29,24 @@ describe('<ExportButton />', () => {
 
     beforeEach(() => {
       props.set = { id: "abcd-1234-wxyz" };
+      props.history = createHistory();
     });
 
     it('has a link', () => {
-      const link = exportButton().find(Link);
+      const link = exportButton().find('a');
       expect(link).to.have.length(1);
     })
 
     it('links to the Set export URL', () => {
-      const link = exportButton().find(Link);
-      expect(link.prop('to')).to.include('/sets/abcd-1234-wxyz');
+      const link = exportButton().find('a');
+      expect(link.prop('href')).to.include('/sets/abcd-1234-wxyz');
     })
 
     context('when extension is not passed', () => {
 
       it('defaults to .tsv', () => {
-        const link = exportButton().find(Link);
-        expect(link.prop('to')).to.include('.tsv');
+        const link = exportButton().find('a');
+        expect(link.prop('href')).to.include('.tsv');
       })
     })
 
@@ -56,8 +57,8 @@ describe('<ExportButton />', () => {
       })
 
       it('uses that extension', () => {
-        const link = exportButton().find(Link);
-        expect(link.prop('to')).to.include('.csv');
+        const link = exportButton().find('a');
+        expect(link.prop('href')).to.include('.csv');
       })
 
     })
@@ -65,12 +66,12 @@ describe('<ExportButton />', () => {
     context('when location with search is passed', () => {
 
       beforeEach(() => {
-        props.location = { search: "?sortBy=amount&order=-1" };
+        props.history.location = { search: "?sortBy=amount&order=-1" };
       })
 
       it('is added to the link', () => {
-        const link = exportButton().find(Link);
-        expect(link.prop('to')).to.include('?sortBy=amount&order=-1');
+        const link = exportButton().find('a');
+        expect(link.prop('href')).to.include('?sortBy=amount&order=-1');
       })
     })
 
