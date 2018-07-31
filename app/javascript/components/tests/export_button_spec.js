@@ -66,7 +66,7 @@ describe('<ExportButton />', () => {
     context('when location with search is passed', () => {
 
       beforeEach(() => {
-        props.history.location = { search: "?sortBy=amount&order=-1" };
+        props.location = { search: "?sortBy=amount&order=-1" };
       })
 
       it('is added to the link', () => {

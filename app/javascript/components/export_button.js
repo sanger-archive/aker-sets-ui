@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from './font_awesome';
-import { Link } from 'react-router-dom';
 
-const exportButton = ({ set, extension, history, style }) => {
+const exportButton = ({ set, extension, location, history, style }) => {
   const pathname = `/sets/${set.id}.${extension}`;
-  const search = history.location.search;
+  const search = (location && location.search) ? location.search : '';
   const href = history.createHref({ pathname, search });
 
   return (
@@ -18,7 +17,8 @@ const exportButton = ({ set, extension, history, style }) => {
 exportButton.propTypes = {
   set: PropTypes.shape({ id: PropTypes.string }).isRequired,
   extension: PropTypes.oneOf(['tsv', 'csv']),
-  history: PropTypes.shape({ location: PropTypes.object, createHref: PropTypes.function }).isRequired,
+  history: PropTypes.shape({ createHref: PropTypes.function }).isRequired,
+  location: PropTypes.shape({ search: PropTypes.string }),
   style: PropTypes.object
 }
 

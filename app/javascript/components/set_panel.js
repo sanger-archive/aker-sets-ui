@@ -87,6 +87,7 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
           <ExportButton
             set={set}
             history={history}
+            location={location}
             style={{ float: "right", marginTop: "-1px", marginRight: "3px" }} />
         </Heading>
 

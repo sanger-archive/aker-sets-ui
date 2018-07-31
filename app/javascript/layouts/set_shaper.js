@@ -86,7 +86,7 @@ class SetShaper extends React.Component {
   render() {
     const { selectedTopSet, selectedBottomSet, sets, userSets, materials } = this.props;
 
-    let basename = '/simple';
+    let basename = '/';
 
     if (typeof RELATIVE_URL_ROOT != 'undefined') {
       basename = RELATIVE_URL_ROOT + basename;
@@ -138,7 +138,7 @@ class SetShaper extends React.Component {
 
             <div className="col-md-9">
               <Switch>
-                <Route exact path='/sets/:set_uuid' render={({ location, ...rest }) => {
+                <Route exact path='/simple/sets/:set_uuid' render={({ location, ...rest }) => {
                   // If there's no queryString (search), set a default sortBy
                   // This seems to be the best (only?) way to make a default sortBy be passed down to the rest
                   // of the application
