@@ -60,6 +60,11 @@ describe('<SetPanelComponent />', () => {
       expect(exportButton.props().location).to.equal(props.location);
     });
 
+    it('passes set to the <ExportButton />', () => {
+      const exportButton = setPanelComponent().dive().find(Heading).find(ExportButton);
+      expect(exportButton.props().set).to.equal(props.set);
+    });
+
     context('when the set is locked', () => {
 
       beforeEach(() => {
