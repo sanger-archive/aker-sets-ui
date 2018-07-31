@@ -84,7 +84,7 @@ class SetShaper extends React.Component {
   }
 
   render() {
-    const { selectedTopSet, selectedBottomSet, sets, userSets, materials } = this.props;
+    const { selectedTopSet, selectedBottomSet, sets, userSets, materials, dispatch } = this.props;
 
     let basename = '/';
 
@@ -167,7 +167,7 @@ class SetShaper extends React.Component {
                   <SelectableSetTable
                     sets={ userSets }
                     selectionType="bottom"
-                    onSetClickAction={ fetchPageForBottom }
+                    onSetClick={ (setId) => { dispatch(fetchPageForBottom({ setId, sortBy: 'amount' })) } }
                     hideOwner={ true }
                     addLink={ false }
                     fetching={ this.state.fetching }
@@ -177,7 +177,7 @@ class SetShaper extends React.Component {
                   <SelectableSetTable
                     sets={ sets }
                     selectionType="bottom"
-                    onSetClickAction={ fetchPageForBottom }
+                    onSetClick={ (setId) => { dispatch(fetchPageForBottom({ setId, sortBy: 'amount' })) } }
                     addLink={ false }
                     fetching={ this.state.fetching }
                   />
@@ -204,7 +204,7 @@ class SetShaper extends React.Component {
 
             <div className="col-md-9">
               <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
-                <BottomSetPanel set={ selectedBottomSet } materials={ materials['bottom'] }  />
+                <BottomSetPanel set={ selectedBottomSet } materials={ materials['bottom'] } location={{ search: '?sortBy=amount' }}  />
               </ReactCSSTransitionGroup>
             </div>
           </div>

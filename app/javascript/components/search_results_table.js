@@ -12,7 +12,10 @@ class SearchResultsTable extends React.Component {
     const { fields, headings, items, links, sets, dispatch, meta, loading } = this.props;
     const hasResults = items.length != 0;
 
-    const handleClick = (page) => dispatch(paginateTo(page));
+    const handleClick = (search) => {
+      const { page } = qs.parse(search, { ignoreQueryPrefix: true })
+      dispatch(paginateTo(page));
+    }
 
     let title = 'Results'
     if (meta.total) {
@@ -90,22 +93,7 @@ const SearchResultsRow = (props) => {
 }
 
 export const PaginationLinks = (props) => {
-  const { links, meta, match, location, onClick } = props;
-
-  let paginationLinks = [];
-
-  // TODO: A better way of doing this?
-  if (match && location) {
-    paginationLinks.push(<PaginationLink link={links.first} match={match} location={location} title='First' key='First' />)
-    paginationLinks.push(<PaginationLink link={links.prev} match={match} location={location} title='Previous' key='Previous' />)
-    paginationLinks.push(<PaginationLink link={links.next} match={match} location={location} title='Next' key='Next' />)
-    paginationLinks.push(<PaginationLink link={links.last} match={match} location={location} title='Last' key='Last' />)
-  } else {
-    paginationLinks.push(<PaginationAnchor link={links.first} onClick={onClick} title='First' key='First' />)
-    paginationLinks.push(<PaginationAnchor link={links.prev} onClick={onClick} title='Previous' key='Previous' />)
-    paginationLinks.push(<PaginationAnchor link={links.next} onClick={onClick} title='Next' key='Next' />)
-    paginationLinks.push(<PaginationAnchor link={links.last} onClick={onClick} title='Last' key='Last' />)
-  }
+  const { links, route, meta, location, onClick } = props;
 
   return (
     <div className="row">
@@ -116,7 +104,10 @@ export const PaginationLinks = (props) => {
          </span></div>
         <nav aria-label="Page navigation" className="pull-right">
           <ul className="pagination">
-            { paginationLinks }
+            <PaginationLink route={route} link={links.first} onClick={onClick} location={location} title='First' key='First' />
+            <PaginationLink route={route} link={links.prev} onClick={onClick} location={location} title='Previous' key='Previous' />
+            <PaginationLink route={route} link={links.next} onClick={onClick} location={location} title='Next' key='Next' />
+            <PaginationLink route={route} link={links.last} onClick={onClick} location={location} title='Last' key='Last' />
           </ul>
         </nav>
       </div>
@@ -124,32 +115,51 @@ export const PaginationLinks = (props) => {
   );
 }
 
-const PaginationLink = ({ link, match, location, title }) => {
-  const pathname = location.pathname;
-  let search = '';
+PaginationLinks.defaultProps = {
+  location: { search: '' }
+}
 
-  if (link) {
-    // TODO: a better way of doing this?
+const PaginationLink = ({ route, link, onClick, location, title }) => {
+  const pathname = location.pathname;
+  let LinkOrA;
+  let search;
+  let linkProps;
+
+  if (link && location) {
     search = qs.stringify(Object.assign({}, qs.parse(location.search, { ignoreQueryPrefix: true }), { page: link.page }), { addQueryPrefix: true });
   }
 
   const to = { pathname, search };
 
+  if (route) {
+    LinkOrA = PageLink;
+    linkProps = { to, title }
+  } else {
+    LinkOrA = PageAnchor;
+    linkProps = { title, onClick, search };
+  }
+
   return (
     <li className={!link ? 'disabled' : undefined } >
-      <Link to={ to } aria-label={title}>
+      <LinkOrA { ...linkProps }>
         <span aria-hidden="true">{title}</span>
-      </Link>
+      </LinkOrA>
     </li>
   );
 }
 
-const PaginationAnchor = ({ link, title, onClick }) => {
+const PageLink = ({ to, title, children }) => {
   return (
-    <li className={!link ? 'disabled' : undefined } >
-      <a href='#' aria-label={title} onClick={ (e) => { e.preventDefault(); onClick(link.page); } }>
-        <span aria-hidden="true">{title}</span>
-      </a>
-    </li>
+    <Link to={ to } aria-label={title}>
+      { children }
+    </Link>
+  )
+}
+
+const PageAnchor = ({ title, onClick, search, children }) => {
+  return (
+    <a href='#' aria-label={title} onClick={ (e) => { e.preventDefault(); onClick(search); } }>
+      { children }
+    </a>
   );
 }

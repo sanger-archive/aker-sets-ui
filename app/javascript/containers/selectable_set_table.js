@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPageForTop, fetchPageForBottom } from '../actions/index';
 import { select } from '../actions/browser';
 import SetTable from '../components/set_table';
 
@@ -17,11 +16,11 @@ const mapStateToProps = (state, { sets, selectionType }) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, { selectionType, onSetClickAction }) => {
+const mapDispatchToProps = (dispatch, { selectionType, onSetClick }) => {
   return {
     onSetClick: (setId) => {
       dispatch(select(setId, selectionType));
-      dispatch(onSetClickAction({ setId }))
+      onSetClick(setId);
     }
   }
 }

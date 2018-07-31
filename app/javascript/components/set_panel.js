@@ -102,6 +102,7 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
               onRemove={onRemove} /> }
         </Body>
         <PaginationLinks
+          route={true}
           links={materials.links}
           meta={materials.meta}
           match={match}
