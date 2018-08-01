@@ -2,23 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export default class FontAwesome extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    const iClass = classNames({
-      'fa': true,
-      'fa-fw': this.props.fw,
-      [`fa-${this.props.icon}`]: this.props.icon,
-      [`fa-${this.props.size}`]: this.props.size
-    });
+const FontAwesome = ({ fw, icon, size, style, onClick }) => {
+  const iClass = classNames({
+    'fa': true,
+    'fa-fw': fw,
+    [`fa-${icon}`]: icon,
+    [`fa-${size}`]: size
+  });
 
-    return (
-      <i style={this.props.style} onClick={this.props.onClick} className={iClass} aria-hidden="true"></i>
-    )
-  }
+  return (
+    <i style={style} onClick={onClick} className={iClass} aria-hidden="true"></i>
+  )
 }
 
 FontAwesome.propTypes = {
@@ -33,3 +27,5 @@ FontAwesome.defaultProps = {
   fw: true,
   style: {}
 }
+
+export default FontAwesome;

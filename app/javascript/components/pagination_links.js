@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import qs from 'qs';
 
-export const PaginationLinks = (props) => {
+const PaginationLinks = (props) => {
   const { links, route, meta, location, onClick } = props;
 
   return (

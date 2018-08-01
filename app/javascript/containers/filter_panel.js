@@ -1,8 +1,8 @@
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
 import DatePicker from 'react-bootstrap-date-picker';
-import FontAwesome from './font_awesome';
-import { Panel, Heading, Body } from './panel'
+import FontAwesome from '../components/font_awesome';
+import { Panel, Heading, Body } from '../components/panel'
 import { connect } from 'react-redux';
 import { updateFilterName, updateFilterComparator, updateFilterValue, removeFilter,
     addFilter, setCurrentSearch, updateSortBy, updateSortOrder} from '../actions/search';

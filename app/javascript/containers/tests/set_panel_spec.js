@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {shallow} from 'enzyme';
 import { SetPanelComponent } from '../set_panel'
-import { Panel, Body, Heading } from '../panel';
+import { Panel, Body, Heading } from '../../components/panel';
 import { MaterialTable } from '../../components/material_table';
 import DroppableMaterialTable from '../../components/droppable_material_table';
 import ExportButton from '../../components/export_button';
