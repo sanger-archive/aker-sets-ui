@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Panel, Heading, Body} from './panel';
 import { MaterialTable } from './material_table';
 import DroppableMaterialTable from '../components/droppable_material_table';
-import { PaginationLinks } from '../components/search_results_table';
+import PaginationLinks from './pagination_links';
 import ExportButton from '../components/export_button';
 import { getSelectedTop } from '../selectors/index';
 import FontAwesome from '../components/font_awesome';
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch, { match, location }) => {
   }
 }
 
-export const SetPanelComponent = ({ set, user_email, materials, match, location, onAdd, onRemove }) => {
+export const SetPanelComponent = ({ set, user_email, materials, match, location, history, onAdd, onRemove }) => {
   if (!set || !set.id) {
     return (
       <Panel key='set-'>
@@ -84,7 +84,11 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
       <Panel key={`set-${set.id}`}>
         <Heading title={setName}>
           { deleteable && <DeleteSetButton set={set} style={{ "float": "right" }} /> }
-          <ExportButton set={set} location={location} style={{ float: "right", marginTop: "-1px", marginRight: "3px" }} />
+          <ExportButton
+            set={set}
+            history={history}
+            location={location}
+            style={{ float: "right", marginTop: "-1px", marginRight: "3px" }} />
         </Heading>
 
         <Body style={{height: '334px', overflowY: 'scroll'}}>
@@ -98,11 +102,10 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
               onRemove={onRemove} /> }
         </Body>
         <PaginationLinks
+          route={true}
           links={materials.links}
           meta={materials.meta}
-          match={match}
           location={location}
-          handleClick={() => {}}
         />
       </Panel>
   );

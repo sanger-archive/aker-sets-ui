@@ -67,7 +67,7 @@ const SetRow = ({ set, selected, onClick, hideOwner, addLink }) => {
 
   let setNameLink = set.attributes.name;
   if (addLink) {
-    setNameLink = <Link to={ `/sets/${set.id}` }>{ setNameLink }</Link>
+    setNameLink = <Link to={ `/simple/sets/${set.id}` }>{ setNameLink }</Link>
   } else {
     setNameLink = <a href='#' onClick={ (e) => { e.preventDefault(); onClick(set.id) }}>{ setNameLink }</a>
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ExportButton from '../export_button';
-import FontAwesome from '../font_awesome';
+import { createMemoryHistory as createHistory } from "history";
 
 describe('<ExportButton />', () => {
 
@@ -20,7 +20,7 @@ describe('<ExportButton />', () => {
     props = {
       set: undefined,
       extension: undefined,
-      location: undefined // React Router's location object
+      history: undefined // React Router's history object
     }
     wrappedExportButton = undefined;
   })
@@ -29,6 +29,7 @@ describe('<ExportButton />', () => {
 
     beforeEach(() => {
       props.set = { id: "abcd-1234-wxyz" };
+      props.history = createHistory();
     });
 
     it('has a link', () => {

@@ -27,6 +27,7 @@ describe('<SetPanelComponent />', () => {
       materials: undefined,
       match: undefined,
       location: undefined,
+      history: undefined,
       onAdd: undefined,
       onRemove: undefined
     }
@@ -44,6 +45,7 @@ describe('<SetPanelComponent />', () => {
       props.set = { id:'my-id', attributes: { locked: false }};
       props.materials = [{ items: [], links: {}, meta: {}}];
       props.location = { search: '?searchBy=amount&order=-1' }
+      props.history = { createHref: function() {} }
     });
 
     it('displays the body for the set', () => {
@@ -55,13 +57,10 @@ describe('<SetPanelComponent />', () => {
       expect(heading.find(ExportButton)).to.have.length(1);
     });
 
-    it('passes location to the <ExportButton />', () => {
+    it('passes location, history, and set to the <ExportButton />', () => {
       const exportButton = setPanelComponent().dive().find(Heading).find(ExportButton);
       expect(exportButton.props().location).to.equal(props.location);
-    });
-
-    it('passes set to the <ExportButton />', () => {
-      const exportButton = setPanelComponent().dive().find(Heading).find(ExportButton);
+      expect(exportButton.props().history).to.equal(props.history);
       expect(exportButton.props().set).to.equal(props.set);
     });
 

@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import {Panel, Heading, Body} from './panel';
 import FontAwesome from './font_awesome';
 import DraggableSelectedSet from '../containers/draggable_selected_set';
-import { PaginationLinks } from '../components/search_results_table';
+import PaginationLinks from './pagination_links';
 import { fetchPageForBottom } from '../actions/index';
+import ExportButton from '../components/export_button';
+import { withRouter } from 'react-router';
 
 export class BottomSetPanel extends Component {
 
@@ -13,13 +15,13 @@ export class BottomSetPanel extends Component {
     this.onPaginationClick = this.onPaginationClick.bind(this);
   }
 
-  onPaginationClick(pageNumber) {
+  onPaginationClick(search) {
     const { dispatch, set } = this.props;
-    dispatch(fetchPageForBottom({ setId: set.id, pageNumber }))
+    dispatch(fetchPageForBottom({ setId: set.id, sortBy: 'amount', search }))
   }
 
   render() {
-    const { set, materials } = this.props;
+    const { set, materials, location, history } = this.props;
 
     if (!set || !set.id) {
       return (
@@ -39,7 +41,13 @@ export class BottomSetPanel extends Component {
 
     return (
       <Panel key={`bottom-set-${set.id}`}>
-        <Heading title={title} />
+        <Heading title={title}>
+          {<ExportButton
+            set={set}
+            history={history}
+            location={{search: '?sortBy=amount'}}
+            style={{ float: "right", marginTop: "-1px", marginRight: "3px" }} />}
+        </Heading>
 
         <Body style={{height: '334px', overflowY: 'scroll'}}>
           <DraggableSelectedSet materials={ materials.items } />
@@ -54,4 +62,4 @@ export class BottomSetPanel extends Component {
   }
 };
 
-export default connect()(BottomSetPanel);
+export default withRouter(connect()(BottomSetPanel));
