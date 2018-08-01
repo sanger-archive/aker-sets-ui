@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Panel, Heading, Body} from './panel';
 import { MaterialTable } from './material_table';
 import DroppableMaterialTable from '../components/droppable_material_table';
-import { PaginationLinks } from '../components/search_results_table';
+import PaginationLinks from './pagination_links';
 import ExportButton from '../components/export_button';
 import { getSelectedTop } from '../selectors/index';
 import FontAwesome from '../components/font_awesome';
@@ -105,9 +105,7 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
           route={true}
           links={materials.links}
           meta={materials.meta}
-          match={match}
           location={location}
-          handleClick={() => {}}
         />
       </Panel>
   );

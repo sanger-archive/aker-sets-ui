@@ -204,7 +204,7 @@ class SetShaper extends React.Component {
 
             <div className="col-md-9">
               <ReactCSSTransitionGroup transitionName="content" transitionEnterTimeout={500} transitionLeave={false}>
-                <BottomSetPanel set={ selectedBottomSet } materials={ materials['bottom'] } location={{ search: '?sortBy=amount' }}  />
+                <BottomSetPanel set={ selectedBottomSet } materials={ materials['bottom'] } />
               </ReactCSSTransitionGroup>
             </div>
           </div>
