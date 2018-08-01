@@ -74,7 +74,7 @@ const PageLink = ({ to, title, children }) => {
 
 const PageAnchor = ({ title, onClick, search, children }) => {
   return (
-    <a href='#' aria-label={title} onClick={ (e) => { e.preventDefault(); onClick(search); } }>
+    <a href='#' aria-label={title} onClick={ (e) => { e.preventDefault(); if (search) { onClick(search) }; } }>
       { children }
     </a>
   );
