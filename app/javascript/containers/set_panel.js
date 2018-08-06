@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Panel, Heading, Body} from './panel';
-import { MaterialTable } from './material_table';
-import DroppableMaterialTable from '../components/droppable_material_table';
-import PaginationLinks from './pagination_links';
-import ExportButton from '../components/export_button';
+import {Panel, Heading, Body} from '../presentation/panel';
+import { MaterialTable } from '../presentation/material_table';
+import DroppableMaterialTable from '../presentation/droppable_material_table';
+import PaginationLinks from '../presentation/pagination_links';
+import ExportButton from '../presentation/export_button';
 import { getSelectedTop } from '../selectors/index';
-import FontAwesome from '../components/font_awesome';
+import FontAwesome from '../presentation/font_awesome';
 import { select } from '../actions/browser';
 import { fetchPageForTop, removeMaterialsFromSet, appendMaterialsToSet } from '../actions/index';
 import { clearSelection } from '../actions/browser';
 import { readEndpoint } from 'redux-json-api';
-import DeleteSetButton from './delete_set_button';
+import DeleteSetButton from '../containers/delete_set_button';
 
 class SetPanel extends Component {
 

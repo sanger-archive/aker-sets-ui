@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
-import { MaterialTable } from '../components/material_table';
+import { MaterialTable } from '../presentation/material_table';
 import droppable from '../hocs/droppable';
 import { ItemTypes } from '../lib/item_types';
 import { clearSelection, storeItems } from '../actions/browser';

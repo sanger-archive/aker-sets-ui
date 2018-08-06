@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createResource } from 'redux-json-api';
 import {shallow, mount} from 'enzyme';
 import DroppableMaterialTable from '../droppable_material_table';
-import { MaterialTable } from '../../components/material_table';
+import { MaterialTable } from '../../presentation/material_table';
 import store from '../../store'
 
 import { DragDropContext } from 'react-dnd';

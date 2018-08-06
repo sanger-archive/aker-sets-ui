@@ -6,8 +6,8 @@ import onClickOutside from 'react-onclickoutside';
 
 import draggable from '../hocs/draggable';
 import { ItemTypes } from '../lib/item_types';
-import { MaterialTable, MaterialTableRow } from '../components/material_table';
-import FontAwesome from '../components/font_awesome';
+import { MaterialTable, MaterialTableRow } from '../presentation/material_table';
+import FontAwesome from '../presentation/font_awesome';
 
 let draggableMaterialTableRow = draggable(MaterialTableRow, (connectDragPreview, props) => {
   let img = new Image();
