@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel, Heading, Body } from '../components/panel';
-import FontAwesome from '../components/font_awesome';
+import { Panel, Heading, Body } from '../presentation/panel';
+import FontAwesome from '../presentation/font_awesome';
 import {SelectDisablingSurroundingButtons} from '../containers/set_selector';
 import StamperControl from '../containers/stamper_control'
 

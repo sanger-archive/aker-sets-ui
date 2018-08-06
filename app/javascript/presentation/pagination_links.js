@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import qs from 'qs';
 
 const PaginationLinks = (props) => {
@@ -31,15 +32,17 @@ PaginationLinks.defaultProps = {
 
 export default PaginationLinks;
 
-const PaginationLink = ({ route, link, onClick, location, title }) => {
+export const PaginationLink = ({ route, link, onClick, location, title }) => {
   const pathname = location.pathname;
   let LinkOrA;
   let search;
   let linkProps;
 
   if (link) {
-    if (location) {
-      search = qs.stringify(Object.assign({}, qs.parse(location.search, { ignoreQueryPrefix: true }), { page: link.page }), { addQueryPrefix: true });
+    if (location && location.search) {
+      search = qs.stringify(
+        Object.assign({}, qs.parse(location.search, { ignoreQueryPrefix: true }), { page: link.page }),
+        { addQueryPrefix: true });
     } else {
       search = `?page=${link.page}`;
     }
@@ -64,6 +67,14 @@ const PaginationLink = ({ route, link, onClick, location, title }) => {
   );
 }
 
+PaginationLink.propTypes = {
+  route: PropTypes.bool,
+  link: PropTypes.shape({ page: PropTypes.number }),
+  onClick: PropTypes.func,
+  location: PropTypes.shape({ pathname: PropTypes.string, search: PropTypes.string }).isRequired,
+  title: PropTypes.string.isRequired
+}
+
 const PageLink = ({ to, title, children }) => {
   return (
     <Link to={ to } aria-label={title}>
@@ -72,9 +83,13 @@ const PageLink = ({ to, title, children }) => {
   )
 }
 
-const PageAnchor = ({ title, onClick, search, children }) => {
+export const PageAnchor = ({ title, onClick, search, children }) => {
   return (
-    <a href='#' aria-label={title} onClick={ (e) => { e.preventDefault(); if (search) { onClick(search) }; } }>
+    <a href='#' aria-label={title} onClick={ (e) => {
+        e.preventDefault();
+        if (!!search) onClick(search);
+      }
+    }>
       { children }
     </a>
   );

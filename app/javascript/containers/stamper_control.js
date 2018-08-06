@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, getState } from 'react-redux';
-import StamperPanel from '../components/stamper_panel'
+import StamperPanel from '../presentation/stamper_panel'
 import { selectStamp, applyStamp, unapplyStamp} from '../actions/index'
 
 const mapStateToProps = (state) => {

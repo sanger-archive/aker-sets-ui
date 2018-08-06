@@ -1,6 +1,6 @@
 import React from 'react';
 import FilterPanel from '../containers/filter_panel';
-import CurrentSearch from '../components/current_search';
+import CurrentSearch from '../presentation/current_search';
 import SearchResultsTable from '../containers/search_results_table';
 import ButtonsPannel from '../containers/buttons_panel';
 import UserMessage from '../containers/user_message';

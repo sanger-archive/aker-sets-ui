@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Panel, Heading, Body} from '../components/panel';
-import { MaterialTable } from '../components/material_table';
-import DroppableMaterialTable from '../components/droppable_material_table';
-import PaginationLinks from '../components/pagination_links';
-import ExportButton from '../components/export_button';
+import {Panel, Heading, Body} from '../presentation/panel';
+import { MaterialTable } from '../presentation/material_table';
+import DroppableMaterialTable from '../presentation/droppable_material_table';
+import PaginationLinks from '../presentation/pagination_links';
+import ExportButton from '../presentation/export_button';
 import { getSelectedTop } from '../selectors/index';
-import FontAwesome from '../components/font_awesome';
+import FontAwesome from '../presentation/font_awesome';
 import { select } from '../actions/browser';
 import { fetchPageForTop, removeMaterialsFromSet, appendMaterialsToSet } from '../actions/index';
 import { clearSelection } from '../actions/browser';

@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel, Heading, Body } from '../components/panel';
+import { Panel, Heading, Body } from '../presentation/panel';
 import { paginateTo } from '../actions/index'
 import ButtonsPanel from './buttons_panel';
-import PaginationLinks from '../components/pagination_links';
+import PaginationLinks from '../presentation/pagination_links';
 import qs from 'qs';
 
 class SearchResultsTable extends React.Component {

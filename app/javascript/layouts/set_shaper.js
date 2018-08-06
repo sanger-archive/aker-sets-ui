@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SelectableSetTable from '../containers/selectable_set_table';
-import { Heading, Body, Footer } from '../components/panel';
+import { Heading, Body, Footer } from '../presentation/panel';
 import Panel from 'react-bootstrap/lib/Panel'
 import SetPanel, { SetPanelComponent } from '../containers/set_panel';
 import BottomSetPanel from '../containers/bottom_set_panel';
 import SetForm from '../containers/add_set_form';
-import FontAwesome from '../components/font_awesome';
+import FontAwesome from '../presentation/font_awesome';
 import UserMessage from '../containers/user_message';
 import { readEndpoint } from 'redux-json-api';
 import { debounce } from '../lib/utils';

@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Panel, Heading, Body } from './panel';
 import { currentSearchQueryBuilder } from '../lib/utils';
 import queryMaterialBuilder from '../lib/query_builder'
+import PropTypes from 'prop-types';
 
 const CurrentSearch = ({ current }) => {
   const emptyFiltersRow = (<p key="emptySearch">No current search</p>);
@@ -49,6 +49,18 @@ const CurrentSearch = ({ current }) => {
       </Body>
     </Panel>
   )
+}
+
+CurrentSearch.propTypes = {
+  current: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    comparator: PropTypes.string,
+    value: PropTypes.string
+  })).isRequired
+}
+
+CurrentSearch.defaultProps = {
+  current: []
 }
 
 export default CurrentSearch
