@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { select } from '../actions/browser';
-import SetTable from '../components/set_table';
+import SetTable from '../presentation/set_table';
 
 const mapStateToProps = (state, { sets, selectionType }) => {
   // Make a copy so we don't mutate the store

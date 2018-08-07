@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {shallow} from 'enzyme';
 import { SetPanelComponent } from '../set_panel'
-import { Panel, Body, Heading } from '../panel';
-import { MaterialTable } from '../../components/material_table';
-import DroppableMaterialTable from '../../components/droppable_material_table';
-import ExportButton from '../../components/export_button';
+import { Panel, Body, Heading } from '../../presentation/panel';
+import { MaterialTable } from '../../presentation/material_table';
+import DroppableMaterialTable from '../../presentation/droppable_material_table';
+import ExportButton from '../../presentation/export_button';
 
 
 describe('<SetPanelComponent />', () => {

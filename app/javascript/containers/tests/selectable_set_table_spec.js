@@ -4,7 +4,7 @@ import { createResource } from 'redux-json-api';
 import {shallow, mount} from 'enzyme';
 import { createMockStore } from 'redux-test-utils';
 import SelectableSetTable from '../selectable_set_table';
-import SetTable from '../../components/set_table';
+import SetTable from '../../presentation/set_table';
 import store from '../../store'
 
 const getContext = (status) => {

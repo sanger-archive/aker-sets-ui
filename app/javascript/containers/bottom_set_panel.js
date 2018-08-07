@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Panel, Heading, Body} from './panel';
-import FontAwesome from './font_awesome';
+import {Panel, Heading, Body} from '../presentation/panel';
+import FontAwesome from '../presentation/font_awesome';
 import DraggableSelectedSet from '../containers/draggable_selected_set';
-import PaginationLinks from './pagination_links';
+import PaginationLinks from '../presentation/pagination_links';
 import { fetchPageForBottom } from '../actions/index';
-import ExportButton from '../components/export_button';
+import ExportButton from '../presentation/export_button';
 import { withRouter } from 'react-router';
 
 export class BottomSetPanel extends Component {
