@@ -1,6 +1,6 @@
 import {userMessage} from '../actions/index';
 
-export const BIOMATERIALS_SERVICE_NAME = 'Biomaterials service';
+export const BIOMATERIALS_SERVICE_NAME = 'Materials service';
 export const SETS_SERVICE_NAME = 'Sets service';
 export const STAMPS_SERVICE_NAME = 'Stamps service';
 

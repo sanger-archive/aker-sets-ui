@@ -1,32 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSetOnly } from '../actions/index';
+import { withRouter } from 'react-router'
 
-let AddSetForm = ({ dispatch }) => {
-  let input;
+export class AddSetForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: '' }
 
-  return (
-    <form onSubmit={ (e) => {
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-        e.preventDefault();
-        if (!input.value) return;
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+  }
 
-        dispatch(createSetOnly(input.value.trim()));
-        input.value = '';
+  handleSubmit(e) {
+    e.preventDefault();
 
-      }}>
+    if (!this.state.value) return;
 
-      <div className="form-group">
-        <label className="sr-only" htmlFor="setName">Name</label>
-        <input ref={(node) => input = node} type="text" className="form-control"
-          id="setName" placeholder="Set Name" pattern="[A-Za-z0-9:_ '-]*"
-          title="Set names may contain letters, numbers, spaces, and the following symbols: ' _ -"></input>
-      </div>
-      <button style={{width: '100%'}} type="submit" className="btn btn-primary">Create</button>
-    </form>
+    this.props.dispatch(createSetOnly(this.state.value.trim()))
+      .then((set) => this.props.history.push({ pathname: `/simple/sets/${set.data.id}` }) );
+
+    this.setState({ value: '' })
+  }
+
+  render() {
+    return (
+      <form onSubmit={ this.handleSubmit }>
+        <div className="form-group">
+          <label className="sr-only" htmlFor="setName">Name</label>
+          <input type="text" value={ this.state.value } onChange={ this.handleChange }
+            id="setName" className="form-control" placeholder="Set Name" pattern="[A-Za-z0-9:_ '-]*"
+            title="Set names may contain letters, numbers, spaces, and the following symbols: ' _ -" />
+        </div>
+        <button style={{width: '100%'}} type="submit" className="btn btn-primary">Create</button>
+      </form>
     );
+  }
 };
 
-AddSetForm = connect()(AddSetForm);
-
-export default AddSetForm;
+export default withRouter(connect()(AddSetForm));

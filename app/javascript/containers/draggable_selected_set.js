@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
-import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions/index';
+import { selectItem, toggleItem, shiftSelectItems, clearSelection, storeItems } from '../actions/browser';
 import onClickOutside from 'react-onclickoutside';
 
 import draggable from '../hocs/draggable';
 import { ItemTypes } from '../lib/item_types';
-import { getSelectedBottomMaterials } from '../selectors/index';
+import { MaterialTable, MaterialTableRow } from '../presentation/material_table';
+import FontAwesome from '../presentation/font_awesome';
 
-import { BiomaterialTable, BiomaterialTableRow } from '../components/biomaterial_table';
-import FontAwesome from '../components/font_awesome';
-
-let draggableBiomaterialTableRow = draggable(BiomaterialTableRow, (connectDragPreview, props) => {
+let draggableMaterialTableRow = draggable(MaterialTableRow, (connectDragPreview, props) => {
   let img = new Image();
 
   if (props.selected.length > 1) {
@@ -23,9 +21,9 @@ let draggableBiomaterialTableRow = draggable(BiomaterialTableRow, (connectDragPr
   img.onload = () => connectDragPreview(img);
 });
 
-const biomaterialSource = {
+const materialSource = {
   beginDrag(props) {
-    return { biomaterial: props.biomaterial, selected: props.selected };
+    return { material: props.material, selected: props.selected };
   }
 };
 
@@ -37,13 +35,11 @@ function dragCollect(connect, monitor) {
   };
 }
 
-draggableBiomaterialTableRow = DragSource(ItemTypes.BIOMATERIAL, biomaterialSource, dragCollect)(draggableBiomaterialTableRow)
+draggableMaterialTableRow = DragSource(ItemTypes.BIOMATERIAL, materialSource, dragCollect)(draggableMaterialTableRow)
 
 const mapStateToProps = (state) => {
   return {
-    biomaterials: getSelectedBottomMaterials(state),
-    materials: state.materials,
-    decorators: { row: draggableBiomaterialTableRow },
+    decorators: { row: draggableMaterialTableRow },
     selected: state.browser.selected
   };
 }
@@ -57,11 +53,11 @@ class Wrapper extends Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
-  onClick(biomaterial, index, evt) {
+  onClick(material, index, evt) {
     const key = index;
-    const {dispatch, biomaterials} = this.props;
+    const {dispatch, materials} = this.props;
 
-    dispatch(storeItems(biomaterials));
+    dispatch(storeItems(materials));
 
     if (evt.metaKey) {
       dispatch(toggleItem(key));
@@ -81,7 +77,7 @@ class Wrapper extends Component {
     const {dispatch, ...rest} = this.props;
 
     return (
-      <BiomaterialTable onClick={this.onClick} {...rest} />
+      <MaterialTable onClick={this.onClick} {...rest} />
     )
   }
 }

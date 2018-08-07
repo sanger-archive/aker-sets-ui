@@ -8,28 +8,10 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import App from 'layouts/set_shaper';
 
 import { selectEntity, storeItems, fetchSetAndMaterials, setUserEmail } from 'actions';
-import { getSelectedTop, getSelectedBottom, getSelectedTopPage, getSelectedBottomPage, getUserSets } from 'selectors';
+import { getSelectedTop, getSelectedBottom, getUserSets } from 'selectors';
 import store from 'store';
 
 store.dispatch(setUserEmail(Aker.userEmail));
-
-setInterval(() => {
-  let state = store.getState();
-  let selected = state.selected;
-
-  if (selected['top']) {
-    let pageNumber = getSelectedTopPage(state);
-    if (pageNumber) {
-      store.dispatch(fetchSetAndMaterials(selected['top'], pageNumber, 25));
-    }
-  }
-  if (selected['bottom']) {
-    let pageNumber = getSelectedBottomPage(state);
-    if (pageNumber) {
-      store.dispatch(fetchSetAndMaterials(selected['bottom'], pageNumber, 25));
-    }
-  }
-}, 10000)
 
 const mapStateToProps = (state) => {
   return {
@@ -37,7 +19,8 @@ const mapStateToProps = (state) => {
     selectedBottomSet: getSelectedBottom(state),
     userEmail: state.userEmail,
     sets: state.api.sets.data,
-    userSets: getUserSets(state)
+    userSets: getUserSets(state),
+    materials: state.materials
   };
 };
 
