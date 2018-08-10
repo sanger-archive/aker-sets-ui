@@ -11,7 +11,10 @@ let initialState = {
     materials:   { data: [] },
   },
   stampsInfo: { stamps: [], status: STAMPS_INITIALIZATION, selectedStamp: null },
-  materials: {},
+  materials: {
+    top: { items: [], links: {}, meta: {} },
+    bottom: { items: [], links: {}, meta: {} }
+  },
   selected: {
     top: null,
     bottom: null
@@ -26,7 +29,7 @@ let initialState = {
   userEmail: null,
   search: {
     batchTransactionSize: 10000,
-    pageNumber: 1,
+    page: 1,
     maxResults: 50,
     batchGroup: 1000,
     fields: {},
@@ -41,7 +44,7 @@ let initialState = {
     stampMaterials: [],
     meta: {},
     sortBy: '_id',
-    sortOrder: 1
+    order: 1
   },
   loading: {
     creatingSet: false,

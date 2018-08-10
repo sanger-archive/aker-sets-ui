@@ -1,22 +1,48 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import { AddSetForm } from '../add_set_form';
+import { createSetOnly } from '../../actions/index'
 import sinon from 'sinon';
-import {shallow, mount} from 'enzyme';
-import { connect } from 'react-redux';
-import AddSetForm from '../add_set_form';
-import { createMockStore } from 'redux-test-utils';
-
 
 describe('<AddSetForm />', () => {
-  const getContext = (status) => {
-    let store = createMockStore(status);
-    let context = { store };
-    return { context }
+  let props;
+  let addSetFormWrapper;
+
+  const addSetForm = () => {
+    if (addSetFormWrapper) {
+      return addSetFormWrapper;
+    }
+    addSetFormWrapper = shallow(<AddSetForm {...props} />);
+    return addSetFormWrapper;
   }
-  context('when displaying it', () => {
-    it('shows the form', () => {
-      const status = {};
-      const wrapper = shallow(<AddSetForm></AddSetForm>, getContext(status));
-      expect(wrapper.dive().find('form').length).to.equal(1);
+
+  beforeEach(() => {
+    props = {
+      dispatch: undefined,
+      history: undefined
+    }
+
+    addSetFormWrapper = undefined;
+  })
+
+  it('shows the form', () => {
+    expect(addSetForm().find('form')).to.have.length(1);
+  });
+
+  describe('submission', () => {
+
+    beforeEach(() => {
+      const set = { set: { data: { id: 'abcd-1234' }}}
+      props.dispatch = sinon.fake.resolves(set);
+      props.history = { push: sinon.spy() };
+    });
+
+    context('when input is empty', () => {
+      it('does not call dispatch', () => {
+        addSetForm().find('button').simulate('click');
+        expect(props.dispatch.callCount).to.equal(0)
+      });
     });
   });
+
 });

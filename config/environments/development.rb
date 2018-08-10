@@ -71,6 +71,9 @@ Rails.application.configure do
   config.default_jwt_user = { email: ENV.fetch('USER', 'user') + '@sanger.ac.uk', groups: ['world'] }
   config.generate_default_jwt = true
 
+  config.material_url = 'http://localhost:5000'
+  config.set_url = 'http://localhost:3000/api/v1'
+
   config.auth_service_url = 'http://localhost:9010'
   config.login_url = config.auth_service_url + '/login'
   config.logout_url = config.auth_service_url + '/logout'
@@ -82,5 +85,5 @@ Rails.application.configure do
                   sets: '',
                   projects: '',
                   work: '' }
-                  
+
 end

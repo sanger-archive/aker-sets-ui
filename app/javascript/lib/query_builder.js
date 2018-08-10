@@ -76,7 +76,7 @@ const queryMaterialBuilder = (filters, materialFilters) => {
     'no less than': '$gte'
   }
 
-  const specialFilters = ['setMembership', 'consumePermission', 'editPermission'];
+  const specialFilters = ['setId', 'setMembership', 'consumePermission', 'editPermission'];
   const emailAppend    = ['owner_id', 'submitter_id'];
 
   var results = filters.reduce((memo, filter) => {

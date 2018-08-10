@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { select, fetchFirstPageSetAndMaterials } from '../actions/index';
-import SetTable from '../components/set_table';
+import { select } from '../actions/browser';
+import SetTable from '../presentation/set_table';
 
 const mapStateToProps = (state, { sets, selectionType }) => {
   // Make a copy so we don't mutate the store
@@ -16,11 +16,11 @@ const mapStateToProps = (state, { sets, selectionType }) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, { selectionType }) => {
+const mapDispatchToProps = (dispatch, { selectionType, onSetClick }) => {
   return {
     onSetClick: (setId) => {
       dispatch(select(setId, selectionType));
-      dispatch(fetchFirstPageSetAndMaterials(setId));
+      onSetClick(setId);
     }
   }
 }

@@ -4,7 +4,7 @@ import { createResource } from 'redux-json-api';
 import {shallow, mount} from 'enzyme';
 import { createMockStore } from 'redux-test-utils';
 import StamperControl from '../stamper_control';
-import StamperPanel from '../../components/stamper_panel';
+import StamperPanel from '../../presentation/stamper_panel';
 import store from '../../store'
 
 const getContext = (status) => {

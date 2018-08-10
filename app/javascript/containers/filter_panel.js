@@ -1,10 +1,12 @@
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
 import DatePicker from 'react-bootstrap-date-picker';
-import FontAwesome from './font_awesome';
-import { Panel, Heading, Body } from './panel'
+import FontAwesome from '../presentation/font_awesome';
+import { Panel, Heading, Body } from '../presentation/panel'
 import { connect } from 'react-redux';
-import {updateFilterName, updateFilterComparator, updateFilterValue, removeFilter, addFilter, setCurrentSearch, performSearch, updateSortBy, updateSortOrder} from '../actions/index';
+import { updateFilterName, updateFilterComparator, updateFilterValue, removeFilter,
+    addFilter, setCurrentSearch, updateSortBy, updateSortOrder} from '../actions/search';
+import { performSearch } from '../actions/index';
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 class FilterPanel extends React.Component {
@@ -21,7 +23,7 @@ class FilterPanel extends React.Component {
 
   render() {
 
-    const { filters, fields, dispatch, sortBy, sortOrder} = this.props;
+    const { filters, fields, dispatch, sortBy, order} = this.props;
     const filter_rows = filters.map((filter, index) => {
       return <FilterRow
                 fields={fields}
@@ -49,10 +51,10 @@ class FilterPanel extends React.Component {
             <FontAwesome icon="plus" size="lg" style={{color: 'white'}} />
           </button>
           <SortRow sortBy={sortBy}
-                    sortOrder={sortOrder}
+                    order={order}
                     fields={fields}
                     onSortByChange={(e) => dispatch(updateSortBy(e.target.value))}
-                    onSortOrderChange={(e) => dispatch(updateSortOrder(parseInt(e.target.value)))}
+                    onOrderChange={(e) => dispatch(updateSortOrder(parseInt(e.target.value)))}
                     />
         </Body>
       </Panel>
@@ -175,7 +177,7 @@ class SortRow extends React.Component {
         <div className="col-md-3 col-xs-4">
           <label>
             Order:
-            <select value={this.props.sortOrder} onChange={this.props.onSortOrderChange} className="form-control">
+            <select value={this.props.order} onChange={this.props.onOrderChange} className="form-control">
               <option value='1'>Ascending</option>
               <option value='-1'>Descending</option>
             </select>

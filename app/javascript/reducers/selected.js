@@ -1,4 +1,4 @@
-import { SELECT, CLEAR_SELECTED } from '../actions/index';
+import { SELECT, CLEAR_SELECTED } from '../actions/browser';
 
 const selected = (state = {}, action) => {
   switch (action.type) {
