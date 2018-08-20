@@ -1,55 +1,155 @@
 import React from 'react';
 import sinon from 'sinon';
-import { shallow, mount } from 'enzyme';
-import {MaterialTableRow, MaterialTable} from '../material_table'
+import { shallow } from 'enzyme';
+import { MaterialTableRow, MaterialTable } from '../material_table'
 
 describe('<MaterialTableRow />', () => {
-  context('when rendering the row', () => {
+
+  let props;
+  let shallowMaterialTableRow;
+
+  const materialTableRow = () => {
+    if (shallowMaterialTableRow) {
+      return shallowMaterialTableRow;
+    }
+    shallowMaterialTableRow = shallow(<MaterialTableRow {...props} />);
+    return shallowMaterialTableRow;
+  };
+
+  beforeEach(() => {
+    props = {
+      material: undefined,
+      onClick: undefined,
+      removeable: undefined,
+      onRemove: undefined,
+      index: undefined,
+      selected: undefined
+    }
+
+    shallowMaterialTableRow = undefined;
+  })
+
+  describe('rendering', () => {
+    beforeEach(() => {
+      props.material = {
+        _id: 1,
+        supplier_name: 'Beaky',
+        concentration: 2,
+        amount: 10,
+        volume: 5,
+        tissue_type: 'DNA'
+      }
+    })
+
     it('renders the row', () => {
-      let wrapper = shallow(<MaterialTableRow />);
-      expect(wrapper.find('tr')).to.have.length(1);
-    });
-    it('should render an icon clickable to allow you remove the material if removable is set to true', () => {
-      let wrapper = shallow(<MaterialTableRow removeable={true} />);
-      expect(wrapper.find('FontAwesome')).to.have.length(1);
+      expect(materialTableRow().find('tr')).to.have.length(1);
     });
 
-    context('when receiving a list of selected materials', () => {
-      it('adds the info CSS class to the material if its id is inside the selected list ', () => {
-        let material = {_id: 1, gender: 'unknown'};
-        let material2 = {_id: 2, gender: 'unknown'};
+    it('renders _id, supplier_name, concentration, amount, volume, and tissue type', () => {
+      expect(materialTableRow().text()).to.include(props.material._id)
+      expect(materialTableRow().text()).to.include(props.material.supplier_name)
+      expect(materialTableRow().text()).to.include(props.material.concentration)
+      expect(materialTableRow().text()).to.include(props.material.amount)
+      expect(materialTableRow().text()).to.include(props.material.volume)
+      expect(materialTableRow().text()).to.include(props.material.tissue_type)
+    })
+  });
 
-        let wrapper = shallow(<MaterialTableRow selected={[material]} material={material} />);
-        expect(wrapper.find('tr.info')).to.have.length(1);
-      });
-      it('does not add the info CSS class to the material if its id is not inside the selected list ', () => {
-        let material = {_id: 1, gender: 'unknown'};
-        let material2 = {_id: 2, gender: 'unknown'};
+  context('when removeable is true', () => {
+    beforeEach(() => {
+      props.removeable = true;
+    })
 
-        let wrapper = shallow(<MaterialTableRow selected={[material]} material={material2} />);
-        expect(wrapper.find('tr.info')).to.have.length(0);
-      });
-
+    it('renders a clickable icon to allow you remove the material', () => {
+      expect(materialTableRow().find('FontAwesome')).to.have.length(1);
     });
   });
+
+  describe('selected materials', () => {
+
+    context('when a material is in the selected list', () => {
+      beforeEach(() => {
+        const material = {_id: 1, gender: 'unknown'};
+        props.selected = [material];
+        props.material = material;
+      })
+
+      it('adds the "info" CSS class to the material', () => {
+        expect(materialTableRow().hasClass('info')).to.equal(true);
+      });
+    });
+
+    context('when a material is not in the selected list', () => {
+      beforeEach(() => {
+        const material = {_id: 1, gender: 'unknown'};
+        props.selected = [];
+        props.material = material;
+      });
+
+      it('does not add the "info" CSS class to the material', () => {
+        expect(materialTableRow().hasClass('info')).to.equal(false);
+      });
+    })
+  });
+
+  describe('onClick', () => {
+
+    beforeEach(() => {
+      props.material = { _id: 1 };
+      props.index = 1;
+      props.onClick = sinon.spy();
+    })
+
+    it('receives the material, index, and event', () => {
+      const e = { fake: 'event' }
+      materialTableRow().simulate('click', e);
+      expect(props.onClick.calledOnceWith(props.material, props.index, e)).to.equal(true);
+    })
+
+  })
+
 });
 
 
 describe('<MaterialTable />', () => {
+
+  let props;
+  let shallowMaterialTable;
+
+  const materialTable = () => {
+    if (shallowMaterialTable) {
+      return shallowMaterialTable;
+    }
+    shallowMaterialTable = shallow(<MaterialTable {...props} />);
+    return shallowMaterialTable;
+  }
+
+  beforeEach(() => {
+    props = {
+      decorators: undefined,
+      materials: undefined
+    }
+
+    shallowMaterialTable = undefined;
+  });
+
   context('when rendering the table', () => {
-    it('renders a row for each material', () => {
-      const materials = [{_id: 1, gender: 'unknown'}, {_id: 2, gender: 'unknown'}];
-      let wrapper = shallow(<MaterialTable materials={materials} />)
-      expect(wrapper.find('MaterialTableRow')).to.have.length(materials.length);
-    });
-    context('when providing a hash of materials information', () => {
-      it('displays the materials information provided', () => {
-        const materials = [{_id: 1, gender: 'female'}, {_id: 2, gender: 'male'}, {_id: 3, gender: 'unknown'}];
-        let wrapper = shallow(<MaterialTable materials={materials} />)
-        expect(wrapper.find('MaterialTableRow').at(0).props().material.gender).to.equal('female');
-        expect(wrapper.find('MaterialTableRow').at(1).props().material.gender).to.equal('male');
-        expect(wrapper.find('MaterialTableRow').at(2).props().material.gender).to.equal('unknown');
-      });
+
+    beforeEach(() => {
+      props.materials = [{_id: 1, gender: 'unknown'}, {_id: 2, gender: 'unknown'}];
     })
+
+    it('renders a row for each material', () => {
+      expect(materialTable().find('MaterialTableRow')).to.have.length(props.materials.length);
+    });
+
+    it('has columns ID, Supplier Name, Amount, Volume, and Tissue Type', () => {
+      expect(materialTable().text()).to.include('ID');
+      expect(materialTable().text()).to.include('Supplier Name');
+      expect(materialTable().text()).to.include('Concentration');
+      expect(materialTable().text()).to.include('Amount');
+      expect(materialTable().text()).to.include('Volume');
+      expect(materialTable().text()).to.include('Tissue Type');
+    });
   });
 });

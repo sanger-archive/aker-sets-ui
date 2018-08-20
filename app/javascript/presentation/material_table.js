@@ -22,6 +22,7 @@ export class MaterialTableRow extends Component {
       <tr className={trClass} style={style} onClick={(e) => onClick(material, index, e) }>
         <td>{material._id}</td>
         <td>{material.supplier_name}</td>
+        <td>{material.concentration}</td>
         <td>{material.amount}</td>
         <td>{material.volume}</td>
         <td>{material.tissue_type}</td>
@@ -59,6 +60,7 @@ export class MaterialTable extends Component {
           <tr>
             <th>ID</th>
             <th>Supplier Name</th>
+            <th>Concentration</th>
             <th>Amount</th>
             <th>Volume</th>
             <th>Tissue Type</th>
