@@ -1,11 +1,10 @@
 import jwt_decode from "jwt-decode"
-import { setHeader, readEndpoint } from "redux-json-api"
+import { setHeader, readEndpoint, createResource } from "redux-json-api"
 import queryMaterialBuilder from '../lib/query_builder'
 import { handleMaterialsServiceErrors, handleSetsServiceErrors, handleStampsServiceErrors } from '../lib/service_errors';
 import { startCreateSet, stopCreateSet, startAddMaterialsToSet, stopAddMaterialsToSet,
   startRemoveMaterialsFromSet, stopRemoveMaterialsFromSet, startStamping, stopStamping } from './loading';
 import { receiveMaterialSchema, receiveSearchResults } from './search';
-import { createResource } from 'redux-json-api';
 import { validateNewSetName } from '../lib/utils';
 import qs from 'qs';
 
@@ -150,13 +149,16 @@ export const fetchPageForSearch = (params) => {
 export const fetchPageForSimple = (params) => {
   return (dispatch) => {
     const filters = [];
-    const setFilters = [{ name: 'setId', type: 'string', comparator: 'is', value: params.setId }];
+    const setId = params['setId'];
+    const setFilters = [{ name: 'setId', type: 'string', comparator: 'is', value: setId }];
     delete params['setId'];
 
     if (params.search) {
       params = qs.parse(params.search, { ignoreQueryPrefix: true });
       delete params['search'];
     }
+
+    dispatch(readEndpoint(`sets/${setId}`));
 
     return dispatch(fetchMaterials({ ...params, setFilters, maxResults: 25 }));
   }
