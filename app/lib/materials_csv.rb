@@ -2,7 +2,7 @@ require 'csv'
 
 class MaterialsCsv
 
-  CSV_FIELDS = [:id, :supplier_name, :amount, :volume, :tissue_type]
+  CSV_FIELDS = [:id, :supplier_name, :concentration, :amount, :volume, :tissue_type]
 
   attr_reader :set_id, :set, :params
 

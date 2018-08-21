@@ -162,7 +162,7 @@ class SetShaper extends React.Component {
                 <li><a data-toggle="tab" href="#bottom-help">Help<FontAwesome icon="question" style={{"color": "#2196F3"}} /></a></li>
               </ul>
 
-              <div className="tab-content">
+              <div className="tab-content" onScroll={debounce((e) => this.onScroll(e, 'bottom'), true)}>
                 <div role="tabpanel" className="tab-pane active" id="mySetsBottom" style={{height: '340px', overflowY: 'scroll'}}>
                   <SelectableSetTable
                     sets={ userSets }
