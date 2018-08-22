@@ -139,7 +139,7 @@ const search = (state = {}, action) => {
       return Object.assign({}, state, { filters: newState });
 
     case UPDATE_SORT_ORDER:
-      return Object.assign({}, state, { sortOrder: action.value });
+      return Object.assign({}, state, { order: action.value });
 
     case UPDATE_SORT_BY:
       return Object.assign({}, state, { sortBy: action.value });
