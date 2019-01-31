@@ -77,12 +77,11 @@ function TableSortHeader(props) {
 export class MaterialTable extends Component {
 
   render() {
-    const { decorators, materials, ...rest } = this.props;
+    const { decorators, materials, sortable, ...rest } = this.props;
     const tableClass = classNames({
       table: true,
       'table-striped': true
     });
-    const sortable = rest['removeable'];
     const instances = Object.values(materials || {});
     return (
       <table className={tableClass}>
