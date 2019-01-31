@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import FontAwesome from './font_awesome';
+import { Link } from 'react-router-dom';
 
 export class MaterialTableRow extends Component {
 
@@ -45,6 +46,34 @@ MaterialTableRow.defaultProps = {
   }
 }
 
+function TableSortHeader(props) {
+  const { column, children, sortable } = props;
+  if (!sortable) {
+    return (<th>{children}</th>);
+  }
+  const params = new URLSearchParams(window.location.search);
+  var order = '1';
+  var orderIcon = '';
+  if (params.get('sortBy')==column) {
+    if (params.get('order')==1) {
+      orderIcon = ' ' + String.fromCharCode(9650);
+      order = '-1';
+    } else {
+      orderIcon = ' ' + String.fromCharCode(9660);
+    }
+  }
+  var search = 'sortBy=' + column + '&order=' + order;
+  const page = params.get('page');
+  if (page) {
+    search += '&page=' + page;
+  }
+  const target = ({
+      pathname: window.location.pathname,
+      search: search
+  });
+  return (<th><Link to={target}>{children}{orderIcon}</Link></th>);
+}
+
 export class MaterialTable extends Component {
 
   render() {
@@ -53,17 +82,18 @@ export class MaterialTable extends Component {
       table: true,
       'table-striped': true
     });
+    const sortable = rest['removeable'];
     const instances = Object.values(materials || {});
     return (
       <table className={tableClass}>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Supplier Name</th>
-            <th>Concentration</th>
-            <th>Amount</th>
-            <th>Volume</th>
-            <th>Tissue Type</th>
+            <TableSortHeader column='_id' sortable={sortable}>ID</TableSortHeader>
+            <TableSortHeader column='supplier_name' sortable={sortable}>Supplier Name</TableSortHeader>
+            <TableSortHeader column='concentration' sortable={sortable}>Concentration</TableSortHeader>
+            <TableSortHeader column='amount' sortable={sortable}>Amount</TableSortHeader>
+            <TableSortHeader column='volume' sortable={sortable}>Volume</TableSortHeader>
+            <TableSortHeader column='tissue_type' sortable={sortable}>Tissue Type</TableSortHeader>
             {/* If the materials are removeable have a blank table header for the extra column */}
             { rest['removeable'] && <th>Remove?</th>}
           </tr>
