@@ -52,8 +52,8 @@ function TableSortHeader(props) {
     return (<th>{children}</th>);
   }
   const params = new URLSearchParams(window.location.search);
-  var order = '1';
-  var orderIcon = '';
+  let order = '1';
+  let orderIcon = '';
   if (params.get('sortBy')==column) {
     if (params.get('order')==1) {
       orderIcon = ' ' + String.fromCharCode(9650);
@@ -62,7 +62,7 @@ function TableSortHeader(props) {
       orderIcon = ' ' + String.fromCharCode(9660);
     }
   }
-  var search = 'sortBy=' + column + '&order=' + order;
+  let search = 'sortBy=' + column + '&order=' + order;
   const page = params.get('page');
   if (page) {
     search += '&page=' + page;
