@@ -143,13 +143,8 @@ describe('<MaterialTable />', () => {
       expect(materialTable().find('MaterialTableRow')).to.have.length(props.materials.length);
     });
 
-    it('has columns ID, Supplier Name, Amount, Volume, and Tissue Type', () => {
-      expect(materialTable().text()).to.include('ID');
-      expect(materialTable().text()).to.include('Supplier Name');
-      expect(materialTable().text()).to.include('Concentration');
-      expect(materialTable().text()).to.include('Amount');
-      expect(materialTable().text()).to.include('Volume');
-      expect(materialTable().text()).to.include('Tissue Type');
+    it('has six sortable headers', () => {
+      expect(materialTable().find('TableSortHeader')).to.have.length(6);
     });
   });
 });
