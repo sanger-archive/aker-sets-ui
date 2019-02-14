@@ -93,8 +93,9 @@ export const SetPanelComponent = ({ set, user_email, materials, match, location,
 
         <Body style={{height: '334px', overflowY: 'scroll'}}>
           { set.attributes.locked ?
-            <MaterialTable removeable={false} set={set} materials={materials.items} /> :
+            <MaterialTable removeable={false} sortable={true} set={set} materials={materials.items} /> :
             <DroppableMaterialTable
+              sortable={true}
               removeable={true}
               set={set}
               materials={materials.items}
