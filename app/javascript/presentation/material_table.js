@@ -68,6 +68,7 @@ function TableSortHeader(props) {
     search += '&page=' + page;
   }
   const target = ({
+      origin: window.location.origin,
       pathname: window.location.pathname,
       search: search
   });
