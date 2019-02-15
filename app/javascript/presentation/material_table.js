@@ -68,7 +68,7 @@ function TableSortHeader(props) {
     search += '&page=' + page;
   }
   const target = ({
-      pathname: '',
+      pathname: window.location.origin + window.location.pathname,
       search: search
   });
   return (<th><Link to={target}>{children}{orderIcon}</Link></th>);
