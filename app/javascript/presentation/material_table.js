@@ -67,8 +67,12 @@ function TableSortHeader(props) {
   if (page) {
     search += '&page=' + page;
   }
+  let pathname = window.location.pathname;
+  if (pathname.startsWith('/set/')) {
+    pathname = pathname.substring(4);
+  }
   const target = ({
-      pathname: window.location.pathname.replace('/set', ''),
+      pathname: pathname,
       search: search
   });
   return (<th><Link to={target}>{children}{orderIcon}</Link></th>);
